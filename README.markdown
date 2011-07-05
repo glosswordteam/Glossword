@@ -8,5 +8,6 @@ Glossword is the software to create and publish online multilingual dictionary, 
 Repository structure
 --------------------
 
-`/1.9` - Glossword as module for a CMS.
-`/1.8` - Glossword as standalone version.
+  - `/1.9` - Glossword as module for a CMS.
+  - `/1.8` - Glossword as standalone version.
+  
