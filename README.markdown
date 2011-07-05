@@ -10,3 +10,4 @@ Glossword is the software to create and publish online multilingual dictionary, 
 1.9
 : Glossword as module for a CMS
 
+*test*
