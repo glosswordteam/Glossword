@@ -1,0 +1,52 @@
+<div class="gw-items-wrapper">
+
+<div class="gw-items">
+
+	<table class="tbl-list floatleft gw-lists" id="{%v:id_table_langs%}" cellspacing="1" width="29%">
+	<thead>
+	<tr>
+	<th style="width:2%">{%v:th_n%}</th>
+	<th> {%l:1184%}  </th>
+	</tr>
+	</thead>
+
+	<tbody>
+	<!-- START BLOCK: langs.list -->
+	<tr>
+	<td class="n">{%langs.list.cnt%}</td>
+	<td>{%langs.list.lang_url%}</td>
+	</tr>
+	<!-- END BLOCK: langs.list -->
+	</tbody>
+	
+	</table>
+
+	<form id="form-az">
+	<table class="tbl-list td-valign-middle floatright" id="{%v:id_table_az%}" cellspacing="1" width="70%">
+	<thead>
+	<tr>
+	<th style="width:2%">{%v:th_n%}</th>
+	<th style="width:15%">{%v:th_1%}</th>
+	<th style="width:20%">{%v:th_2%}</th>
+	<th style="width:20%">{%v:th_3%}</th>
+	<th>{%l:1023%}</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	<!-- START BLOCK: az.list -->
+	<tr id="lettersd-{%az.list.id_letter%}">
+	<td class="n">{%az.list.cnt%}</td>
+	<td class="m">{%az.list.uc_lc%}</td>
+	<td class="m">{%az.list.uc%}</td>
+	<td class="m">{%az.list.lc%}</td>
+	<td class="textleft">{%az.list.actions%}</td>
+	</tr>
+	<!-- END BLOCK: az.list -->
+	</tbody>
+	
+	</table>
+	</form>
+
+	</div>
+</div>

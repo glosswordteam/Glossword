@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="Glossword">
+		<message>
+			<![CDATA[STANDARD GLOSSWORD LAYOUT DESC]]>
+		</message>
+	</layout>
+	<state>
+		<name>Glossword</name>
+		<description>STANDARD GLOSSWORD LAYOUT DESC</description>
+		<params>
+			<param name="show_page_title" type="radio" default="1" label="Show Page Title" description="Show/Hide the pages Title">
+				<option value="0">Hide</option>
+				<option value="1">Show</option>
+			</param>
+		</params>
+	</state>
+</metadata>

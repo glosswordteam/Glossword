@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install version="1.5" type="plugin" group="user">
+	<name>Glossword - Login/Logout</name>
+	<author>Dmitry N. Shilnikov</author>
+	<creationDate>March 2010</creationDate>
+	<copyright>© Dmitry N. Shilnikov, 2002-2010</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<authorEmail>team@glossword.biz</authorEmail>
+	<authorUrl>http://code.google.com/p/glossword/</authorUrl>
+	<version>1.9.0</version>
+	<description>Provides log in/log out for Glossword</description>
+	<files>
+		<filename plugin="gw_login">gw_login.php</filename>
+	</files>
+</install>

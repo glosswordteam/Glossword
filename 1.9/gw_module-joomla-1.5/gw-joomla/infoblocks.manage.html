@@ -1,0 +1,48 @@
+<div class="gw-items-wrapper">
+
+<div class="gw-items">
+
+	<div class="pagination">{%l:1036%}: 
+		<span><strong id="cnt-records">{%v:cnt_records%}</strong></span>
+		<div class="floatright">{%l:1038%}</div>
+	</div>
+
+	<!-- START BLOCK: if.paginator_top -->
+		<div class="pagination">{%l:1033%}: <span>{%v:pagination%}</span></div>
+	<!-- END BLOCK: if.paginator_top -->
+
+	<div style="height:1em"></div>
+
+	<table class="tbl-list" id="{%v:id_table%}" cellspacing="1">
+	<thead>
+	<tr>
+	<th style="width:2%">{%v:th_n%}</th>
+	<th style="width:2%">{%l:1023%}</th>
+	<th style="width:78%"> </th>
+	<th style="width:20%">{%l:1057%}</th>
+	<th style="width:20%">{%l:1067%}</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	<!-- START BLOCK: infoblocks.list -->
+	<tr id="itemd-{%infoblocks.list.id_block%}">
+	<td class="n">{%infoblocks.list.cnt%}</td>
+	<td class="center">{%infoblocks.list.actions%}</td>
+	<td class="defnpreview">
+		{%infoblocks.list.block_name%} 
+		{%infoblocks.list.block_contents%}
+	</td>
+	<td class="date">{%infoblocks.list.placement%}</td>
+	<td class="date">{%infoblocks.list.status%}</td>
+	</tr>
+	<!-- END BLOCK: infoblocks.list -->
+	</tbody>
+	</table>
+
+	<!-- START BLOCK: if.paginator_bottom -->
+		<div class="pagination">{%l:1033%}: <span>{%v:pagination%}</span></div>
+	<!-- END BLOCK: if.paginator_bottom -->
+
+	</div>
+</div>

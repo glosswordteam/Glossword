@@ -1,0 +1,37 @@
+<div class="gw-items-wrapper">
+
+	<div class="gw-az">
+		{%v:az%}
+	</div>
+
+	<div class="gw-items">
+
+		<div class="pagination">{%l:1036%}:
+			<span><strong>{%v:cnt_records%}</strong></span><!-- START BLOCK: if.cnt_displayed -->,
+			{%l:1037%}: <span><strong>{%v:cnt_displayed%}</strong></span>
+			<!-- END BLOCK: if.cnt_displayed -->
+			<div class="floatright">{%l:1038%}</div>
+		</div>
+
+		<!-- START BLOCK: if.paginator_top -->
+			<div class="pagination">{%l:1033%}: <span>{%v:pagination%}</span></div>
+		<!-- END BLOCK: if.paginator_top -->
+
+		<div style="height:1em"></div>
+
+		<!-- START BLOCK: items.list -->
+		{%items.list.letter_a%}
+		<dl>
+		<dt> {%items.list.item_title%} </dt>
+		<dd> {%items.list.item_descr%} </dd>
+		</dl>
+		<!-- END BLOCK: items.list -->
+
+		<!-- START BLOCK: if.paginator_bottom -->
+			<div class="pagination">{%l:1033%}: <span>{%v:pagination%}</span></div>
+		<!-- END BLOCK: if.paginator_bottom -->
+
+
+	</div>
+</div>
+

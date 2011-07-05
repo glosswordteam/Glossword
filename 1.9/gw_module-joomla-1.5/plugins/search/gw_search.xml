@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install version="1.5" type="plugin" group="search">
+	<name>Glossword - Search</name>
+	<author>Dmitry N. Shilnikov</author>
+	<creationDate>April 2010</creationDate>
+	<copyright>© Dmitry N. Shilnikov, 2002-2010</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<authorEmail>team@glossword.biz</authorEmail>
+	<authorUrl>http://code.google.com/p/glossword/</authorUrl>
+	<version>1.9.3</version>
+	<description>Allows Searching in Glossword</description>
+	<files>
+		<filename plugin="gw_search">gw_search.php</filename>
+	</files>
+	<params>
+		<param name="int_search_max" type="text" size="5" default="1000" label="Maximum items" description="" />
+		<param name="int_per_page" type="text" size="5" default="20" label="Items per page" description="" />
+	</params>
+</install>
