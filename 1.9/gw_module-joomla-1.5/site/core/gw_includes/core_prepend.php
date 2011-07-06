@@ -488,7 +488,7 @@ class site_prepend extends site_db_config {
 		$o = new site_session_2_0();
 		$o->oDb =& $this->oDb;
 		$o->oTkit =& $this->oTkit;
-		$o->remote_ip = ip2long( $this->V->REMOTE_ADDR );
+		$o->remote_ip = sprintf( "%u", ip2long( $this->V->REMOTE_ADDR ) );
 		$o->remote_ua = substr( htmlspecialchars( getenv( 'HTTP_USER_AGENT' ) ), 0, 255 );
 		$o->uri = $this->V->uri = $this->V->REQUEST_URI;
 		$o->sid = GW_SITE_SID;
