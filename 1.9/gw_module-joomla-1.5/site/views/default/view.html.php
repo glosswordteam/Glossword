@@ -115,16 +115,18 @@ class glosswordViewdefault extends JView
 			'view' => isset( $jo_items->query['view'] ) ? $jo_items->query['view'] : 'default',
 			'Itemid' => isset( $jo_items->id ) ? $jo_items->id : ''
 		);
+		foreach( $jo_uri->getQuery( true ) as $k => $v ){
+			$ar_cfg['sef_append'][$k] = $v;
+		}
+
 		/* Additional URL parameters for SEF-mode */
-		if ( $ar_cfg['is_sef'] )
-		{
+		if ( $ar_cfg['is_sef'] ) {
 			$ar_cfg['sef_fileindex'] = '/index.php';
 			/* Used for SEF */
 			$ar_cfg['sef_append']['alias'] = $ar_cfg['sef_append']['arg']['alias'] = isset( $jo_items->alias ) ?  $jo_items->alias : 'glossword';
 		}
 		/* Adjust for mod_rewrite */
-		if ( $jo_cfg->getValue( 'sef_rewrite' ) )
-		{
+		if ( $jo_cfg->getValue( 'sef_rewrite' ) ) {
 			$ar_cfg['sef_fileindex'] = '';
 		}
 	
@@ -137,12 +139,33 @@ class glosswordViewdefault extends JView
 
 		/* Append to all URLs used for AJAX-requests */
 		$ar_cfg['sef_append_ajax'] = array( 'format' => 'ajax' );
-		
-		/* SEF. Only variables inside arg[]. arg[alias], arg[area], arg[sef_output] */
-		$ar_cfg['sef_rule'] = array( '' => '/alias/area/sef_filename.sef_output' );
 
-		#print_r( $ar_cfg );
-		
+		# index.php/ru/kyudopedia/slownik/i
+		# index.php/slownik/id.agaritsuru/i.html
+		$s_path = $jo_uri->getPath();
+		$ar_path_tmp = explode( '/', $s_path );
+		$ar_path_ext = array();
+		/* */
+		if ( isset( $ar_cfg['sef_append']['lang'] ) ) {
+			$ar_path_ext['lang'] = true;
+			$ar_cfg['sef_append']['arg']['lang'] = $ar_cfg['sef_append']['lang'];
+		}
+		foreach( $ar_path_tmp as $path_k => $path_v ) {
+			if ( $path_v == '' ){ continue; }
+			if ( $path_v == 'index.php' ){ continue; }
+			if ( $path_v == $ar_cfg['sef_append']['alias'] ){ break; }
+			$ar_path_ext['_ext'.$path_k] = true;
+			$ar_cfg['sef_append']['arg']['_ext'.$path_k] = $path_v;
+		}
+		$ar_sef_rule = array( '', 'alias', 'area', 'sef_filename.sef_output' );
+
+		if ( !empty( $ar_path_ext ) ) {
+			$ar_path_ext_keys = array_keys( $ar_path_ext );
+			array_splice( $ar_sef_rule, 1, 0, $ar_path_ext_keys );
+		}
+		/* SEF. Only variables inside arg[]. */
+		$ar_cfg['sef_rule'] = array( '' => implode( '/', $ar_sef_rule ) );
+
 		/* Use existend database connection */
 		$ar_cfg['db_host'] = $mainframe->getCfg('host');
 		$ar_cfg['db_user'] = $mainframe->getCfg('user');
