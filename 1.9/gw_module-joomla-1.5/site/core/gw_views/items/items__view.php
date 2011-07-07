@@ -22,6 +22,8 @@ if ( $this->V->link_template_uri != '' )
 	}
 	$this->gv['area']['id'] = $this->gv['id'];
 }
+
+
 /**
  * ----------------------------------------------
  * Select Item ID
@@ -33,11 +35,21 @@ $this->oDb->where( array( 'i.id_item = c.id_item' => NULL ) );
 $this->oDb->where( array( 'i.id_item = uri.id_item' => NULL ) );
 $this->oDb->where( array( 'mftf.id_field = c.id_field' => NULL ) );
 $this->oDb->where( array( 'mftf.id_fieldset' => $this->V->id_field_root ) );
-switch ( $this->V->link_mode )
-{
-	case GW_LINK_ID:	$this->oDb->where( array( 'i.id_item' => $this->gv['id'] ) ); break;
-	case GW_LINK_URI:	$this->oDb->where( array( 'uri.item_uri' => $this->gv['id'] ) ); break;
-	case GW_LINK_TEXT:	$this->oDb->where( array( 'c.contents_value_cached' => $this->gv['area']['id'] ) ); break;
+switch ( $this->V->link_mode ) {
+  case GW_LINK_ID:
+    if ( isset( $this->gv['area']['a'] ) && $this->gv['area']['a'] == 'search' ){
+      $this->oDb->where( array( 'uri.item_uri' => $this->gv['id'] ) );
+    }
+    else {
+      $this->oDb->where( array( 'i.id_item' => $this->gv['id'] ) );
+    }
+    break;
+  case GW_LINK_URI:
+    $this->oDb->where( array( 'uri.item_uri' => $this->gv['id'] ) );
+    break;
+  case GW_LINK_TEXT:
+    $this->oDb->where( array( 'c.contents_value_cached' => $this->gv['area']['id'] ) );
+    break;
 }
 /* Allow view offline items */
 if ( !$this->oSess->is( 'items' ) && !$this->oSess->is( 'items-own' ) )
