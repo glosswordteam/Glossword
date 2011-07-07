@@ -23,6 +23,9 @@ class site_engine_utils extends site_engine {
 		$s .= '<input name="option" value="com_search" type="hidden" />';
 		$s .= '<input name="task" value="search" type="hidden" />';
 		$s .= '<input name="areas[]" value="gw_search" type="hidden" />';
+		if ( isset( $this->V->sef_append['Itemid'] ) {
+			$s .= '<input name="Itemid" value="'.$this->V->sef_append['Itemid'].'" type="hidden" />';
+		}
 		$s .= '</form></span>';
 		
 		return $s;
