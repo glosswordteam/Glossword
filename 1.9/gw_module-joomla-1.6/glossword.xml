@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/component-install.dtd">
+<extension type="component" version="1.6.0" method="new">
+	<name>Glossword</name>
+	<author>Dmitry N. Shilnikov</author>
+	<creationDate>July 2011</creationDate>
+	<copyright>© Dmitry N. Shilnikov, 2002-2011</copyright>
+	<authorEmail>team@glossword.biz</authorEmail>
+	<authorUrl>http://code.google.com/p/glossword/</authorUrl>
+	<version>1.9.3.2</version>
+	<license>Glossword.biz</license>
+	<description>A free glossary/dictionary PHP-script.</description>
+	<installfile>install.glossword.php</installfile>
+	<uninstallfile>uninstall.glossword.php</uninstallfile>
+	<install>
+		<sql>
+			<file driver="mysqli" charset="utf8">install.component.mysqli.sql</file>
+			<file driver="mysqli" charset="utf8">glossword_1_9.structure.sql</file>
+			<file driver="mysqli" charset="utf8">glossword_1_9.data.sql</file>
+			<file driver="mysqli" charset="utf8">glossword_1_9_pid.sql</file>
+			<file driver="mysqli" charset="utf8">glossword_1_9_tv.sql</file>
+			<file driver="mysqli" charset="utf8">gw_unicode_normalization.sql</file>
+		</sql>
+	</install>
+	<uninstall>
+		<sql>
+			<file driver="mysqli" charset="utf8">uninstall.mysqli.sql</file>
+			<file driver="mysqli" charset="utf8">glossword_1_9.uninstall.sql</file>
+		</sql>
+	</uninstall>
+	<files/>
+	<files folder="site">
+		<filename>controller.php</filename>
+		<filename>glossword.php</filename>
+		<filename>index.html</filename>
+		<filename>metadata.xml</filename>
+		<filename>router.php</filename>
+		<folder>views</folder>
+		<folder>core</folder>
+	</files>
+	<languages folder="language/site">
+		<language tag="en-GB">en-GB.com_glossword.ini</language>
+		<language tag="en-GB">en-GB.plg_search_glossword.ini</language>
+		<language tag="ru-RU">ru-RU.com_glossword.ini</language>
+		<language tag="ru-RU">ru-RU.plg_search_glossword.ini</language>
+	</languages>
+	<administration>
+		<menu>Glossword</menu>			
+		<submenu>
+			<menu link="arg[area]=a.add,t.items&amp;option=com_glossword">Add: Terms</menu>
+			<menu link="arg[area]=a.manage,t.items&amp;option=com_glossword">Manage: Terms</menu>
+			<menu link="arg[area]=a.import,t.items&amp;option=com_glossword">Import: Terms</menu>
+			<menu task="configure">Configure component</menu>
+		</submenu>
+		<files folder="admin">
+			<filename>admin.glossword.html.php</filename>
+			<filename>admin.glossword.php</filename>
+			<filename>config.xml</filename>
+			<filename>controller.php</filename>
+			<filename>index.html</filename>
+			<filename>install.glossword.php</filename>
+			<filename>uninstall.glossword.php</filename>
+			<filename>toolbar.glossword.html.php</filename>
+			<filename>toolbar.glossword.php</filename>
+			<filename>install.component.mysqli.sql</filename>
+			<filename>uninstall.mysqli.sql</filename>
+			<filename>glossword_1_9.structure.sql</filename>
+			<filename>glossword_1_9.data.sql</filename>
+			<filename>glossword_1_9_pid.sql</filename>
+			<filename>glossword_1_9_tv.sql</filename>
+			<filename>glossword_1_9.uninstall.sql</filename>
+			<filename>gw_unicode_normalization.sql</filename>
+			<folder>plugins</folder>
+			<folder>gw-joomla</folder>
+		</files>
+		<languages folder="language/admin">
+			<language tag="en-GB">en-GB.com_glossword.ini</language>
+			<language tag="ru-RU">ru-RU.com_glossword.ini</language>
+		</languages>
+	</administration>
+</extension>
