@@ -1,0 +1,19 @@
+/* Page structure */
+.gw-content { width: 100%; font-size: 100%; }
+
+
+
+/* Term */
+.gw-items dl dt { font-size: 130%; font-weight: normal; }
+/* Definition */
+.gw-items dl dd { margin-bottom: 1em; margin-left: 2.5em; }
+
+.gw-body h1 { line-height: 120%; }
+.gw-body h3 { font-size: 150%; }
+
+.gw-az a.highlight { padding: 0 4px !important;  }
+.gw-az a.showall { font-size: 66%; line-height: 125%; font-weight: normal !important; padding: 0 !important;  }
+
+
+/* Fixes for Joomla themes */
+.article-tools { overflow: hidden; clear: both; }

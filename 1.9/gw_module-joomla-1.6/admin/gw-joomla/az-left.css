@@ -1,0 +1,23 @@
+/* Alphabetic order */
+.gw-az {
+	overflow: hidden;
+	padding: 1px;
+	margin-top: 2em;
+	font-size: 125%;
+	line-height: 125%;
+	border-right: 1px dashed #999;
+	width: 6%;
+	float: left;
+}
+/* Each alphabetic group */
+.gw-az div { overflow: hidden; clear: both; border-bottom: 1px dashed #999; }
+.gw-az a, .gw-az a:visited {
+	min-width: 1em;
+	text-decoration: none;
+	display: block;
+	text-align: center;
+	margin: 1px;
+}
+
+/* Block with terms and definitions */
+.gw-items { float: right; width: 92%; }

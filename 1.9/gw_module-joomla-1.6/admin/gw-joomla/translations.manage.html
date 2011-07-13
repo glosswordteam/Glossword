@@ -1,0 +1,46 @@
+<div class="gw-items-wrapper">
+
+<div class="gw-items">
+
+	<!-- Records found: n -->
+	<div class="pagination">{%l:1036%}: 
+		<span><strong id="cnt-records">{%v:cnt_records%}</strong></span>
+		<div class="floatright">{%l:1038%}</div>
+	</div>
+
+	<!-- START BLOCK: if.paginator_top -->
+		<div class="pagination">{%l:1033%}: <span>{%v:pagination%}</span></div>
+	<!-- END BLOCK: if.paginator_top -->
+
+	<div style="height:1em"></div>
+
+	<table class="tbl-list" id="{%v:id_table%}" width="100%" cellspacing="1">
+	<thead>
+	<tr>
+	<th style="width:2%">{%v:th_n%}</th>
+	<th style="width:10%">{%l:1189%}</th>
+	<th style="width:10%">{%l:1205%}</th>
+	<th> {%l:1184%}  </th>
+	<th style="width:25%">{%l:1186%}</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	<!-- START BLOCK: translations.list -->
+	<tr id="langsd-{%translations.list.id_lang%}">
+	<td class="n">{%translations.list.cnt%}</td>
+	<td class="b">{%translations.list.percent%}</td>
+	<td class="b">{%translations.list.untranslated%}</td>
+	<td> {%translations.list.lang_url%} </td>
+	<td>{%translations.list.region%}</td>
+	</tr>
+	<!-- END BLOCK: translations.list -->
+	</tbody>
+	</table>
+
+	<!-- START BLOCK: if.paginator_bottom -->
+		<div class="pagination">{%l:1033%}: <span>{%v:pagination%}</span></div>
+	<!-- END BLOCK: if.paginator_bottom -->
+	
+	</div>
+</div>

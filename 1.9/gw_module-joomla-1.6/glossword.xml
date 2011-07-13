@@ -7,11 +7,10 @@
 	<copyright>© Dmitry N. Shilnikov, 2002-2011</copyright>
 	<authorEmail>team@glossword.biz</authorEmail>
 	<authorUrl>http://code.google.com/p/glossword/</authorUrl>
-	<version>1.9.3.2</version>
+	<version>1.9.4</version>
 	<license>Glossword.biz</license>
 	<description>A free glossary/dictionary PHP-script.</description>
-	<installfile>install.glossword.php</installfile>
-	<uninstallfile>uninstall.glossword.php</uninstallfile>
+	<scriptfile>script.php</scriptfile>
 	<install>
 		<sql>
 			<file driver="mysqli" charset="utf8">install.component.mysqli.sql</file>
@@ -28,7 +27,6 @@
 			<file driver="mysqli" charset="utf8">glossword_1_9.uninstall.sql</file>
 		</sql>
 	</uninstall>
-	<files/>
 	<files folder="site">
 		<filename>controller.php</filename>
 		<filename>glossword.php</filename>
@@ -45,12 +43,12 @@
 		<language tag="ru-RU">ru-RU.plg_search_glossword.ini</language>
 	</languages>
 	<administration>
-		<menu>Glossword</menu>			
+		<menu>COM_GLOSSWORD</menu>
 		<submenu>
-			<menu link="arg[area]=a.add,t.items&amp;option=com_glossword">Add: Terms</menu>
-			<menu link="arg[area]=a.manage,t.items&amp;option=com_glossword">Manage: Terms</menu>
-			<menu link="arg[area]=a.import,t.items&amp;option=com_glossword">Import: Terms</menu>
-			<menu task="configure">Configure component</menu>
+			<menu link="arg%5Barea%5C=a.add,t.items&amp;option=com_glossword">COM_GLOSSWORD_TERMS_ADD</menu>
+			<menu link="arg%5Barea%5C=a.manage,t.items&amp;option=com_glossword">COM_GLOSSWORD_TERMS_MANAGE</menu>
+			<menu link="arg%5Barea%5C=a.import,t.items&amp;option=com_glossword">COM_GLOSSWORD_TERMS_IMPORT</menu>
+			<menu task="configure">COM_GLOSSWORD_CFG</menu>
 		</submenu>
 		<files folder="admin">
 			<filename>admin.glossword.html.php</filename>
@@ -58,8 +56,6 @@
 			<filename>config.xml</filename>
 			<filename>controller.php</filename>
 			<filename>index.html</filename>
-			<filename>install.glossword.php</filename>
-			<filename>uninstall.glossword.php</filename>
 			<filename>toolbar.glossword.html.php</filename>
 			<filename>toolbar.glossword.php</filename>
 			<filename>install.component.mysqli.sql</filename>
@@ -74,7 +70,9 @@
 			<folder>gw-joomla</folder>
 		</files>
 		<languages folder="language/admin">
+			<language tag="en-GB">en-GB.com_glossword.sys.ini</language>
 			<language tag="en-GB">en-GB.com_glossword.ini</language>
+			<language tag="ru-RU">ru-RU.com_glossword.sys.ini</language>
 			<language tag="ru-RU">ru-RU.com_glossword.ini</language>
 		</languages>
 	</administration>

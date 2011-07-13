@@ -1,0 +1,62 @@
+<div class="gw-items-wrapper">
+
+<div class="gw-az">
+	{%v:az%}
+</div>
+
+<div class="gw-items">
+
+	<!-- Sorting orders -->
+	<div class="pagination">{%l:1171%}: {%v:sorting_order%}</div>
+	
+	<!-- Records found: n, Displayed: n -->
+	<div class="pagination">{%l:1036%}: 
+		<span><strong id="cnt-records">{%v:cnt_records%}</strong></span><!-- START BLOCK: if.cnt_displayed -->,
+		{%l:1037%}: <span><strong>{%v:cnt_displayed%}</strong></span> 
+		<!-- END BLOCK: if.cnt_displayed -->
+		<div class="floatright">{%l:1038%}</div>
+	</div>
+
+	<!-- START BLOCK: if.paginator_top -->
+		<div class="pagination">{%l:1033%}: <span>{%v:pagination%}</span></div>
+	<!-- END BLOCK: if.paginator_top -->
+
+	<div style="height:1em"></div>
+
+	<table class="tbl-list" id="{%v:id_table%}" cellspacing="1">
+	<thead>
+	<tr>
+	<th style="width:2%">{%v:th_n%}</th>
+	<th style="width:2%"> </th>
+	<th style="width:1%">{%l:1023%}</th>
+	<th style="width:90%">{%l:1025%}</th>
+	<th style="width:5%">{%l:1067%}</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	<!-- START BLOCK: items.list -->
+	<tr id="itemd-{%items.list.id_item%}">
+	<td class="n">{%items.list.cnt%}</td>
+	<td class="n">{%items.list.checkbox_html%}</td>
+	<td class="center">{%items.list.actions%}</td>
+	<td class="defnpreview">
+		{%items.list.item_title%} 
+		&#160;
+		<label for="{%items.list.id_checkbox%}">
+			{%items.list.item_descr%}
+		</label>
+	</td>
+	<td class="date">{%items.list.status%}</td>
+	</tr>
+	<!-- END BLOCK: items.list -->
+	</tbody>
+	</table>
+
+
+	<!-- START BLOCK: if.paginator_bottom -->
+		<div class="pagination">{%l:1033%}: <span>{%v:pagination%}</span></div>
+	<!-- END BLOCK: if.paginator_bottom -->
+
+	</div>
+</div>

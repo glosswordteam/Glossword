@@ -1,0 +1,48 @@
+<div class="gw-tvs-wrapper">
+
+<div class="gw-tvs">
+
+	<!-- Tabs -->
+	{%v:tabs_tvs%}
+
+
+	<!-- START BLOCK: if.paginator_top -->
+		<div class="pagination">{%l:1033%}: <span>{%v:pagination%}</span>
+		<div class="floatright">{%l:1038%}</div>
+		
+		</div>
+	<!-- END BLOCK: if.paginator_top -->
+
+	<div style="height:1em"></div>
+
+	<table class="tbl-list" id="{%v:id_table%}" width="100%" cellspacing="1">
+	<thead>
+	<tr>
+	<th style="width:2%">{%v:th_n%}</th>
+	<th style="width:45%"> {%v:lang_select1%} </th>
+	<th style="width:45%"> {%v:lang_select2%} </th>
+	<th style="width:8%">{%l:1208%}</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	<!-- START BLOCK: tvs.list -->
+
+	<tr id="row-{%tvs.list.id_pid%}">
+	<td class="n">{%tvs.list.cnt%}</td>
+	<td class="defnpreview"> <div {%tvs.list.div_tv_attr1%}>{%tvs.list.tv_value1%}<div> </td>
+	<td class="defnpreview"> <div {%tvs.list.div_tv_attr2%}>{%tvs.list.tv_value2%}<div> </td>
+	<td class="pid"><tt>{%tvs.list.pid_value%}</tt></td>
+	</tr>
+	<!-- END BLOCK: tvs.list -->
+	</tbody>
+	</table>
+	
+	{%v:hidden_fields%}
+
+	<!-- START BLOCK: if.paginator_bottom -->
+		<div class="pagination">{%l:1033%}: <span>{%v:pagination%}</span></div>
+	<!-- END BLOCK: if.paginator_bottom -->
+
+	</div>
+</div>
