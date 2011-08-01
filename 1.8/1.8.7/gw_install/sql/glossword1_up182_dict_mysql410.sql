@@ -1,0 +1,1 @@
+ALTER TABLE `%s` ADD `term_3` VARBINARY(64) NOT NULL AFTER `term_2`;

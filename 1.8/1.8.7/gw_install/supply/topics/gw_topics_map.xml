@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><glossword>
+<topic id="1">
+	<parameters><![CDATA[a:5:{s:7:"id_user";s:1:"2";s:9:"is_active";s:1:"1";s:8:"int_sort";s:2:"10";s:9:"id_parent";s:1:"0";s:10:"topic_icon";s:0:"";}]]></parameters>
+	<entry>
+		<lang xml:lang="en">
+			<topic_title><![CDATA[The list of dictionaries]]></topic_title>
+			<topic_descr><![CDATA[This is the list of interesting dictionaries.]]></topic_descr>
+			<id_topic_phrase><![CDATA[1]]></id_topic_phrase>
+		</lang>
+		<lang xml:lang="ru">
+			<topic_title><![CDATA[Список словарей]]></topic_title>
+			<topic_descr><![CDATA[Это список интересных словарей.]]></topic_descr>
+			<id_topic_phrase><![CDATA[2]]></id_topic_phrase>
+		</lang>
+	</entry>
+</topic>
+</glossword>

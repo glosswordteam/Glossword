@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tmx version="1.4">
+
+<tu>
+ <prop type="varname">VARIABLE</prop>
+ <tuv xml:lang="en"><seg>Variable</seg></tuv>
+ <tuv xml:lang="ru"><seg>Переменная</seg></tuv>
+</tu>
+
+</tmx>

@@ -1,0 +1,17 @@
+DELETE FROM `{PREFIX}settings` WHERE settings_key = 'prbblty\_tasks' LIMIT 1;
+DELETE FROM `{PREFIX}theme_group` WHERE id_group = "5";
+INSERT INTO `{PREFIX}theme_group` (settings_key,id_group,int_sort) VALUES ('tpl\_header','5','10');
+INSERT INTO `{PREFIX}theme_group` (settings_key,id_group,int_sort) VALUES ('tpl\_search\_form','5','20');
+INSERT INTO `{PREFIX}theme_group` (settings_key,id_group,int_sort) VALUES ('tpl\_az','5','30');
+INSERT INTO `{PREFIX}theme_group` (settings_key,id_group,int_sort) VALUES ('tpl\_aazz','5','40');
+INSERT INTO `{PREFIX}theme_group` (settings_key,id_group,int_sort) VALUES ('tpl\_aaazzz','5','50');
+INSERT INTO `{PREFIX}theme_group` (settings_key,id_group,int_sort) VALUES ('tpl\_term\_list','5','60');
+INSERT INTO `{PREFIX}theme_group` (settings_key,id_group,int_sort) VALUES ('tpl\_footer','5','70');
+DELETE FROM `{PREFIX}theme_group` WHERE id_group = "7";
+INSERT INTO `{PREFIX}theme_group` (settings_key,id_group,int_sort) VALUES ('tpl\_header','7','10');
+INSERT INTO `{PREFIX}theme_group` (settings_key,id_group,int_sort) VALUES ('tpl\_search\_form','7','20');
+INSERT INTO `{PREFIX}theme_group` (settings_key,id_group,int_sort) VALUES ('tpl\_az','7','30');
+INSERT INTO `{PREFIX}theme_group` (settings_key,id_group,int_sort) VALUES ('tpl\_aazz','7','40');
+INSERT INTO `{PREFIX}theme_group` (settings_key,id_group,int_sort) VALUES ('tpl\_aaazzz','7','50');
+INSERT INTO `{PREFIX}theme_group` (settings_key,id_group,int_sort) VALUES ('tpl\_term','7','60');
+INSERT INTO `{PREFIX}theme_group` (settings_key,id_group,int_sort) VALUES ('tpl\_footer','7','70');
