@@ -1,0 +1,223 @@
+body { text-align: center; padding: 1em; margin: 0; color: {color_black};
+	background: {color_5} url("{v:path_css}/bg_body.png");
+	cursor: default;
+}
+.{v:visualtheme} {
+	text-align: {v:css_align_left};
+	margin: 0 auto;
+	font-size: 100%;
+	width: 652px;
+	border: 5px solid {color_a_link};
+}
+.{v:visualtheme} .az {
+	font: 120% arial,sans-serif;
+	margin: 0; padding: 5px;
+	text-align: center;
+	color: {color_black};
+	background: {color_5};
+}
+.{v:visualtheme} .az a, .{v:visualtheme} .az a:visited  {
+	padding: 1px;
+	border: none;
+}
+.{v:visualtheme} .aazz {
+	font: 100% arial,sans-serif;
+	padding: 2px 5px;
+	border-bottom: 1px dashed {color_7};
+	background: {color_3};
+	height: 1.1em;
+}
+.{v:visualtheme} .aaazzz {
+	font: 75% arial,sans-serif;
+	padding: 2px 5px;
+	border-bottom: 1px dashed {color_7};
+	background: {color_3};
+	height: 1.1em;
+}
+.{v:visualtheme} .aazz a, .{v:visualtheme} .aazz a:visited,
+.{v:visualtheme} .aaazzz a, .{v:visualtheme} .aaazzz a:visited  {
+	border: none;
+	margin: 1px;
+}
+.{v:visualtheme} .xq { font: 61% verdana,arial,sans-serif; }
+.{v:visualtheme} .xw { font: 140% georgia,"times new roman",serif;   }
+.{v:visualtheme} .xr { font: bold 91% verdana,arial,sans-serif; }
+.{v:visualtheme} .xt { font: 71% verdana,arial,sans-serif; }
+.{v:visualtheme} .xu { font: 90% verdana,arial,sans-serif; }
+.{v:visualtheme} .date {
+	font: 100% 'trebuchet ms',arial,sans-serif;
+	color: {color_7}; background: {color_2};
+}
+.{v:visualtheme} .hr2 { height: 1px; font-size: 0px; border-top: {color_2} 1px solid; background: {color_2} }
+.{v:visualtheme} .hr3 { height: 1px; font-size: 0px; border-top: {color_3} 1px solid; background: {color_3} }
+.{v:visualtheme} .hr4 { height: 5px; font-size: 0px; border-top: {color_4} 0px solid; background: url("{v:path_css}/bg_hr4.png") repeat-x; }
+.{v:visualtheme} .hr5 { height: 1px; font-size: 0px; border-top: {color_5} 1px solid; background: {color_5} }
+.{v:visualtheme} h1 { margin: 0; }
+.{v:visualtheme} h3 {
+	font: bold 75% verdana,arial,sans-serif;
+	color: {color_7};
+	background: {color_4};
+	margin: 0; padding: 4px;
+}
+.{v:visualtheme} h4 {
+	font: bold 90% tahoma,arial,sans-serif;
+	color: {color_3};
+	background: {color_6} url("{v:path_css}/bg_h4.png") repeat-x;
+	margin: 0; padding: 0.5em;
+}
+.{v:visualtheme} h5 {
+	font: bold 100% tahoma,arial,sans-serif;
+	color: {color_7};
+	background: transparent;
+	margin: 0.5em 0 -0.5em 0; padding: 0;
+}
+.{v:visualtheme} a { cursor: pointer; color: {color_a_link}; background: transparent; text-decoration: none; border-bottom: 1px dashed {color_a_link}; }
+.{v:visualtheme} a:visited { color: {color_a_visited}; background: transparent; text-decoration: none;  border-bottom: 1px dashed {color_a_visited}; }
+.{v:visualtheme} a:hover { color: {color_a_hover}; background: transparent; text-decoration: none;  border-bottom: 1px solid {color_a_hover}; }
+.{v:visualtheme} a:active { color: {color_a_active}; background: transparent; text-decoration: none; }
+.{v:visualtheme} a.on, a:active.on, a:visited.on { color: {color_a_hover}; background: {color_a_active}; text-decoration: none; }
+.{v:visualtheme} a.plain { text-decoration: none; border: none; }
+.{v:visualtheme} dl.termlist dt {
+	margin: 0.2em 0.5em 0 0.5em;
+	border-top: {color_4} 2px dotted;
+}
+.{v:visualtheme} dl.termlist dd {
+	text-align: justify;
+	margin: 0 1em 1em 2.5em;
+}
+.{v:visualtheme} dl.termlist dt {
+	font: 120% "arial unicode ms",arial,helvetica,sans-serif;
+}
+
+
+/* the catalog of dictionaries */
+.{v:visualtheme} .catalog {
+	color: #999;
+	background: transparent;
+}
+.{v:visualtheme} .catalog dd {
+	margin-left: 1em;
+}
+.{v:visualtheme} .catalog dt {
+	margin-top: 0;
+}
+.{v:visualtheme} .catalog .xr {
+	font: bold 86% tahoma,arial,sans-serif;
+	color: #555;
+	margin-top: 0.5em;
+}
+
+
+.{v:visualtheme} th.gw {
+	color: {color_a_link}; background: {color_5} url("{v:path_css}/bg_th.png");
+	font: bold 71% tahoma,arial,sans-serif;
+}
+.{v:visualtheme} .profile dt { font-size: 80%; margin: 1em 0; color: #987; }
+
+.term { color: {color_7}; background: transparent; font: 175% georgia,"times new roman",serif; }
+.termpreview { font: 100% "arial unicode ms",arial,helvetica,sans-serif; }
+.defnpreview { font: 95% "arial unicode ms",arial,helvetica,sans-serif; }
+.trsp { color: #777; background: transparent; font: 100% 'lucida sans unicode',sans-serif; }
+.abbr-1,.abbr-2, .abbr-3,.abbr-5  { margin: 0em; padding: 0; color: #777; background: transparent; font: bold 100% sans-serif; }
+.abbr-1 { color: #e30700; }
+.abbr-2 { color: #9b67c7; }
+.abbr-3 { color: #5bbf3f; }
+.abbr-5 { color: #47a7a3; }
+.trns-4 { color: #5A0; background: transparent; font: bold 100% "arial unicode ms",arial,sans-serif; }
+.defn { margin: 0 0 0 1em; font: 106% "times new roman",serif; text-align: justify; }
+ol.defnblock li .defn { margin: 0; }
+.defnblock { margin: 0; padding: 0 1em 1em 1em; width: auto; }
+ol.defnblock { margin-left: 1em; }
+.defnnote { font: 90% "arial unicode ms",arial,helvetica,sans-serif;  }
+div.defn p { margin-bottom: 0; }
+.gwsrc, .gwsyn, .gwantonym, .gwsee, .gwaddress, .gwphone { font: 106% "times new roman",serif; }
+.gwusg { font: 100% "times new roman",serif; color: #987; background: transparent; margin: -0.4em 0 0 2em; }
+.gwusg dl { margin: 0 0 0.5em 0; }
+.gwvar { color: #336; background: #F8F8F8; }
+
+.submitcancel { cursor: pointer; padding: 2px; border: #C7C4A9 1px solid; width: 75px; color: #000; background: #F0F0EB; font: 8pt "microsoft sans serif","ms sans serif",serif; }
+.submitok, a.submitok, a:active.submitok { cursor: pointer; padding: 2px;
+	border: {color_black} 1px solid;
+	display: block;
+	text-align: center;
+	width: 75px;
+	color: {color_white};
+	background: {color_a_link} url("{v:path_css}/bg_b.png");
+	font: 8pt "microsoft sans serif","ms sans serif",serif;
+}
+a.submitok, a:hover.submitok { text-decoration: none; }
+.submitok:hover { color: {color_7}; background: {color_5}; }
+select:hover, input.input:hover, textarea.input:hover { color: {color_black}; background: {color_3}; }
+.submitcancel:hover {
+	color: {color_2};
+	background: {color_7};
+}
+input.input, textarea.input {
+	border-top: #000 1px solid;
+	border-left: #000 1px solid;
+	border-bottom: #97AA99 1px solid;
+	border-right: #97AA99 1px solid;
+}
+
+/* Boxes */
+.{v:visualtheme} .box {
+	padding: 1em;
+	background: {color_1};
+}
+.{v:visualtheme} div.box-themes td {
+	padding: 1px 3px;
+}
+
+/* */
+.navtop a, .navtop a:visited {
+	float: left;
+	text-align: left;
+	display: block;
+	width: 9em;
+	padding: 3px 3px 3px 15px;
+	margin: 2px;
+	white-space: nowrap;
+	border: {color_6} 1px dotted;
+	text-decoration: underline;
+	background: {color_4} url("{v:path_css}/icon_off.gif") no-repeat 0.1em;
+}
+.navtop a:hover {
+	color: {color_a_hover};
+	border: {color_a_hover} 1px dotted;
+	background: {color_2} url("{v:path_css}/icon_on.gif") no-repeat 0.1em;
+	text-decoration: underline;
+}
+.bgtop  {
+	width: 100%;
+	background: {color_2} url("{v:path_css}/bg_top.png") repeat-x;
+}
+.bgbottom  {
+	background: {color_2} url("{v:path_css}/bg_bottom.png") repeat-x;
+}
+ul.dictlist {
+	margin-top: 0;
+}
+/* */
+.{v:visualtheme} div.navpages { color: {color_6}; background: transparent; }
+.{v:visualtheme} div.navpages b.on { color: {color_a_hover}; background: {color_a_active}; }
+
+@media print {
+.{v:visualtheme} {
+	width: 100%;
+	border: none;
+}
+}
+/* Virtual keyboard */
+.gwkeyboard { background: #CCC; color: #000; border: 1px solid #AAA; font: 140% "Arial Unicode MS", sans-serif; }
+.gwkeyboard td { background: #F3F3F3; }
+.gwkeyboard a, .gwkeyboard a:visited {
+	text-align:center; 
+	display: block; 
+	width: 1em; 
+	text-decoration: none; 
+	border-top: 1px #FFF solid;
+	border-left: 1px #FFF solid;
+	border-bottom: 1px #CCC solid;
+	border-right: 1px #CCC solid;
+}
+.gwkeyboard a:hover { background: {color_a_link}; color: {color_white}; text-decoration: none; border: 1px solid #FFF; }

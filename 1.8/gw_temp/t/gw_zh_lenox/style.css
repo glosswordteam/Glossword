@@ -1,0 +1,259 @@
+body { text-align: center; padding: 1em; margin: 0; cursor: default;
+	color: {color_black}; background: {color_5} url({v:path_css}/body_bg.jpg);
+}
+.{v:visualtheme} { 
+	text-align: {v:css_align_left}; 
+	margin: 0 auto; 
+	font-size: 100%; 
+	width: 80%; 
+	border: 5px solid {color_a_link};
+}
+.{v:visualtheme} .az { 
+	font: 110% arial,sans-serif; 
+	margin: 0; padding: 5px;
+	text-align: center;
+	color: {color_black};
+	background: {color_5} url({v:path_css}/bg_az.png) repeat-x;
+}
+.{v:visualtheme} .az a, .{v:visualtheme} .az a:visited  {
+	border: {color_5} 1px solid;
+	padding: 0px 2px;
+	margin: 0 -2px;
+	text-decoration: none;
+}
+.{v:visualtheme} .az a:hover {
+	border: {color_7} 1px solid;
+	padding: 0px 2px;
+}
+.{v:visualtheme} .aazz {
+	font: bold 90% arial,sans-serif;  
+	padding: 2px 5px;
+	border-top: 1px solid {color_5};
+	background: {color_3} url({v:path_css}/bg_az.png) repeat-x;
+	height: 1.1em;
+}
+.{v:visualtheme} .aaazzz {
+	font: 80% arial,sans-serif;  
+	padding: 2px 5px;
+	border-top: 1px solid {color_5};
+	background: {color_3} url({v:path_css}/bg_az.png) repeat-x;
+}
+.{v:visualtheme} .aazz a, .{v:visualtheme} .aazz a:visited  {
+	border: none;
+	text-decoration: none;
+}
+.{v:visualtheme} .xq { font: 70% tahoma,arial,sans-serif; }
+.{v:visualtheme} .xw { font: 140% georgia,"times new roman",serif;   }
+.{v:visualtheme} .xr { font: bold 91% verdana,arial,sans-serif; }
+.{v:visualtheme} .xt { font: 71% verdana,arial,sans-serif; }
+.{v:visualtheme} .xu { font: 90% verdana,arial,sans-serif; }
+.{v:visualtheme} .date {
+	font: 100% 'trebuchet ms',arial,sans-serif; 
+	color: {color_7}; background: {color_2};
+}
+.{v:visualtheme} .hr4 { height: 5px; font-size: 0px; border-top: {color_4} 0px solid; background: url({v:path_css}/bg_hr4.png) repeat-x; }
+.{v:visualtheme} .hr5 { height: 1px; font-size: 0px; border-top: {color_5} 1px solid; background: {color_2} }
+.{v:visualtheme} h1 {
+	padding:0; margin:0;
+}
+.{v:visualtheme} h3 {
+	font: bold 75% tahoma,arial,sans-serif;
+	color: {color_7}; 
+	background: {color_3} url({v:path_css}/bg_h3.png); 
+	margin: 0; padding: 4px;
+	border-left: {color_5} 4px solid;
+}
+.{v:visualtheme} h4 {
+	font: bold 80% tahoma,arial,sans-serif; 
+	color: {color_1}; 
+	background: {color_5} url({v:path_css}/bg_h4.png); 
+	margin: 0; padding: 0.3em; 
+	border-left: {color_7} 4px solid;
+}
+.{v:visualtheme} h5 {
+	font: bold 100% tahoma,arial,sans-serif;
+	color: {color_7};
+	background: transparent;
+	margin: 0.5em 0 -0.5em 0; padding: 0;
+}
+.{v:visualtheme} a { cursor:pointer; color: {color_a_link}; background: transparent; text-decoration: underline; }
+.{v:visualtheme} a:visited { color: {color_a_visited}; background: transparent; text-decoration: underline; }
+.{v:visualtheme} a:hover { color: {color_a_hover}; background: transparent; text-decoration: none;  border-bottom: 1px solid {color_a_hover}; }
+.{v:visualtheme} a:active { color: {color_a_active}; background: transparent; text-decoration: none; }
+.{v:visualtheme} a.on, a:active.on, a:visited.on { color: {color_a_hover}; background: {color_a_active}; text-decoration: none; }
+.{v:visualtheme} a.plain { text-decoration: none; border: none; }
+/* the list of terms */
+.{v:visualtheme} dl.termlist {
+	margin:0; padding:0;
+}
+.{v:visualtheme} dl.termlist dt {
+	font: 101% "arial unicode ms",arial,helvetica,sans-serif;
+	line-height: 120%;
+	margin: 0.4em 0.4em 0 0.4em;
+	color: {color_6};
+}
+.{v:visualtheme} dl.termlist dd {
+	font: 81%/115% tahoma,"arial unicode ms",sans-serif;
+	text-align: justify;
+	margin: 0 0.4em 0.4em 0.4em;
+	padding: 0 0 0 1.5em;
+}
+
+.{v:visualtheme} .tbl-browse {
+	width: 100%;
+	margin-top: 1em;
+}
+.{v:visualtheme} .tbl-browse td {
+	padding: 0;
+}
+.{v:visualtheme} .tbl-browse tr.even {
+	background: {color_2} url({v:path_css}/m2.png);
+}
+
+
+/* the catalog of dictionaries */
+.{v:visualtheme} .catalog {
+	color: #777; 
+	background: transparent;
+}
+.{v:visualtheme} .catalog dd {
+	margin-left: 1em;
+}
+.{v:visualtheme} .catalog .xr {
+	font: bold 76% tahoma,arial,sans-serif;
+	color: #999;
+}
+
+
+/* Top 10 */
+.{v:visualtheme} th.gw {
+	text-align: center;
+	color: {color_a_link}; 
+	background: {color_3} url({v:path_css}/bg_th.png);
+	font: bold 71% tahoma,arial,sans-serif;
+}
+
+.{v:visualtheme} .profile dt { font-size: 80%; margin: 1em 0; color: #987; }
+
+.term { color: {color_7}; background: transparent; font: 170% "arial unicode ms",arial,helvetica,sans-serif; letter-spacing: -1px; }
+.termpreview { font: 90% "arial unicode ms",arial,helvetica,sans-serif; }
+.defnpreview { font: 95% "arial unicode ms",arial,helvetica,sans-serif; }
+.trsp { color: #777; background: transparent; font: 100% 'lucida sans unicode',sans-serif; }
+.abbr-1,.abbr-2, .abbr-3,.abbr-5  { margin: 0em; padding: 0; color: #777; background: transparent; font: bold 100% sans-serif; }
+.abbr-1 { color: #e30700; }
+.abbr-2 { color: #9b67c7; }
+.abbr-3 { color: #5bbf3f; }
+.abbr-5 { color: #47a7a3; }
+.trns-4 { color: #5A0; background: transparent; font: bold 100% "arial unicode ms",arial,sans-serif; }
+.defn { margin: 0 0 0 0.5em; font: 90%/115% tahoma,"arial unicode ms",arial,sans-serif; text-align: justify; }
+.defnnote { color: #987; background: transparent; font: 75% "arial unicode ms",arial,helvetica,sans-serif;  }
+div.defn p { margin-bottom: 0; }
+.defnblock { margin: 0; padding: 0 1em 1em 1em; width: auto; }
+ol.defnblock li { margin-bottom: 1em; }
+
+.gwsrc, .gwsyn, .gwantonym, .gwsee, .gwaddress, .gwphone { font: 90%/115% "arial unicode ms",arial,sans-serif; }
+.gwusg { font: 100% "times new roman",serif; color: #987; background: transparent; margin: -0.4em 0 0 2em; }
+.gwusg dl { margin: 0 0 0.5em 0; }
+.gwvar { color: #336; background: #F8F8F8; }
+
+.submitcancel { cursor: pointer; padding: 2px; border: #C7C4A9 1px solid; width: 75px; color: #000; background: #F0F0EB; font: 8pt "microsoft sans serif","ms sans serif",serif; }
+.submitok { cursor: pointer; padding: 2px;
+	border: {color_black} 1px solid; 
+	width: 75px; 
+	color: {color_white}; 
+	background: {color_a_link} url({v:path_css}/bg_b.png); 
+	font: 8pt "microsoft sans serif","ms sans serif",serif;
+}
+a.submitok, a:hover.submitok { text-decoration: none; }
+input.input { color: {color_black}; background: {color_1}; border: {color_7} 1px solid;  }
+select { color: {color_black}; background: {color_1};  }
+
+/* content box */
+.{v:visualtheme} .box {
+	padding: 1em;
+	background: {color_1} url({v:path_css}/m1.png);
+}
+
+/* Search form */
+.{v:visualtheme} div.box-search td {
+	padding: 1px 3px;
+}
+.{v:visualtheme} div.box-search  {
+	padding: 1px;
+	margin-right: 0.5em;
+	color: {color_black};
+	background: {color_3};
+	border: {color_7} 2px solid;
+}
+/* */
+.{v:visualtheme} .navpages {
+	padding: 5px 0;
+	color: #777;
+	background: {color_2};
+	border-top: {color_4} 1px solid;
+}
+/* */
+.{v:visualtheme} .navtop a, .{v:visualtheme} .navtop a:visited {
+	float: left;
+	text-align: left;
+	display: block;
+	width: 9em;
+	padding: 3px 3px 3px 17px;
+	margin: 4px;
+	white-space: nowrap; 
+	color: {color_5};
+	background: {color_7} url({v:path_css}/bg_nav.png) no-repeat; 
+	border: none;
+	text-decoration: none;
+}
+.{v:visualtheme} .navtop a:hover {
+	color: {color_a_active};
+	background: {color_7} url({v:path_css}/bg_nav_hover.png) no-repeat; 
+	border: none;
+	text-decoration: none;
+}
+.bgtop {
+	background: {color_2} url({v:path_css}/bg_top.png) repeat-x; 
+}
+.bgbottom  {
+	background: {color_2} url({v:path_css}/bg_bottom.png) repeat-x; 
+}
+/* search results */
+ul.dictlist {
+	margin-top: 0;
+}
+
+@media print{
+body { color: #000; background: #FFF; }
+.gray { color: #444; background: transparent; }
+
+.gw-zh-lenox {
+	text-align: left;
+	margin: 0.5em auto;
+	font-size: 100%;
+	width: 180mm;
+	border: none;
+}
+.gw-zh-lenox a { color: #00F; background: transparent; text-decoration: underline; }
+.gw-zh-lenox a:visited { color: #00F; background: transparent; text-decoration: underline; }
+.gw-zh-lenox a:hover { color: #00F; background: transparent; text-decoration: underline; }
+.gw-zh-lenox a:active { color: #F00; background: transparent; text-decoration: underline; }
+
+
+.abbr { color: #444; background: transparent; }
+.gwsrc, .gwsyn, .gwsee, .gwaddress, .gwphone { color: #000; background: transparent; }
+.gwusg { color: #444; background: transparent; }
+.trns { color: #5A0; background: transparent; }
+.trsp { color: #444; background: transparent; }
+
+.stress { color: #C30; background: transparent; }
+
+.red { color: #E30; background: transparent; }
+.green { color: #3B0; background: transparent; }
+}
+
+/* Virtual keyboard */
+.gwkeyboard { background: #CCC; color: #000; border: 1px solid #AAA; font: 140% "Arial Unicode MS", sans-serif; }
+.gwkeyboard td { background: #F3F3F3; }
+.gwkeyboard a, .gwkeyboard a:visited { text-align:center; display:block; width:1em; text-decoration: none; border: none; }
+.gwkeyboard a:hover { background: {color_a_link}; color: {color_white}; text-decoration: none; border: none; }

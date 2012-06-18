@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?><glossword version="1.8.10">
+<custom_page id="1">
+	<parameters><![CDATA[a:8:{s:7:"id_user";s:1:"2";s:9:"is_active";s:1:"1";s:8:"int_sort";s:2:"40";s:9:"id_parent";s:1:"0";s:12:"date_created";s:10:"1110191523";s:13:"date_modified";s:10:"1206163573";s:9:"page_icon";s:14:"icon_16_fb.gif";s:8:"page_uri";s:8:"feedback";}]]></parameters>
+	<page_php_1><![CDATA[include_once($sys['path_addon'].'/gw_feedback/index.php');]]></page_php_1>
+	<page_php_2><![CDATA[]]></page_php_2>
+	<entry>
+		<lang xml:lang="en">
+			<page_title><![CDATA[Feedback]]></page_title>
+			<page_content><![CDATA[{block:feedback}]]></page_content>
+			<page_descr></page_descr>
+			<page_keywords></page_keywords>
+			<id_page_phrase><![CDATA[2]]></id_page_phrase>
+		</lang>
+		<lang xml:lang="es">
+			<page_title><![CDATA[Contacto]]></page_title>
+			<page_content><![CDATA[{block:feedback}]]></page_content>
+			<page_descr></page_descr>
+			<page_keywords></page_keywords>
+			<id_page_phrase><![CDATA[23]]></id_page_phrase>
+		</lang>
+		<lang xml:lang="ru">
+			<page_title><![CDATA[Обратная связь]]></page_title>
+			<page_content><![CDATA[{block:feedback}]]></page_content>
+			<page_descr></page_descr>
+			<page_keywords></page_keywords>
+			<id_page_phrase><![CDATA[1]]></id_page_phrase>
+		</lang>
+	</entry>
+</custom_page>
+<custom_page id="2">
+	<parameters><![CDATA[a:8:{s:7:"id_user";s:1:"2";s:9:"is_active";s:1:"1";s:8:"int_sort";s:2:"20";s:9:"id_parent";s:1:"0";s:12:"date_created";s:10:"1112663721";s:13:"date_modified";s:10:"1206163630";s:9:"page_icon";s:17:"icon_16_top10.gif";s:8:"page_uri";s:5:"top10";}]]></parameters>
+	<page_php_1><![CDATA[$arV['page_title'] = sprintf($arV['page_title'], $sys['max_dict_top']);
+
+/* Average hits per dictionary */
+$oTpl->addVal( 'block:average_hits',
+  gw_html_block_small(
+    $oL->m('r_dict_averagehits'), 
+    getTop10('DICT_AVERAGEHITS', $sys['max_dict_top'], 1))
+);
+
+/* Newest dictionaries */
+$oTpl->addVal( 'block:dict_newest', 
+  gw_html_block_small(
+    $oL->m('r_dict_newest'), 
+    getTop10('DICT_NEWEST', $sys['max_dict_top'], 1))
+);
+
+/* Last updated dictionaries */
+$oTpl->addVal( 'block:dict_updated', 
+  gw_html_block_small(
+    $oL->m('r_dict_updated'), 
+    getTop10('DICT_UPDATED', $sys['max_dict_top'], 0))
+);
+
+/* The last search queries.*/
+$oTpl->addVal( 'block:search_last', 
+  gw_html_block_small(
+    $oL->m('1159'), 
+    getTop10('SEARCH_LAST', $sys['max_dict_top'], 0))
+);
+
+/* Top authors */
+$oTpl->addVal( 'block:user_top', 
+  gw_html_block_small(
+    $oL->m('1112'), 
+    getTop10('USER_ACTIVE', $sys['max_dict_top'], 0))
+);
+
+/* Last updated terms
+$oTpl->addVal( 'block:term_updated', 
+  gw_html_block_small(
+    $oL->m('r_term_updated'), 
+    getTop10('TERM_UPDATED', $sys['max_dict_top'] , 1), 
+    0, 0, $sys['css_align_left'])
+);
+*/
+]]></page_php_1>
+	<page_php_2><![CDATA[]]></page_php_2>
+	<entry>
+		<lang xml:lang="en">
+			<page_title><![CDATA[Top 10]]></page_title>
+			<page_content><![CDATA[{block:average_hits}
+<br />
+{block:dict_updated}
+<br />
+{block:dict_newest}
+<br />
+{block:search_last}
+<br />
+{block:user_top}]]></page_content>
+			<page_descr></page_descr>
+			<page_keywords></page_keywords>
+			<id_page_phrase><![CDATA[3]]></id_page_phrase>
+		</lang>
+		<lang xml:lang="es">
+			<page_title><![CDATA[Top 10]]></page_title>
+			<page_content><![CDATA[{block:average_hits}
+<br />
+{block:dict_updated}
+<br />
+{block:dict_newest}
+<br />
+{block:search_last}
+<br />
+{block:user_top}]]></page_content>
+			<page_descr></page_descr>
+			<page_keywords></page_keywords>
+			<id_page_phrase><![CDATA[20]]></id_page_phrase>
+		</lang>
+		<lang xml:lang="ru">
+			<page_title><![CDATA[10 самых]]></page_title>
+			<page_content><![CDATA[{block:average_hits}
+<br />
+{block:dict_updated}
+<br />
+{block:dict_newest}
+<br />
+{block:search_last}
+<br />
+{block:user_top}]]></page_content>
+			<page_descr></page_descr>
+			<page_keywords></page_keywords>
+			<id_page_phrase><![CDATA[4]]></id_page_phrase>
+		</lang>
+	</entry>
+</custom_page>
+<custom_page id="4">
+	<parameters><![CDATA[a:8:{s:7:"id_user";s:1:"2";s:9:"is_active";s:1:"1";s:8:"int_sort";s:2:"50";s:9:"id_parent";s:1:"0";s:12:"date_created";s:10:"1110352429";s:13:"date_modified";s:10:"1207556588";s:9:"page_icon";s:17:"icon_16_login.gif";s:8:"page_uri";s:5:"login";}]]></parameters>
+	<page_php_1><![CDATA[gwtk_header($sys['server_dir'].'/'.$sys['file_admin']);]]></page_php_1>
+	<page_php_2><![CDATA[]]></page_php_2>
+	<entry>
+		<lang xml:lang="en">
+			<page_title><![CDATA[Login]]></page_title>
+			<page_content></page_content>
+			<page_descr></page_descr>
+			<page_keywords></page_keywords>
+			<id_page_phrase><![CDATA[8]]></id_page_phrase>
+		</lang>
+		<lang xml:lang="es">
+			<page_title><![CDATA[Acceso]]></page_title>
+			<page_content></page_content>
+			<page_descr></page_descr>
+			<page_keywords></page_keywords>
+			<id_page_phrase><![CDATA[26]]></id_page_phrase>
+		</lang>
+		<lang xml:lang="ru">
+			<page_title><![CDATA[Вход]]></page_title>
+			<page_content></page_content>
+			<page_descr></page_descr>
+			<page_keywords></page_keywords>
+			<id_page_phrase><![CDATA[7]]></id_page_phrase>
+		</lang>
+	</entry>
+</custom_page>
+<custom_page id="5">
+	<parameters><![CDATA[a:8:{s:7:"id_user";s:1:"2";s:9:"is_active";s:1:"0";s:8:"int_sort";s:2:"30";s:9:"id_parent";s:1:"0";s:12:"date_created";s:10:"1117810844";s:13:"date_modified";s:10:"1204978288";s:9:"page_icon";s:19:"icon_16_catalog.gif";s:8:"page_uri";s:12:"dictionaries";}]]></parameters>
+	<page_php_1><![CDATA[$oTpl->addVal( 'block:catalog', getDictList('', 999, 2, 999 ) );]]></page_php_1>
+	<page_php_2><![CDATA[]]></page_php_2>
+	<entry>
+		<lang xml:lang="en">
+			<page_title><![CDATA[Dictionaries]]></page_title>
+			<page_content><![CDATA[{block:catalog}]]></page_content>
+			<page_descr></page_descr>
+			<page_keywords></page_keywords>
+			<id_page_phrase><![CDATA[9]]></id_page_phrase>
+		</lang>
+		<lang xml:lang="es">
+			<page_title><![CDATA[Diccionarios]]></page_title>
+			<page_content><![CDATA[{block:catalog}]]></page_content>
+			<page_descr></page_descr>
+			<page_keywords></page_keywords>
+			<id_page_phrase><![CDATA[17]]></id_page_phrase>
+		</lang>
+		<lang xml:lang="ru">
+			<page_title><![CDATA[Словари]]></page_title>
+			<page_content><![CDATA[{block:catalog}]]></page_content>
+			<page_descr></page_descr>
+			<page_keywords></page_keywords>
+			<id_page_phrase><![CDATA[10]]></id_page_phrase>
+		</lang>
+	</entry>
+</custom_page>
+<custom_page id="6">
+	<parameters><![CDATA[a:8:{s:7:"id_user";s:1:"2";s:9:"is_active";s:1:"1";s:8:"int_sort";s:2:"10";s:9:"id_parent";s:1:"0";s:12:"date_created";s:10:"1187866866";s:13:"date_modified";s:10:"1218977366";s:9:"page_icon";s:17:"icon_16_about.gif";s:8:"page_uri";s:5:"about";}]]></parameters>
+	<page_php_1><![CDATA[]]></page_php_1>
+	<page_php_2><![CDATA[]]></page_php_2>
+	<entry>
+		<lang xml:lang="en">
+			<page_title><![CDATA[About]]></page_title>
+			<page_content><![CDATA[This site is built on <a href="http://glossword.biz/">Glossword</a> — the software to create and publish online multilingual dictionaries, glossaries, references, or encyclopedias.]]></page_content>
+			<page_descr><![CDATA[Short about]]></page_descr>
+			<page_keywords></page_keywords>
+			<id_page_phrase><![CDATA[11]]></id_page_phrase>
+		</lang>
+		<lang xml:lang="es">
+			<page_title><![CDATA[Acerca de]]></page_title>
+			<page_content><![CDATA[Este sitio está construido con <a href="http://glossword.biz/">Glossword</a>, software para crear y publicar en línea diccionarios, glosarios, referencias y enciclopedias multilingües.]]></page_content>
+			<page_descr><![CDATA[Escriba su texto aquí]]></page_descr>
+			<page_keywords></page_keywords>
+			<id_page_phrase><![CDATA[15]]></id_page_phrase>
+		</lang>
+		<lang xml:lang="ru">
+			<page_title><![CDATA[О сайте]]></page_title>
+			<page_content><![CDATA[Этот сайт построен на <a href="http://glossword.biz/">Glossword</a> — программе для создания и публикации онлайновых словарей, глоссариев, справочников, энциклопедий.]]></page_content>
+			<page_descr><![CDATA[Коротко о сайте]]></page_descr>
+			<page_keywords></page_keywords>
+			<id_page_phrase><![CDATA[12]]></id_page_phrase>
+		</lang>
+	</entry>
+</custom_page>
+</glossword>

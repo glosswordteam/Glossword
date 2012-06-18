@@ -1,0 +1,194 @@
+body { padding: 0; margin: 0; color: {color_black}; background: {color_white}; cursor: default; }
+.{v:visualtheme} {
+	text-align: {v:css_align_left};
+	margin: 0 auto;
+	font-size: 100%;
+	width: 100%;
+}
+.{v:visualtheme} .az { font: bold 110% 'trebuchet ms',arial,verdana,sans-serif; margin: 0; padding: 5px; width: 98%; text-align: center; }
+.{v:visualtheme} .aazz { font: bold 100% 'trebuchet ms',arial,verdana,sans-serif; margin: 0 1em; padding: 0 5px; width: auto; }
+.{v:visualtheme} .aaazzz { background: {color_2}; border-bottom:1px solid {color_4}; font: 80% 'trebuchet ms',arial,verdana,sans-serif; margin: 0 1.2em; padding: 0 5px; width: auto; }
+.{v:visualtheme} .xq { font: 61% verdana,arial,sans-serif; }
+.{v:visualtheme} .xw { font: bold 140% "trebuchet ms",verdana,sans-serif; }
+.{v:visualtheme} .xr { font: bold 91% verdana,arial,sans-serif; }
+.{v:visualtheme} .xt { font: 71% verdana,arial,sans-serif; }
+.{v:visualtheme} .xu { font: 90% verdana,arial,sans-serif; }
+.{v:visualtheme} .date {
+	font: 100% 'trebuchet ms',arial,sans-serif;
+	color: {color_7}; background: {color_2};
+}
+.{v:visualtheme} .hr3 { height: 1px; font-size: 0px; border-top: {color_3} 1px solid;  }
+.{v:visualtheme} .hr4 { height: 1px; font-size: 0px; border-top: {color_4} 1px solid; background: {color_2} }
+.{v:visualtheme} .hr5 { height: 1px; font-size: 0px; border-top: {color_5} 2px solid; background: {color_3} }
+.{v:visualtheme} h1 { margin: 0; }
+.{v:visualtheme} h3 {
+	font: bold 70% verdana,arial,sans-serif;
+	color: {color_black};
+	background: {color_3};
+	margin: 0; padding: 3px;
+	border-top: {color_4} 2px solid;
+}
+.{v:visualtheme} h4 {
+	font: bold 90% verdana,arial,sans-serif;
+	color: {color_7};
+	background: {color_4};
+	margin: 0; padding: 4px;
+}
+.{v:visualtheme} h5 {
+	font: bold 100% tahoma,arial,sans-serif;
+	color: {color_7};
+	background: transparent;
+	margin: 0.5em 0 -0.5em 0; padding: 0;
+}
+.{v:visualtheme} a { cursor:pointer; color: {color_a_link}; background: transparent; text-decoration: none; }
+.{v:visualtheme} a:visited { color: {color_a_visited}; background: transparent; text-decoration: none; }
+.{v:visualtheme} a:hover { color: {color_a_hover}; background: transparent; text-decoration: underline; }
+.{v:visualtheme} a:active { color: {color_a_active}; background: transparent; text-decoration: none; }
+.{v:visualtheme} a.on, a:active.on, a:visited.on { color: {color_a_hover}; background: {color_a_active}; text-decoration: none; }
+
+.{v:visualtheme} .tbl-browse {
+	width: 100%;
+}
+.{v:visualtheme} .tbl-browse td {
+	vertical-align: top;
+	padding: 0;
+}
+
+
+/* the catalog of dictionaries */
+.{v:visualtheme} .catalog {
+	color: #777;
+	background: transparent;
+}
+.{v:visualtheme} .catalog dd {
+	margin-left: 2em;
+}
+
+
+/* Top 10 */
+.{v:visualtheme} th.gw {
+	color: {color_1}; background: {color_6};
+	font: bold 71% verdana,arial,sans-serif;
+}
+
+.{v:visualtheme} .profile dt { font-size: 80%; margin: 1em 0; color: #987; }
+
+.term { color: #000; background: transparent; font: 175% georgia,"times new roman",serif; }
+.termpreview { font: 100% "arial unicode ms",arial,helvetica,sans-serif; }
+.defnpreview { font: 100%/125% "arial unicode ms",arial,helvetica,sans-serif; }
+.trsp { color: #777; background: transparent; font: 100% 'lucida sans unicode',sans-serif; }
+.abbr-1,.abbr-2, .abbr-3,.abbr-5  { margin: 0em; padding: 0; color: #777; background: transparent; font: bold 100% sans-serif; }
+.abbr-1 { color: #e30700; }
+.abbr-2 { color: #9b67c7; }
+.abbr-3 { color: #5bbf3f; }
+.abbr-5 { color: #47a7a3; }
+.trns-4 { color: #5A0; background: transparent; font: bold 100% "arial unicode ms",arial,sans-serif; }
+.defn { margin: 0 1em 0 1em; font: 106% "times new roman",serif; text-align: justify; }
+ol.defnblock li .defn { margin: 0; }
+.defnnote { font: 90% "arial unicode ms",arial,helvetica,sans-serif;  }
+div.defn p { margin-bottom: 0; }
+.gwsrc, .gwsyn, .gwantonym, .gwsee, .gwaddress, .gwphone { font: 106% "times new roman",serif; }
+.gwusg { font: 100% "times new roman",serif; color: #987; background: transparent; margin: -0.4em 0 0 2em; }
+.gwusg dl { margin: 0 0 0.5em 0; }
+.gwvar { color: #336; background: #F8F8F8; }
+tt.lyrics { display: block; margin-{v:css_align_left}: 1em; font: 106% "times new roman",serif; color: #765; background: transparent; text-align: {v:css_align_left}; }
+
+/* buttons and forms */
+.submitcancel {
+	cursor: pointer;
+	padding: 2px;
+	border-top: #C7C4A9 1px solid;
+	border-left: #C7C4A9 1px solid;
+	border-bottom: #AAA 1px solid;
+	border-right: #AAA 1px solid;
+	width: 75px;
+	color: #776; background: #F0F0EB url("{v:path_css}/bg_b_cancel.gif");
+	font: bold 9pt arial,"microsoft sans serif","ms sans serif",serif;
+}
+.submitok {
+	padding: 2px;
+	cursor: pointer;
+	display: block;
+	text-align: center;
+	border-top: #A0D0EC 1px solid;
+	border-left: #A0D0EC 1px solid;
+	border-bottom: #7B9CBC 1px solid;
+	border-right: #7B9CBC 1px solid;
+	width: 75px;
+	color: #FF6204; background: {color_2} url("{v:path_css}/bg_b.gif");
+	font: bold 9pt arial,"microsoft sans serif","ms sans serif",serif;
+}
+a.submitok, a:active.submitok { 
+	color: #FF6204; background: {color_2} !important;
+	padding: 2px !important;
+}
+a.submitok, a:hover.submitok { text-decoration: none; }
+.submitok:hover, .submitcancel:hover { background: {color_white}; }
+input.input { height: 1.4em; }
+
+/* Boxes */
+.{v:visualtheme} .box {
+	padding: 1em;
+	background: {color_1};
+}
+.{v:visualtheme} div.box-themes td {
+	padding: 1px 3px;
+}
+.{v:visualtheme} div.box-themes  {
+	width: 100%;
+	padding: 1px;
+	margin-right: 0.5em;
+}
+.{v:visualtheme} div.box-search  {
+	padding: 1px;
+}
+.{v:visualtheme} div.box-search tr {
+	vertical-align: top;
+}
+.{v:visualtheme} div.box-search td {
+	padding: 1px 3px;
+	text-align: {v:css_align_left};
+}
+.{v:visualtheme} div.box-search .submitok {
+	width: auto;
+	padding-left: 15px;
+	padding-right: 5px;
+	background: url("{v:path_css}/bg_search.gif") no-repeat;
+}
+.{v:visualtheme} div.box-search .submitok:hover {
+	background: {color_white} url("{v:path_css}/bg_search_hover.gif") no-repeat;
+}
+/* */
+/* .{v:visualtheme} div.navtop  */
+.{v:visualtheme} div.navpages { color: {color_5}; background: transparent; }
+.{v:visualtheme} div.navpages b.on { color: {color_a_hover}; background: {color_a_active}; }
+
+/* the list of dictionaries */
+ul.dictlist {
+	margin: 0 0 0 0.5em;
+}
+ul.dictlist li {
+	list-style: square;
+	margin-bottom: 0;
+}
+
+.news dd { margin-left: 2em; font-size: 90%; }
+.news dl { margin-top: 0; }
+
+/* Virtual keyboard */
+.gwkeyboard { background: #CCC; color: #000; border: 1px solid #AAA; font: 140% "Arial Unicode MS", sans-serif; }
+.gwkeyboard td { background: #F3F3F3; }
+.gwkeyboard a, .gwkeyboard a:visited {
+	text-align:center; 
+	display: block; 
+	width: 1em; 
+	text-decoration: none; 
+	border-top: 1px #FFF solid;
+	border-left: 1px #FFF solid;
+	border-bottom: 1px #CCC solid;
+	border-right: 1px #CCC solid;
+}
+.gwkeyboard a:hover { background: {color_a_link}; color: {color_white}; text-decoration: none; border: 1px solid #FFF; }
+
+.{v:visualtheme} div.box-search button.submitok { padding-left: 0; padding-right: 0; background: none; }
+.{v:visualtheme} div.box-search .submitok:hover { background: {color_white}; }

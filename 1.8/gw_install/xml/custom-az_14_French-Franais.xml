@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><glossword version="1.8.7">
+<custom_az profile_name="French - Français" is_active="1">
+	<entry><az_value><![CDATA[A]]></az_value><az_value_lc><![CDATA[a]]></az_value_lc><int_sort><![CDATA[10]]></int_sort></entry>
+	<entry><az_value><![CDATA[À]]></az_value><az_value_lc><![CDATA[à]]></az_value_lc><int_sort><![CDATA[20]]></int_sort></entry>
+	<entry><az_value><![CDATA[Â]]></az_value><az_value_lc><![CDATA[â]]></az_value_lc><int_sort><![CDATA[30]]></int_sort></entry>
+	<entry><az_value><![CDATA[Æ]]></az_value><az_value_lc><![CDATA[æ]]></az_value_lc><int_sort><![CDATA[40]]></int_sort></entry>
+	<entry><az_value><![CDATA[B]]></az_value><az_value_lc><![CDATA[b]]></az_value_lc><int_sort><![CDATA[50]]></int_sort></entry>
+	<entry><az_value><![CDATA[C]]></az_value><az_value_lc><![CDATA[c]]></az_value_lc><int_sort><![CDATA[60]]></int_sort></entry>
+	<entry><az_value><![CDATA[Ç]]></az_value><az_value_lc><![CDATA[ç]]></az_value_lc><int_sort><![CDATA[70]]></int_sort></entry>
+	<entry><az_value><![CDATA[D]]></az_value><az_value_lc><![CDATA[d]]></az_value_lc><int_sort><![CDATA[80]]></int_sort></entry>
+	<entry><az_value><![CDATA[E]]></az_value><az_value_lc><![CDATA[e]]></az_value_lc><int_sort><![CDATA[90]]></int_sort></entry>
+	<entry><az_value><![CDATA[É]]></az_value><az_value_lc><![CDATA[é]]></az_value_lc><int_sort><![CDATA[100]]></int_sort></entry>
+	<entry><az_value><![CDATA[È]]></az_value><az_value_lc><![CDATA[è]]></az_value_lc><int_sort><![CDATA[110]]></int_sort></entry>
+	<entry><az_value><![CDATA[Ê]]></az_value><az_value_lc><![CDATA[ê]]></az_value_lc><int_sort><![CDATA[120]]></int_sort></entry>
+	<entry><az_value><![CDATA[Ë]]></az_value><az_value_lc><![CDATA[ë]]></az_value_lc><int_sort><![CDATA[130]]></int_sort></entry>
+	<entry><az_value><![CDATA[F]]></az_value><az_value_lc><![CDATA[f]]></az_value_lc><int_sort><![CDATA[140]]></int_sort></entry>
+	<entry><az_value><![CDATA[G]]></az_value><az_value_lc><![CDATA[g]]></az_value_lc><int_sort><![CDATA[150]]></int_sort></entry>
+	<entry><az_value><![CDATA[H]]></az_value><az_value_lc><![CDATA[h]]></az_value_lc><int_sort><![CDATA[160]]></int_sort></entry>
+	<entry><az_value><![CDATA[I]]></az_value><az_value_lc><![CDATA[i]]></az_value_lc><int_sort><![CDATA[170]]></int_sort></entry>
+	<entry><az_value><![CDATA[Î]]></az_value><az_value_lc><![CDATA[î]]></az_value_lc><int_sort><![CDATA[180]]></int_sort></entry>
+	<entry><az_value><![CDATA[Ï]]></az_value><az_value_lc><![CDATA[ï]]></az_value_lc><int_sort><![CDATA[190]]></int_sort></entry>
+	<entry><az_value><![CDATA[J]]></az_value><az_value_lc><![CDATA[j]]></az_value_lc><int_sort><![CDATA[200]]></int_sort></entry>
+	<entry><az_value><![CDATA[K]]></az_value><az_value_lc><![CDATA[k]]></az_value_lc><int_sort><![CDATA[210]]></int_sort></entry>
+	<entry><az_value><![CDATA[L]]></az_value><az_value_lc><![CDATA[l]]></az_value_lc><int_sort><![CDATA[220]]></int_sort></entry>
+	<entry><az_value><![CDATA[M]]></az_value><az_value_lc><![CDATA[m]]></az_value_lc><int_sort><![CDATA[230]]></int_sort></entry>
+	<entry><az_value><![CDATA[N]]></az_value><az_value_lc><![CDATA[n]]></az_value_lc><int_sort><![CDATA[240]]></int_sort></entry>
+	<entry><az_value><![CDATA[O]]></az_value><az_value_lc><![CDATA[o]]></az_value_lc><int_sort><![CDATA[250]]></int_sort></entry>
+	<entry><az_value><![CDATA[Ô]]></az_value><az_value_lc><![CDATA[ô]]></az_value_lc><int_sort><![CDATA[260]]></int_sort></entry>
+	<entry><az_value><![CDATA[Œ]]></az_value><az_value_lc><![CDATA[œ]]></az_value_lc><int_sort><![CDATA[270]]></int_sort></entry>
+	<entry><az_value><![CDATA[P]]></az_value><az_value_lc><![CDATA[p]]></az_value_lc><int_sort><![CDATA[280]]></int_sort></entry>
+	<entry><az_value><![CDATA[Q]]></az_value><az_value_lc><![CDATA[q]]></az_value_lc><int_sort><![CDATA[290]]></int_sort></entry>
+	<entry><az_value><![CDATA[R]]></az_value><az_value_lc><![CDATA[r]]></az_value_lc><int_sort><![CDATA[300]]></int_sort></entry>
+	<entry><az_value><![CDATA[S]]></az_value><az_value_lc><![CDATA[s]]></az_value_lc><int_sort><![CDATA[310]]></int_sort></entry>
+	<entry><az_value><![CDATA[T]]></az_value><az_value_lc><![CDATA[t]]></az_value_lc><int_sort><![CDATA[320]]></int_sort></entry>
+	<entry><az_value><![CDATA[U]]></az_value><az_value_lc><![CDATA[u]]></az_value_lc><int_sort><![CDATA[330]]></int_sort></entry>
+	<entry><az_value><![CDATA[Ù]]></az_value><az_value_lc><![CDATA[ù]]></az_value_lc><int_sort><![CDATA[340]]></int_sort></entry>
+	<entry><az_value><![CDATA[Û]]></az_value><az_value_lc><![CDATA[û]]></az_value_lc><int_sort><![CDATA[350]]></int_sort></entry>
+	<entry><az_value><![CDATA[Ü]]></az_value><az_value_lc><![CDATA[ü]]></az_value_lc><int_sort><![CDATA[360]]></int_sort></entry>
+	<entry><az_value><![CDATA[V]]></az_value><az_value_lc><![CDATA[v]]></az_value_lc><int_sort><![CDATA[370]]></int_sort></entry>
+	<entry><az_value><![CDATA[W]]></az_value><az_value_lc><![CDATA[w]]></az_value_lc><int_sort><![CDATA[380]]></int_sort></entry>
+	<entry><az_value><![CDATA[X]]></az_value><az_value_lc><![CDATA[x]]></az_value_lc><int_sort><![CDATA[390]]></int_sort></entry>
+	<entry><az_value><![CDATA[Y]]></az_value><az_value_lc><![CDATA[y]]></az_value_lc><int_sort><![CDATA[400]]></int_sort></entry>
+	<entry><az_value><![CDATA[Z]]></az_value><az_value_lc><![CDATA[z]]></az_value_lc><int_sort><![CDATA[410]]></int_sort></entry>
+</custom_az>
+</glossword>

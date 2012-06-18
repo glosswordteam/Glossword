@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tmx version="1.4">
+<!-- 
+	This is example of usage `multilingual variables'.
+	
+	Create dictionary, get Dictionary ID (see URL, like &a=list&d=2),
+	Create file `/gw_xml/multilingual_vars/2.xml'
+	
+	To use multilingual variable, type {VARIABLE} in the text 
+	of definitions or in HTML-templates of visual theme which 
+	selected for the dictionary. For example, if you select `Silver' 
+	theme for Dictionary ID = 2, then type {VARIABLE} in any of 
+	`templates/gw_silver/*.html' files. Try to change `footer_inside.html' 
+	to see how it works.
+	
+-->
+
+<tu>
+ <prop type="varname">VARIABLE</prop>
+ <tuv xml:lang="en"><seg>Variable</seg></tuv>
+ <tuv xml:lang="ru"><seg>Переменная</seg></tuv>
+</tu>
+
+</tmx>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><glossword version="1.8.9">
+<custom_az profile_name="Arabic العربية" is_active="1">
+	<entry><az_value><![CDATA[ء]]></az_value><az_value_lc><![CDATA[ء]]></az_value_lc><int_sort><![CDATA[10]]></int_sort></entry>
+	<entry><az_value><![CDATA[ا]]></az_value><az_value_lc><![CDATA[ا]]></az_value_lc><int_sort><![CDATA[20]]></int_sort></entry>
+	<entry><az_value><![CDATA[ب]]></az_value><az_value_lc><![CDATA[ب]]></az_value_lc><int_sort><![CDATA[40]]></int_sort></entry>
+	<entry><az_value><![CDATA[ت]]></az_value><az_value_lc><![CDATA[ت]]></az_value_lc><int_sort><![CDATA[50]]></int_sort></entry>
+	<entry><az_value><![CDATA[ث]]></az_value><az_value_lc><![CDATA[ث]]></az_value_lc><int_sort><![CDATA[60]]></int_sort></entry>
+	<entry><az_value><![CDATA[ج]]></az_value><az_value_lc><![CDATA[ج]]></az_value_lc><int_sort><![CDATA[70]]></int_sort></entry>
+	<entry><az_value><![CDATA[ح]]></az_value><az_value_lc><![CDATA[ح]]></az_value_lc><int_sort><![CDATA[80]]></int_sort></entry>
+	<entry><az_value><![CDATA[خ]]></az_value><az_value_lc><![CDATA[خ]]></az_value_lc><int_sort><![CDATA[90]]></int_sort></entry>
+	<entry><az_value><![CDATA[د]]></az_value><az_value_lc><![CDATA[د]]></az_value_lc><int_sort><![CDATA[100]]></int_sort></entry>
+	<entry><az_value><![CDATA[ذ]]></az_value><az_value_lc><![CDATA[ذ]]></az_value_lc><int_sort><![CDATA[110]]></int_sort></entry>
+	<entry><az_value><![CDATA[ر]]></az_value><az_value_lc><![CDATA[ر]]></az_value_lc><int_sort><![CDATA[120]]></int_sort></entry>
+	<entry><az_value><![CDATA[ز]]></az_value><az_value_lc><![CDATA[ز]]></az_value_lc><int_sort><![CDATA[130]]></int_sort></entry>
+	<entry><az_value><![CDATA[س]]></az_value><az_value_lc><![CDATA[س]]></az_value_lc><int_sort><![CDATA[140]]></int_sort></entry>
+	<entry><az_value><![CDATA[ش]]></az_value><az_value_lc><![CDATA[ش]]></az_value_lc><int_sort><![CDATA[150]]></int_sort></entry>
+	<entry><az_value><![CDATA[ص]]></az_value><az_value_lc><![CDATA[ص]]></az_value_lc><int_sort><![CDATA[160]]></int_sort></entry>
+	<entry><az_value><![CDATA[ض]]></az_value><az_value_lc><![CDATA[ض]]></az_value_lc><int_sort><![CDATA[170]]></int_sort></entry>
+	<entry><az_value><![CDATA[ط]]></az_value><az_value_lc><![CDATA[ط]]></az_value_lc><int_sort><![CDATA[180]]></int_sort></entry>
+	<entry><az_value><![CDATA[ظ]]></az_value><az_value_lc><![CDATA[ظ]]></az_value_lc><int_sort><![CDATA[190]]></int_sort></entry>
+	<entry><az_value><![CDATA[ع]]></az_value><az_value_lc><![CDATA[ع]]></az_value_lc><int_sort><![CDATA[200]]></int_sort></entry>
+	<entry><az_value><![CDATA[غ]]></az_value><az_value_lc><![CDATA[غ]]></az_value_lc><int_sort><![CDATA[210]]></int_sort></entry>
+	<entry><az_value><![CDATA[ف]]></az_value><az_value_lc><![CDATA[ف]]></az_value_lc><int_sort><![CDATA[220]]></int_sort></entry>
+	<entry><az_value><![CDATA[ق]]></az_value><az_value_lc><![CDATA[ق]]></az_value_lc><int_sort><![CDATA[230]]></int_sort></entry>
+	<entry><az_value><![CDATA[ك]]></az_value><az_value_lc><![CDATA[ك]]></az_value_lc><int_sort><![CDATA[240]]></int_sort></entry>
+	<entry><az_value><![CDATA[ل]]></az_value><az_value_lc><![CDATA[ل]]></az_value_lc><int_sort><![CDATA[250]]></int_sort></entry>
+	<entry><az_value><![CDATA[م]]></az_value><az_value_lc><![CDATA[م]]></az_value_lc><int_sort><![CDATA[260]]></int_sort></entry>
+	<entry><az_value><![CDATA[ن]]></az_value><az_value_lc><![CDATA[ن]]></az_value_lc><int_sort><![CDATA[270]]></int_sort></entry>
+	<entry><az_value><![CDATA[ه]]></az_value><az_value_lc><![CDATA[ه]]></az_value_lc><int_sort><![CDATA[280]]></int_sort></entry>
+	<entry><az_value><![CDATA[و]]></az_value><az_value_lc><![CDATA[و]]></az_value_lc><int_sort><![CDATA[290]]></int_sort></entry>
+	<entry><az_value><![CDATA[ي]]></az_value><az_value_lc><![CDATA[ي]]></az_value_lc><int_sort><![CDATA[300]]></int_sort></entry>
+	<entry><az_value><![CDATA[ى]]></az_value><az_value_lc><![CDATA[ى]]></az_value_lc><int_sort><![CDATA[310]]></int_sort></entry>
+</custom_az>
+</glossword>

@@ -1,0 +1,14 @@
+<script type="text/javascript">/*<[CDATA[*/
+id='foreverfan';
+d=document;
+col="";scr=0;b=navigator.appName;
+scr=screen.width+"*"+screen.height;
+ref=parent==self ? escape(window.document.referrer) : escape(top.document.referrer);
+pag=escape(document.URL);
+if (b != "Netscape") {col=screen.colorDepth}
+else {col=screen.pixelDepth}
+if(col=="undefined"){col="";}
+d.write('<a href="http://www.belstat.nl/viewstat.asp?UserID='+id+'&amp;lang=nl"><img src="http://www.belstat.nl/regstat.aspx?');
+d.write("UserID=foreverfan&amp;BColor=blue&amp;refer=" + ref + "&amp;pag=" + pag + "&amp;b=" + b + "&amp;col=" + col + "&amp;scr=" + scr);
+d.write(' width="16" height="16" alt="Monitored by BelStat - Your Site Counts"></a>');
+/*]]>*/</script>

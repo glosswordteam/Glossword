@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><glossword version="1.8.7">
+<custom_az profile_name="Russian - Русский" is_active="1">
+	<entry><az_value><![CDATA[А]]></az_value><az_value_lc><![CDATA[а]]></az_value_lc><int_sort><![CDATA[10]]></int_sort></entry>
+	<entry><az_value><![CDATA[Б]]></az_value><az_value_lc><![CDATA[б]]></az_value_lc><int_sort><![CDATA[20]]></int_sort></entry>
+	<entry><az_value><![CDATA[В]]></az_value><az_value_lc><![CDATA[в]]></az_value_lc><int_sort><![CDATA[30]]></int_sort></entry>
+	<entry><az_value><![CDATA[Г]]></az_value><az_value_lc><![CDATA[г]]></az_value_lc><int_sort><![CDATA[40]]></int_sort></entry>
+	<entry><az_value><![CDATA[Д]]></az_value><az_value_lc><![CDATA[д]]></az_value_lc><int_sort><![CDATA[50]]></int_sort></entry>
+	<entry><az_value><![CDATA[Е]]></az_value><az_value_lc><![CDATA[е]]></az_value_lc><int_sort><![CDATA[60]]></int_sort></entry>
+	<entry><az_value><![CDATA[Ё]]></az_value><az_value_lc><![CDATA[ё]]></az_value_lc><int_sort><![CDATA[70]]></int_sort></entry>
+	<entry><az_value><![CDATA[Ж]]></az_value><az_value_lc><![CDATA[ж]]></az_value_lc><int_sort><![CDATA[80]]></int_sort></entry>
+	<entry><az_value><![CDATA[З]]></az_value><az_value_lc><![CDATA[з]]></az_value_lc><int_sort><![CDATA[90]]></int_sort></entry>
+	<entry><az_value><![CDATA[И]]></az_value><az_value_lc><![CDATA[и]]></az_value_lc><int_sort><![CDATA[100]]></int_sort></entry>
+	<entry><az_value><![CDATA[Й]]></az_value><az_value_lc><![CDATA[й]]></az_value_lc><int_sort><![CDATA[110]]></int_sort></entry>
+	<entry><az_value><![CDATA[К]]></az_value><az_value_lc><![CDATA[к]]></az_value_lc><int_sort><![CDATA[120]]></int_sort></entry>
+	<entry><az_value><![CDATA[Л]]></az_value><az_value_lc><![CDATA[л]]></az_value_lc><int_sort><![CDATA[130]]></int_sort></entry>
+	<entry><az_value><![CDATA[М]]></az_value><az_value_lc><![CDATA[м]]></az_value_lc><int_sort><![CDATA[140]]></int_sort></entry>
+	<entry><az_value><![CDATA[Н]]></az_value><az_value_lc><![CDATA[н]]></az_value_lc><int_sort><![CDATA[150]]></int_sort></entry>
+	<entry><az_value><![CDATA[О]]></az_value><az_value_lc><![CDATA[о]]></az_value_lc><int_sort><![CDATA[160]]></int_sort></entry>
+	<entry><az_value><![CDATA[П]]></az_value><az_value_lc><![CDATA[п]]></az_value_lc><int_sort><![CDATA[170]]></int_sort></entry>
+	<entry><az_value><![CDATA[Р]]></az_value><az_value_lc><![CDATA[р]]></az_value_lc><int_sort><![CDATA[180]]></int_sort></entry>
+	<entry><az_value><![CDATA[С]]></az_value><az_value_lc><![CDATA[с]]></az_value_lc><int_sort><![CDATA[190]]></int_sort></entry>
+	<entry><az_value><![CDATA[Т]]></az_value><az_value_lc><![CDATA[т]]></az_value_lc><int_sort><![CDATA[200]]></int_sort></entry>
+	<entry><az_value><![CDATA[У]]></az_value><az_value_lc><![CDATA[у]]></az_value_lc><int_sort><![CDATA[210]]></int_sort></entry>
+	<entry><az_value><![CDATA[Ф]]></az_value><az_value_lc><![CDATA[ф]]></az_value_lc><int_sort><![CDATA[220]]></int_sort></entry>
+	<entry><az_value><![CDATA[Х]]></az_value><az_value_lc><![CDATA[ч]]></az_value_lc><int_sort><![CDATA[230]]></int_sort></entry>
+	<entry><az_value><![CDATA[Ц]]></az_value><az_value_lc><![CDATA[ц]]></az_value_lc><int_sort><![CDATA[240]]></int_sort></entry>
+	<entry><az_value><![CDATA[Ч]]></az_value><az_value_lc><![CDATA[ч]]></az_value_lc><int_sort><![CDATA[250]]></int_sort></entry>
+	<entry><az_value><![CDATA[Ш]]></az_value><az_value_lc><![CDATA[ш]]></az_value_lc><int_sort><![CDATA[260]]></int_sort></entry>
+	<entry><az_value><![CDATA[Щ]]></az_value><az_value_lc><![CDATA[щ]]></az_value_lc><int_sort><![CDATA[270]]></int_sort></entry>
+	<entry><az_value><![CDATA[Ы]]></az_value><az_value_lc><![CDATA[ы]]></az_value_lc><int_sort><![CDATA[280]]></int_sort></entry>
+	<entry><az_value><![CDATA[Э]]></az_value><az_value_lc><![CDATA[э]]></az_value_lc><int_sort><![CDATA[290]]></int_sort></entry>
+	<entry><az_value><![CDATA[Ю]]></az_value><az_value_lc><![CDATA[ю]]></az_value_lc><int_sort><![CDATA[300]]></int_sort></entry>
+	<entry><az_value><![CDATA[Я]]></az_value><az_value_lc><![CDATA[я]]></az_value_lc><int_sort><![CDATA[310]]></int_sort></entry>
+</custom_az>
+</glossword>

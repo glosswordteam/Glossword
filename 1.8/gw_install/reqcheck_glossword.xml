@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<reqcheck version="1.0">
+	<product>Glossword</product>
+	<version>1.8.10</version>
+	<product_url>http://glossword.biz/</product_url>
+	<author>Glossword.biz team</author>
+	<copyright>© 2008 Glossword.biz team. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<max_points>10</max_points>
+	<sequence>
+		<constant name="PHP_VERSION" compare="&gt;" value="5.2.0" return="true"></constant>
+		<constant name="PHP_VERSION" hidden="1" compare="==" value="5.3.0-dev" point="2"></constant>
+		<ini name="register_globals" compare="-1"></ini>
+		<ini name="register_globals" hidden="1" compare="==" value="on" point="-1"></ini>
+		<ini name="allow_url_fopen" hidden="1" compare="-1"></ini>
+		<function name="getimagesize" compare="1" return="true" point="1"></function>
+		<set name="PCRE_UTF8" return="true" point="1"></set>
+		<extension name="mbstring" compare="1" return="true" point="2">
+			<ini name="mbstring.func_overload" compare="&amp;" value="MB_OVERLOAD_MAIL|MB_OVERLOAD_STRING" return="false"></ini>
+			<ini name="mbstring.encoding_translation" compare="!=" value="0" return="false"></ini>
+			<ini name="mbstring.http_input" compare="!=" value="pass" return="false"></ini>
+			<ini name="mbstring.http_output" compare="!=" value="pass" return="false"></ini>
+		</extension>
+		<extension name="mysql" compare="1" return="true" point="1"></extension>
+		<extension name="xml" compare="1" return="true" point="1"></extension>
+		<extension name="gd" compare="1" return="true" point="1"></extension>
+		<servervar name="REQUEST_URI" compare="1" return="true" point="1"></servervar>
+	</sequence>
+</reqcheck>

@@ -1,0 +1,18 @@
+<div style="margin:1em;text-align:center">
+	<form action="{v:form_action}" method="get" style="margin:0" accept-charset="{v:charset}" enctype="application/x-www-form-urlencoded">
+	<table style="border: 1px {color_5} solid;margin:0 auto;width:12em" cellspacing="0" cellpadding="3" border="0">
+	<tr style="text-align:center;background:{color_3}">
+	<td colspan="3">{v:this_site}</a>
+	</tr>
+	<tr style="background:{color_2}">
+	<td colspan="2">{block:SearchSelect}</td>
+	</tr>
+	<tr>
+	<td><input name="q" type="text" value="" style="width:99%" /></td>
+	<td style="width:30%"><input type="submit" value="{l:search_submit}" style="width:99%" /></td>
+	</tr>
+	</table>
+	<input type="hidden" name="strict" value="1" />
+	<input type="hidden" name="a" value="srch" />
+	</form>
+</div>

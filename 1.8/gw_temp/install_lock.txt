@@ -1,0 +1,1 @@
+When this file is here, installation script is disabled.

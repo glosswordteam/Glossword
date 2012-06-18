@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Glossword</ShortName>
+<Description>Glossary compiler</Description>
+<InputEncoding>UTF-8</InputEncoding>
+<Image height="16" width="16" type="image/vnd.microsoft.icon">http://127.0.0.1/glossword/1.8/favicon.ico</Image>
+<Url type="text/html" method="GET" template="http://127.0.0.1/glossword/1.8/index.php?a=srch&amp;source=opensearch&amp;q={searchTerms}"></Url>
+<moz:SearchForm>http://127.0.0.1/glossword/1.8/index.php</moz:SearchForm>
+<SyndicationRight>open</SyndicationRight>
+</OpenSearchDescription>

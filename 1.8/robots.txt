@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /gw_admin/
+Disallow: /inc/
+Disallow: /locale/
+Disallow: /cache/

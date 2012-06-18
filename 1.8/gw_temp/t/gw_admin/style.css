@@ -1,0 +1,85 @@
+body { padding: 0; margin: 0; color: {color_black}; background: {color_white}; cursor: default; }
+.{v:visualtheme} { text-align: {v:css_align_left}; font-size: 100%; }
+.{v:visualtheme} .xq { font: 66% "Segoe UI",arial,sans-serif; }
+.{v:visualtheme} .xw { font: 140% verdana,sans-serif; letter-spacing: -1px; }
+.{v:visualtheme} .xr { font: bold 91% verdana,arial,sans-serif; }
+.{v:visualtheme} .xt { font: 80% "Segoe UI",arial,sans-serif; }
+.{v:visualtheme} .xu { font: 89% verdana,arial,sans-serif; }
+.{v:visualtheme} .xi { padding: 2px 0 0 4px; font: 85% verdana,sans-serif; font-size: 89%; cursor: pointer; letter-spacing: -1px; }
+.{v:visualtheme} .xm { font: 85% verdana,arial,sans-serif; letter-spacing: 0px; padding: 0.3em; }
+
+.{v:visualtheme} .date { font: 100% 'trebuchet ms',arial,verdana,sans-serif; color: {color_7}; background: {color_2}; }
+.{v:visualtheme} .hr3 { height: 1px; font-size: 0px; border-top: {color_3} 1px solid;  }
+.{v:visualtheme} .hr4 { height: 1px; font-size: 0px; border-top: {color_4} 1px solid;  }
+.{v:visualtheme} .hr5 { height: 1px; font-size: 0px; border-top: {color_5} 2px solid;  }
+
+.{v:visualtheme} a.ext, .{v:visualtheme} a.ext:visited, .{v:visualtheme} a.ext:hover { padding-right: 16px; background: transparent url("{v:path_css}/icon16_arrow_topright.png") center right no-repeat; }
+.{v:visualtheme} a { cursor: pointer; color: {color_a_link}; background: transparent; text-decoration: none; }
+.{v:visualtheme} a:visited { color: {color_a_visited}; background: transparent; text-decoration: none; }
+.{v:visualtheme} a:hover { color: {color_a_hover}; background: transparent; text-decoration: underline; }
+.{v:visualtheme} a:active { color: {color_a_active}; background: transparent; text-decoration: none; }
+.{v:visualtheme} a.on, a:active.on, a:visited.on { color: #D60; background: #FE9; text-decoration: none; }
+.{v:visualtheme} h1 { 
+	font: 160% "Segoe UI",arial,sans-serif; 
+	padding: 7px; 
+	margin: 0;
+	letter-spacing: -1px;
+}
+.{v:visualtheme} h3 { 
+	font: 80% "Segoe UI",arial,sans-serif; 
+	background: {color_3}; 
+	margin: 0; padding: 3px; 
+	border-top: {color_5} 2px solid; 
+} 
+
+.term { color: #000; background: transparent; font: 175% georgia,"times new roman",serif; }
+.termpreview { font: 100% "arial unicode ms",arial,helvetica,sans-serif; }
+.defnpreview { font: 100% "arial unicode ms",arial,helvetica,sans-serif; }
+dd.defnpreview { margin-left: 2.5em; }
+dl.termlist dd { margin-bottom: 1em; }
+
+input.submitdel, a.submitdel, a.submitdel:visited, 
+input.submitcancel, a.submitcancel, a.submitcancel:visited, 
+input.submitok, a.submitok, a.submitok:visited {
+	color: #000;
+	cursor: pointer;
+	font: 80% "Segoe UI",arial,sans-serif;
+	margin: 0 1px;
+	padding: 2px 0px;
+	text-decoration: none;
+	white-space: nowrap;
+	width: 9em;
+}
+input.submitok, a.submitok, a.submitok:visited {
+	background: #ffd976 url("{v:path_css}/bg_button_ok.png");
+	border-bottom: #ffa452 1px solid;
+	border-left: #fff2a6 1px solid;
+	border-right: #ffa452 1px solid;
+	border-top: #fff2a6 1px solid;
+}
+input.submitcancel, a.submitcancel, a.submitcancel:visited {
+	background: #d9d9d9 url("{v:path_css}/bg_button_cancel.png");
+	border-bottom: #b6b6b6 1px solid;
+	border-left: #eee 1px solid;
+	border-right: #b6b6b6 1px solid;
+	border-top: #eee 1px solid;
+}
+input.submitdel, a.submitdel, a.submitdel:visited {
+	background: #ffcac8 url("{v:path_css}/bg_button_del.png");
+	border-bottom: #dba6a4 1px solid;
+	border-left: #ffe8e7 1px solid;
+	border-right: #dba6a4 1px solid;
+	border-top: #ffe8e7 1px solid;
+}
+
+
+input[type=submit]:hover, input[type=reset]:hover, input[type=button]:hover { 
+	border: 1px solid #a5def6;
+	color: #077cae; 
+	background: #d1eefb url("{v:path_css}/bg_button_hover.png"); 
+}
+
+fieldset.fields { padding:3px; margin:0px; border: 1px solid #CCC; }
+fieldset.fields legend { padding:2px; margin:0px; color:#555; font: 70% sans-serif; }
+
+

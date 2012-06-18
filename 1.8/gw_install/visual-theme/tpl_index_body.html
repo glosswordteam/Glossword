@@ -1,0 +1,94 @@
+<h2>{v:current_status}</h2>
+
+{d if:chooselanguage}
+<div class="inp">
+<form accept-charset="utf-8" action="{v:form_action}" enctype="application/x-www-form-urlencoded" id="chooselanguage" method="post">
+
+<input type="hidden" name="arg[target]" value="welcome" /> 
+
+<fieldset>
+<label for="arg-il-">
+{v:form_select_il}
+</label>
+</fieldset>
+
+<div class="center">
+<a href="#" class="submitok" onclick="document.forms[0].submit()">{l:10002}</a>
+</div>
+
+</form>
+</div>
+{/d}
+
+
+{d if:welcome}
+<div class="inp">
+{v:text_before}
+
+<fieldset>{v:select_action}</fieldset>
+
+{v:text_after}
+</div>
+{/d}
+
+
+{d if:install}
+<div class="inp">
+{v:text_before}
+
+{v:note_afterpost}
+
+<fieldset>
+{v:text_inside}
+
+{d if:sequence}
+<script type="text/javascript">
+function INSTALL_show_hide(id)
+{
+	d = document.getElementById(id).style;
+	d.display = (d.display == 'none' || d.display == '') ? 'block' : 'none';
+}
+</script>
+<div class="sequence">
+<ul>
+<li class="li-header">
+<dl>
+<dt>{l:10011}</dt>
+<dd class="value">{l:10015}</dd>
+<dd class="value">{l:10014}</dd>
+<dd class="status">{l:10008}</dd>
+</dl>
+</li>
+
+{d foreach:sequence}
+<li class="{v:li_class}" onclick="INSTALL_show_hide('descr-{v:id}')">
+<dl>
+<dt><div class="subject">{v:subject}</div></dt>
+<dd class="value">{v:val_req}&#160;</dd>
+<dd class="value">{v:val_ini}&#160;</dd>
+<dd class="status">{v:passed_failed}</dd>
+</dl>
+<div class="descr" id="descr-{v:id}">{v:description}</div>
+</li>
+{/d}
+
+<li class="li-footer">
+<dl>
+<dt>{l:10010}</dt>
+<dd class="value">&#160;</dd>
+<dd class="value">&#160;</dd>
+<dd class="status">{v:total_passed_failed}</dd>
+</dl>
+</li>
+
+</ul>
+</div>
+{/d}
+
+
+</fieldset>
+
+{v:text_after}
+</div>
+{/d}
+

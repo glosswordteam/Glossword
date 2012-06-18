@@ -1,0 +1,17 @@
+.f { color: #444; background: transparent; }
+
+a { color: #36C; background: transparent; text-decoration : underline; }
+a:visited { color: #36C; background: transparent; text-decoration : underline; }
+a:hover { color: #D60; background: transparent; text-decoration : underline; }
+a:active { color: #D60; background: transparent; text-decoration : underline; }
+
+.abbr { color: #444; background: transparent; }
+.gwsrc, .gwsyn, .gwsee, .gwaddress, .gwphone { color: #000; background: transparent; }
+.gwusg { color: #444; background: transparent; }
+.trns { color: #5A0; background: transparent; }
+.trsp { color: #444; background: transparent; }
+
+.stress { color: #C30; background: transparent; }
+
+.red { color: #E30; background: transparent; }
+.green { color: #3B0; background: transparent; }
