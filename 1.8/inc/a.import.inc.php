@@ -1204,6 +1204,9 @@ function getFormImport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 		if (isset($arReq[$key])) { $arReqMsg[$key] = '&#160;<span class="red"><strong>*</strong></span>'; }
 		if (isset($arBroken[$key])) { $arBrokenMsg[$key] = '<div class="red"><strong>' . $oL->m('reason_9') .'</strong></div>'; }
 	} // end of while
+	
+	global $arReq;
+	//
 	##
 	## ----------------------------------------------------
 	$arBoxId = array();
