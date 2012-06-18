@@ -393,7 +393,7 @@ document.forms[\'vbform\'][\'submit1\'].click();
 			$cnt++;
 			$ar_dict_ids[] = $arDictParam['id'];
 		}
-		/* No assigned dictionaries */
+
 #prn_r( $this->ar_state );
 		if (!$this->ar_state['is_profile'] && $cnt)
 		{
@@ -406,6 +406,7 @@ document.forms[\'vbform\'][\'submit1\'].click();
 				</tr>';
 		}
 		
+		/* No assigned dictionaries */		
 		if ( !$cnt ) {
 			
 			if ( $this->oSess->is( 'is-sys-settings' ) ) {
