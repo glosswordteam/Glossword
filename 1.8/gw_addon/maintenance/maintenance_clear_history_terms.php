@@ -1,7 +1,8 @@
 <?php
 /**
  *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
+ *  © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ *  © 2002-2008 Dmitry N. Shilnikov
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,12 +41,12 @@ class gw_addon_clear_history_terms extends gw_addon
 		$arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-history-to-remove'));
 		$arTermIds = $arQ = array();
 		/* Group terms by dictionary */
-		for (; list($k, $v) = each($arSql);)
+		foreach ( $arSql as $k => $v )
 		{
 			$arTermIds[$v['id_dict']][] = $v['id_term'];
 			unset($arSql[$k]);
 		}
-		for (; list($id_dict, $v) = each($arTermIds);)
+		foreach ( $arTermIds as $id_dict => $v )
 		{
 			$sql = 'DELETE FROM `' . $this->gw_this['ar_dict_list'][$id_dict]['tablename'] . '` WHERE id IN (' . implode(',', $v) . ')';
 			$this->oDb->sqlExec($sql);

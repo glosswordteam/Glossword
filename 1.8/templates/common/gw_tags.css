@@ -114,6 +114,8 @@ fieldset.admform .gw2TableFieldset td.td1 .input50,
 fieldset.admform .gw2TableFieldset td.td1 .input75
 { font-size: 150%; }
 
+fieldset.admform legend { text-align: {v:css_align_left}; }
+
 /* */
 .debugwindow { text-align:left; color:#000; background:#FFF; font-size:0.9em; margin:0 }
 .note-afterpost {

@@ -826,6 +826,7 @@ function text2keywords_crc($t, $mn = 1, $mx = 25, $e = 'UTF-8')
  */
 function text_normalize($t)
 {
+	$t = str_replace( array('<![CDATA', ']]>' ), ' ', $t );
 	global $oCase;
 	return $oCase->nc($oCase->rm_($t));
 }
@@ -989,26 +990,51 @@ function append_url($url, $vars = array())
 function htmlFormsSelect($arData, $default, $formname = 'select', $class = 'input', $style = '', $dir = 'ltr')
 {
 	global $oFunc, $sys;
-	$class = ($class != '') ? ( ' class="'. $class .'"') : ( '' );
-	$style = ($style != '') ? ( ' style="'. $style .'"') : ( '' );
-	$dir = ($dir != '') ? ( ' dir="'. $dir .'"') : ( '' );
-	$formname = ($formname != '') ? ( ' name="'. $formname .'"') : ( '' );
-	$str = '<select' . $formname . $class . $style . $dir. '>';
-	for (reset($arData); list($k, $v) = each($arData);)
+	$class = ($class != '') ? ( ' class="' . $class . '"') : ( '' );
+	$style = ($style != '') ? ( ' style="' . $style . '"') : ( '' );
+	$dir = ($dir != '') ? ( ' dir="' . $dir . '"') : ( '' );
+	$formname = ($formname != '') ? ( ' name="' . $formname . '"') : ( '' );
+	$str = '<select' . $formname . $class . $style . $dir . '>';
+	for ( reset( $arData ); list($k, $v) = each( $arData ); )
 	{
+		/* 8 Oct 2010: Decode quotes to calculate the correct string length */
+		$v = htmlspecialchars_decode( $v, ENT_QUOTES );
+		$v_src = $v;
+		
 		/* Cut long names in order to proper display */
 		/* trim() is used for old mysql version */
-		$int_string_len = $oFunc->mb_strlen(trim($v));
-		if ($int_string_len > $sys['max_char_combobox'])
+		$int_string_len = $oFunc->mb_strlen( trim( $v ) );
+
+		$attr_title = '';
+		if ( $int_string_len > $sys['max_char_combobox'] )
 		{
-			$v = $oFunc->mb_substr($v, 0, $sys['max_char_combobox']).'&#8230;';
+			$attr_title = ' title="' . htmlspecialchars( $v_src ) . '"';
+			$v = $oFunc->mb_substr( $v, 0, $sys['max_char_combobox'] ) . '…';
 		}
-		if ($k == $default) { $s = ' selected="selected"'; } else { $s = ''; }
-		$str .= '<option value="' . $k . '"' . $s . ">";
-		if (preg_match("/abbrlang/", $formname) || preg_match("/trnslang/", $formname)) { $str .= $k; }
-		else { $str .= $v; }
+		
+		/* SELECTED */
+		if ( $k == $default )
+		{
+			$attr_selected = ' selected="selected"';
+		}
+		else
+		{
+			$attr_selected = '';
+		}
+
+		$str .= '<option value="' . $k . '"' . $attr_selected . $attr_title . '">';
+
+		if ( preg_match( "/abbrlang/", $formname ) || preg_match( "/trnslang/", $formname ) )
+		{
+			$str .= $k;
+		}
+		else
+		{
+			$str .= ( $v );
+		}
+
 		$str .= "</option>";
-	 }
+	}
 	$str .= '</select>';
 	return $str;
 }

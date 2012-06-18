@@ -200,30 +200,32 @@ else
 	if (!empty($file_location))
 	{
 		$avatar_file = isset($file_location['tmp_name']) ? $file_location['tmp_name'] : '';
-		$ar_img_size = getimagesize($avatar_file);
-		$file_target = urlencode($this->sys['time_now'].'_'.$file_location['name']);
-		/* Create directory */
-		$this->oFunc->file_put_contents($this->sys['path_temporary'].'/a/'.$file_target, '');
-		if (is_uploaded_file($avatar_file)
-			&& move_uploaded_file($avatar_file, $this->sys['path_temporary'].'/a/'.$file_target)
-			)
-		{
-			/* remove old avatar, image could not exist */
-			if (isset($ar_user['user_settings']['avatar_img']) && $ar_user['user_settings']['avatar_img'] != '')
+		if ( $avatar_file ) {
+			$ar_img_size = getimagesize($avatar_file);
+			$file_target = urlencode($this->sys['time_now'].'_'.$file_location['name']);
+			/* Create directory */
+			$this->oFunc->file_put_contents($this->sys['path_temporary'].'/a/'.$file_target, '');
+			if (is_uploaded_file($avatar_file)
+				&& move_uploaded_file($avatar_file, $this->sys['path_temporary'].'/a/'.$file_target)
+				)
 			{
-				@unlink($sys['path_temporary'].'/a/'.$ar_user['user_settings']['avatar_img']);
+				/* remove old avatar, image could not exist */
+				if (isset($ar_user['user_settings']['avatar_img']) && $ar_user['user_settings']['avatar_img'] != '')
+				{
+					@unlink($sys['path_temporary'].'/a/'.$ar_user['user_settings']['avatar_img']);
+				}
+				/* resize image: source path, target path, max x, lib, debug */
+				if (($ar_img_size[0] > $this->sys['avatar_max_x'])
+				  || ($ar_img_size[1] > $this->sys['avatar_max_y']))
+				{
+					include_once( $this->sys['path_include'] . '/func.img.inc.php' );
+					gw_image_resize($this->sys['path_temporary'].'/a/'.$file_target, $this->sys['path_temporary'].'/a/'.$file_target, $this->sys['avatar_max_x'], 'gd2', 0);
+					$ar_img_size = getimagesize($this->sys['path_temporary'].'/a/'.$file_target);
+				}
+				$arPost['user_settings']['avatar_img_x'] = $ar_img_size[0];
+				$arPost['user_settings']['avatar_img_y'] = $ar_img_size[1];
+				$arPost['user_settings']['avatar_img'] = $file_target;
 			}
-			/* resize image: source path, target path, max x, lib, debug */
-			if (($ar_img_size[0] > $this->sys['avatar_max_x'])
-			  || ($ar_img_size[1] > $this->sys['avatar_max_y']))
-			{
-				include_once( $this->sys['path_include'] . '/func.img.inc.php' );
-				gw_image_resize($this->sys['path_temporary'].'/a/'.$file_target, $this->sys['path_temporary'].'/a/'.$file_target, $this->sys['avatar_max_x'], 'gd2', 0);
-				$ar_img_size = getimagesize($this->sys['path_temporary'].'/a/'.$file_target);
-			}
-			$arPost['user_settings']['avatar_img_x'] = $ar_img_size[0];
-			$arPost['user_settings']['avatar_img_y'] = $ar_img_size[1];
-			$arPost['user_settings']['avatar_img'] = $file_target;
 		}
 	}
 	/* final update */

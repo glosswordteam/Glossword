@@ -1,7 +1,8 @@
 <?php
 /*
  * Query storage
- * © 2004-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ *  © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ *  © 2002-2008 Dmitry N. Shilnikov
  * $Id: query_storage_global-mysql410.php 491 2008-06-13 10:05:06Z glossword_team $
  */
 
@@ -441,7 +442,7 @@ $tmp['ar_queries'] = array(
 						GROUP BY m.term_id, m.dict_id
 						ORDER BY m.dict_id
 					',
-	'srch-word-cnt-phrase' => 'SELECT m.term_id, m.dict_id, t.term, t.term_uri
+	'srch-word-cnt-phrase' => 'SELECT m.term_id, m.dict_id, t.term, t.term_uri, t.defn
 						FROM `' . TBL_WORDLIST . '` AS k, `' . TBL_WORDMAP . '` AS m%s
 						WHERE m.dict_id IN (%s) %s
 						AND k.word_id = m.word_id

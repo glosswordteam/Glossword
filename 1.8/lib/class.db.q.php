@@ -1,8 +1,8 @@
 <?php
 /**
  *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2007 Dmitry N. Shilnikov <dev at glossword dot info>
+ *  © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ *  © 2002-2008 Dmitry N. Shilnikov
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ class gw_query_storage {
 	/* */
 	function setQ()
 	{
-		$arSql = $this->q_import(array('query_storage_global'));
+		$arSql = $this->q_import( array('query_storage_global') );
 		return $arSql;
 	}
 	/**/
@@ -64,7 +64,7 @@ class gw_query_storage {
 		{
 			$ar[] = isset($args[$i]) ? $args[$i] : '';
 		}
-		$arSql = array_merge($this->setQ(), $this->setCustomQ());
+		$arSql = array_merge( $this->setQ(), $this->setCustomQ() );
 		if (isset($arSql[$ar[0]]))
 		{
 			$arSql[$ar[0]] = preg_replace("/[ |\t]{2,}/", ' ', $arSql[$ar[0]]);

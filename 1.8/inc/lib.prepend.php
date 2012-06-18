@@ -5,8 +5,8 @@ if (!defined('IN_GW'))
 }
 /**
  *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2007 Dmitry N. Shilnikov <dev at glossword dot info>
+ *  © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ *  © 2002-2008 Dmitry N. Shilnikov
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,8 +26,15 @@ if (!defined('IN_GW'))
 @ini_set('set_magic_quotes_gpc', 0);
 @ini_set('set_magic_quotes_runtime', 0);
 @ini_set('mbstring.internal_encoding', $sys['internal_encoding']);
+
 /* Prefix for constants */
 $sys['prefix_c'] = 'GW_';
+
+/* Auto time for server */
+if ( function_exists( 'date_default_timezone_set' ) )
+{
+	date_default_timezone_set( 'UTC' );
+}
 
 /* ------------------------------------------------------- */
 /* Load functions */
@@ -100,13 +107,18 @@ if (!isset($sys['server_url']))
 {
 	$sys['server_url'] = $sys['server_proto'].$sys['server_host'].$sys['server_dir'];
 }
+
 $_SERVER['HTTP_ACCEPT_ENCODING'] = isset($_SERVER['HTTP_ACCEPT_ENCODING']) ? $_SERVER['HTTP_ACCEPT_ENCODING'] : (isset($_SERVER['HTTP_TE']) ? $_SERVER['HTTP_TE'] : '');
+
 /* Get PHP version */
 $tmp['arPhpVer'] = explode('.', PHP_VERSION);
+
 define('PHP_VERSION_INT', intval(sprintf('%d%02d%02d', $tmp['arPhpVer'][0], $tmp['arPhpVer'][1], $tmp['arPhpVer'][2])));
+
 /* ------------------------------------------------------- */
 define('REMOTE_IP', gwGetRemoteIp());
 $HTTP_REF = getenv('HTTP_REFERER');
+
 /* ------------------------------------------------------- */
 /* Specific technical purposes (error level, banners, counters etc.) */
 $arLocalIp = array('192.168.', '172.', '127.', '10.');
@@ -147,12 +159,14 @@ if (@file_exists( $sys['path_include_local']. '/gw_config.php'))
 {
 	include( $sys['path_include_local']. '/gw_config.php');
 }
+
 /* ------------------------------------------------------- */
 /* Dynamic path names */
 $sys['path_img_full'] = $sys['server_proto'] . $sys['server_host'] . $sys['server_dir'] .'/'. $sys['path_img'];
 $sys['path_img_ph'] = $sys['path_img'];
 $sys['path_img'] = $sys['server_dir'] .'/'. $sys['path_img'];
 $sys['page_index'] = $sys['server_dir'] .'/index.php';
+
 /* ------------------------------------------------------- */
 /* Database class */
 $oDb = new gwtkDb;
@@ -161,6 +175,7 @@ if ($sys['is_cache_sql'])
 	$oDb->cache_lifetime = $sys['cache_lifetime'];
 	$oDb->setCache($sys['path_cache_sql']);
 }
+
 /* ------------------------------------------------------- */
 /* New functions */
 if (!function_exists('str_split')) { 

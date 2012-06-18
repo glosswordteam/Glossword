@@ -405,11 +405,19 @@ document.forms[\'vbform\'][\'submit1\'].click();
 				</td>
 				</tr>';
 		}
-		if (!$cnt)
-		{
-			$str_form .= '<tr><td></td><td class="'.$v_class_2.'">'. $this->oL->m('reason_4')  .'</td></tr>';
+		
+		if ( !$cnt ) {
+			
+			if ( $this->oSess->is( 'is-sys-settings' ) ) {
+				/* Admin user */
+				$msg_no_dict = $this->oL->m( '1400' );
+			} else {
+				/* Other users */
+				$msg_no_dict = $this->oL->m( 'reason_4' );
+			}
+			$str_form .= '<tr><td></td><td class="' . $v_class_2 . '">' . $msg_no_dict . '</td></tr>';
 		}
-
+		
 #prn_r( $this->oSess->user_get('dictionaries') );
 
 		$str_form .= '</tbody></table>';

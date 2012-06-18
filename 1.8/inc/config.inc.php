@@ -1,8 +1,8 @@
 <?php
 /**
  *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ *  © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ *  © 2002-2008 Dmitry N. Shilnikov
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -98,7 +98,7 @@ $sys['filters_defn']       = array('gw_text_smooth_defn');
 $sys['is_debug_output']    = 0;
 $sys['ar_url_append']      = array();
 $sys['content_type']       = 'text/html';
-$sys['max_char_combobox']  = 64;
+$sys['max_char_combobox']  = 45;
 $sys['prbblty_tasks']      = 3;
 $sys['max_terms_in_index'] = 200;
 $sys['max_lines_csv']      = 10000;

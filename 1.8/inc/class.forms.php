@@ -1,7 +1,8 @@
 <?php
 /**
  *  Glossword - glossary compiler (http://glossword.info/)
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ *  © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ *  © 2002-2008 Dmitry N. Shilnikov
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
