@@ -5,5 +5,4 @@ Glossword is the software to create and publish online multilingual dictionary, 
 
 <http://glossword.biz/>
 
-
-  
+Stand-alone version with the latest updates.
