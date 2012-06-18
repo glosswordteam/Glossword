@@ -406,7 +406,7 @@ document.forms[\'vbform\'][\'submit1\'].click();
 				</tr>';
 		}
 		
-		/* No assigned dictionaries */		
+		/* No assigned dictionaries */
 		if ( !$cnt ) {
 			
 			if ( $this->oSess->is( 'is-sys-settings' ) ) {
