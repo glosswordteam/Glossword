@@ -665,6 +665,16 @@ switch ( $gw_this['vars']['layout'] )
 					);
 				}
 				$oTpl->addVal( 'l:1075', $oL->m( '1075' ) );
+				
+				/* Suggest a term */
+				if ( isset( $arDictParam['is_show_term_suggest'] ) && $arDictParam['is_show_term_suggest'] ) {
+					$gw_this['href_term_suggest'] = $oHtml->url_normalize( $sys['page_index'] . '?' . GW_ACTION . '=' . GW_A_CUSTOMPAGE . '&id=1&d=' . $arDictParam['uri'] . '&q=' . urlencode( $gw_this['arSrchResults']['q'] )  . '&uid=newterm' );
+					$oHtml->setTag( 'a', 'onclick', "self.location='" . $gw_this['href_term_suggest'] . "';return false" );
+					$gw_this['url_term_suggest'] = $oHtml->a( '#', $oL->m( '1095' ), $oL->m( '1375' ) );
+					$oHtml->setTag( 'a', 'onclick', '' );
+					$oTpl->addVal( 'v:term_suggest', $gw_this['url_term_suggest'] );
+				}
+				
 			}
 			
 			$oTpl->addVal( 'l:search_time', $oL->m( 'srch_6' ) );

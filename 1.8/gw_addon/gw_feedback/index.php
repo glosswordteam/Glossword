@@ -233,6 +233,9 @@ class gw_addon_feedback extends gw_addon
 		{
 			case 'newterm':
 				$ar_req_fields = array ( 'term', 'defn', 'captcha' );
+				if ( isset( $this->gw_this['vars']['q'] ) && strlen( $this->gw_this['vars']['q'] ) ) {
+					$vars['term'] = strip_tags( $this->gw_this['vars']['q'] );
+				}
 				break;
 			case 'report':
 				$ar_req_fields = array ( 'defn', 'captcha' );
