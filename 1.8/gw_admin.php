@@ -396,7 +396,7 @@ $arTplVars['srch']['v:chk_srch_in_term_unapproved'] = '';
 $arTplVars['srch']['v:chk_srch_in_term_incomplete'] = '';
 $arTplVars['srch']['v:chk_srch_in_term_removed'] = '';
 
-if (isset($gw_this['vars']['srch']['by']['by']) && $gw_this['vars']['srch']['by']['by'] == 'd')
+if (isset($gw_this['vars']['srch']['by']) && $gw_this['vars']['srch']['by'] == 'd')
 {
 	/* Search by dictionary */
 

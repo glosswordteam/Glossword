@@ -2,8 +2,8 @@
 
 /**
  *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008-2012 Glossword.biz team <team at glossword dot biz>
- *  © 2002-2008 Dmitry N. Shilnikov
+ *  Â© 2008-2010 Glossword.biz team
+ *  Â© 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -215,7 +215,7 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 				/* Search in incomplete */
 #				$sql_table_match = ', `'.$arDictParam['tablename'].'` AS dict';
 				$sql_term_match = 'AND m.term_match = "1" AND t.id = m.term_id AND t.is_complete = "0"';
-				$sql_term_match_all = 'WHERE t.is_complete = "0"';
+				$sql_term_match_all = 'WHERE t.is_complete = "0" AND t.is_active != "3"';
 				break;
 			case 102:
 				/* Search in removed terms */
@@ -859,9 +859,7 @@ function gw_search_results ( $id_srch, $p, $id_dict = 0 )
 			{
 				$oTpl->tmp['d']['search_item'][$k1]['v:term'] = text_highlight( $v1['term'], $arSql['q'] );
 				$oTpl->tmp['d']['search_item'][$k1]['v:checkbox'] = '<input onchange="term_selected(this.value)" id="id-term-' . $v1['t_id'] . '" name="arPost[ar_id][]" type="checkbox" value="' . $v1['t_id'] . '" />';
-				$oTpl->tmp['d']['search_item'][$k1]['url:term_edit'] = '<span class="actions-third">' . $oHtml->a( $page_index
-								. '?' . GW_ACTION . '=' . GW_A_EDIT . '&w1=viewhistory&' . GW_TARGET . '=' . GW_T_TERMS . '&tid=' . $v1['t_id']
-								. '&id=' . $arDictParam['id'], $oL->m( '1294' ) ) . '</span>';
+				$oTpl->tmp['d']['search_item'][$k1]['url:term_edit'] = '';
 				$oTpl->tmp['d']['search_item'][$k1]['url:term_remove'] = '';
 			}
 			else
