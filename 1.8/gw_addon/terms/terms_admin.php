@@ -1,8 +1,8 @@
 <?php
 /**
  *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ *  © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ *  © 2002-2008 Dmitry N. Shilnikov
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ class gw_addon_terms_admin extends gw_addon
 		$this->oHtml->setTag('a', 'onclick', 'nw(this);return false');
 		
 		/* Link to term */
-		$url_view_term = '';		
+		$url_view_term = '';
 		if ( $arDictParam['is_active'] == 1 ) {
 			$url_view_term = (
 					$this->gw_this['vars']['tid'] && ($arTermParam['is_active'] != 3) && ($this->gw_this['vars'][GW_ACTION] == GW_A_EDIT) ?
