@@ -33,15 +33,20 @@ class gw_addon_terms_admin extends gw_addon
 		global $arDictParam, $arTermParam;
 		$this->oHtml->setTag('a', 'class', 'ext');
 		$this->oHtml->setTag('a', 'onclick', 'nw(this);return false');
-		$url_view_term = (
-				$this->gw_this['vars']['tid'] && ($arTermParam['is_active'] != 3) && ($this->gw_this['vars'][GW_ACTION] == GW_A_EDIT) ?
-					$this->oHtml->a(
-						$this->sys['page_index'].'?'.GW_ACTION.'='.GW_T_TERM.'&d='.$arDictParam['uri'].'&'.GW_TARGET.'='.$arTermParam['uri'],
-						$this->oL->m('1283'),
-						$this->oL->m('terms').': '.$this->oL->m('1283')
-					)
-				: ''
-		);
+		
+		/* Link to term */
+		$url_view_term = '';		
+		if ( $arDictParam['is_active'] == 1 ) {
+			$url_view_term = (
+					$this->gw_this['vars']['tid'] && ($arTermParam['is_active'] != 3) && ($this->gw_this['vars'][GW_ACTION] == GW_A_EDIT) ?
+						$this->oHtml->a(
+							$this->sys['page_index'].'?'.GW_ACTION.'='.GW_T_TERM.'&d='.$arDictParam['uri'].'&'.GW_TARGET.'='.$arTermParam['uri'],
+							$this->oL->m('1283'),
+							$this->oL->m('terms').': '.$this->oL->m('1283')
+						)
+					: ''
+			);
+		}
 		$this->oHtml->setTag('a', 'onclick', '');
 		$this->oHtml->setTag('a', 'class', '');
 		/* */
