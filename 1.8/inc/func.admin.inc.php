@@ -150,9 +150,10 @@ function gw_after_redirect_url($action, $id_term = 0)
 			break;
 		}
 		$str_url .= '&note_afterpost='.
-					urlencode(strip_tags($arTermParam['term']).': <a href="'.$oHtml->url_normalize($sys['page_admin'].'?'.GW_ACTION.'='.GW_A_EDIT.'&d='.$arDictParam['id'].'&'.GW_TARGET.'='.GW_T_TERMS.'&tid='.$id_term).'">'.$oL->m('3_edit').'</a>').
-					'  - '.urlencode('<a class="ext" href="'.$oHtml->url_normalize($sys['page_index'].'?'.GW_ACTION.'='.GW_T_TERM.'&d='.$arDictParam['uri'].'&'.GW_TARGET.'='.$arTermParam['uri']).'" onclick="window.open(this.href);return false">'.$oL->m('1283').'</a>');
-
+				urlencode(strip_tags($arTermParam['term']).': <a href="'.$oHtml->url_normalize($sys['page_admin'].'?'.GW_ACTION.'='.GW_A_EDIT.'&d='.$arDictParam['id'].'&'.GW_TARGET.'='.GW_T_TERMS.'&tid='.$id_term).'">'.$oL->m('3_edit').'</a>');
+		if ( $arDictParam['is_active'] == 1 ) {
+			$str_url .= '  - '.urlencode('<a class="ext" href="'.$oHtml->url_normalize($sys['page_index'].'?'.GW_ACTION.'='.GW_T_TERM.'&d='.$arDictParam['uri'].'&'.GW_TARGET.'='.$arTermParam['uri']).'" onclick="window.open(this.href);return false">'.$oL->m('1283').'</a>');
+		}
 	}
 #	prn_r( $str_url );
 #	exit;
