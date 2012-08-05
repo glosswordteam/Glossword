@@ -987,42 +987,51 @@ function append_url($url, $vars = array())
 ## --------------------------------------------------------
 ## HTML-library
 ## (C) 2000-2003 Dmitry Shilnikov
+/* 5 Aug 2012 - Use $oHtml to build attributes */
 function htmlFormsSelect($arData, $default, $formname = 'select', $class = 'input', $style = '', $dir = 'ltr')
 {
-	global $oFunc, $sys;
-	$class = ($class != '') ? ( ' class="' . $class . '"') : ( '' );
-	$style = ($style != '') ? ( ' style="' . $style . '"') : ( '' );
-	$dir = ($dir != '') ? ( ' dir="' . $dir . '"') : ( '' );
-	$formname = ($formname != '') ? ( ' name="' . $formname . '"') : ( '' );
-	$str = '<select' . $formname . $class . $style . $dir . '>';
+	global $oFunc, $sys, $oHtml;
+	
+	$ar_attr_select = array( );
+	
+	if ( strlen( $class ) ) {
+		$ar_attr_select['class'] = $class;
+	}
+	if ( strlen( $style ) ) {
+		$ar_attr_select['style'] = $style;
+	}
+	if ( strlen( $dir ) ) {
+		$ar_attr_select['dir'] = $dir;
+	}
+	if ( strlen( $formname ) ) {
+		$ar_attr_select['name'] = $formname;
+	}
+
+	$str = '<select' . $oHtml->paramValue( $ar_attr_select ) . '>';
+	
 	for ( reset( $arData ); list($k, $v) = each( $arData ); )
 	{
+		$ar_attr_option = array( );
+		
 		/* 8 Oct 2010: Decode quotes to calculate the correct string length */
 		$v = htmlspecialchars_decode( $v, ENT_QUOTES );
 		$v_src = $v;
 		
 		/* Cut long names in order to proper display */
-		/* trim() is used for old mysql version */
-		$int_string_len = $oFunc->mb_strlen( trim( $v ) );
-
-		$attr_title = '';
-		if ( $int_string_len > $sys['max_char_combobox'] )
+		/* trim() is used to solve problems when function parameters comes 
+		 * from MySQL and database is not updated to the current MySQL version */
+		if ( $oFunc->mb_strlen( trim( $v ) ) > $sys['max_char_combobox'] )
 		{
-			$attr_title = ' title="' . htmlspecialchars( $v_src ) . '"';
+			$ar_attr_option['title'] = htmlspecialchars( $v_src );
 			$v = $oFunc->mb_substr( $v, 0, $sys['max_char_combobox'] ) . '…';
 		}
 		
+		$ar_attr_option['value'] = $k;
+		
 		/* SELECTED */
-		if ( $k == $default )
-		{
-			$attr_selected = ' selected="selected"';
-		}
-		else
-		{
-			$attr_selected = '';
-		}
+		$ar_attr_option['selected'] = $k == $default ? 'selected' : '';
 
-		$str .= '<option value="' . $k . '"' . $attr_selected . $attr_title . '">';
+		$str .= PHP_EOL . '<option' . $oHtml->paramValue( $ar_attr_option ) . '>';
 
 		if ( preg_match( "/abbrlang/", $formname ) || preg_match( "/trnslang/", $formname ) )
 		{
@@ -1033,7 +1042,7 @@ function htmlFormsSelect($arData, $default, $formname = 'select', $class = 'inpu
 			$str .= ( $v );
 		}
 
-		$str .= "</option>";
+		$str .= '</option>';
 	}
 	$str .= '</select>';
 	return $str;
