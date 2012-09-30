@@ -448,7 +448,6 @@
 <head>
 <title>{v:html_title} - {l:print_version}</title>
 <meta content="{v:content_type}; charset={v:charset}" http-equiv="Content-Type" />
-<meta content="text/css" http-equiv="Content-Style-Type" />
 <meta name="generator" content="Glossword version {v:glossword_version}"  />
 <meta name="description" content="{l:print_version} : {v:meta_description}"  />
 <meta content="{v:meta_keywords}" name="keywords" />

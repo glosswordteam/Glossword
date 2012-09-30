@@ -1,16 +1,17 @@
 <?php
 /**
- *  Glossword Requirements Checker
- *  � 2008 Glossword.biz team (http://glossword.biz/)
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
+ * 
+ * Glossword Requirements Checker
+ * © 2008-2012 Glossword.biz team <team at glossword dot biz>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
- */
-/**
- * $Id: index.php 3 2008-06-21 07:22:47Z glossword_team $
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
 if (!defined('IS_IN_GW2')) { define('IS_IN_GW2', 1); }
 if (!defined('GW2_THIS_SCRIPT')) { define('GW2_THIS_SCRIPT', 'index.php'); }
@@ -41,8 +42,9 @@ class gw_mini_site
 			'path_includes' => 'includes',
 			'path_db' => 'includes',
 			'file_index' => 'index.php',
-			'version' => '1.8.12-beta',
+			'version' => '1.8.12',
 			'site_name' => 'Glossword',
+			'site_desc' => 'Glossary compiler',
 			'path_temp_app' => '../gw_temp',
 			'file_lock' => '../gw_temp/install_lock.txt'
 		));

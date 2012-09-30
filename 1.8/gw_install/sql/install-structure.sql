@@ -500,6 +500,7 @@ DROP TABLE IF EXISTS `{prefix}virtual_keyboard`;
 CREATE TABLE IF NOT EXISTS `{prefix}virtual_keyboard` (
   `id_profile` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `is_index_page` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `vkbd_name` tinyblob NOT NULL,
   `vkbd_letters` tinyblob NOT NULL,
   PRIMARY KEY (`id_profile`)

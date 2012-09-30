@@ -1,5 +1,5 @@
 <?php
-$template_timestamp = 1261920498;
+$template_timestamp = 1349016812;
 $arBlockI["GW::2635168800"]['var'][] = "GW::3319714414";
 $arBlockI["GW::2635168800"]['var'][] = "GW::1699272955";
 $arBlockI["GW::2635168800"]['var'][] = "GW::722155088";

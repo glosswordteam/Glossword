@@ -758,7 +758,9 @@ start_timer_full_path();
 		$this->oDb->update( 'settings', array('settings_val' => $this->gv['arp']['admin_email']), array('settings_key' => 'site\_email') );
 		$this->oDb->update( 'settings', array('settings_val' => $this->gv['arp']['admin_email']), array('settings_key' => 'site\_email\_from') );
 		$this->oDb->update( 'settings', array('settings_val' => 'gw\_brand'), array('settings_key' => 'visualtheme') );
-
+		$this->oDb->update( 'settings', array('settings_val' => $this->g('site_name') ), array( 'settings_key' => 'site\_name' ) );
+		$this->oDb->update( 'settings', array('settings_val' => $this->g('site_desc') ), array( 'settings_key' => 'site\_desc' ) );
+				
 		/* Importing XML data:
 			1. Topics
 			2. Custom pages
@@ -797,8 +799,8 @@ start_timer_full_path();
 
 		/* Write OpenSearch */
 		$str_oo = $this->oFunc->file_get_contents('../templates/common/opensearch.xml');
-		$str_oo = str_replace('{v:site_name}', 'Glossword', $str_oo);
-		$str_oo = str_replace('{v:site_desc}', 'Glossary compiler', $str_oo);
+		$str_oo = str_replace('{v:site_name}', $this->g('site_name'), $str_oo);
+		$str_oo = str_replace('{v:site_desc}', $this->g('site_desc'), $str_oo);
 		$str_oo = str_replace('{v:server_url}', strip_tags($this->gv['arp']['server_proto'].$this->gv['arp']['server_host'].$this->gv['arp']['server_dir']), $str_oo);
 		$this->oFunc->file_put_contents( $this->g('path_temp_app').'/opensearch.xml', $str_oo, 'w');
 
@@ -875,6 +877,7 @@ start_timer_full_path();
 			$ar_sql = explode(';', $sql_structure);
 			$sql_structure = '';
 			$is_return = true;
+		
 			foreach ($ar_sql as $sql)
 			{
 				if (trim($sql) == ''){ continue; }
@@ -885,7 +888,6 @@ start_timer_full_path();
 			}
 			/* Update dictionary dates */
 			$this->oDb->update( 'dict', array('date_created' => $this->g('time_gmt')-60, 'date_modified' => $this->g('time_gmt')), array('id' => '1') );
-			$this->oDb->update( 'x94djqkr', array('date_created' => $this->g('time_gmt')-60, 'date_modified' => $this->g('time_gmt')) );
 			$this->oDb->update( 'history_terms', array('date_created' => $this->g('time_gmt')-60, 'date_modified' => $this->g('time_gmt')), array('id_dict' => '1') );
 			$ar_results[] = array(
 				'tag' => 'db',

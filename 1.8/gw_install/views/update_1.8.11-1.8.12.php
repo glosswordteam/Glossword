@@ -75,14 +75,14 @@ switch($this->gv['step'])
 		}
 
 		/* Import visual themes */
-		#$ar_status['themes'] = '<div>'.$this->oTkit->_(20010).': '.$this->oTkit->_(20011).'</div>';
-		#$ar_items = array();
+		$ar_status['themes'] = '<div>'.$this->oTkit->_(20010).': '.$this->oTkit->_(20011).'</div>';
+		$ar_items = array();
 		foreach (glob('xml/visual-themes_*.xml') as $filename)
 		{
-			#$this->import_visual_themes_file($filename);
-			#$ar_items[] = str_replace('xml/', '', $filename);
+			$this->import_visual_themes_file($filename);
+			$ar_items[] = str_replace('xml/', '', $filename);
 		}
-		#$ar_status['themes'] .= '<p>('.sizeof($ar_items).') '.implode(', ', $ar_items).'</p>';
+		$ar_status['themes'] .= '<p>('.sizeof($ar_items).') '.implode(', ', $ar_items).'</p>';
 
 		/* == Update database structure == */
 		
@@ -108,7 +108,7 @@ switch($this->gv['step'])
 		/* Update settings */
 		$ar_status['settings'] = '<div>'.$this->oTkit->_(20013).': '.$this->oTkit->_(20015).'</div>';
 
-		#$this->oDb->update('settings', array('settings_val' => $str_version_to), array('settings_key' => 'version') );
+		$this->oDb->update('settings', array('settings_val' => $str_version_to), array('settings_key' => 'version') );
 
 		/* Go to next step */
 		$this->oTpl->addVal( 'v:text_before', '<form accept-charset="utf-8" action="'.$this->g('file_index') .'" enctype="application/x-www-form-urlencoded" id="form-install" method="post">' );
