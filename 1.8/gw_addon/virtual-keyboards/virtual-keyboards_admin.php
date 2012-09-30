@@ -1,13 +1,14 @@
 <?php
 /**
- *  Glossword - glossary compiler (http://glossword.info/)
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
 if (!defined('IN_GW'))
 {
@@ -92,6 +93,10 @@ class gw_addon_vkbd_admin extends gw_addon
 		$str_form .= '<tr>'.
 					'<td class="'.$v_class_1.'">' . $oForm->field('checkbox', 'arPost[is_active]', $vars['is_active']) . '</td>'.
 					'<td class="'.$v_class_2.'">' . '<label for="'.$oForm->text_field2id('arPost[is_active]').'">'.$this->oL->m('1320').'</label></td>'.
+					'</tr>';
+		$str_form .= '<tr>'.
+					'<td class="'.$v_class_1.'">' . $oForm->field('checkbox', 'arPost[is_index_page]', $vars['is_index_page']) . '</td>'.
+					'<td class="'.$v_class_2.'">' . '<label for="'.$oForm->text_field2id('arPost[is_index_page]').'">'.$this->oL->m('1401').'</label></td>'.
 					'</tr>';
 		$str_form .= '<tr>'.
 					'<td class="'.$v_class_1.'">' . $this->oL->m('1289') . $ar_req_msg['vkbd_name'] . '</td>'.

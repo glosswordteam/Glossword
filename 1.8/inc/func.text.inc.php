@@ -1,8 +1,8 @@
 <?php
 /**
  *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,6 +17,46 @@ if (!defined('IN_GW'))
 /**
  *  Functions for an HTML-code and text operations.
  */
+
+/**
+ * Constructs HTML for Virtual keyboard
+ * 
+ * @required $oDb, $oSqlQ, $oL, $ar_theme
+ * @param int $id_profile Virtual keyboard Profile
+ * @param int $id_dict Dictionary ID.
+ */		
+function gw_get_virtual_keyboard( $id_profile = false, $id_dict = false ) {
+	global $oDb, $oSqlQ, $oL, $ar_theme;
+
+	$str = '';
+	$ar_letters = array();
+
+	if ( $id_dict && $id_profile ) {
+		/* Per dictionary */
+		$arSql = $oDb->sqlRun( $oSqlQ->getQ( 'get-vkbd-profile', $id_profile ), $id_dict );
+	} else {
+		/* Default Virtual keyboard */
+		$arSql = $oDb->sqlRun( $oSqlQ->getQ( 'get-vkbd-default' ), 'st' );
+	}
+
+	foreach ( $arSql as $arV ) {
+		$ar_letters = explode( ',', $arV['vkbd_letters'] );
+	}
+	
+	if ( !empty( $ar_letters ) ) {
+		array_walk( $ar_letters, create_function( '&$v', '$v = trim( addslashes( $v ) );' ) );
+		
+		/* "Virtual keyboard" button */
+		$str .= '<a title="' . $oL->m( 'virtual_keyboard' ) . '" id="gwkbdcall" onclick="';
+		$str .= 'return gwJS.showKbd(\'gw\', ['; // <form id="gw"><input id="gwq">
+		$str .= "'" . implode( '\',\'', $ar_letters ) . "'";
+		$str .= ']);"';
+		$str .= ' class="plain">' . $ar_theme['txt_virtual_keyboard'] . '</a>';
+		$str .= '<table style="position:absolute;top:-10;visibility:hidden" id="gwkbd" cellspacing="0"><tbody><tr><td></td></tr></tbody></table>';
+	}
+	
+	return $str;
+}
 
 /* */
 function gw_get_note_afterpost($text, $status = 0)
@@ -1026,13 +1066,13 @@ function htmlFormsSelect($arData, $default, $formname = 'select', $class = 'inpu
 			$v = $oFunc->mb_substr( $v, 0, $sys['max_char_combobox'] ) . '…';
 		}
 		
-		$ar_attr_option['value'] = $k;
+		$ar_attr_option['value'] = ( string ) $k;
 		
 		/* SELECTED */
 		$ar_attr_option['selected'] = $k == $default ? 'selected' : '';
 
 		$str .= PHP_EOL . '<option' . $oHtml->paramValue( $ar_attr_option ) . '>';
-
+		
 		if ( preg_match( "/abbrlang/", $formname ) || preg_match( "/trnslang/", $formname ) )
 		{
 			$str .= $k;
@@ -1044,7 +1084,7 @@ function htmlFormsSelect($arData, $default, $formname = 'select', $class = 'inpu
 
 		$str .= '</option>';
 	}
-	$str .= '</select>';
+	$str .= '</select>';				
 	return $str;
 }
 ## HTML-library

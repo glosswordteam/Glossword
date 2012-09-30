@@ -1,7 +1,8 @@
 <?php
 /**
- * Glossword - glossary compiler (http://glossword.info/)
- * � 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +33,27 @@ $this->str .= $this->_get_nav();
 /* Get profile settings */
 $arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-vkbd-profile', $this->gw_this['vars']['tid']), $this->component);
 $arSql = isset($arSql[0]) ? $arSql[0] : array();
+
+
+$ar_query = array( );
+//$this->sys['isDebugQ'] = 1;
+/* Switching On/off */
+if ( $this->gw_this['vars']['mode'] == 'off' ) {
+	$ar_query[] = 'UPDATE `' . $this->sys['tbl_prefix'] . 'virtual_keyboard`
+							SET `is_index_page` = "0"
+							WHERE `id_profile` = "' . $this->gw_this['vars']['tid'] . '"';
+	$this->str .= postQuery( $ar_query, GW_ACTION . '=' . GW_A_BROWSE . '&' . GW_TARGET . '=' . $this->gw_this['vars'][GW_TARGET], $this->sys['isDebugQ'], 0 );
+	return;
+} elseif ( $this->gw_this['vars']['mode'] == 'on' ) {
+	/* Only one virtual keyboard for the index page */
+	$ar_query[] = gw_sql_update( array( 'is_index_page' => '0' ), $this->sys['tbl_prefix'] . 'virtual_keyboard', 'is_index_page = \'1\' AND id_profile != \'' . $this->gw_this['vars']['tid'] . '\'' );
+	$ar_query[] = 'UPDATE `' . $this->sys['tbl_prefix'] . 'virtual_keyboard`
+							SET `is_index_page` = "1"
+							WHERE `id_profile` = "' . $this->gw_this['vars']['tid'] . '"';
+	$this->str .= postQuery( $ar_query, GW_ACTION . '=' . GW_A_BROWSE . '&' . GW_TARGET . '=' . $this->gw_this['vars'][GW_TARGET], $this->sys['isDebugQ'], 0 );
+	return;
+}
+
 
 $ar_req_fields = array('vkbd_name', 'vkbd_letters');
 if ($this->gw_this['vars']['post'] == '')
@@ -75,7 +97,7 @@ else
 	$arPost['vkbd_letters'] = str_replace('  ', ' ', $arPost['vkbd_letters']);
 
 	/* Fix on/off options */
-	$arIsV = array('is_active');
+	$arIsV = array( 'is_active', 'is_index_page' );
 	for (; list($k, $v) = each($arIsV);)
 	{
 		$arPost[$v]  = isset($arPost[$v]) ? $arPost[$v] : 0;
@@ -87,6 +109,12 @@ else
 	if (empty($ar_broken))
 	{
 		$q1 =& $arPost;
+		
+		/* Only one virtual keyboard for the index page */
+		if ( $arPost['is_index_page'] ) {
+			$ar_query[] = gw_sql_update( array( 'is_index_page' => '0' ), $this->sys['tbl_prefix'].'virtual_keyboard', 'is_index_page = \'1\' AND id_profile != \''.$this->gw_this['vars']['tid'].'\'');
+		}
+		
 		$ar_query[] = gw_sql_update($q1, $this->sys['tbl_prefix'].'virtual_keyboard', 'id_profile = "'.$this->gw_this['vars']['tid'].'"');
 		$this->str .= postQuery($ar_query, GW_ACTION.'='.GW_A_BROWSE.'&'.GW_TARGET.'='.$this->component.'&tid='.$this->gw_this['vars']['tid'].'&r='.time(), $this->sys['isDebugQ'], 0);
 	}

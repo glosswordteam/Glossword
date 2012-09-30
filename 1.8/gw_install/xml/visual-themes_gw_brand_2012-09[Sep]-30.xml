@@ -5,7 +5,7 @@
  theme_author="Dmitry N. Shilnikov"
  theme_email="team@glossword.biz"
  theme_url="http://sourceforge.net/projects/glossword/"
- version="1.8.11">
+ version="1.8.12">
 	<group id="settings">
 		<setting key="color_1"><![CDATA[#FEFEFE]]></setting>
 		<setting key="color_2"><![CDATA[#f5f9ff]]></setting>
@@ -116,8 +116,10 @@
 <td>{v:select_dict}</td>
 
 <td style="width:50%">
-<input class="input" maxlength="128" name="q" size="28" style="width:98%" value="{v:q}" />
+<input class="input" id="gwq" maxlength="128" name="q" size="28" style="width:98%" value="{v:q}" />
 </td>
+
+<td style="width:1%">{v:keyboard}</td>
 
 <td style="width:5%"><input alt="{l:search_submit}" class="submitok" name="search" type="submit" value="{l:search_submit}" /></td>
 
@@ -586,9 +588,10 @@ gwJS.Put('str_select_visualtheme', '{v:select_visualtheme}');
 <td>{v:select_dict}</td>
 
 <td style="width:50%">
-<input class="input" maxlength="128" name="q" size="28" style="width:98%" value="{v:q}" />
+<input class="input" id="gwq" maxlength="128" name="q" size="28" style="width:98%" value="{v:q}" />
 </td>
 
+<td style="width:1%">{v:keyboard}</td>
 <td style="width:5%"><input alt="{l:search_submit}" class="submitok" name="search" type="submit" value="{l:search_submit}" /></td>
 
 </tr>

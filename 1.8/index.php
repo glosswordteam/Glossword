@@ -3,14 +3,15 @@
  *  $Id: index.php 543 2008-07-24 06:05:47Z glossword_team $
  */
 /**
- *  Glossword - glossary compiler (http://glossword.info/)
- *  � 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
 /* ------------------------------------------------------- */
 /**
@@ -283,8 +284,8 @@ if (!$gw_this['vars'][GW_ID_DICT] && ($gw_this['vars'][GW_ACTION] == ''))
 	}
 }
 /* */
-if ($gw_this['vars'][GW_ID_DICT])
-{
+if ( $gw_this['vars'][GW_ID_DICT] ) {
+	
 	/* 1.8.7: Sorting order */
 	$arDictParam['az_sql'] = $arDictParam['az_order'] = '';
 	/* 1.8.7: Select custom alphabetic order */

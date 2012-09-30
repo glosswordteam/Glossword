@@ -2,8 +2,9 @@
 /**
  *  All HTML-tags are here
  *  ==============================================
- *  � 1999-2004 Dmitry Shilnikov <dev at glossword dot info>
- *  http://glossword.info/dev/
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ * © 1999-2008 Dmitry N. Shilnikov
  */
 /* -------------------------------------------------------- */
 /**

@@ -36,7 +36,8 @@ class gw_addon_terms_admin extends gw_addon
 		
 		/* Link to term */
 		$url_view_term = '';
-		if ( $arDictParam['is_active'] == 1 ) {
+		if ( isset( $arDictParam['is_active'] ) 
+				&& $arDictParam['is_active'] == 1 ) {
 			$url_view_term = (
 					$this->gw_this['vars']['tid'] && ($arTermParam['is_active'] != 3) && ($this->gw_this['vars'][GW_ACTION] == GW_A_EDIT) ?
 						$this->oHtml->a(

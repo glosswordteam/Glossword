@@ -1,12 +1,17 @@
 <?php
 /*
  * Query storage
- *  © 2008-2012 Glossword.biz team <team at glossword dot biz>
- *  © 2002-2008 Dmitry N. Shilnikov
+ *  ï¿½ 2008-2012 Glossword.biz team <team at glossword dot biz>
+ *  ï¿½ 2002-2008 Dmitry N. Shilnikov
  * $Id: query_storage_global-mysql410.php 491 2008-06-13 10:05:06Z glossword_team $
  */
 
 $tmp['ar_queries'] = array(
+	'get-vkbd-default' => 'SELECT *
+						FROM `'.$sys['tbl_prefix'].'virtual_keyboard`
+						WHERE `is_index_page` = "1"
+						LIMIT 1
+					',
 	'get-vkbd-profile' => 'SELECT *
 						FROM `'.$sys['tbl_prefix'].'virtual_keyboard`
 						WHERE `id_profile` = "%d"

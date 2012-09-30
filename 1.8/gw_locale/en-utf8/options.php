@@ -16,6 +16,7 @@
  *  Translation created by:
  *      - Dmitry N. Shilnikov <team at glossword.biz>
  */
+$lang['1401'] = 'Display by default';
 $lang['1374'] = 'Save in the history of changes';
 $lang['1369'] = 'The task execution time';
 $lang['1364'] = 'Dictionary ID';

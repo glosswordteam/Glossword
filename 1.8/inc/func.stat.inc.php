@@ -5,7 +5,7 @@ if (!defined('IN_GW'))
 }
 /**
  *  Glossword - glossary compiler (http://glossword.info/)
- *  © 2002-2007 Dmitry N. Shilnikov <dev at glossword dot info>
+ *  ï¿½ 2002-2007 Dmitry N. Shilnikov <dev at glossword dot info>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ function gw_set_cookie($n, $value = '', $is_always = 1)
 	{
 		$expires = time() + (60*60*24*365);
 	}
-	@setcookie($n.$sys['token'], urlencode($value), $expires, '/', $sys['server_host']);
+	@setcookie($n.$sys['token'], urlencode($value), $expires, '/', '' );
 }
 
 

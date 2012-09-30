@@ -5,7 +5,7 @@
  theme_author="Dmitry N. Shilnikov"
  theme_email="team@glossword.biz"
  theme_url="http://sourceforge.net/projects/glossword/"
- version="1.8.11">
+ version="1.8.12">
 	<group id="settings">
 		<setting key="color_1"><![CDATA[#FCF9EF]]></setting>
 		<setting key="color_2"><![CDATA[#FBF3DB]]></setting>
@@ -108,16 +108,17 @@
 
 <!-- search form --><div class="box-search">
 
-<form accept-charset="utf-8" action="{v:form_action}" enctype="application/x-www-form-urlencoded" id="gw" method="get" style="margin:0">
+<form accept-charset="utf-8" action="{v:form_action}" enctype="application/x-www-form-urlencoded" id="gw" method="get">
 
 <div class="inlinetable">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tbody>
 <tr>
-<td colspan="2">{v:select_dict}</td>
+<td colspan="3">{v:select_dict}</td>
 </tr>
 <tr>
-<td><input class="input" maxlength="128" name="q" size="28" value="{v:q}" /></td>
+<td><input class="input" id="gwq" maxlength="128" name="q" size="28" value="{v:q}" /></td>
+<td style="width:1%">{v:keyboard}</td> 
 <td style="width:5%"><input alt="{l:search_submit}" class="submitok" name="search" type="submit" value="{l:search_submit}" /></td>
 </tr>
 </tbody>
@@ -568,16 +569,17 @@
 
 <!-- search form --><div class="box-search">
 
-<form accept-charset="utf-8" action="{v:form_action}" enctype="application/x-www-form-urlencoded" id="gw" method="get" style="margin:0">
+<form accept-charset="utf-8" action="{v:form_action}" enctype="application/x-www-form-urlencoded" id="gw" method="get">
 
 <div class="inlinetable">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tbody>
 <tr>
-<td colspan="2">{v:select_dict}</td>
+<td colspan="3">{v:select_dict}</td>
 </tr>
 <tr>
-<td><input class="input" maxlength="128" name="q" size="28" value="{v:q}" /></td>
+<td><input class="input" id="gwq" maxlength="128" name="q" size="28" value="{v:q}" /></td>
+<td style="width:1%">{v:keyboard}</td> 
 <td style="width:5%"><input alt="{l:search_submit}" class="submitok" name="search" type="submit" value="{l:search_submit}" /></td>
 </tr>
 </tbody>

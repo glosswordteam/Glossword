@@ -1,15 +1,14 @@
 <?php
-
 /**
- *  Glossword - glossary compiler (http://glossword.biz/)
- *  � 2008-2012 Glossword.biz team <team at glossword dot biz>
- *  � 2002-2008 Dmitry N. Shilnikov
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
 if ( !defined( 'IN_GW' ) )
 {
@@ -99,31 +98,21 @@ if ( $gw_this['vars']['layout'] != '' ) // settings for all dictionary pages
 			}
 		}
 		$oTpl->addVal( 'v:id_dict', $arDictParam['id'] );
-
+		
 		/* 1.8.7: Virtual keyboard */
-		if ( $arDictParam['id_vkbd'] )
-		{
-			$arSqlVkbd = $oDb->sqlRun( $oSqlQ->getQ( 'get-vkbd-profile', $arDictParam['id_vkbd'] ), $arDictParam['id'] );
-			$arSqlVkbd = isset( $arSqlVkbd[0] ) ? $arSqlVkbd[0] : array ( );
-			if ( !empty( $arSqlVkbd ) )
-			{
-				$arSqlVkbd['vkbd_letters'] = str_replace( ' ', '', $arSqlVkbd['vkbd_letters'] );
-				$arSqlVkbd['vkbd_letters'] = explode( ',', $arSqlVkbd['vkbd_letters'] );
-				$arSqlVkbd['vkbd_letters'] = "'" . implode( '\',\'', $arSqlVkbd['vkbd_letters'] ) . "'";
-
-				/* "Virtual keyboard" button */
-				$oTpl->addVal( 'v:keyboard', '<a title="' . $oL->m( 'virtual_keyboard' ) . '" id="gwkbdcall" onclick="return gwJS.showKbd(\'gw\', [' .
-						$arSqlVkbd['vkbd_letters'] . ']);" class="plain">' .
-						$ar_theme['txt_virtual_keyboard'] . '</a><table style="position:absolute;top:-10;visibility:hidden" id="gwkbd" cellspacing="0"><tbody><tr><td></td></tr></tbody></table>' );
-			}
-		}
+		/* 1.8.12: Global virtual keyboard */		
+		$oTpl->addVal( 'v:keyboard', gw_get_virtual_keyboard( $arDictParam['id_vkbd'], $arDictParam['id'] ) );
 
 		/* 1.8.1: Link to dictionary contents, all terms A-Z */
 		$oTpl->addVal( 'v:dict_contents', $oHtml->a( $sys['page_index'] . '?a=contents&d=' . $arDictParam['uri'], $oL->m( '1058' ) ) );
 	}
 	else
 	{
-		/* non-dictionary pages (top10, feedback, title page) */
+		/* Non-dictionary pages (top10, feedback, title page) */
+		
+		/* Get HTML for Virtual keyboard */
+		$oTpl->addVal( 'v:keyboard', gw_get_virtual_keyboard() );	
+	
 		if ( $sys['is_cache_http'] )
 		{
 			$oHdr->add( "Last-Modified: " . @date( "D, d M Y H:i:s", $sys['time_now_gmt_unix'] ) . " GMT" );
@@ -1025,6 +1014,7 @@ if ( $arDictParam['id']
 		$oTpl->addVal( 'url:site_name', '' );
 	}
 }
+
 /* Other variables */
 $oTpl->addVal( 'meta:robots', '<meta content="' . $sys['meta_robots'] . '" name="robots" />' );
 $oTpl->addVal( 'href:home', $sys['server_proto'] . $sys['server_host'] . $sys['page_index'] );
@@ -1057,7 +1047,7 @@ if ( isset( $gw_this['vars']['srch']['adv'] ) && $gw_this['vars']['srch']['adv']
 {
 	$s_chk_srch_exact = ' checked="checked"';
 }
-$oTpl->addVal( 'v:exact_match', '<label><input name="srch[adv]" type="checkbox" value="exact"'.$s_chk_srch_exact.'/>'.$oL->m( 'Точно' ).'</label>' );
+#$oTpl->addVal( 'v:exact_match', '<label><input name="srch[adv]" type="checkbox" value="exact"'.$s_chk_srch_exact.'/>'.$oL->m( 'exact' ).'</label>' );
 
 #$oTpl->addVal( 'v:sid',              $gw_this['vars'][GW_SID] );
 #$oTpl->addVal( 'v:sid_name',         GW_SID );

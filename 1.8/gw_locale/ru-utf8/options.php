@@ -16,6 +16,7 @@
  *  Translation created by:
  *      - Dmitry N. Shilnikov <team at glossword.biz>
  */
+$lang['1401'] = 'Отображать по умолчанию';
 $lang['1374'] = 'Сохранить в истории изменений';
 $lang['1369'] = 'Времы выполнения задачи';
 $lang['1364'] = 'ID словаря';

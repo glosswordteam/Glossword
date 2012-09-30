@@ -36,6 +36,7 @@ body { padding: 0; margin: 0; color: {color_black}; background: {color_white}; c
 .termpreview { font: 100% "arial unicode ms",arial,helvetica,sans-serif; }
 .defnpreview { font: 100% "arial unicode ms",arial,helvetica,sans-serif; }
 dd.defnpreview { margin-left: 2.5em; }
+
 dl.termlist dd { margin-bottom: 1em; }
 
 input.submitdel, a.submitdel, a.submitdel:visited, 

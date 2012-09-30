@@ -5,7 +5,7 @@
  theme_author="Dmitry N. Shilnikov"
  theme_email="team@glossword.biz"
  theme_url="http://sourceforge.net/projects/glossword/"
- version="1.8.11">
+ version="1.8.12">
 	<group id="settings">
 		<setting key="color_1"><![CDATA[#FFF]]></setting>
 		<setting key="color_2"><![CDATA[#F9FAF8]]></setting>
@@ -133,14 +133,15 @@
 <tbody><tr><td class="center">
 
 <!-- search form --><div class="box-search">
-<form accept-charset="utf-8" action="{v:form_action}" enctype="application/x-www-form-urlencoded" id="srchform" method="get" style="margin:0">
+<form accept-charset="utf-8" action="{v:form_action}" enctype="application/x-www-form-urlencoded" id="gw" method="get">
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
 <td colspan="2" style="text-align:{v:css_align_right}">
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr>
-<td><input class="input" maxlength="128" name="q" onfocus="this.select()" size="28" type="text" value="{v:q_rnd}" /></td>
+<td><input class="input" id="gwq" maxlength="128" name="q" onfocus="this.select()" size="28" type="text" value="{v:q_rnd}" /></td>
+<td style="width:1%">{v:keyboard}</td> 
 <td style="width:1%"><input class="submitok" name="post" type="submit" value="{l:search_submit}" /></td>
 </tr></tbody></table>
 
@@ -261,8 +262,8 @@
 <table border="0" cellpadding="0" cellspacing="0" style="float:{v:css_align_right}" width="70%">
 <tbody>
 <tr>
-<td style="width:1%">{v:keyboard}</td> 
 <td><input class="input" id="gwq" maxlength="128" name="q" size="28" type="text" value="{v:q}" /></td>
+<td style="width:1%">{v:keyboard}</td>
 <td style="width:1%"><input class="submitok" name="post" type="submit" value="{l:search_submit}" /></td>
 </tr>
 </tbody>
@@ -547,7 +548,8 @@
 <table border="0" cellpadding="0" cellspacing="0" style="float:{v:css_align_right}" width="70%">
 <tbody>
 <tr>
-<td><input class="input" maxlength="128" name="q" size="28" type="text" value="{v:q}" /></td>
+<td><input class="input" id="gwq" maxlength="128" name="q" size="28" type="text" value="{v:q}" /></td>
+<td style="width:1%">{v:keyboard}</td> 
 <td style="width:1%"><input class="submitok" name="post" type="submit" value="{l:search_submit}" /></td>
 </tr>
 </tbody>

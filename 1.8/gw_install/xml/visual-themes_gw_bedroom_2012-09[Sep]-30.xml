@@ -5,7 +5,7 @@
  theme_author="Dmitry N. Shilnikov"
  theme_email="team@glossword.biz"
  theme_url="http://sourceforge.net/projects/glossword/"
- version="1.8.11">
+ version="1.8.12">
 	<group id="settings">
 		<setting key="color_1"><![CDATA[#F6FCFD]]></setting>
 		<setting key="color_2"><![CDATA[#E7F1F8]]></setting>
@@ -112,7 +112,7 @@
 <!-- search form -->
 <div class="box-search" style="padding: 0.5em; background: {color_5} url('{v:path_css}/bg_top.png');">
 
-<form accept-charset="utf-8" action="{v:form_action}" enctype="application/x-www-form-urlencoded" id="srchform" method="get">
+<form accept-charset="utf-8" action="{v:form_action}" enctype="application/x-www-form-urlencoded" id="gw" method="get">
 
 <table border="0" cellpadding="0" cellspacing="3" width="100%">
 <tbody>
@@ -136,7 +136,11 @@
 </td>
 
 <td style="padding:0 0.5em;background: url('{v:path_css}/srch2.png') repeat-x">
-<input class="input" maxlength="128" name="q" size="28" style="width:100%" type="text" value="{v:q_rnd}" />
+<input class="input" id="gwq" maxlength="128" name="q" size="28" style="width:100%" type="text" value="{v:q_rnd}" />
+</td>
+
+<td style="width:1%;padding:0 0.5em;background: url('{v:path_css}/srch2.png') repeat-x">
+{v:keyboard}
 </td>
 
 <td style="background: url('{v:path_css}/srch2.png') repeat-x;width:5%"><input alt="{l:search_submit}" class="submitok" name="search" type="submit" value="{l:search_submit}" /></td>
@@ -663,7 +667,8 @@
 <tr>
 <td style="width:25px; height:39px; background: url('{v:path_css}/srch1.png') repeat-x"></td>
 <td style="background: url('{v:path_css}/srch2.png') repeat-x">
-<input class="input" maxlength="128" name="q" size="28" style="width:98%" value="{v:q}" /></td>
+<input class="input" id="gwq" maxlength="128" name="q" size="28" style="width:98%" value="{v:q}" /></td>
+<td style="width:1%;background: url('{v:path_css}/srch2.png') repeat-x">{v:keyboard}</td>
 <td style="background: url('{v:path_css}/srch2.png') repeat-x;width:5%"><input alt="{l:search_submit}" class="submitok" name="search" type="submit" value="{l:search_submit}" /></td>
 <td style="width:11px; height:39px; background: url('{v:path_css}/srch3.png') repeat-x"> </td>
 </tr>
