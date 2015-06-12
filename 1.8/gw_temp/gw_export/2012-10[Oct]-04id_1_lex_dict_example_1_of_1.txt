@@ -1,0 +1,32 @@
+id	term	t1	t2	t3	term_uri	trsp	defn	abbr	trns	usg	see	syn	antonym	src	address	phone
+33	About	A	B&amp;	B&amp;&quot;	about				(131) Sobre ;; (137) O programu ;; (115) Om ;; (106) Info ;; (116) Info ;; (186) Acerca de ;; (104) Tietoja ;; (105) À propos de ;; (107) Πληροφορίες ;; (108) אודות ;; (119) Névjegy ;; (133) Informazioni su ;; (170) バージョン情報 ;; (182) 저장 ;; (130) Om ;; (139) Informacje ;; (173) Èo je ;; (122) Acerca de ;; (123) Om ;; (129) Hakkýnda					Microsoft International Word List		
+59	All fields	A	L	L	all-fields	Transcription	<p>Example with all fields.</p>	(044) Abbreviation	(103) Translation	usage 1 usage 2	(1, as is) All fields	(1) All fields	(1) All fields	Imagination		
+59	All fields							<p>Second example.</p>									
+3	Autolinks	A	U	T	autolinks		<p>ASCII or ASP and &quot;CGI&quot; so (CMS) in [CSS] of DNS; from XML to HTML next HTTP and ICRA.</p> <p>On the other side -- W3C and ヒトリ.</p>	(167) 								
+27	Feedhorn	F	E	E	feedhorn		One of the main components in any satellite receiving system, the feedhorn collects the satellite signals that are reflected to the focal point of the dish and feeds them to the system&#39;s LNA (e.g., RF Unit).				(1) RF Unit					
+61	Gross domestic product (GDP)	G	R	O	gross-domestic-product-gdp		Рыночная стоимость товаров и услуг, произведенных в течение определенного периода, включая доход иностранных корпораций и нерезидентов, работающих в США; однако, при этом исключается доход американских граждан и корпораций, работающих за рубежом.		(120) Валовой внутренний продукт (ВВП)							
+18	Ionic Bonding	I	O	N	ionic-bonding		Chemical bonding resulting from the transfer of one or more electrons from one atom or a group of atoms to another.									
+29	RF Unit	R	F	F	rf-unit		The radio on PES 5000, 6000 and 8000 series remote terminals. The RF Unit is mounted on the feed support arm of the antenna and provides analogue receive and transmit functions.	RFU								
+35	TabSheet1Caption	T	A	B	tab-sheet-1-caption				(103) Current optimization set ;; (120) Текущий набор настроек ;; (106) Gaengliche Optimisierungsgruppe ;; (105) Jeu d&#39;optimisation courant							
+5	UTF-8	U	T	F	utf-8		<p>UTF-8 (8-bit Unicode Transformation Format) is a lossless, variable-length character encoding for Unicode created by Rob Pike and Ken Thompson. It uses groups of bytes to represent the Unicode standard for the alphabets of many of the world&#39;s languages. UTF-8 is especially useful for transmission over 8-bit mail systems.</p>  <p>It uses 1 to 4 bytes per character, depending on the Unicode symbol. For example, only one UTF-8 byte is needed to encode the 128 US-ASCII characters in the Unicode range U+0000 to U+007F.</p>   <p>While it may seem inefficient to represent Unicode characters with as many as 4 bytes, UTF-8 allows legacy systems to transmit this ASCII superset. Additionally, data compression can still be performed independently of the use of UTF-8.</p>  <p>The IETF requires all Internet protocols to identify the encoding used for character data with UTF-8 as at least one supported encoding.</p>				UTF-16 <a href="http://www.ccss.de/slovo/testuni.htm" title="www.ccss.de">a UTF-8 test page</a>			Wikipedia		
+21	XML declaration	X	M	L	xml-declaration		Part of an XML document that defines the version of XML being used. Although the XML declaration looks like a processing instruction, it is not. For that reason, you cannot access the XML declaration from an XSLT stylesheet or an XPath expression.									
+71	[bye]	[	B	Y	71-bye-		dddd									
+7	black	B	L	A	black				(100) swart ;; (185) e zezë ;; (111) черен ;; (112) negre ;; (114) 黑色 ;; (174) crno ;; (137) černá ;; (115) sort ;; (116) zwart ;; (104) musta ;; (105) noir ;; (106) schwarz ;; (107) μαύρο ;; (108) שחור ;; (119) fekete ;; (138) svartur ;; (181) hitam ;; (183) dubh ;; (133) nero ;; (170) 黒 ;; (182) 검정섁 ;; (110) niger ;; (180) hitam ;; (172) iswed ;; (130) sort ;; (139) czarny ;; (131) preto ;; (121) negru ;; (120) чёрный ;; (175) црна ;; (173) čierna ;; (122) negro ;; (123) svart ;; (177) nyeusi ;; (178) bontsho ;; (129) siyah ;; (124) màu đen ;; (171) du ;; (184) mnyama ;; (176) kumneyama							
+9	bob	B	O	B	bob		   	(012)  ;; (048) 	saç lülesi							
+9	bob							   	(012)  ;; (048) 	hafifçe kımıldamak							
+10	bobbin	B	O	B	bobbin		  	(048) 	makara							
+10	bobbin							  	(048) 	ufak iğ							
+11	body	B	O	D	body		  	(048) 	beden							
+11	body							  	(048) 	ceset							
+11	body							  	(048) 	karoser							
+13	bold	B	O	L	74-bold			(036) 	cüretli		see					
+62	completion	C	O	M	completion		(in land law) The point at which ownership of land that is the subject of a contract for its sale changes hands. The purchaser hands over any unpaid balance of the price in exchange for the title deeds and a valid conveyance of the land to him if the land is unregistered. If the land is registered, the purchaser receives a simple form of transfer that must be lodged at the appropriate District Land Registry with the land certificate.	(048) 						Oxford Dictionary of Law		
+45	gloom	G	L	O	gloom		<p>a state of partial or total darkness</p>			he struck a match to dispell the gloom		somberness sombreness				
+45	gloom							<p>a feeling of melancholy apprehension</p>					gloominess somberness				
+45	gloom							<p>an atmosphere of depression and melancholy</p>			gloom pervaded the office		gloominess glumness				
+66	not [hello]	N	O	T	72-not-hello-											
+14	panther	P	A	N	panther	´pænθə			(124) con báo							
+44	pichicato	P	I	C	pichicato		cicatero, miserable, que escatima lo que debe dar (del italiano &quot;pizzicato&quot; = pellizcado).			¡No seas pichicata, Margarita! Le estás dando muy poquita comida a ese pobre gato. ;; 123 123				Jerga de México		
+23	southing	S	O	U	southing		a southern movement.	(048) 								
+23	southing							the distance travelled or measured southward.	(144) 								
+23	southing							the angular distance of a star etc. south of the celestial equator.	(062) 								

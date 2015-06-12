@@ -127,7 +127,7 @@ body { text-align: center; padding: 0em; margin: 0; color: {color_black};
 .gray { color: #999; }
 .{v:visualtheme} .profile dt { font-size: 80%; margin: 1em 0; color: #987; }
 
-.term { text-transform: uppercase; letter-spacing: -1px; color: {color_7}; background: transparent; font: 175% sans-serif; }
+.term { text-transform: uppercase; letter-spacing: -1px; color: {color_7}; background: transparent; font: 175% code2000, sans-serif; }
 .termpreview { font: 100% "arial unicode ms",arial,helvetica,sans-serif; }
 .defnpreview { font: 95% "arial unicode ms",arial,helvetica,sans-serif; }
 .trsp { color: #777; background: transparent; font: 100% 'lucida sans unicode',sans-serif; }
@@ -137,11 +137,11 @@ body { text-align: center; padding: 0em; margin: 0; color: {color_black};
 .abbr-3 { color: #5bbf3f; }
 .abbr-5 { color: #47a7a3; }
 table.abbr-t,table.trns-t{width:100%;background:none;}
-td.abbr-l,td.trns-l{width:10%}
+td.abbr-l,td.trns-l{width:10}
 
 acronym { font: italic 90% sans-serif; }
 .trns-4 { color: #b9906e; background: transparent; font: bold 100% "arial unicode ms",arial,sans-serif; }
-.defn { margin: 0; font: 100% sans-serif; text-align: {v:css_align_left}; }
+.defn { margin: 0; font: 100% code2000, sans-serif; text-align: {v:css_align_left}; }
 ol.defnblock li .defn { margin: 0; }
 ol.defnblock li { margin-top: 1em; }
 div.defnblock { margin-bottom: 1em; padding: 0 1em 0em 1em; width: auto; }
@@ -149,7 +149,7 @@ ol.defnblock { margin-{v:css_align_left}: 1em; }
 .defnnote { font: 90% "arial unicode ms",arial,helvetica,sans-serif;  }
 div.defn p { margin-bottom: 0; }
 .gwsrc, .gwsyn, .gwantonym, .gwsee, .gwaddress, .gwphone { font: 90% sans-serif; }
-.gwusg { font: 90% sans-serif; color: #987; background: transparent; margin: -0.5em 0 0.5em 0; }
+.gwusg { font: 90% code2000, sans-serif; color: #987; background: transparent; margin: -0.5em 0 0.5em 0; }
 .gwusg dl { margin:0; }
 .gwusg dt { margin: 2px 0; padding-left: 4px; border-{v:css_align_left}: #CCC 1px solid; }
 .gwvar { color: #336; background: #F8F8F8; }

@@ -73,7 +73,7 @@ body { padding: 0; margin: 0; color: {color_black}; background: {color_white}; c
 
 .{v:visualtheme} .profile dt { font-size: 80%; margin: 1em 0; color: #987; }
 
-.term { color: #000; background: transparent; font: 175% georgia,"times new roman",serif; }
+.term { color: #000; background: transparent; font: 175% code2000, georgia,"times new roman",serif; }
 .termpreview { font: 100% "arial unicode ms",arial,helvetica,sans-serif; }
 .defnpreview { font: 100%/125% "arial unicode ms",arial,helvetica,sans-serif; }
 .trsp { color: #777; background: transparent; font: 100% 'lucida sans unicode',sans-serif; }
@@ -88,7 +88,7 @@ ol.defnblock li .defn { margin: 0; }
 .defnnote { font: 90% "arial unicode ms",arial,helvetica,sans-serif;  }
 div.defn p { margin-bottom: 0; }
 .gwsrc, .gwsyn, .gwantonym, .gwsee, .gwaddress, .gwphone { font: 106% "times new roman",serif; }
-.gwusg { font: 100% "times new roman",serif; color: #987; background: transparent; margin: -0.4em 0 0 2em; }
+.gwusg { font: 100% Cham_Roman, "times new roman",serif; color: #987; background: transparent; margin: -0.4em 0 0 2em; }
 .gwusg dl { margin: 0 0 0.5em 0; }
 .gwvar { color: #336; background: #F8F8F8; }
 tt.lyrics { display: block; margin-{v:css_align_left}: 1em; font: 106% "times new roman",serif; color: #765; background: transparent; text-align: {v:css_align_left}; }

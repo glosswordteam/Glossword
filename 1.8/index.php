@@ -439,8 +439,8 @@ $oL->getCustom('tht',     $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang
 $oL->getCustom('tol',     $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'], 'join');
 $oL->getCustom('custom',  $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'], 'join');
 /* Uppercase / lowercase */
-$oCase = new gwv_casemap(array(1,2,3,4,5,6,7,8), array(1,2,3));
-$oCase->set_replace_sp(array('--'=>' ', '-' => ' '));
+$oCase = new gwv_casemap(array(1,2,3,4,5,6,7,8), array(1));
+$oCase->set_replace_sp(array('--'=>' ', '-' => ' ','[['=>'[',']]'=>']'));
 $oCase->encoding = $sys['internal_encoding'];
 // ---------------------------------------------------------
 // Search engine, last modified 1 aug 2003

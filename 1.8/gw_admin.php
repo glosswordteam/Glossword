@@ -198,7 +198,7 @@ include_once( $sys['path_include'] . '/func.admin.inc.php');
 include_once( $sys['path_include'] . '/class.confirm.php');
 /* Uppercase / lowercase */
 $oCase = new gwv_casemap(array(1,2,3,4,5,6,7,8), array(1,2,3,4,5));
-$oCase->set_replace_sp(array('--' => ' ', '-' => ' '));
+$oCase->set_replace_sp(array('--'=>' ', '-' => ' ','['=>'[',']'=>']'));
 $oCase->encoding = $sys['internal_encoding'];
 $oCase->is_use_mbstring = 1;
 

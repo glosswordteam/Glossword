@@ -65,7 +65,7 @@ input.submitcancel, a.submitcancel, a.submitcancel:visited {
 	border-right: #b6b6b6 1px solid;
 	border-top: #eee 1px solid;
 }
-input.submitdel, a.submitdel, a.submitdel:visited {
+.actions-third .submitdel, input.submitdel, a.submitdel, a.submitdel:visited {
 	background: #ffcac8 url("{v:path_css}/bg_button_del.png");
 	border-bottom: #dba6a4 1px solid;
 	border-left: #ffe8e7 1px solid;

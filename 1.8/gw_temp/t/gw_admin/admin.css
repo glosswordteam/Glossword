@@ -210,6 +210,11 @@ div.actions-secondary {
 	text-decoration: none;
 	white-space: nowrap;
 }
+
+.actions-third .submitcancel {
+	
+}
+
 .actions-third a:hover {
 	text-decoration: none;
 	border: 1px solid #a5def6;

@@ -16,7 +16,7 @@
  *  Translation created by:
  *      - José Marcos <elmoch at telefonica.net>
  */
-$lang['1401'] = 'Mostrar зor defecto'; //to translate
+$lang['1401'] = 'Mostrar por defecto'; //to translate
 $lang['1374'] = 'Guardar en el hisorial de cambios';
 $lang['1369'] = 'Tiempo de ejecución de la tarea';
 $lang['1364'] = 'ID del diccionario';
