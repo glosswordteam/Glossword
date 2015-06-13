@@ -1,8 +1,8 @@
 <?php
 /**
  *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ *  Â© 2008 Glossword.biz team
+ *  Â© 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,6 +41,8 @@ if (!$this->oSess->is('is-users'))
 {
 	$ar_req_fields = array();
 }
+
+$bSuccess = true;
 
 /* correct unknown settings */
 $ar_user_settings = array('is_dst' => @date('I'), 'locale_name' => $this->gw_this['vars']['locale_name'], 'visualtheme' => 'gw_brand', 'location' => '', 'avatar_img' => '', 'is_use_avatar' => 0, 'is_htmled' => '1', 'gmt_offset' => 0, 'date_format' => 'F j, Y, g:i a');
@@ -96,8 +98,7 @@ if ($this->gw_this['vars']['post'] == '')
 
 	$this->str .= $this->get_form_user($arSql, $is_first, 0, $ar_req_fields);
 }
-else
-{
+else {
 	/* */
 	$arPost =& $this->gw_this['vars']['arPost'];
 
@@ -112,8 +113,6 @@ else
 	/* If someone edits other profile */
 	$id_user = ($this->gw_this['vars']['w1'] != '') ? $this->gw_this['vars']['w1'] : $this->oSess->id_user;
 	$ar_user = $this->oSess->user_load_values($id_user, 'return');
-
-#prn_r( $ar_user, 'user_load_values' );
 
 	/* compare changed username with existent */
 	if (isset($arPost['login']))
@@ -141,7 +140,7 @@ else
 			if (isset($arV['id_user']) && ($arV['id_user'] != $id_user))
 			{
 				$arBroken['user_email'] = true;
-				$isPostError = 1;
+				$bSuccess = false;
 				$this->str .= '<p class="xr"><span class="red">' . $this->oL->m('reason_18') . '</span></p>';
 			}
 		}
@@ -154,13 +153,13 @@ else
 		{
 			$arBroken['pass_new'] = $arBroken['pass_confirm'] = true;
 			$this->str .= '<p class="xr"><span class="red">'. $this->oL->m('reason_14') . '</span></p>';
-			$isPostError = 1;
+			$bSuccess = false;
 		}
 		else if ( strlen($arPost['pass_new']) > 32 )
 		{
 			$arBroken['pass_new'] = $arBroken['pass_confirm'] = true;
 			$this->str .= '<p class="xr"><span class="red">'. $this->oL->m('reason_19') . '</span></p>';
-			$isPostError = 1;
+			$bSuccess = false;
 		}
 		else if ($this->gw_this['vars']['w1'] == $this->oSess->id_user)
 		{
@@ -171,11 +170,11 @@ else
 	/* New login correct, current password is ok, both passwords is correct */
 	if (sizeof($arBroken) == 0)
 	{
-		$isPostError = 0;
+		$bSuccess = true;
 	}
 	else
 	{
-		$isPostError = 1;
+		$bSuccess = false;
 		/* Admin changes profile of another user */
 		if ($this->sys['is_profile_owner'])
 		{
@@ -197,41 +196,61 @@ else
 		$file_location = $this->gw_this['vars']['_files']['file_location'];
 	}
 	/* */
-	if (!empty($file_location))
-	{
+	if (!empty($file_location)) {
 		$avatar_file = isset($file_location['tmp_name']) ? $file_location['tmp_name'] : '';
 		if ( $avatar_file ) {
 			$ar_img_size = getimagesize($avatar_file);
-			$file_target = urlencode($this->sys['time_now'].'_'.$file_location['name']);
-			/* Create directory */
-			$this->oFunc->file_put_contents($this->sys['path_temporary'].'/a/'.$file_target, '');
-			if (is_uploaded_file($avatar_file)
-				&& move_uploaded_file($avatar_file, $this->sys['path_temporary'].'/a/'.$file_target)
-				)
-			{
-				/* remove old avatar, image could not exist */
-				if (isset($ar_user['user_settings']['avatar_img']) && $ar_user['user_settings']['avatar_img'] != '')
+
+			switch ( $ar_img_size[2] ){
+				case IMAGETYPE_GIF:
+				case IMAGETYPE_JPEG:
+				case IMAGETYPE_PNG:
+					$bSuccess = true;
+				break;
+				default:
+					$bSuccess = false;
+					break;
+			}
+
+			if ( $bSuccess ) {
+				$file_target = urlencode($this->sys['time_now'].'_'.$file_location['name']);
+				/* Create directory */
+				$this->oFunc->file_put_contents($this->sys['path_temporary'].'/a/'.$file_target, '');
+				if (is_uploaded_file($avatar_file)
+					&& move_uploaded_file($avatar_file, $this->sys['path_temporary'].'/a/'.$file_target)
+					)
 				{
-					@unlink($sys['path_temporary'].'/a/'.$ar_user['user_settings']['avatar_img']);
+					/* remove old avatar, image could not exist */
+					if (isset($ar_user['user_settings']['avatar_img']) && $ar_user['user_settings']['avatar_img'] != '')
+					{
+						@unlink($sys['path_temporary'].'/a/'.$ar_user['user_settings']['avatar_img']);
+					}
+					/* resize image: source path, target path, max x, lib, debug */
+					if (($ar_img_size[0] > $this->sys['avatar_max_x'])
+						|| ($ar_img_size[1] > $this->sys['avatar_max_y']))
+					{
+						include_once( $this->sys['path_include'] . '/func.img.inc.php' );
+						gw_image_resize($this->sys['path_temporary'].'/a/'.$file_target, $this->sys['path_temporary'].'/a/'.$file_target, $this->sys['avatar_max_x'], 'gd2', 0);
+						$ar_img_size = getimagesize($this->sys['path_temporary'].'/a/'.$file_target);
+					}
+					$arPost['user_settings']['avatar_img_x'] = $ar_img_size[0];
+					$arPost['user_settings']['avatar_img_y'] = $ar_img_size[1];
+					$arPost['user_settings']['avatar_img'] = $file_target;
 				}
-				/* resize image: source path, target path, max x, lib, debug */
-				if (($ar_img_size[0] > $this->sys['avatar_max_x'])
-				  || ($ar_img_size[1] > $this->sys['avatar_max_y']))
-				{
-					include_once( $this->sys['path_include'] . '/func.img.inc.php' );
-					gw_image_resize($this->sys['path_temporary'].'/a/'.$file_target, $this->sys['path_temporary'].'/a/'.$file_target, $this->sys['avatar_max_x'], 'gd2', 0);
-					$ar_img_size = getimagesize($this->sys['path_temporary'].'/a/'.$file_target);
-				}
-				$arPost['user_settings']['avatar_img_x'] = $ar_img_size[0];
-				$arPost['user_settings']['avatar_img_y'] = $ar_img_size[1];
-				$arPost['user_settings']['avatar_img'] = $file_target;
 			}
 		}
+	} // $file_location
+
+	/* Redirect */
+	$url_to = GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . GW_T_USERS;
+	if ( $this->gw_this['vars']['w1'] != $this->oSess->id_user ) {
+		$url_to .= '&w1=' . $this->gw_this['vars']['w1'];
+	} else {
+		$url_to = GW_ACTION . '=edit-own&' . GW_TARGET . '=' . GW_T_USERS;
 	}
+
 	/* final update */
-	if (!$isPostError)
-	{
-#$this->sys['isDebugQ'] = 1;
+	if ( $bSuccess ) {
 
 		$q1 = $ar_q = array();
 		if (isset($arPost['pass_confirm']) && ($arPost['pass_confirm'] != ''))
@@ -327,18 +346,13 @@ else
 		$ar_q[] = gw_sql_update($q1, $this->oSess->db_table_users, 'id_user = "'.$id_user.'"');
 
 		/* Redirect */
-		$url = GW_ACTION.'='.GW_A_EDIT .'&'. GW_TARGET.'='.GW_T_USERS;
-		if ($this->gw_this['vars']['w1'] != $this->oSess->id_user)
-		{
-			$url .= '&w1=' . $this->gw_this['vars']['w1'];
-		}
-		else
-		{
-				$url = GW_ACTION.'=edit-own&'. GW_TARGET.'='.GW_T_USERS;
-		}
-		$this->str .= postQuery($ar_q, $url.'&note_afterpost='.$this->oL->m('1332'), $this->sys['isDebugQ'], 0);
+		$this->str .= postQuery($ar_q, $url_to.'&note_afterpost='.urlencode($this->oL->m('1332')), $this->sys['isDebugQ'], 0 );
+	} else {
+		$ar_q = array();
+		$this->str .= postQuery($ar_q, $url_to.'&error_afterpost='.urlencode($this->oL->m('1255')), $this->sys['isDebugQ'], 0 );
 	}
+
 	unset($arPost['is_send_notice']);
-}
+} // submitted
 
 ?>

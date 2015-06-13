@@ -1,8 +1,8 @@
 <?php
 /**
  *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ *  Â© 2008 Glossword.biz team
+ *  Â© 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,7 +56,8 @@ function gw_show_form()
 function gw_export_sqltable($tablename)
 {
 	global $sys, $oDb, $oFunc, $oL;
-	$filename = $sys['path_export'] . '/sql_backup_' . @date("Y-mM-d") .'/backup_' . $tablename . '.sql';
+	$dirname = 'sql_backup_' . @date("Y-mM-d");
+	$filename = $sys['path_export'] . '/'. $dirname . '/backup_' . $tablename . '_' . md5( $tablename . time() . uniqid() ) .'.sql';
 	$strQ = '';
 	$strQ .= 'SET NAMES \'utf8\';' . CRLF;
 	$strQ .= 'DROP TABLE IF EXISTS `' . $tablename . '`;' . CRLF;
@@ -80,6 +81,7 @@ function gw_export_sqltable($tablename)
 		}
 		$strQ .= gw_sql_insert($arV, $tablename, 0) . ';';
 	}
+	$oFunc->file_put_contents( $sys['path_export'] . '/'. $dirname . '/index.html', '-', 'w' );
 	$isWrite = $oFunc->file_put_contents( $filename, $strQ, 'w');
 	return ( $isWrite ?  '<span class="xt"><span class="gray">'. $filename . '</span><br />' . $oFunc->number_format(strlen($strQ), 0, $oL->languagelist(4)) . ' ' . $oL->m('bytes'): $oL->m('error') ).'</span>';
 }
