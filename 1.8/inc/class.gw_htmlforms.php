@@ -530,7 +530,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		{
 			$tmp['cur_element'] = 'arTrns';
 		}
-		$tmp['cur_array'] = $this->$tmp['cur_element'];
+		$tmp['cur_array'] = $this->{$tmp['cur_element']};
 
 		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
 		//
