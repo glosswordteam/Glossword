@@ -231,7 +231,7 @@ class gwv_template
 					if (strstr($tmp['cmd'], ' ')) /* not a variable */
 					{
 						$arCmdParts = explode(' ', $tmp['cmd']);
-						$arRpl[] = $this->oCmd->$arCmdParts[0]($arCmdParts[1]);
+						$arRpl[] = $this->oCmd->{$arCmdParts[0]}($arCmdParts[1]);
 					}
 					elseif (substr($tmp['cmd'], 0, 1) == "/") /* block */
 					{

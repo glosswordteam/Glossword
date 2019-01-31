@@ -5,7 +5,7 @@ if (!defined('IN_GW'))
 }
 /**
  *  Glossword - glossary compiler (http://glossword.info/dev/)
- *  © 2002-2006 Dmitry N. Shilnikov <dev at glossword dot info>
+ *  Â© 2002-2006 Dmitry N. Shilnikov <dev at glossword dot info>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ if (!defined('IN_GW'))
 /* */
 function gw_addon_multilingual_vars_load($filename = '', $obj_tpl)
 {
-	global $oFunc, $$obj_tpl;
+	global $oFunc, ${$obj_tpl};
 	global $sys, $gw_this, $arDictParam;
 
 	// Read additional template variables
