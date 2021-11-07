@@ -1,8 +1,8 @@
-<?php 
+<?php
 /**
- *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2004 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * Â© 2008-2021 Glossword.biz team <team at glossword dot biz>
+ * Â© 2002-2008 Dmitry N. Shilnikov
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,49 +13,39 @@
 /* --------------------------------------------------------
  * Simple HTTP-headers class
  * ----------------------------------------------------- */
-if (!defined('IN_GW'))
-{
-	die('<!-- $Id: class.headers.php 470 2008-05-14 16:25:33Z yrtimd $ -->');
+if ( ! defined('IN_GW')) {
+    die('<!-- Not in App -->');
 }
 /* ----------------------------------------------------- */
-if (!defined('IS_CLASS_HEADERS'))
-{
-	define('IS_CLASS_HEADERS', 1);
+if ( ! class_exists('gw_headers')) {
+    class gw_headers
+    {
+        public $is_debug = GW_DEBUG_HTTP;
+        public $arH = array();
+        public $arHText = array();
 
-class gw_headers
-{
-	var $is_debug = GW_DEBUG_HTTP;
-	var $arH = array();
-	var $arHText = array();
-	
-	function add($str)
-	{
-		if ($str != '')
-		{
-			array_push($this->arH, $str);
-		}
-	}
-	function output()
-	{
-		for (reset($this->arH); list($k, $v) = each($this->arH);)
-		{
-			@header($v);
-			if ($this->is_debug)
-			{
-				$this->arHText[]  = $v;
-			}
-			else
-			{
-			}
-		}
-	}
-	function get()
-	{
-		return $this->arH;
-	}
-} /* end of class */
-/* Autostart */
-$oHdr = new gw_headers;
+        public function add($str)
+        {
+            if ($str != '') {
+                $this->arH[] = $str;
+            }
+        }
+
+        public function output()
+        {
+            foreach ($this->arH as $k => $v) {
+                @header($v);
+                if ($this->is_debug) {
+                    $this->arHText[] = $v;
+                }
+            }
+        }
+
+        public function get()
+        {
+            return $this->arH;
+        }
+    } /* end of class */
+    /* Autostart */
+    $oHdr = new gw_headers;
 }
-
-?>
