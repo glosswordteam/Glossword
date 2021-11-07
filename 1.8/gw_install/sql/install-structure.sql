@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}abbr` (
   `id_dict` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `id_group` tinyint(3) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id_abbr`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}abbr_phrase` (
   `abbr_short` tinyblob NOT NULL,
   `abbr_long` tinyblob NOT NULL,
   PRIMARY KEY (`id_abbr_phrase`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}auth_restore` (
   `auth_key` int(10) unsigned NOT NULL,
   `date_created` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_user`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}captcha` (
   `captcha` varchar(5) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `captcha` (`captcha`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}component` (
   `vv3` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `cname` varchar(128) NOT NULL,
   PRIMARY KEY (`id_component`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}component_actions` (
   `aname_sys` varchar(64) NOT NULL,
   `icon` varchar(64) NOT NULL,
   PRIMARY KEY (`id_action`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}component_map` (
   `req_permission_map` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_component` (`id_action`,`id_component`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}custom_az` (
   `az_int` int(9) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_letter`),
   KEY `az_value` (`id_profile`,`int_sort`,`az_int`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}custom_az_profiles` (
   `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `profile_name` tinyblob NOT NULL,
   PRIMARY KEY (`id_profile`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}dict` (
   `dict_settings` blob NOT NULL,
   PRIMARY KEY (`id`),
   KEY `date_created` (`date_created`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -203,7 +203,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}history_terms` (
   `defn` mediumblob NOT NULL,
   `keywords` mediumblob NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -224,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}import_sessions` (
   `filename` varbinary(255) NOT NULL,
   `settings` blob NOT NULL,
   PRIMARY KEY (`id_session`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}map_user_to_dict` (
   `user_id` smallint(5) unsigned NOT NULL DEFAULT '1',
   `dict_id` smallint(5) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -252,7 +252,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}map_user_to_term` (
   `term_id` int(10) unsigned NOT NULL DEFAULT '0',
   `dict_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   UNIQUE KEY `utd` (`user_id`,`term_id`,`dict_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -274,7 +274,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}pages` (
   `page_php_1` mediumblob NOT NULL,
   `page_php_2` tinyblob NOT NULL,
   PRIMARY KEY (`id_page`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -292,7 +292,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}pages_phrase` (
   `page_descr` mediumblob NOT NULL,
   `page_content` mediumblob NOT NULL,
   PRIMARY KEY (`id_page_phrase`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -310,7 +310,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}search_results` (
   `q` tinyblob NOT NULL,
   `srch_settings` mediumblob NOT NULL,
   PRIMARY KEY (`id_srch`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -327,7 +327,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}sessions` (
   `ip` int(10) unsigned NOT NULL DEFAULT '0',
   `ua` varchar(255) NOT NULL,
   PRIMARY KEY (`id_sess`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -340,7 +340,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}settings` (
   `settings_key` varchar(127) NOT NULL DEFAULT '',
   `settings_val` mediumblob NOT NULL,
   PRIMARY KEY (`settings_key`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -353,7 +353,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}stat_dict` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `hits` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -373,7 +373,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}stat_search` (
   PRIMARY KEY (`id_stat_search`),
   KEY `date_created` (`date_created`),
   KEY `id_dict` (`id_dict`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 PACK_KEYS=1 DELAY_KEY_WRITE=1;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 PACK_KEYS=1 DELAY_KEY_WRITE=1;
 
 -- --------------------------------------------------------
 
@@ -393,7 +393,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}theme` (
   `theme_email` varchar(128) NOT NULL DEFAULT '',
   `theme_url` varchar(128) NOT NULL DEFAULT '',
   PRIMARY KEY (`id_theme`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -407,7 +407,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}theme_group` (
   `id_group` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `int_sort` mediumint(8) unsigned NOT NULL DEFAULT '0',
   KEY `settings_key` (`settings_key`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -427,7 +427,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}theme_settings` (
   `code_i` blob NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_theme` (`id_theme`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -447,7 +447,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}topics` (
   `date_modified` int(10) unsigned NOT NULL DEFAULT '0',
   `topic_icon` varchar(64) NOT NULL DEFAULT '',
   PRIMARY KEY (`id_topic`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -463,7 +463,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}topics_phrase` (
   `topic_title` varbinary(255) NOT NULL DEFAULT '',
   `topic_descr` mediumblob NOT NULL,
   PRIMARY KEY (`id_topic_phrase`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -488,7 +488,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}users` (
   `user_perm` blob NOT NULL,
   `user_settings` blob NOT NULL,
   PRIMARY KEY (`id_user`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -504,7 +504,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}virtual_keyboard` (
   `vkbd_name` tinyblob NOT NULL,
   `vkbd_letters` tinyblob NOT NULL,
   PRIMARY KEY (`id_profile`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -518,7 +518,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}wordlist` (
   `word_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`word_text`),
   UNIQUE KEY `word_id` (`word_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 PACK_KEYS=1 DELAY_KEY_WRITE=1;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 PACK_KEYS=1 DELAY_KEY_WRITE=1;
 
 -- --------------------------------------------------------
 
@@ -535,4 +535,4 @@ CREATE TABLE IF NOT EXISTS `{prefix}wordmap` (
   `date_created` int(10) unsigned NOT NULL DEFAULT '0',
   KEY `word_id` (`word_id`),
   KEY `term_id` (`term_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 PACK_KEYS=1 DELAY_KEY_WRITE=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 PACK_KEYS=1 DELAY_KEY_WRITE=1;
