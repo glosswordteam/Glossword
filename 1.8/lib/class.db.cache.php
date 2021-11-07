@@ -16,7 +16,7 @@
  *  Special usage is not required.
  *  Implemented into database class, sqlExec() function
  */
-if ( ! class_exists('gwv_casemap')) {
+if ( ! class_exists('gwtkCache')) {
     class gwtkCache
     {
         // --------------------------------------------------------
