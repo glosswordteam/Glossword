@@ -1,8 +1,8 @@
 <?php
 /**
  *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ *  Â© 2008 Glossword.biz team
+ *  Â© 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -93,18 +93,18 @@ class gwtkDataBase
 			{
 				$t = new gw_timer('q');
 			}
-			$connect_type = ($is_pconnect) ? 'mysql_pconnect' : 'mysql_connect';
+			$connect_type = 'mysqli_connect';
 			$this->connect_type = $connect_type . '('.$this->host.');';
 			if (!$this->link_id = @$connect_type($this->host, $this->user, $this->password))
 			{
 				$this->halt("Could not " . $this->connect_type . " to the database server ($this->host, $this->user).", $this->on_error_default);
 			}
-			if (!@mysql_select_db($this->database))
+			if (!@mysqli_select_db($this->link_id, $this->database))
 			{
-				@mysql_close($this->link_id);
+				@mysqli_close($this->link_id);
 				$this->halt('Could not select database ('.$this->database.').', $this->on_error_default);
 			}
-			@mysql_query('SET NAMES \'utf8\'', $this->link_id);
+			@mysqli_query($this->link_id, 'SET NAMES \'utf8\'');
 			if (defined("GW_DEBUG_SQL_TIME") && defined("IS_CLASS_TIMER") && GW_DEBUG_SQL_TIME == 1)
 			{
 				$this->connect_time = $t->end();
@@ -132,7 +132,7 @@ class gwtkDataBase
 			{
 				$t = new gw_timer('q');
 			}
-			if (!$this->query_id = @mysql_query($query, $this->link_id))
+			if (!$this->query_id = @mysqli_query($this->link_id, $query))
 			{
 				$this->halt('Invalid SQL: ' . $query, $this->on_error_default);
 			}
@@ -161,9 +161,9 @@ class gwtkDataBase
 	{
 		if ($query != '')
 		{
-			if (!$this->query_id = @mysql_query($query, $this->link_id))
+			if (!$this->query_id = @mysqli_query($this->link_id, $query))
 			{
-				return preg_match("/Duplicate entry/i", @mysql_error($this->link_id));
+				return preg_match("/Duplicate entry/i", @mysqli_error($this->link_id));
 			}
 		}
 		return false;
@@ -178,7 +178,7 @@ class gwtkDataBase
 			$this->halt("next_record() called with no query pending.", $this->on_error_default);
 			return 0;
 		}
-		$this->record = @mysql_fetch_assoc($this->query_id);
+		$this->record = @mysqli_fetch_assoc($this->query_id);
 		$this->row   += 1;
 		$stat = is_array($this->record);
 		if (!$stat && IS_FREE_RESULT)
@@ -200,7 +200,7 @@ class gwtkDataBase
 				print '<br/>DB: free ' . $query_id;
 			}
 		}
-		return @mysql_free_result($this->query_id);
+		return @mysqli_free_result($this->query_id);
 	} // end of free_result();
 	/**
 	 *
@@ -217,7 +217,7 @@ class gwtkDataBase
 			{
 				$this->free_result($this->query_id);
 			}
-			return @mysql_close($this->link_id);
+			return @mysqli_close($this->link_id);
 		}
 		else
 		{
@@ -229,8 +229,8 @@ class gwtkDataBase
 	##
 	function halt($msg, $errMode = 1)
 	{
-		$this->Error = @mysql_error($this->link_id);
-		$this->Errno = @mysql_errno($this->link_id);
+		$this->Error = @mysqli_error($this->link_id);
+		$this->Errno = @mysqli_errno($this->link_id);
 		if ($errMode == ON_ERROR_IGNORE) { return; }
 		$this->haltmsg($msg);
 		if ($errMode == ON_ERROR_HALT)
@@ -271,7 +271,7 @@ class gwtkDataBase
 			$sql .= $table . ' ' . $mode;
 		}
 		// $this->query($sql);
-		$res = @mysql_query($sql, $this->link_id);
+		$res = @mysqli_query($this->link_id, $sql);
 		if (!$res)
 		{
 			$str = is_array($table) ? implode(', ', $table) : $table;
@@ -283,7 +283,7 @@ class gwtkDataBase
 	function unlock()
 	{
 		$this->connect();
-		$res = @mysql_query("UNLOCK TABLES", $this->link_id);
+		$res = @mysqli_query($this->link_id, "UNLOCK TABLES");
 		if (!$res)
 		{
 			$this->halt("Can't unlock().");
@@ -294,16 +294,16 @@ class gwtkDataBase
 	//
 	function num_fields()
 	{
-		return @mysql_num_fields($this->query_id);
+		return @mysqli_num_fields($this->query_id);
 	}
 	function num_rows()
 	{
-		return @mysql_num_rows($this->query_id);
+		return @mysqli_num_rows($this->query_id);
 	}
 	/* public: evaluate the result (size, width) */
 	function affected_rows()
 	{
-		return (@mysql_affected_rows($this->link_id) > 0) ? mysql_affected_rows($this->link_id) : 0;
+		return (@mysqli_affected_rows($this->link_id) > 0) ? mysqli_affected_rows($this->link_id) : 0;
 	}
 	/* public: shorthand notation */
 	function r($name)
@@ -316,9 +316,9 @@ class gwtkDataBase
 		$this->database = trim(str_replace('`', '', $this->database));
 		if ($this->link_id)
 		{
-			$db_list = mysql_list_dbs($this->link_id);
+			$db_list = mysqli_query($this->link_id, 'SHOW DATABASES');
 			$ar = array();
-			while ($row = mysql_fetch_array($db_list))
+			while ($row = mysqli_fetch_array($db_list))
 			{
 				$ar[$row['Database']] = $row['Database'];
 			}
@@ -330,7 +330,7 @@ class gwtkDataBase
 			$ar = array();
 			if ($this->query_id)
 			{
-				while ($row = mysql_fetch_array($this->query_id, MYSQL_NUM))
+				while ($row = mysqli_fetch_array($this->query_id, MYSQL_NUM))
 				{
 					$ar[$row[0]] = $row[0];
 				}
@@ -349,7 +349,7 @@ class gwtkDataBase
 			$sql = 'SHOW TABLES FROM `' . $this->database . '` LIKE "' . $tablename . '"';
 		}
 		$this->query($sql);
-		while ($row = mysql_fetch_array($this->query_id, MYSQL_NUM))
+		while ($row = mysqli_fetch_array($this->query_id, MYSQL_NUM))
 		{
 			$ar[] = $row[0];
 		}
@@ -367,7 +367,7 @@ class gwtkDataBase
 			$this->query('SHOW TABLE STATUS FROM `' . $this->database . '` LIKE "' . $tablename . '";');
 			if ($this->query_id)
 			{
-				return mysql_fetch_assoc($this->query_id);
+				return mysqli_fetch_assoc($this->query_id);
 			}
 		}
 		return array();
@@ -378,7 +378,7 @@ class gwtkDataBase
 		if ($tablename != '')
 		{
 			$this->query('SELECT MAX(' . $field . ') AS n FROM `' . $tablename . '`;');
-			$arID = mysql_fetch_assoc($this->query_id);
+			$arID = mysqli_fetch_assoc($this->query_id);
 			return ($arID['n'] + 1);
 		}
 		return 1;

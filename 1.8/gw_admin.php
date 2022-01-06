@@ -62,7 +62,7 @@ $oHtml->id_sess_name = GW_SID;
  * Register global variables
  * ----------------------------------------------------- */
 $gw_this['vars'] = $oGlobals->register(array(
-	'arControl','arPost','arPre','d','in','file_location','note_afterpost','error_afterpost',
+	'arControl','arPost','arPre','d','in','file_location','note_afterpost',
 	GW_ACTION,GW_SID,GW_SID.'r',GW_TARGET,GW_LANG_I,GW_LANG_C,'visualtheme','uri',
 	'id','uid','isConfirm',GW_A_SEARCH,'id_srch','is','name','email','id_topic',
 	'isUpdate','mode','p','post','remove','q','strict','submit','tid','w1','w2','w3',
@@ -198,7 +198,7 @@ include_once( $sys['path_include'] . '/func.admin.inc.php');
 include_once( $sys['path_include'] . '/class.confirm.php');
 /* Uppercase / lowercase */
 $oCase = new gwv_casemap(array(1,2,3,4,5,6,7,8), array(1,2,3,4,5));
-$oCase->set_replace_sp(array('--'=>' ', '-' => ' ','['=>'[',']'=>']'));
+$oCase->set_replace_sp(array('--' => ' ', '-' => ' '));
 $oCase->encoding = $sys['internal_encoding'];
 $oCase->is_use_mbstring = 1;
 
@@ -342,11 +342,9 @@ if ($oSess->is('is-users'))
 }
 $oTpl->addVal( 'l:term',             $oL->m('term') );
 /* Show notice */
-if ($gw_this['vars']['note_afterpost']) {
+if ($gw_this['vars']['note_afterpost'])
+{
 	$oTpl->addVal( 'v:note_afterpost', gw_get_note_afterpost($gw_this['vars']['note_afterpost'], true) );
-}
-if ($gw_this['vars']['error_afterpost']) {
-	$oTpl->addVal( 'v:note_afterpost', gw_get_note_afterpost($gw_this['vars']['error_afterpost'], false ) );
 }
 
 /* I request you to retain the copyright notice! */
@@ -703,8 +701,7 @@ $sys['path_component_action'] = $sys['path_addon'].'/'.$gw_this['vars'][GW_TARGE
 #prn_r( $sys['path_component']  );
 #prn_r( $sys['path_component_action']  );
 
-$sys['id_current_status'] = '2_page_' . $gw_this['vars'][GW_TARGET] . '_' . $gw_this['vars'][GW_ACTION];
-$sys['id_current_status'] = preg_replace( '/[^a-z0-9_\-]/', '', $sys['id_current_status'] );
+$sys['id_current_status'] = '2_page_'.$gw_this['vars'][GW_TARGET] . '_' . $gw_this['vars'][GW_ACTION];
 
 /* include components */
 if ($gw_this['vars'][GW_TARGET] != '')
@@ -724,7 +721,7 @@ if ($gw_this['vars'][GW_TARGET] != '')
 	file_exists($pathAction)
 		? include_once($pathAction)
 		: (isset($gw_this['class_'.$gw_this['vars'][GW_TARGET]])
-			? $$gw_this['vars'][GW_TARGET] = new $gw_this['class_'.$gw_this['vars'][GW_TARGET]]
+			? ${$gw_this['vars'][GW_TARGET]} = new $gw_this['class_'.$gw_this['vars'][GW_TARGET]]
 			: '' );
 }
 

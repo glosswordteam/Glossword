@@ -1,8 +1,8 @@
 <?php 
 /**
  *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2003-2004 Dmitry N. Shilnikov <dev at glossword dot info>
+ *  Â© 2008 Glossword.biz team
+ *  Â© 2003-2004 Dmitry N. Shilnikov <dev at glossword dot info>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ class gw_timer {
 	{
 		$this->prefix = $prefix;
 		$var = $this->prefix.'_starttime';
-		global $$var;
+		global ${$var};
 		$mtime = explode(' ', microtime());
 		$$var = (float)$mtime[1] + (float)$mtime[0];
 	}
