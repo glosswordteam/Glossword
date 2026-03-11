@@ -50,8 +50,8 @@ if (!isset($sys['server_host']))
 {
 	$sys['server_host'] = isset($_SERVER["HTTP_HOST"])&&!empty($_SERVER["HTTP_HOST"]) ? $_SERVER["HTTP_HOST"]
 					: (isset($HTTP_SERVER_VARS["HTTP_HOST"]) ? $HTTP_SERVER_VARS["HTTP_HOST"]
-					: (getenv('SERVER_NAME') != '') ? getenv('SERVER_NAME')
-					: 'localhost');
+					: ((getenv('SERVER_NAME') != '') ? getenv('SERVER_NAME')
+					: 'localhost'));
 }
 /* Constants */
 define('CRLF', "\r\n");
