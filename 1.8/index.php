@@ -134,6 +134,12 @@ $oGlobals->do_default($gw_this['vars']['lang_enc'], $sys['locale_name']);
 $oGlobals->do_default($gw_this['vars']['p'], 1);
 $oGlobals->do_default($gw_this['vars']['d'], 0);
 $oGlobals->do_default($gw_this['vars']['uri'], '');
+
+/* Security: normalize request routing arguments */
+$gw_this['vars'][GW_ACTION] = strtolower(trim($gw_this['vars'][GW_ACTION]));
+$gw_this['vars'][GW_TARGET] = strtolower(trim($gw_this['vars'][GW_TARGET]));
+$gw_this['vars'][GW_ACTION] = preg_replace('/[^a-z0-9_\-]/', '', $gw_this['vars'][GW_ACTION]);
+$gw_this['vars'][GW_TARGET] = preg_replace('/[^a-z0-9_\-]/', '', $gw_this['vars'][GW_TARGET]);
 /* used for Session class */
 $sys['uri'] =& $gw_this['vars']['uri'];
 

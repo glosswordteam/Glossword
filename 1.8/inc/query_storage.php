@@ -26,9 +26,12 @@ class gwtk_query_storage extends gw_query_storage
         global $gw_this, $sys;
         $arSql = array();
         foreach ($ar as $k => $v) {
-            if (file_exists($sys['path_addon'] . '/' . $gw_this['vars'][GW_TARGET] . '/' . $v . $this->str_suffix . '.php')) {
+            $target = preg_replace('/[^a-z0-9_\-]/', '', strtolower($gw_this['vars'][GW_TARGET]));
+            $query_file = preg_replace('/[^a-z0-9_\-]/', '', strtolower($v));
+            $path = $sys['path_addon'] . '/' . $target . '/' . $query_file . $this->str_suffix . '.php';
+            if (file_exists($path)) {
                 $tmp = array();
-                include($sys['path_addon'] . '/' . $gw_this['vars'][GW_TARGET] . '/' . $v . $this->str_suffix . '.php');
+                include($path);
                 $arSql = array_merge($arSql, $tmp['ar_queries']);
             }
         }

@@ -149,6 +149,7 @@ for ( reset( $sys['ar_url_append'] ); list($k, $v) = each( $sys['ar_url_append']
 $oTpl->addVal( 'v:input_url_append', $tmp['input_url_append'] );
 
 /* Load addons */
+$gw_this['vars'][GW_TARGET] = preg_replace('/[^a-z0-9_\-]/', '', strtolower($gw_this['vars'][GW_TARGET]));
 $sys['path_component'] = $sys['path_addon'] . '/' . $gw_this['vars'][GW_TARGET] . '/' . $gw_this['vars'][GW_TARGET] . '.php';
 
 file_exists( $sys['path_component'] ) ? include_once($sys['path_component'] ) : '';
