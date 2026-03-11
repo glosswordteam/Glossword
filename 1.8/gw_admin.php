@@ -81,6 +81,13 @@ $oGlobals->do_default($gw_this['vars'][GW_LANG_C], $gw_this['vars'][GW_LANG_I]);
 $oGlobals->do_default($gw_this['vars']['lang_enc'], $sys['locale_name']);
 $oGlobals->do_default($gw_this['vars']['visualtheme'], $sys['visualtheme']);
 $oGlobals->do_default($gw_this['vars']['uri'], '');
+
+/* Security: normalize request routing arguments */
+$gw_this['vars'][GW_ACTION] = strtolower(trim($gw_this['vars'][GW_ACTION]));
+$gw_this['vars'][GW_TARGET] = strtolower(trim($gw_this['vars'][GW_TARGET]));
+$gw_this['vars'][GW_ACTION] = preg_replace('/[^a-z0-9_\-]/', '', $gw_this['vars'][GW_ACTION]);
+$gw_this['vars'][GW_TARGET] = preg_replace('/[^a-z0-9_\-]/', '', $gw_this['vars'][GW_TARGET]);
+
 /* used for Session class */
 $sys['uri'] =& $gw_this['vars']['uri'];
 
@@ -706,6 +713,16 @@ $sys['path_component_action'] = $sys['path_addon'].'/'.$gw_this['vars'][GW_TARGE
 $sys['id_current_status'] = '2_page_' . $gw_this['vars'][GW_TARGET] . '_' . $gw_this['vars'][GW_ACTION];
 $sys['id_current_status'] = preg_replace( '/[^a-z0-9_\-]/', '', $sys['id_current_status'] );
 
+/* Security: allow only known administration components */
+$gw_this['vars']['is_valid_component'] = isset($gw_this['ar_actions_list'][$gw_this['vars'][GW_TARGET]]) ? 1 : 0;
+if ($gw_this['vars'][GW_TARGET] != '' && !$gw_this['vars']['is_valid_component'])
+{
+	$gw_this['vars'][GW_TARGET] = '';
+	$gw_this['vars'][GW_ACTION] = '';
+	$sys['path_component'] = '';
+	$sys['path_component_action'] = '';
+}
+
 /* include components */
 if ($gw_this['vars'][GW_TARGET] != '')
 {
@@ -720,7 +737,6 @@ if ($gw_this['vars'][GW_TARGET] != '')
 #		? include_once($sys['path_component_action'] )
 #		: '';
 	/* Old */
-	print $pathAction;
 	file_exists($pathAction)
 		? include_once($pathAction)
 		: (isset($gw_this['class_'.$gw_this['vars'][GW_TARGET]])
