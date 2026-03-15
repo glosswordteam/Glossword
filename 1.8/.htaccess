@@ -11,7 +11,7 @@ DirectoryIndex index.php index.html index.htm
 # AddDefaultCharset charset=utf-8
 # php_value default_charset 'utf-8'
 
-Options -Indexes FollowSymLinks
+Options -Indexes +FollowSymLinks
 
 <Files .htaccess>
     Order allow,deny
