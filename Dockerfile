@@ -7,7 +7,6 @@ RUN rm -f /etc/apt/sources.list \
  && echo 'Acquire::AllowInsecureRepositories "true";' >> /etc/apt/apt.conf.d/99archive-no-check \
  && echo 'APT::Get::AllowUnauthenticated "true";'     >> /etc/apt/apt.conf.d/99archive-no-check
 
-# Теперь обновляем и ставим пакеты
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
       libpng-dev \
