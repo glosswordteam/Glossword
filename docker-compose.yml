@@ -1,0 +1,25 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: Glossword
+    ports:
+      - "8082:80"
+    volumes:
+      - ./1.8:/var/www/html/
+      - ./docker/000-default.conf:/etc/apache2/sites-available/000-default.conf:ro
+    restart: unless-stopped
+  mysql:
+    image: mysql:5.7
+    container_name: glossword-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: glossword18
+      MYSQL_USER: glossword
+      MYSQL_PASSWORD: glossword
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
