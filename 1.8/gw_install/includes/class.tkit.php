@@ -113,14 +113,14 @@ class tkit
         $a = [];
         foreach ($ar as $k => $v) {
             $filename = sprintf($path, $v);
-            $a = array();
+            $a = [];
 
             /* Serialized version */
             if (file_exists($filename) && !isset($this->f[$filename])) {
                 $a = @unserialize(file_get_contents($filename));
 
                 if (!is_array($a)) {
-                    $a = array();
+                    $a = [];
                 } else {
                     array_walk($a, function (&$value) {
                         $value = urldecode($value);
