@@ -1,4 +1,5 @@
 <?php
+
 /**
  *  Glossword - glossary compiler (http://glossword.biz/)
  *  © 2008-2012 Glossword.biz team <team at glossword dot biz>
@@ -10,9 +11,8 @@
  *  (at your option) any later version.
  *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
-if (!defined('IN_GW'))
-{
-	die('<!-- $Id: config.inc.php 515 2008-07-07 00:28:18Z glossword_team $ -->');
+if (!defined('IN_GW')) {
+    die('<!-- $Id: config.inc.php 515 2008-07-07 00:28:18Z glossword_team $ -->');
 }
 /* ------------------------------------------------------- */
 /**
@@ -20,17 +20,21 @@ if (!defined('IN_GW'))
  *  index -> config.inc -> lib.prepend -> constants.inc -> custom
  *           ^^^^^^^^^^
  */
+$sys['path_css_script'] = $sys['server_dir'];
+$sys['server_url'] = $sys['server_proto'] . $sys['server_host'] . $sys['server_dir'];
+$sys['page_admin'] = $sys['server_dir'] . '/' . $sys['file_admin'];
+$sys['page_login'] = $sys['server_dir'] . '/' . $sys['file_login'];
 /* ------------------------------------------------------- */
 // Database settings
 // see `glossword/db_config.php'
 /* ------------------------------------------------------- */
 $sys['const_prefix'] = 'GW_';  /* prefix for constant names, do not touch */
 // Debug Level
-define('GW_DEBUG',           0); /* [ 1 - on | 0 - off ] Debug mode */
-define('GW_DEBUG_SQL_TIME',  0); /* displays Total execution time */
+define('GW_DEBUG', 0); /* [ 1 - on | 0 - off ] Debug mode */
+define('GW_DEBUG_SQL_TIME', 0); /* displays Total execution time */
 define('GW_DEBUG_SQL_QUERY', 0); /* displays SQL-queries */
-define('GW_DEBUG_CACHE',     0); /* displays Cache usage */
-define('GW_DEBUG_HTTP',      0); /* displays HTTP headers */
+define('GW_DEBUG_CACHE', 0); /* displays Cache usage */
+define('GW_DEBUG_HTTP', 0); /* displays HTTP headers */
 /* Switches placed in the first configuration file */
 define('GW_PAGE_LINK_ID', 1);   /* id_page = 1 */
 define('GW_PAGE_LINK_URI', 2);  /* id_image = one */
@@ -77,36 +81,36 @@ define('GW_A_CUSTOMPAGE', 'viewpage');
 ## meta_robots          [ index|archive|noindex|noarchive ] Rules for <meta content="" name="robots" />
 
 /* ------------------------------------------------------- */
-$sys['is_check_ip']        = 0;
-$sys['is_cache_sql']       = 0;
-$sys['is_cache_http']      = 0;
-$sys['is_cache_search']    = 0;
-$sys['is_use_gzip']        = 0;
-$sys['gzip_level']         = 6;
-$sys['cache_zlib']         = 0;
-$sys['cache_lifetime']     = 10080; /* week */
-$sys['path_temporary']     = 'gw_temp';
-$sys['path_cache_sql']     = $sys['path_temporary'].'/gw_cache_sql';
-$sys['path_export']        = $sys['path_temporary'].'/gw_export';
-$sys['path_logs']          = $sys['path_temporary'].'/gw_logs';
-$sys['refreshtime']        = 2;
-$sys['leech_factor']       = 2;
-$sys['is_tpl_show_names']  = 0;
-$sys['is_delay_redirect']  = 0;
-$sys['filters_output']     = array('gw_text_smooth');
-$sys['filters_defn']       = array('gw_text_smooth_defn');
-$sys['is_debug_output']    = 0;
-$sys['ar_url_append']      = array();
-$sys['content_type']       = 'text/html';
-$sys['max_char_combobox']  = 45;
-$sys['prbblty_tasks']      = 3;
+$sys['is_check_ip'] = 0;
+$sys['is_cache_sql'] = 0;
+$sys['is_cache_http'] = 0;
+$sys['is_cache_search'] = 0;
+$sys['is_use_gzip'] = 0;
+$sys['gzip_level'] = 6;
+$sys['cache_zlib'] = 0;
+$sys['cache_lifetime'] = 10080; /* week */
+$sys['path_temporary'] = 'gw_temp';
+$sys['path_cache_sql'] = $sys['path_temporary'] . '/gw_cache_sql';
+$sys['path_export'] = $sys['path_temporary'] . '/gw_export';
+$sys['path_logs'] = $sys['path_temporary'] . '/gw_logs';
+$sys['refreshtime'] = 2;
+$sys['leech_factor'] = 2;
+$sys['is_tpl_show_names'] = 0;
+$sys['is_delay_redirect'] = 0;
+$sys['filters_output'] = ['gw_text_smooth'];
+$sys['filters_defn'] = ['gw_text_smooth_defn'];
+$sys['is_debug_output'] = 0;
+$sys['ar_url_append'] = [];
+$sys['content_type'] = 'text/html';
+$sys['max_char_combobox'] = 45;
+$sys['prbblty_tasks'] = 3;
 $sys['max_terms_in_index'] = 200;
-$sys['max_lines_csv']      = 10000;
-$sys['max_terms_search']   = 1000;
-$sys['max_page_links']     = 3;
+$sys['max_lines_csv'] = 10000;
+$sys['max_terms_search'] = 1000;
+$sys['max_page_links'] = 3;
 $sys['mod_rewrite_suffix'] = '.xhtml';
-$sys['mod_rewrite_index']  = 'index.xhtml';
-$sys['meta_robots']        = 'index,follow,archive';
+$sys['mod_rewrite_index'] = 'index.xhtml';
+$sys['meta_robots'] = 'index,follow,archive';
 
 $sys['int_jpeg_compression'] = 51;
 $sys['is_ext_fields'] = 1;
@@ -118,14 +122,12 @@ $sys['internal_encoding'] = 'UTF-8';
 /* I request you to retain the copyright notice! Ask for copyright removal. */
 $sys['str_branding'] = 'Powered&#160;by <a href="http://glossword.biz/" onclick="window.open(this);return false" title="Freeware dictionary/glossary PHP-script">Glossword</a>&#160;';
 
-include_once( $sys['path_gwlib'] .'/class.func.php' );
+include_once($sys['path_gwlib'] . '/class.func.php');
 /* ------------------------------------------------------- */
 /* Autoexec */
-if (isset($sys['is_prepend']) && $sys['is_prepend'])
-{
-	include_once( $sys['path_include'] . '/lib.prepend.php');
+if (isset($sys['is_prepend']) && $sys['is_prepend']) {
+    include_once($sys['path_include'] . '/lib.prepend.php');
 }
-$sys['file_lock']   = 'gw_temp/gw_install.lock';
+$sys['file_lock'] = 'gw_temp/gw_install.lock';
 
 /* end of file */
-?>

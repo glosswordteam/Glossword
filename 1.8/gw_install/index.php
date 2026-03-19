@@ -51,7 +51,7 @@ class gw_mini_site
             'path_includes'    => 'includes',
             'path_db'          => 'includes',
             'file_index'       => 'index.php',
-            'version'          => '1.8.12',
+            'version'          => '1.8.13',
             'site_name'        => 'Glossword',
             'site_desc'        => 'Glossary compiler',
             'path_temp_app'    => '../gw_temp',
@@ -139,25 +139,25 @@ class gw_mini_site
     /* */
     public function _init_functions()
     {
-        include_once($this->V->path_includes . '/functions.php');
+        require_once($this->V->path_includes . '/functions.php');
         return new tkit_functions;
     }
 
     public function _init_reqchecker()
     {
-        include_once($this->V->path_includes . '/reqchecker.php');
+        require_once($this->V->path_includes . '/reqchecker.php');
         return new gw_reqcheck;
     }
 
     public function _init_xmlreader()
     {
-        include_once($this->V->path_includes . '/xml_reader5.php');
+        require_once($this->V->path_includes . '/xml_reader5.php');
         return new gw2_xmlreader5;
     }
 
     public function _init_tkit($ar_tkit_profiles, $il)
     {
-        include_once($this->g('path_includes') . '/class.tkit.php');
+        require_once($this->g('path_includes') . '/class.tkit.php');
         $o = new tkit;
         $o->path_locale = $this->g('path_locale');
         $o->is_debug = $this->g('is_debug_tkit');
@@ -169,7 +169,7 @@ class gw_mini_site
     /* */
     public function _init_html()
     {
-        include_once($this->g('path_includes') . '/class.html_gw2.php');
+        require_once($this->g('path_includes') . '/class.html_gw2.php');
         $o = new gw2_html;
         $o->path_css = $this->g('path_css');
         $o->path_js = $this->g('path_js');
@@ -180,7 +180,7 @@ class gw_mini_site
     /* */
     public function _init_html_tags()
     {
-        include_once($this->g('path_includes') . '/class.html_tags.php');
+        require_once($this->g('path_includes') . '/class.html_tags.php');
         $o = new gw2_html_tags;
         return $o;
     }
@@ -189,8 +189,8 @@ class gw_mini_site
     public function _init_html_tpl()
     {
         $this->a('is_tpl_show_names', 0);
-        include_once($this->g('path_includes') . '/class.tpl.php');
-        include_once($this->g('path_includes') . '/class.template.ext.php');
+        require_once($this->g('path_includes') . '/class.tpl.php');
+        require_once($this->g('path_includes') . '/class.template.ext.php');
         $o = new tkit_template();
 #		$o->oDb =& $this->oDb;
         $o->init($this->g('visual-theme'));
@@ -208,7 +208,7 @@ class gw_mini_site
         if (!class_exists('CI_Exceptions')) {
             include($this->g('path_includes') . '/Exceptions.php');
         }
-        include_once($this->g('path_includes') . '/DB.php');
+        require_once($this->g('path_includes') . '/DB.php');
         $ar_params['hostname'] = $ar_params['db_host'];
         $ar_params['username'] = $ar_params['db_user'];
         $ar_params['database'] = $ar_params['db_name'];
@@ -232,7 +232,7 @@ class gw_mini_site
     /* */
     public function _init_db_forge()
     {
-        #include_once($this->g('path_includes').'/DB_forge.php');
+        #require_once($this->g('path_includes').'/DB_forge.php');
         #return new CI_DB_forge;
     }
 
@@ -610,7 +610,7 @@ class gw_mini_site
     /* */
     public function global_variables($ar = [])
     {
-        include_once($this->g('path_includes') . '/class.register_globals.php');
+        require_once($this->g('path_includes') . '/class.register_globals.php');
         $oGlobals = new tkit_register_globals($ar);
         $this->gv = $oGlobals->register($ar);
 

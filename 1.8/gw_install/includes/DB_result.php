@@ -1,15 +1,18 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 /**
  * CodeIgniter
  *
  * An open source application development framework for PHP 4.3.2 or newer
  *
- * @package		CodeIgniter
- * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2006, EllisLab, Inc.
- * @license		http://codeigniter.com/user_guide/license.html
- * @link		http://codeigniter.com
- * @since		Version 1.0
+ * @package        CodeIgniter
+ * @author        ExpressionEngine Dev Team
+ * @copyright    Copyright (c) 2006, EllisLab, Inc.
+ * @license        http://codeigniter.com/user_guide/license.html
+ * @link        http://codeigniter.com
+ * @since        Version 1.0
  * @filesource
  */
 
@@ -22,320 +25,333 @@
  * This class will not be called directly. Rather, the adapter
  * class for the specific database will extend and instantiate it.
  *
- * @category	Database
- * @author		ExpressionEngine Dev Team
- * @link		http://codeigniter.com/user_guide/database/
+ * @category    Database
+ * @author        ExpressionEngine Dev Team
+ * @link        http://codeigniter.com/user_guide/database/
  */
-class CI_DB_result {
+class CI_DB_result
+{
 
-	var $conn_id		= NULL;
-	var $result_id		= NULL;
-	var $result_array	= array();
-	var $result_object	= array();
-	var $current_row 	= 0;
-	var $num_rows		= 0;
-	var $row_data		= NULL;
+    public $conn_id       = null;
+    public $result_id     = null;
+    public $result_array  = [];
+    public $result_object = [];
+    public $current_row   = 0;
+    public $num_rows      = 0;
+    public $row_data      = null;
 
 
-	/**
-	 * Query result.  Acts as a wrapper function for the following functions.
-	 *
-	 * @access	public
-	 * @param	string	can be "object" or "array"
-	 * @return	mixed	either a result object or array	
-	 */	
-	function result($type = 'object')
-	{	
-		return ($type == 'object') ? $this->result_object() : $this->result_array();
-	}
+    /**
+     * Query result.  Acts as a wrapper function for the following functions.
+     *
+     * @access    public
+     * @param string    can be "object" or "array"
+     * @return    mixed    either a result object or array
+     */
+    public function result($type = 'object')
+    {
+        return ($type == 'object') ? $this->result_object() : $this->result_array();
+    }
 
-	// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
-	/**
-	 * Query result.  "object" version.
-	 *
-	 * @access	public
-	 * @return	object
-	 */	
-	function result_object()
-	{
-		if (count($this->result_object) > 0)
-		{
-			return $this->result_object;
-		}
-		
-		// In the event that query caching is on the result_id variable 
-		// will return FALSE since there isn't a valid SQL resource so 
-		// we'll simply return an empty array.
-		if ($this->result_id === FALSE OR $this->num_rows() == 0)
-		{
-			return array();
-		}
+    /**
+     * Query result.  "object" version.
+     *
+     * @access    public
+     * @return    object
+     */
+    public function result_object()
+    {
+        if (count($this->result_object) > 0) {
+            return $this->result_object;
+        }
 
-		$this->_data_seek(0);
-		while ($row = $this->_fetch_object())
-		{
-			$this->result_object[] = $row;
-		}
-		
-		return $this->result_object;
-	}
-	
-	// --------------------------------------------------------------------
+        // In the event that query caching is on the result_id variable
+        // will return FALSE since there isn't a valid SQL resource so
+        // we'll simply return an empty array.
+        if ($this->result_id === false or $this->num_rows() == 0) {
+            return [];
+        }
 
-	/**
-	 * Query result.  "array" version.
-	 *
-	 * @access	public
-	 * @return	array
-	 */	
-	function result_array()
-	{
-		if (count($this->result_array) > 0)
-		{
-			return $this->result_array;
-		}
+        $this->_data_seek(0);
+        while ($row = $this->_fetch_object()) {
+            $this->result_object[] = $row;
+        }
 
-		// In the event that query caching is on the result_id variable 
-		// will return FALSE since there isn't a valid SQL resource so 
-		// we'll simply return an empty array.
-		if ($this->result_id === FALSE OR $this->num_rows() == 0)
-		{
-			return array();
-		}
+        return $this->result_object;
+    }
 
-		$this->_data_seek(0);			
-		while ($row = $this->_fetch_assoc())
-		{
-			$this->result_array[] = $row;
-		}
-		
-		return $this->result_array;
-	}
+    // --------------------------------------------------------------------
 
-	// --------------------------------------------------------------------
+    /**
+     * Query result.  "array" version.
+     *
+     * @access    public
+     * @return    array
+     */
+    public function result_array()
+    {
+        if (count($this->result_array) > 0) {
+            return $this->result_array;
+        }
 
-	/**
-	 * Query result.  Acts as a wrapper function for the following functions.
-	 *
-	 * @access	public
-	 * @param	string
-	 * @param	string	can be "object" or "array"
-	 * @return	mixed	either a result object or array	
-	 */	
-	function row($n = 0, $type = 'object')
-	{
-		if ( ! is_numeric($n))
-		{
-			// We cache the row data for subsequent uses
-			if ( ! is_array($this->row_data))
-			{
-				$this->row_data = $this->row_array(0);
-			}
-		
-			// array_key_exists() instead of isset() to allow for MySQL NULL values
-			if (array_key_exists($n, $this->row_data))
-			{
-				return $this->row_data[$n];
-			}
-			// reset the $n variable if the result was not achieved			
-			$n = 0;
-		}
-		
-		return ($type == 'object') ? $this->row_object($n) : $this->row_array($n);
-	}
+        // In the event that query caching is on the result_id variable
+        // will return FALSE since there isn't a valid SQL resource so
+        // we'll simply return an empty array.
+        if ($this->result_id === false or $this->num_rows() == 0) {
+            return [];
+        }
 
-	// --------------------------------------------------------------------
+        $this->_data_seek(0);
+        while ($row = $this->_fetch_assoc()) {
+            $this->result_array[] = $row;
+        }
 
-	/**
-	 * Assigns an item into a particular column slot
-	 *
-	 * @access	public
-	 * @return	object
-	 */	
-	function set_row($key, $value = NULL)
-	{
-		// We cache the row data for subsequent uses
-		if ( ! is_array($this->row_data))
-		{
-			$this->row_data = $this->row_array(0);
-		}
-	
-		if (is_array($key))
-		{
-			foreach ($key as $k => $v)
-			{
-				$this->row_data[$k] = $v;
-			}
-			
-			return;
-		}
-	
-		if ($key != '' AND ! is_null($value))
-		{
-			$this->row_data[$key] = $value;
-		}
-	}
+        return $this->result_array;
+    }
 
-	// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
-	/**
-	 * Returns a single result row - object version
-	 *
-	 * @access	public
-	 * @return	object
-	 */	
-	function row_object($n = 0)
-	{
-		$result = $this->result_object();
-		
-		if (count($result) == 0)
-		{
-			return $result;
-		}
+    /**
+     * Query result.  Acts as a wrapper function for the following functions.
+     *
+     * @access    public
+     * @param string
+     * @param string    can be "object" or "array"
+     * @return    mixed    either a result object or array
+     */
+    public function row($n = 0, $type = 'object')
+    {
+        if (!is_numeric($n)) {
+            // We cache the row data for subsequent uses
+            if (!is_array($this->row_data)) {
+                $this->row_data = $this->row_array(0);
+            }
 
-		if ($n != $this->current_row AND isset($result[$n]))
-		{
-			$this->current_row = $n;
-		}
+            // array_key_exists() instead of isset() to allow for MySQL NULL values
+            if (array_key_exists($n, $this->row_data)) {
+                return $this->row_data[$n];
+            }
+            // reset the $n variable if the result was not achieved
+            $n = 0;
+        }
 
-		return $result[$this->current_row];
-	}
+        return ($type == 'object') ? $this->row_object($n) : $this->row_array($n);
+    }
 
-	// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
-	/**
-	 * Returns a single result row - array version
-	 *
-	 * @access	public
-	 * @return	array
-	 */	
-	function row_array($n = 0)
-	{
-		$result = $this->result_array();
+    /**
+     * Assigns an item into a particular column slot
+     *
+     * @access    public
+     * @return    object
+     */
+    public function set_row($key, $value = null)
+    {
+        // We cache the row data for subsequent uses
+        if (!is_array($this->row_data)) {
+            $this->row_data = $this->row_array(0);
+        }
 
-		if (count($result) == 0)
-		{
-			return $result;
-		}
-			
-		if ($n != $this->current_row AND isset($result[$n]))
-		{
-			$this->current_row = $n;
-		}
-		
-		return $result[$this->current_row];
-	}
+        if (is_array($key)) {
+            foreach ($key as $k => $v) {
+                $this->row_data[$k] = $v;
+            }
 
-		
-	// --------------------------------------------------------------------
+            return;
+        }
 
-	/**
-	 * Returns the "first" row
-	 *
-	 * @access	public
-	 * @return	object
-	 */	
-	function first_row($type = 'object')
-	{
-		$result = $this->result($type);
+        if ($key != '' and !is_null($value)) {
+            $this->row_data[$key] = $value;
+        }
+    }
 
-		if (count($result) == 0)
-		{
-			return $result;
-		}
-		return $result[0];
-	}
-	
-	// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
-	/**
-	 * Returns the "last" row
-	 *
-	 * @access	public
-	 * @return	object
-	 */	
-	function last_row($type = 'object')
-	{
-		$result = $this->result($type);
+    /**
+     * Returns a single result row - object version
+     *
+     * @access    public
+     * @return    object
+     */
+    public function row_object($n = 0)
+    {
+        $result = $this->result_object();
 
-		if (count($result) == 0)
-		{
-			return $result;
-		}
-		return $result[count($result) -1];
-	}	
+        if (count($result) == 0) {
+            return $result;
+        }
 
-	// --------------------------------------------------------------------
+        if ($n != $this->current_row and isset($result[$n])) {
+            $this->current_row = $n;
+        }
 
-	/**
-	 * Returns the "next" row
-	 *
-	 * @access	public
-	 * @return	object
-	 */	
-	function next_row($type = 'object')
-	{
-		$result = $this->result($type);
+        return $result[$this->current_row];
+    }
 
-		if (count($result) == 0)
-		{
-			return $result;
-		}
+    // --------------------------------------------------------------------
 
-		if (isset($result[$this->current_row + 1]))
-		{
-			++$this->current_row;
-		}
-				
-		return $result[$this->current_row];
-	}
-	
-	// --------------------------------------------------------------------
+    /**
+     * Returns a single result row - array version
+     *
+     * @access    public
+     * @return    array
+     */
+    public function row_array($n = 0)
+    {
+        $result = $this->result_array();
 
-	/**
-	 * Returns the "previous" row
-	 *
-	 * @access	public
-	 * @return	object
-	 */	
-	function previous_row($type = 'object')
-	{
-		$result = $this->result($type);
+        if (count($result) == 0) {
+            return $result;
+        }
 
-		if (count($result) == 0)
-		{
-			return $result;
-		}
+        if ($n != $this->current_row and isset($result[$n])) {
+            $this->current_row = $n;
+        }
 
-		if (isset($result[$this->current_row - 1]))
-		{
-			--$this->current_row;
-		}
-		return $result[$this->current_row];
-	}
+        return $result[$this->current_row];
+    }
 
-	// --------------------------------------------------------------------
 
-	/**
-	 * The following functions are normally overloaded by the identically named
-	 * methods in the platform-specific driver -- except when query caching
-	 * is used.  When caching is enabled we do not load the other driver.
-	 * These functions are primarily here to prevent undefined function errors
-	 * when a cached result object is in use.  They are not otherwise fully
-	 * operational due to the unavailability of the database resource IDs with
-	 * cached results.
-	 */
-	function num_rows() { return $this->num_rows; }
-	function num_fields() { return 0; }
-	function list_fields() { return array(); }
-	function field_names() { return array(); } // Deprecated
-	function field_data() { return array(); }	
-	function free_result() { return TRUE; }
-	function _data_seek() { return TRUE; }
-	function _fetch_assoc() { return array(); }	
-	function _fetch_object() { return array(); }
-	
+    // --------------------------------------------------------------------
+
+    /**
+     * Returns the "first" row
+     *
+     * @access    public
+     * @return    object
+     */
+    public function first_row($type = 'object')
+    {
+        $result = $this->result($type);
+
+        if (count($result) == 0) {
+            return $result;
+        }
+        return $result[0];
+    }
+
+    // --------------------------------------------------------------------
+
+    /**
+     * Returns the "last" row
+     *
+     * @access    public
+     * @return    object
+     */
+    public function last_row($type = 'object')
+    {
+        $result = $this->result($type);
+
+        if (count($result) == 0) {
+            return $result;
+        }
+        return $result[count($result) - 1];
+    }
+
+    // --------------------------------------------------------------------
+
+    /**
+     * Returns the "next" row
+     *
+     * @access    public
+     * @return    object
+     */
+    public function next_row($type = 'object')
+    {
+        $result = $this->result($type);
+
+        if (count($result) == 0) {
+            return $result;
+        }
+
+        if (isset($result[$this->current_row + 1])) {
+            ++$this->current_row;
+        }
+
+        return $result[$this->current_row];
+    }
+
+    // --------------------------------------------------------------------
+
+    /**
+     * Returns the "previous" row
+     *
+     * @access    public
+     * @return    object
+     */
+    public function previous_row($type = 'object')
+    {
+        $result = $this->result($type);
+
+        if (count($result) == 0) {
+            return $result;
+        }
+
+        if (isset($result[$this->current_row - 1])) {
+            --$this->current_row;
+        }
+        return $result[$this->current_row];
+    }
+
+    // --------------------------------------------------------------------
+
+    /**
+     * The following functions are normally overloaded by the identically named
+     * methods in the platform-specific driver -- except when query caching
+     * is used.  When caching is enabled we do not load the other driver.
+     * These functions are primarily here to prevent undefined function errors
+     * when a cached result object is in use.  They are not otherwise fully
+     * operational due to the unavailability of the database resource IDs with
+     * cached results.
+     */
+    public function num_rows()
+    {
+        return $this->num_rows;
+    }
+
+    public function num_fields()
+    {
+        return 0;
+    }
+
+    public function list_fields()
+    {
+        return [];
+    }
+
+    public function field_names()
+    {
+        return [];
+    } // Deprecated
+
+    public function field_data()
+    {
+        return [];
+    }
+
+    public function free_result()
+    {
+        return true;
+    }
+
+    public function _data_seek()
+    {
+        return true;
+    }
+
+    public function _fetch_assoc()
+    {
+        return [];
+    }
+
+    public function _fetch_object()
+    {
+        return [];
+    }
+
 }
 // END DB_result class
 

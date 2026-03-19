@@ -1,347 +1,324 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 /**
  * Code Igniter
  *
  * An open source application development framework for PHP 4.3.2 or newer
  *
- * @package		CodeIgniter
- * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2006, EllisLab, Inc.
- * @license		http://codeigniter.com/user_guide/license.html
- * @link		http://codeigniter.com
- * @since		Version 1.0
+ * @package        CodeIgniter
+ * @author        ExpressionEngine Dev Team
+ * @copyright    Copyright (c) 2006, EllisLab, Inc.
+ * @license        http://codeigniter.com/user_guide/license.html
+ * @link        http://codeigniter.com
+ * @since        Version 1.0
  * @filesource
  */
-/** 
- * @author		Dmitry N. Shilnikov
- * @changes		CI_DB_forge()
+/**
+ * @author        Dmitry N. Shilnikov
+ * @changes        CI_DB_forge()
  */
 // ------------------------------------------------------------------------
 
 /**
  * Database Utility Class
  *
- * @category	Database
- * @author		ExpressionEngine Dev Team
- * @link		http://codeigniter.com/user_guide/database/
+ * @category    Database
+ * @author        ExpressionEngine Dev Team
+ * @link        http://codeigniter.com/user_guide/database/
  */
-class CI_DB_forge {
+class CI_DB_forge
+{
 
-	var $fields		 	= array();
-	var $keys			= array();
-	var $primary_keys 	= array();
-	var $db_char_set	=	'';
+    public $fields       = [];
+    public $keys         = [];
+    public $primary_keys = [];
+    public $db_char_set  = '';
 
-	/**
-	 * Constructor
-	 *
-	 * Grabs the CI super object instance so we can access it.
-	 *
-	 */	
-	function CI_DB_forge()
-	{
-		// Assign the main database object to $this->db
-		#$CI =& gw2_get_db_instance();
-		$this->db =& gw2_get_db_instance();
-		ci_log_message('debug', "Database Forge Class Initialized");
-	}
+    /**
+     * Constructor
+     *
+     * Grabs the CI super object instance so we can access it.
+     *
+     */
+    public function __construct()
+    {
+        // Assign the main database object to $this->db
+        $this->db = gw2_get_db_instance();
+        ci_log_message('debug', "Database Forge Class Initialized");
+    }
 
-	// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
-	/**
-	 * Create database
-	 *
-	 * @access	public
-	 * @param	string	the database name
-	 * @return	bool
-	 */
-	function create_database($db_name)
-	{
-		$sql = $this->_create_database($db_name);
-		
-		if (is_bool($sql))
-		{
-			return $sql;
-		}
-	
-		return $this->db->query($sql);
-	}
+    /**
+     * Create database
+     *
+     * @access    public
+     * @param string    the database name
+     * @return    bool
+     */
+    public function create_database($db_name)
+    {
+        $sql = $this->_create_database($db_name);
 
-	// --------------------------------------------------------------------
+        if (is_bool($sql)) {
+            return $sql;
+        }
 
-	/**
-	 * Drop database
-	 *
-	 * @access	public
-	 * @param	string	the database name
-	 * @return	bool
-	 */
-	function drop_database($db_name)
-	{
-		$sql = $this->_drop_database($db_name);
-		
-		if (is_bool($sql))
-		{
-			return $sql;
-		}
-	
-		return $this->db->query($sql);
-	}
+        return $this->db->query($sql);
+    }
 
-	// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
-	/**
-	 * Add Key
-	 *
-	 * @access	public
-	 * @param	string	key
-	 * @param	string	type
-	 * @return	void
-	 */
-	function add_key($key = '', $primary = FALSE)
-	{
-		if ($key == '')
-		{
-			show_error('Key information is required for that operation.');
-		}
-		
-		if ($primary === TRUE)
-		{
-			$this->primary_keys[] = $key;
-		}
-		else
-		{
-			$this->keys[] = $key;
-		}
-	}
+    /**
+     * Drop database
+     *
+     * @access    public
+     * @param string    the database name
+     * @return    bool
+     */
+    public function drop_database($db_name)
+    {
+        $sql = $this->_drop_database($db_name);
 
-	// --------------------------------------------------------------------
+        if (is_bool($sql)) {
+            return $sql;
+        }
 
-	/**
-	 * Add Field
-	 *
-	 * @access	public
-	 * @param	string	collation
-	 * @return	void
-	 */
-	function add_field($field = '')
-	{
-		if ($field == '')
-		{
-			show_error('Field information is required.');
-		}
-		
-		if (is_string($field))
-		{
-			if ($field == 'id')
-			{
-				$this->add_field(array(
-										'id' => array(
-													'type' => 'INT',
-													'constraint' => 9,
-													'auto_increment' => TRUE
-													)
-								));
-				$this->add_key('id', TRUE);
-			}
-			else
-			{
-				if (strpos($field, ' ') === FALSE)
-				{
-					show_error('Field information is required for that operation.');
-				}
-				
-				$this->fields[] = $field;
-			}
-		}
-		
-		if (is_array($field))
-		{
-			$this->fields = array_merge($this->fields, $field);
-		}
-		
-	}
+        return $this->db->query($sql);
+    }
 
-	// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
-	/**
-	 * Create Table
-	 *
-	 * @access	public
-	 * @param	string	the table name
-	 * @return	bool
-	 */
-	function create_table($table = '', $if_not_exists = FALSE)
-	{	
-		if ($table == '')
-		{
-			show_error('A table name is required for that operation.');
-		}
-			
-		if (count($this->fields) == 0)
-		{	
-			show_error('Field information is required.');
-		}
+    /**
+     * Add Key
+     *
+     * @access    public
+     * @param string    key
+     * @param string    type
+     * @return    void
+     */
+    public function add_key($key = '', $primary = false)
+    {
+        if ($key == '') {
+            show_error('Key information is required for that operation.');
+        }
 
-		$sql = $this->_create_table($this->db->dbprefix.$table, $this->fields, $this->primary_keys, $this->keys, $if_not_exists);
+        if ($primary === true) {
+            $this->primary_keys[] = $key;
+        } else {
+            $this->keys[] = $key;
+        }
+    }
 
-		$this->_reset();
-		return $this->db->query($sql);
-	}
+    // --------------------------------------------------------------------
 
-	// --------------------------------------------------------------------
+    /**
+     * Add Field
+     *
+     * @access    public
+     * @param string    collation
+     * @return    void
+     */
+    public function add_field($field = '')
+    {
+        if ($field == '') {
+            show_error('Field information is required.');
+        }
 
-	/**
-	 * Drop Table
-	 *
-	 * @access	public
-	 * @param	string	the table name
-	 * @return	bool
-	 */
-	function drop_table($table_name)
-	{
-		$sql = $this->_drop_table($this->db->dbprefix.$table_name);
-		
-		if (is_bool($sql))
-		{
-			return $sql;
-		}
-	
-		return $this->db->query($sql);
-	}
+        if (is_string($field)) {
+            if ($field == 'id') {
+                $this->add_field([
+                    'id' => [
+                        'type'           => 'INT',
+                        'constraint'     => 9,
+                        'auto_increment' => true,
+                    ],
+                ]);
+                $this->add_key('id', true);
+            } else {
+                if (strpos($field, ' ') === false) {
+                    show_error('Field information is required for that operation.');
+                }
 
-	// --------------------------------------------------------------------
+                $this->fields[] = $field;
+            }
+        }
 
-	/**
-	 * Rename Table
-	 *
-	 * @access	public
-	 * @param	string	the old table name
-	 * @param	string	the new table name
-	 * @return	bool
-	 */
-	function rename_table($table_name, $new_table_name)
-	{
-		if ($table_name == '' OR $new_table_name == '')
-		{
-			show_error('A table name is required for that operation.');
-		}
-			
-		$sql = $this->_rename_table($table_name, $new_table_name);
-		return $this->db->query($sql);
-	}
+        if (is_array($field)) {
+            $this->fields = array_merge($this->fields, $field);
+        }
+    }
 
-	// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
-	/**
-	 * Column Add
-	 *
-	 * @access	public
-	 * @param	string	the table name
-	 * @param	string	the column name
-	 * @param	string	the column definition
-	 * @return	bool
-	 */
-	function add_column($table = '', $field = array(), $after_field = '')
-	{
-		if ($table == '')
-		{
-			show_error('A table name is required for that operation.');
-		}
+    /**
+     * Create Table
+     *
+     * @access    public
+     * @param string    the table name
+     * @return    bool
+     */
+    public function create_table($table = '', $if_not_exists = false)
+    {
+        if ($table == '') {
+            show_error('A table name is required for that operation.');
+        }
 
-		// add field info into field array, but we can only do one at a time
-		// so only grab the first field in the event there are more then one
-		$this->add_field(array_slice($field, 0, 1));
+        if (count($this->fields) == 0) {
+            show_error('Field information is required.');
+        }
 
-		if (count($this->fields) == 0)
-		{	
-			show_error('Field information is required.');
-		}
+        $sql = $this->_create_table($this->db->dbprefix . $table, $this->fields, $this->primary_keys, $this->keys, $if_not_exists);
 
-		$sql = $this->_alter_table('ADD', $this->db->dbprefix.$table, $this->fields, $after_field);
+        $this->_reset();
+        return $this->db->query($sql);
+    }
 
-		$this->_reset();
-		return $this->db->query($sql);
-	}
+    // --------------------------------------------------------------------
 
-	// --------------------------------------------------------------------
+    /**
+     * Drop Table
+     *
+     * @access    public
+     * @param string    the table name
+     * @return    bool
+     */
+    public function drop_table($table_name)
+    {
+        $sql = $this->_drop_table($this->db->dbprefix . $table_name);
 
-	/**
-	 * Column Drop
-	 *
-	 * @access	public
-	 * @param	string	the table name
-	 * @param	string	the column name
-	 * @return	bool
-	 */
-	function drop_column($table = '', $column_name = '')
-	{
-	
-		if ($table == '')
-		{
-				show_error('A table name is required for that operation.');
-		}
+        if (is_bool($sql)) {
+            return $sql;
+        }
 
-		if ($column_name == '')
-		{
-				show_error('A column name is required for that operation.');
-		}
+        return $this->db->query($sql);
+    }
 
-		$sql = $this->_alter_table('DROP', $this->db->dbprefix.$table, $column_name);
-	
-		return $this->db->query($sql);
-	}
+    // --------------------------------------------------------------------
 
-	// --------------------------------------------------------------------
+    /**
+     * Rename Table
+     *
+     * @access    public
+     * @param string    the old table name
+     * @param string    the new table name
+     * @return    bool
+     */
+    public function rename_table($table_name, $new_table_name)
+    {
+        if ($table_name == '' or $new_table_name == '') {
+            show_error('A table name is required for that operation.');
+        }
 
-	/**
-	 * Column Modify
-	 *
-	 * @access	public
-	 * @param	string	the table name
-	 * @param	string	the column name
-	 * @param	string	the column definition
-	 * @return	bool
-	 */
-	function modify_column($table = '', $field = array())
-	{
-	
-		if ($table == '')
-		{
-				show_error('A table name is required for that operation.');
-		}
+        $sql = $this->_rename_table($table_name, $new_table_name);
+        return $this->db->query($sql);
+    }
 
-		// add field info into field array, but we can only do one at a time
-		// so only grab the first field in the event there are more then one
-		$this->add_field(array_slice($field, 0, 1));
+    // --------------------------------------------------------------------
 
-		if (count($this->fields) == 0)
-		{	
-			show_error('Field information is required.');
-		}
+    /**
+     * Column Add
+     *
+     * @access    public
+     * @param string    the table name
+     * @param string    the column name
+     * @param string    the column definition
+     * @return    bool
+     */
+    public function add_column($table = '', $field = [], $after_field = '')
+    {
+        if ($table == '') {
+            show_error('A table name is required for that operation.');
+        }
 
-		$sql = $this->_alter_table('CHANGE', $this->db->dbprefix.$table, $this->fields);
+        // add field info into field array, but we can only do one at a time
+        // so only grab the first field in the event there are more then one
+        $this->add_field(array_slice($field, 0, 1));
 
-		$this->_reset();
-		return $this->db->query($sql);
-	}
+        if (count($this->fields) == 0) {
+            show_error('Field information is required.');
+        }
 
-	// --------------------------------------------------------------------
+        $sql = $this->_alter_table('ADD', $this->db->dbprefix . $table, $this->fields, $after_field);
 
-	/**
-	 * Reset
-	 *
-	 * Resets table creation vars
-	 *
-	 * @access	private
-	 * @return	void
-	 */
-	function _reset()
-	{
-		$this->fields 		= array();
-		$this->keys			= array();
-		$this->primary_keys 	= array();
-	}
+        $this->_reset();
+        return $this->db->query($sql);
+    }
+
+    // --------------------------------------------------------------------
+
+    /**
+     * Column Drop
+     *
+     * @access    public
+     * @param string    the table name
+     * @param string    the column name
+     * @return    bool
+     */
+    public function drop_column($table = '', $column_name = '')
+    {
+        if ($table == '') {
+            show_error('A table name is required for that operation.');
+        }
+
+        if ($column_name == '') {
+            show_error('A column name is required for that operation.');
+        }
+
+        $sql = $this->_alter_table('DROP', $this->db->dbprefix . $table, $column_name);
+
+        return $this->db->query($sql);
+    }
+
+    // --------------------------------------------------------------------
+
+    /**
+     * Column Modify
+     *
+     * @access    public
+     * @param string    the table name
+     * @param string    the column name
+     * @param string    the column definition
+     * @return    bool
+     */
+    public function modify_column($table = '', $field = [])
+    {
+        if ($table == '') {
+            show_error('A table name is required for that operation.');
+        }
+
+        // add field info into field array, but we can only do one at a time
+        // so only grab the first field in the event there are more then one
+        $this->add_field(array_slice($field, 0, 1));
+
+        if (count($this->fields) == 0) {
+            show_error('Field information is required.');
+        }
+
+        $sql = $this->_alter_table('CHANGE', $this->db->dbprefix . $table, $this->fields);
+
+        $this->_reset();
+        return $this->db->query($sql);
+    }
+
+    // --------------------------------------------------------------------
+
+    /**
+     * Reset
+     *
+     * Resets table creation vars
+     *
+     * @access    private
+     * @return    void
+     */
+    public function _reset()
+    {
+        $this->fields = [];
+        $this->keys = [];
+        $this->primary_keys = [];
+    }
 
 }
 

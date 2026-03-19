@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <reqcheck version="1.0">
 	<product>Glossword</product>
-	<version>1.8.10</version>
+	<version>1.8.13</version>
 	<product_url>http://glossword.biz/</product_url>
 	<author>Glossword.biz team</author>
 	<copyright>© 2008 Glossword.biz team. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 	<max_points>10</max_points>
 	<sequence>
-		<constant name="PHP_VERSION" compare="&gt;" value="5.2.0" return="true"></constant>
+		<constant name="PHP_VERSION" compare="&gt;" value="5.6.1" return="true"></constant>
 		<constant name="PHP_VERSION" hidden="1" compare="==" value="5.3.0-dev" point="2"></constant>
 		<ini name="allow_url_fopen" hidden="1" compare="-1"></ini>
 		<function name="getimagesize" compare="1" return="true" point="1"></function>

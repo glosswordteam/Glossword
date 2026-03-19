@@ -15,7 +15,7 @@ if (!defined('CRLF')) { define('CRLF', "\n"); }
 if (!defined('IS_CLASS_GW2_GLOBALS')) { define('IS_CLASS_GW2_GLOBALS', 1);
 class tkit_register_globals {
 	private $max_nesting_level = 5;
-	function register($ar = array())
+    public function register($ar = array())
 	{
 		$tmp['_files'] = $tmp['_cookie'] = array();
 		for (reset($ar); list($k, $v) = each($ar);)
@@ -64,7 +64,7 @@ class tkit_register_globals {
 		return $tmp;
 	}
 	/* */
-	function fix_newline($v, $level = 0)
+    public function fix_newline($v, $level = 0)
 	{
 		if (is_array($v))
 		{
@@ -84,7 +84,7 @@ class tkit_register_globals {
 		return $v;
 	}
 	/* */
-	function fix_xss($v, $level = 0)
+    public function fix_xss($v, $level = 0)
 	{
 		if (is_array($v))
 		{
@@ -118,7 +118,7 @@ class tkit_register_globals {
 	 * Fixes "slash problem".
 	 * 2 Apr 2008: added the maximum nesting level
 	 */
-	function fix_slash($v, $level = 0)
+    public function fix_slash($v, $level = 0)
 	{
 		if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc())
 		{
@@ -141,7 +141,7 @@ class tkit_register_globals {
 		return $v;
 	}
 	/* */
-	static function do_default(&$n, $v = '')
+	public function do_default(&$n, $v = '')
 	{
 		if (!isset($n))
 		{
@@ -153,22 +153,22 @@ class tkit_register_globals {
 		}
 	}
 	/* */
-	static function do_alphanum(&$v)
+    public function do_alphanum(&$v)
 	{
 		$v = preg_replace('#[^a-zA-Z0-9_.,%\-]#', '', $v);
 	}
-	static function do_numeric_one(&$v)
+    public function do_numeric_one(&$v)
 	{
 		$v = preg_replace('#[^0-9]#', '', $v);
 		$v = !$v ? 1 : $v;
 	}
-	static function do_numeric_zero(&$v)
+    public function do_numeric_zero(&$v)
 	{
 		$v = $v + 0;
 		$v = sprintf($v, '%u');
 	}
 	/* */
-	static function _unset()
+    public function _unset()
 	{
 		foreach (array($_GET, $_POST, $_COOKIE) as $global)
 		{

@@ -14,11 +14,11 @@
  */
 class gw_reqcheck
 {
-	var $phrase_status_true, $phrase_status_false;
-	var $points = 0;
-	var $ar_results, $ar_info;
-	var $is_checked = 1;
-	var $is_checked_total = 1;
+    public $phrase_status_true, $phrase_status_false;
+    public $points = 0;
+    public $ar_results, $ar_info;
+    public $is_checked = 1;
+    public $is_checked_total = 1;
 	/* */
 	public function SetVars($ar = array())
 	{
@@ -30,10 +30,10 @@ class gw_reqcheck
 	/* */
 	public function SetCfg($map)
 	{
-		$this->map =& $map;
+		$this->map = $map;
 	}
 	/* */
-	function GetInfo()
+    public function GetInfo()
 	{
 		$ar_info = array();
 		foreach ( $this->map as $tag => $arV )
@@ -77,7 +77,7 @@ class gw_reqcheck
 			}
 		}
 	}
-	function GetResults()
+    public function GetResults()
 	{
 		$this->_Parse($this->map);
 		return $this->ar_results;
@@ -87,7 +87,7 @@ class gw_reqcheck
 		$return = false;
 		$val_ini = $val_req = '-';
 		$p['descr'] = '';
-		
+
 		$is_hidden = 0;
 		if (isset($p['hidden']))
 		{
