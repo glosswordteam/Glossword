@@ -2,7 +2,7 @@
 
 /**
  * Glossword - glossary compiler (http://glossword.biz/)
- * © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
  * © 2002-2008 Dmitry N. Shilnikov
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@ class gw_addon_vkbd_admin extends gw_addon
     public $ar_profiles = [];
 
     /* Autoexec */
-    public function gw_addon_vkbd_admin()
+    public function __construct()
     {
         $this->init();
     }
@@ -35,36 +35,48 @@ class gw_addon_vkbd_admin extends gw_addon
     /* */
     public function _get_nav()
     {
-#		$this->oL->setHomeDir($this->sys['path_locale']);
-#		$this->oL->getCustom('addon_'.$this->component, $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc'], 'join');
-
         /* The list of profiles */
         $sql = $this->oSqlQ->getQ('get-vkbd-profiles-adm');
-        if (!$sql){
+        if (!$sql) {
             $this->oDb->haltmsg('Query storage error');
-            return;
+            return '';
         }
-        $arSql = $this->oDb->sqlRun($sql, $this->component);
 
-        $ar_profiles = [];
-        $this->ar_profiles = [];
-        while (is_array($arSql) && list($k, $arV) = each($arSql)) {
-            /* For <select> */
-            $this->ar_profiles[$arV['id_profile']] = $arV;
+        $sqlRows = $this->oDb->sqlRun($sql, $this->component);
+
+        $this->ar_profiles = array();
+
+        if (is_array($sqlRows)) {
+            foreach ($sqlRows as $profile) {
+                /* For <select> */
+                if (isset($profile['id_profile'])) {
+                    $this->ar_profiles[$profile['id_profile']] = $profile;
+                }
+            }
         }
-        return '<div class="actions-secondary">' . implode(' ', $this->gw_this['ar_actions_list'][$this->component]) . '</div>';
+
+        return '<div class="actions-secondary">'
+            . implode(' ', $this->gw_this['ar_actions_list'][$this->component])
+            . '</div>';
     }
 
     /**
      * HTML-form for a profile
      */
-    public function get_form_vkbd($vars, $runtime = 0, $ar_broken = [], $ar_req = [])
+    public function get_form_vkbd($vars, $runtime = 0, $ar_broken = array(), $ar_req = array())
     {
-        $str_hidden = '';
-        $str_form = '';
-        $v_class_1 = 'td1';
-        $v_class_2 = 'td2';
-        $v_td1_width = '25%';
+        $vars = (array)$vars + [
+                'is_active'     => 0,
+                'is_index_page' => 0,
+                'vkbd_name'     => '',
+                'vkbd_letters'  => '',
+            ];
+
+        $strHidden = '';
+        $strForm = '';
+        $classTd1 = 'td1';
+        $classTd2 = 'td2';
+        $td1Width = '25%';
 
         $oForm = new gwForms();
         $oForm->Set('action', $this->sys['page_admin']);
@@ -83,40 +95,104 @@ class gw_addon_vkbd_admin extends gw_addon
             $oForm->Set('submitdel', $this->oL->m('3_remove'));
         }
 
-        $ar_req = array_flip($ar_req);
+        $requiredFields = array_flip($ar_req);
+        $requiredMessages = array();
+        $brokenMessages = array();
+        $brokenMessage = '<span class="red"><b>' . $this->oL->m('reason_9') . '</b></span><br />';
+
         /* mark fields as "Required" and display error message */
-        while (is_array($vars) && list($k, $v) = each($vars)) {
-            $ar_req_msg[$k] = $ar_broken_msg[$k] = '';
-            if (isset($ar_req[$k])) {
-                $ar_req_msg[$k] = '&#160;<span class="red"><b>*</b></span>';
+        foreach ((array)$vars as $key => $value) {
+            $requiredMessages[$key] = '';
+            $brokenMessages[$key] = '';
+
+            if (isset($requiredFields[$key])) {
+                $requiredMessages[$key] = '&#160;<span class="red"><b>*</b></span>';
             }
-            if (isset($ar_broken[$k])) {
-                $ar_broken_msg[$k] = '<span class="red"><b>' . $this->oL->m('reason_9') . '</b></span><br />';
+
+            if (isset($ar_broken[$key])) {
+                $brokenMessages[$key] = $brokenMessage;
             }
         }
-        /* */
-        $str_form .= getFormTitleNav($this->oL->m('1137'), '<span style="float:right">' . $oForm->get_button('submit') . '</span>');
 
-        $str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
-        $str_form .= '<table class="gw2TableFieldset" width="100%">';
-        $str_form .= '<tbody><tr><td style="width:' . $v_td1_width . '"></td><td>';
-        $str_form .= '</td></tr>';
-        $str_form .= '<tr>' . '<td class="' . $v_class_1 . '">' . $oForm->field('checkbox', 'arPost[is_active]', $vars['is_active']) . '</td>' . '<td class="' . $v_class_2 . '">' . '<label for="' . $oForm->text_field2id('arPost[is_active]') . '">' . $this->oL->m('1320') . '</label></td>' . '</tr>';
-        $str_form .= '<tr>' . '<td class="' . $v_class_1 . '">' . $oForm->field('checkbox', 'arPost[is_index_page]', $vars['is_index_page']) . '</td>' . '<td class="' . $v_class_2 . '">' . '<label for="' . $oForm->text_field2id('arPost[is_index_page]') . '">' . $this->oL->m('1401') . '</label></td>' . '</tr>';
-        $str_form .= '<tr>' . '<td class="' . $v_class_1 . '">' . $this->oL->m('1289') . $ar_req_msg['vkbd_name'] . '</td>' . '<td class="' . $v_class_2 . '">' . $ar_broken_msg['vkbd_name'] . $oForm->field('textarea', 'arPost[vkbd_name]', $vars['vkbd_name']) . '</td>' . '</tr>';
+        if (!isset($requiredMessages['vkbd_name'])) {
+            $requiredMessages['vkbd_name'] = '';
+        }
+        if (!isset($requiredMessages['vkbd_letters'])) {
+            $requiredMessages['vkbd_letters'] = '';
+        }
+        if (!isset($brokenMessages['vkbd_name'])) {
+            $brokenMessages['vkbd_name'] = '';
+        }
+        if (!isset($brokenMessages['vkbd_letters'])) {
+            $brokenMessages['vkbd_letters'] = '';
+        }
+
+        /* */
+        $strForm .= getFormTitleNav(
+            $this->oL->m('1137'),
+            '<span style="float:right">' . $oForm->get_button('submit') . '</span>'
+        );
+
+        $strForm .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
+        $strForm .= '<table class="gw2TableFieldset" width="100%">';
+        $strForm .= '<tbody><tr><td style="width:' . $td1Width . '"></td><td>';
+        $strForm .= '</td></tr>';
+
+        $strForm .= '<tr>'
+            . '<td class="' . $classTd1 . '">'
+            . $oForm->field('checkbox', 'arPost[is_active]', $vars['is_active'])
+            . '</td>'
+            . '<td class="' . $classTd2 . '">'
+            . '<label for="' . $oForm->text_field2id('arPost[is_active]') . '">'
+            . $this->oL->m('1320')
+            . '</label></td>'
+            . '</tr>';
+
+        $strForm .= '<tr>'
+            . '<td class="' . $classTd1 . '">'
+            . $oForm->field('checkbox', 'arPost[is_index_page]', $vars['is_index_page'])
+            . '</td>'
+            . '<td class="' . $classTd2 . '">'
+            . '<label for="' . $oForm->text_field2id('arPost[is_index_page]') . '">'
+            . $this->oL->m('1401')
+            . '</label></td>'
+            . '</tr>';
+
+        $strForm .= '<tr>'
+            . '<td class="' . $classTd1 . '">'
+            . $this->oL->m('1289') . $requiredMessages['vkbd_name']
+            . '</td>'
+            . '<td class="' . $classTd2 . '">'
+            . $brokenMessages['vkbd_name']
+            . $oForm->field('textarea', 'arPost[vkbd_name]', $vars['vkbd_name'])
+            . '</td>'
+            . '</tr>';
+
         $oForm->setTag('textarea', 'style', 'font-size:200%');
-        $str_form .= '<tr>' . '<td class="' . $v_class_1 . '">' . $this->oL->m('1306') . $ar_req_msg['vkbd_letters'] . '</td>' . '<td class="' . $v_class_2 . '">' . $ar_broken_msg['vkbd_letters'] . $oForm->field('textarea', 'arPost[vkbd_letters]', $vars['vkbd_letters']) . '<div class="tooltip">' . $this->oL->m('1307') . '</div></td>' . '</tr>';
-        $str_form .= '</tbody></table>';
-        $str_form .= '</fieldset>';
+
+        $strForm .= '<tr>'
+            . '<td class="' . $classTd1 . '">'
+            . $this->oL->m('1306') . $requiredMessages['vkbd_letters']
+            . '</td>'
+            . '<td class="' . $classTd2 . '">'
+            . $brokenMessages['vkbd_letters']
+            . $oForm->field('textarea', 'arPost[vkbd_letters]', $vars['vkbd_letters'])
+            . '<div class="tooltip">' . $this->oL->m('1307') . '</div></td>'
+            . '</tr>';
+
+        $strForm .= '</tbody></table>';
+        $strForm .= '</fieldset>';
 
         if ($this->gw_this['vars'][GW_ACTION] == GW_A_EDIT) {
-            $str_form .= $oForm->field('hidden', 'tid', $this->gw_this['vars']['tid']);
+            $strForm .= $oForm->field('hidden', 'tid', $this->gw_this['vars']['tid']);
         }
-        $str_form .= $oForm->field('hidden', GW_ACTION, $this->gw_this['vars'][GW_ACTION]);
-        $str_form .= $oForm->field('hidden', GW_TARGET, $this->gw_this['vars'][GW_TARGET]);
-        $str_form .= $oForm->field('hidden', $this->oSess->sid, $this->oSess->id_sess);
-        $str_form .= $str_hidden;
-        return $oForm->Output($str_form);
+
+        $strForm .= $oForm->field('hidden', GW_ACTION, $this->gw_this['vars'][GW_ACTION]);
+        $strForm .= $oForm->field('hidden', GW_TARGET, $this->gw_this['vars'][GW_TARGET]);
+        $strForm .= $oForm->field('hidden', $this->oSess->sid, $this->oSess->id_sess);
+        $strForm .= $strHidden;
+
+        return $oForm->Output($strForm);
     }
 
     /* */
