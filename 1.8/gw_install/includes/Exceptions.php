@@ -25,14 +25,14 @@
  * @link		http://www.codeigniter.com/user_guide/libraries/exceptions.html
  */
 class CI_Exceptions {
-	var $action;
-	var $severity;
-	var $message;
-	var $filename;
-	var $line;
-	var $ob_level;
+    public $action;
+    public $severity;
+    public $message;
+    public $filename;
+    public $line;
+	public $ob_level;
 
-	var $levels = array(
+    public $levels = array(
 						E_ERROR				=>	'Error',
 						E_WARNING			=>	'Warning',
 						E_PARSE				=>	'Parsing Error',
@@ -51,8 +51,8 @@ class CI_Exceptions {
 	/**
 	 * Constructor
 	 *
-	 */	
-	function CI_Exceptions()
+	 */
+    public function CI_Exceptions()
 	{
 		$this->ob_level = ob_get_level();
 		// Note:  Do not log messages from this constructor.
@@ -72,7 +72,7 @@ class CI_Exceptions {
 	 * @param	string	the error line number
 	 * @return	string
 	 */
-	function log_exception($severity, $message, $filepath, $line)
+    public function log_exception($severity, $message, $filepath, $line)
 	{	
 		$severity = ( ! isset($this->levels[$severity])) ? $severity : $this->levels[$severity];
 		
@@ -88,7 +88,7 @@ class CI_Exceptions {
 	 * @param	string
 	 * @return	string
 	 */
-	function show_404($page = '')
+    public function show_404($page = '')
 	{	
 		$heading = "404 Page Not Found";
 		$message = "The page you requested was not found.";
@@ -113,7 +113,7 @@ class CI_Exceptions {
 	 * @param	string	the template name
 	 * @return	string
 	 */
-	function show_error($heading, $message, $template = 'error_general')
+    public function show_error($heading, $message, $template = 'error_general')
 	{
 		$message = '<p>'.implode('</p><p>', ( ! is_array($message)) ? array($message) : $message).'</p>';
 
@@ -148,7 +148,7 @@ class CI_Exceptions {
 	 * @param	string	the error line number
 	 * @return	string
 	 */
-	function show_php_error($severity, $message, $filepath, $line)
+    public function show_php_error($severity, $message, $filepath, $line)
 	{	
 		$severity = ( ! isset($this->levels[$severity])) ? $severity : $this->levels[$severity];
 	
@@ -172,7 +172,5 @@ class CI_Exceptions {
 		echo $buffer;
 	}
 
-
 }
 // END Exceptions Class
-?>

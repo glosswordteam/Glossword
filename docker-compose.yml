@@ -28,6 +28,7 @@ services:
       MYSQL_PASSWORD: glossword
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./docker/my.cnf:/etc/mysql/conf.d/custom.cnf:ro
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       timeout: 5s
@@ -38,14 +39,20 @@ services:
     networks:
       - default
 
-  cloudbeaver:
-    image: dbeaver/cloudbeaver:latest
-    container_name: glossword-cloudbeaver
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: glossword-phpmyadmin
     restart: unless-stopped
-    ports:
-      - "8183:8978"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 0
+      PMA_USER: glossword
+      PMA_PASSWORD: glossword
     depends_on:
       - mysql
+    ports:
+      - "8182:80"
     networks:
       - default
       - web

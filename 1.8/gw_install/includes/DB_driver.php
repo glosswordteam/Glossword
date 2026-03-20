@@ -87,7 +87,7 @@ class CI_DB_driver
      *
      * @param array
      */
-    public function CI_DB_driver($params)
+    public function __construct($params)
     {
         if (is_array($params)) {
             foreach ($params as $key => $val) {

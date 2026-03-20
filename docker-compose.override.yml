@@ -7,10 +7,10 @@ services:
       - "traefik.http.routers.glossword.entrypoints=web"
       - "traefik.http.services.glossword.loadbalancer.server.port=80"
 
-  cloudbeaver:
+  phpmyadmin:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=web"
-      - "traefik.http.routers.cloudbeaver.rule=Host(`db.glossword.local`)"
-      - "traefik.http.routers.cloudbeaver.entrypoints=web"
-      - "traefik.http.services.cloudbeaver.loadbalancer.server.port=8978"
+      - "traefik.http.routers.phpmyadmin.rule=Host(`db.glossword.local`)"
+      - "traefik.http.routers.phpmyadmin.entrypoints=web"
+      - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
