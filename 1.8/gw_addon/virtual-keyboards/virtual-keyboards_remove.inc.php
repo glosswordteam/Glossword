@@ -12,7 +12,7 @@
  */
 if (!defined('IN_GW'))
 {
-	die('<!-- $Id: virtual-keyboards_remove.inc.php 421 2008-04-22 23:14:56Z yrtimd $ -->');
+    die('<!-- Not in App  -->');
 }
 /* Included from $oAddonAdm->alpha(); */
 
@@ -32,4 +32,3 @@ $ar_query[] = gw_sql_update(array('id_vkbd' => '0'), $this->sys['tbl_prefix'].'d
 /* */
 $this->str .= postQuery($ar_query, GW_ACTION.'='.GW_A_BROWSE.'&'.GW_TARGET.'='.$this->component, $this->sys['isDebugQ'], 0);
 /* end of file */
-?>
