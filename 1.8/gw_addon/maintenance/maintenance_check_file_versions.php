@@ -121,10 +121,8 @@ class gw_addon_check_file_versions extends gw_addon
 		$ar_files[] = 'inc/lib.prepend.php';
 		$ar_files[] = 'inc/page.footer.php';
 		$ar_files[] = 'inc/query_storage.php';
-		$ar_files[] = 'inc/query_storage_global-mysql323.php';
-		$ar_files[] = 'inc/query_storage_global-mysql410.php';
-		$ar_files[] = 'inc/query_storage_sess-mysql323.php';
-		$ar_files[] = 'inc/query_storage_sess-mysql410.php';
+	    $ar_files[] = 'inc/query_storage_global-mysqli410.php';
+		$ar_files[] = 'inc/query_storage_sess-mysqli410.php';
 		$ar_files[] = 'inc/t.dict.inc.php';
 		$ar_files[] = 'inc/t.term.inc.php';
 		$ar_files[] = 'inc/t.user.inc.php';
