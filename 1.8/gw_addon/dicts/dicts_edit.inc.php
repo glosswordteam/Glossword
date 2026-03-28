@@ -215,7 +215,7 @@ else
 		$q['int_bytes'] = gw_sys_dict_count_bytes();
 
 		/* Save dictionary settings */
-		$arQ[] = gw_sql_update($q, TBL_DICT, 'id = "'.$this->gw_this['vars']['id'].'"');
+		$arQ[] = gw_sql_update($q, gw_get_tbl_name('dict'), 'id = "'.$this->gw_this['vars']['id'].'"');
 		
 		/* Clear cache */
 		$strR .= gw_tmp_clear($this->gw_this['vars']['id']);

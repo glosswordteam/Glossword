@@ -500,7 +500,7 @@ class gw_addon_topic_admin extends gw_addon
 		$msg_error = '';
 		$arQ = array();
 		/* can't remove topic already assigned to another dictionary */
-		$sql = sprintf('SELECT id, title FROM `'.TBL_DICT.'` WHERE id_topic = "%d"', $this->gw_this['vars']['tid']);
+		$sql = sprintf('SELECT id, title FROM `'.gw_get_tbl_name('dict').'` WHERE id_topic = "%d"', $this->gw_this['vars']['tid']);
 		$arSql = $this->oDb->sqlExec($sql);
 		if (!empty($arSql))
 		{

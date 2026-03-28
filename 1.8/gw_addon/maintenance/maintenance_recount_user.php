@@ -28,7 +28,7 @@ class gw_addon_recount_user extends gw_addon
 		$arQ = array();
 		while (list($k, $arV) = each($arSql))
 		{
-			$arQ[] = gw_sql_update(array('int_items' => $arV['n']), TBL_USERS, "id_user = '".$arV['user_id']."'");
+			$arQ[] = gw_sql_update(array('int_items' => $arV['n']), gw_get_tbl_name('users'), "id_user = '".$arV['user_id']."'");
 		}
 		for (; list($sqlk, $sqlv) = each($arQ);)
 		{

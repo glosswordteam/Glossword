@@ -1220,4 +1220,28 @@ function gw_sql_delete($table, array $where)
     return 'DELETE FROM ' . gw_sql_identifier($table) . ' WHERE ' . implode(' AND ', $where_parts);
 }
 
+/**
+ * Return physical table name using current table prefix.
+ *
+ * Applies minimal sanitization for table key and prefix.
+ * Database layer should report an error if the table does not exist.
+ *
+ * @param string $table_key Table key or table name suffix.
+ *
+ * @return string
+ */
+function gw_get_tbl_name($table_key)
+{
+    global $sys;
+
+    $table_key = trim((string)$table_key);
+    $tbl_prefix = isset($sys['tbl_prefix']) ? (string)$sys['tbl_prefix'] : '';
+
+    /* Keep only lowercase identifier characters */
+    $table_key = preg_replace('/[^a-z0-9_]/', '', strtolower($table_key));
+    $tbl_prefix = preg_replace('/[^a-z0-9_]/', '', strtolower($tbl_prefix));
+
+    return $tbl_prefix . $table_key;
+}
+
 

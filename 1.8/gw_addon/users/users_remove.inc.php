@@ -49,13 +49,13 @@ $ar_query[] = gw_sql_delete(
 );
 
 $ar_query[] = gw_sql_delete(
-    TBL_MAP_USER_DICT,
+    gw_get_tbl_name('map_user_to_dict'),
     ['user_id' => $target_user_id]
 );
 
 $ar_query[] = gw_sql_update(
     ['id_user' => $current_user_id],
-    TBL_DICT,
+    gw_get_tbl_name('dict'),
     '`id_user` = ' . $target_user_id
 );
 

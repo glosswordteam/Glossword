@@ -17,17 +17,16 @@ if (!defined('IN_GW')) {
 
 /* Included from $oAddonAdm->alpha(); */
 
-$ar_query = [];
+$target_id = (int)$this->gw_this['vars'][GW_TARGET_ID];
+$ar_query  = [];
 
 if (!$this->gw_this['vars']['isConfirm']) {
     /* Deletion must be confirmed */
     return;
 }
 
-$target_id = (int)$this->gw_this['vars'][GW_TARGET_ID];
-
-/* Keep UTF-8 profile */
 if ($target_id === 1) {
+    // UTF-8 - The default sorting order
     $this->str .= $this->_get_nav();
     $this->str .= '<div class="xt">' . $this->oL->m('1293') . '</div>';
 
@@ -35,32 +34,15 @@ if ($target_id === 1) {
 }
 
 /* Remove from profiles */
-$ar_query[] = gw_sql_delete(
-    $this->sys['tbl_prefix'] . 'custom_az',
-    ['id_profile' => $target_id]
-);
+$ar_query[] = gw_sql_delete(gw_get_tbl_name('custom_az'), ['id_profile' => $target_id]);
 
 /* Remove from alphabetic orders */
-$ar_query[] = gw_sql_delete(
-    $this->sys['tbl_prefix'] . 'custom_az_profiles',
-    ['id_profile' => $target_id]
-);
+$ar_query[] = gw_sql_delete(gw_get_tbl_name('custom_az_profiles'), ['id_profile' => $target_id]);
 
 /* Replace with the default profile */
-$ar_query[] = gw_sql_update(
-    ['id_custom_az' => 1],
-    $this->sys['tbl_prefix'] . 'dict',
-    '`id_custom_az` = ' . $target_id
-);
+$ar_query[] = gw_sql_update(['id_custom_az' => 1], gw_get_tbl_name('dict'), '`id_custom_az` = ' . $target_id);
 
-$redirect_url = $this->oUrlBuilder->build_admin_url(
-    GW_A_BROWSE,
-    $this->component,
-    [
-        GW_TARGET_ID => 1,
-        'r'          => time(),
-    ]
-);
+$redirect_url = $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->component, ['r' => time()]);
 
 /* Redirect */
 $this->str .= postQuery(

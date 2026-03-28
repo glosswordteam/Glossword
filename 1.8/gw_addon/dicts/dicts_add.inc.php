@@ -153,7 +153,7 @@ else
 		$q['id_user'] = $this->oSess->id_user;
 		/* Create tables */
 		$queryA[] = $this->oSqlQ->getQ( 'create-dict', $q['tablename'] );
-		$q['id'] = $q3['dict_id'] = $this->oDb->MaxId( TBL_DICT );
+		$q['id'] = $q3['dict_id'] = $this->oDb->MaxId( gw_get_tbl_name('dict') );
 
 		/* 30 apr 2008: Prepare URI */
 		$q['dict_uri'] = $q['id'] . '-' . $this->oCase->rm_entity( $q['title'] );
@@ -165,14 +165,14 @@ else
 			$q['dict_uri'] = $q['id'] . '-';
 		}
 
-		$queryA[] = gw_sql_insert( $q, TBL_DICT );
+		$queryA[] = gw_sql_insert( $q, gw_get_tbl_name('dict') );
 		$q = array ( );
 		$q['hits'] = 0;
 		$q['id'] = $q3['dict_id'];
-		$queryA[] = gw_sql_insert( $q, TBL_STAT_DICT );
+		$queryA[] = gw_sql_insert( $q, gw_get_tbl_name('stat_dict') );
 		/* TODO: rename user_id / id_user */
 		$q3['user_id'] = $this->oSess->user_get( 'id_user' );
-		$queryA[] = gw_sql_insert( $q3, TBL_MAP_USER_DICT );
+		$queryA[] = gw_sql_insert( $q3, gw_get_tbl_name('map_user_to_dict') );
 		/* Add Dictionary ID to the list of assigned dictionairies */
 		$ar_user_dict = $this->oSess->user_get( 'dictionaries' );
 		$ar_user_dict[$q3['dict_id']] = 1;

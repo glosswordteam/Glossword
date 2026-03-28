@@ -589,7 +589,7 @@ else
 		/* Clear cache */
 		$this->str .= gw_tmp_clear( $this->gw_this['vars']['id'] );
 		/* */
-		$queryA[] = 'UPDATE `'. TBL_DICT .'` SET `date_modified` = ' . $this->sys['time_now_gmt_unix'] . ' WHERE `id` = \'' .$this->gw_this['vars']['id'].'\'';
+		$queryA[] = 'UPDATE `'. gw_get_tbl_name('dict') .'` SET `date_modified` = ' . $this->sys['time_now_gmt_unix'] . ' WHERE `id` = \'' .$this->gw_this['vars']['id'].'\'';
 		/* Redirect to... */
 		$str_url = gw_after_redirect_url( $arPost['after'], $this->gw_this['vars']['tid'] );
 		$this->str .= postQuery($queryA, $str_url, $this->sys['isDebugQ'], 0);

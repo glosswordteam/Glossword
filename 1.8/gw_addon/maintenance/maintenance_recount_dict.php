@@ -46,7 +46,7 @@ class gw_addon_recount_dict extends gw_addon
             $dictStats['int_terms'] = isset($result[0]['n']) ? (int) $result[0]['n'] : 0;
 
             // Prepare update query (assumes gw_sql_update escapes properly).
-            $updateQueries[] = gw_sql_update($dictStats, TBL_DICT, "id = '" . $dictId . "'");
+            $updateQueries[] = gw_sql_update($dictStats, gw_get_tbl_name('dict'), "id = '" . $dictId . "'");
         }
 
         // Execute all updates.

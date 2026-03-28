@@ -108,10 +108,10 @@ if ($dict_id > 0) {
 
 $ar_query = [];
 $ar_query[] = $this->oSqlQ->getQ('del-wordmap-by-dict', $dict_id);
-$ar_query[] = $this->oSqlQ->getQ('del-by-dict_id', TBL_MAP_USER_DICT, $dict_id);
+$ar_query[] = $this->oSqlQ->getQ('del-by-dict_id', gw_get_tbl_name('map_user_to_dict'), $dict_id);
 $ar_query[] = $this->oSqlQ->getQ('del-by-dict_id', TBL_MAP_USER_TERM, $dict_id);
-$ar_query[] = $this->oSqlQ->getQ('del-by-id', TBL_DICT, $dict_id);
-$ar_query[] = $this->oSqlQ->getQ('del-by-id', TBL_STAT_DICT, $dict_id);
+$ar_query[] = $this->oSqlQ->getQ('del-by-id', gw_get_tbl_name('dict'), $dict_id);
+$ar_query[] = $this->oSqlQ->getQ('del-by-id', gw_get_tbl_name('stat_dict'), $dict_id);
 $ar_query[] = gw_sql_delete(
     $this->sys['tbl_prefix'] . 'history_terms',
     ['id_dict' => $dict_id]

@@ -254,7 +254,7 @@ else
 			$q2 = array();
 			$q2['user_id'] = $q1['id_user'];
 			$q2['dict_id'] = $k;
-			$ar_q[] = gw_sql_replace($q2, TBL_MAP_USER_DICT);
+			$ar_q[] = gw_sql_replace($q2, gw_get_tbl_name('map_user_to_dict'));
 		}
 
 		/* Redirect */

@@ -50,7 +50,7 @@ class gwUrlBuilder
      *
      * @return string
      */
-    public function build_url($base, array $params)
+    private function _build_url($base, array $params)
     {
         $query = http_build_query($this->filter_null_params($params), '', '&');
 
@@ -77,7 +77,7 @@ class gwUrlBuilder
             GW_TARGET => $target,
         ];
 
-        return $this->build_url(
+        return $this->_build_url(
             $this->get_page_admin(),
             $baseParams + $params
         );
@@ -97,7 +97,7 @@ class gwUrlBuilder
             GW_TARGET => $target,
         ];
 
-        return $this->build_url(
+        return $this->_build_url(
             $this->get_page_index(),
             $baseParams + $params
         );

@@ -286,7 +286,7 @@ else
 			$this->str .= '<li>';
 			$this->str .= $oHtml->a($filename, $filename) . '&#8230; ';
 			$strQ .= '# <!-- ' . $filename . ' -->' . CRLF;
-			$sql = sprintf('SELECT * FROM `' . TBL_DICT . '` WHERE id = %d', $this->gw_this['vars']['id']);
+			$sql = sprintf('SELECT * FROM `' . gw_get_tbl_name('dict') . '` WHERE id = %d', $this->gw_this['vars']['id']);
 			$arSql = $oDb->sqlExec($sql, '', 0);
 			for (; list($arK, $arV) = each($arSql);)
 			{
@@ -302,7 +302,7 @@ else
 						}
 					}
 				}
-				$strQ .= gw_sql_replace($arV, TBL_DICT, 0) . ';';
+				$strQ .= gw_sql_replace($arV, gw_get_tbl_name('dict'), 0) . ';';
 			}
 			$isWrite = $this->oFunc->file_put_contents( $filename, $strQ, $mode);
 			$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist('4')) . " " . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';

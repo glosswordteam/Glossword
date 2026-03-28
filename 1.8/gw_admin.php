@@ -198,6 +198,7 @@ if ($gw_this['vars'][GW_ACTION] == 'logout')
 ## path_export      Path to directory where import/export files will be readed/saved (chmod 0777 required)
 ##------------------------------------------------
 $sys['isDebugQ'] = 0;
+$sys['isPause'] = 0;
 $sys['path_img_admin'] = $sys['path_admin'] . '/images';
 include_once( $sys['path_include'] . '/class.forms.php');
 include_once( $sys['path_include'] . '/class.gw_htmlforms.php');

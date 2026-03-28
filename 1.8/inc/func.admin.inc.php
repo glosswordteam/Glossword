@@ -255,7 +255,7 @@ function gw_sys_dict_update()
 
     $sql = gw_sql_update(
         $q_dict,
-        TBL_DICT,
+        gw_get_tbl_name('dict'),
         '`id` = ' . $dict_id
     );
 
@@ -374,14 +374,19 @@ function gw_admin_menu($a, $t)
             }
             /* Include links to actions for a secondary menu */
             /* Do not include links to actions with is_in_menu = 0 */
-            if ($arV2['is_in_menu'] != 0) {
-                $arUrlParams = [];
-                if ($gw_this['vars'][GW_TARGET_ID] && $gw_this['vars'][GW_TARGET] == $id_component) {
-                    $arUrlParams = [GW_TARGET_ID => $gw_this['vars'][GW_TARGET]];
+            if ((int)$arV2['is_in_menu'] !== 0) {
+                $link_params = [];
+
+                if ((int)$gw_this['vars']['tid'] > 0 && ($gw_this['vars'][GW_TARGET] == $id_component)) {
+                    $link_params[GW_TARGET_ID] = (int)$gw_this['vars'][GW_TARGET_ID];
                 }
-                $hrefInMenu = $oUrlBuilder->build_admin_url($arV2['aname_sys'], $arV2['id_component_name'], $arUrlParams);
+
                 $gw_this['ar_actions_list'][$id_component][$arV2['aname_sys']] = $oHtml->a(
-                    $hrefInMenu,
+                    $oUrlBuilder->build_admin_url(
+                        $arV2['aname_sys'],
+                        $arV2['id_component_name'],
+                        $link_params
+                    ),
                     $oL->m($arV2['aname']),
                     $oL->m($arV2['cname']) . ': ' . $oL->m($arV2['aname'])
                 );

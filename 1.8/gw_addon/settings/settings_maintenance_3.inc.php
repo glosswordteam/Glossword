@@ -115,7 +115,7 @@ function gw_dict_recount($vars)
 		}
 		$qDict['int_terms'] = gw_sys_dict_count_terms();
 		$qDict['int_bytes'] = gw_sys_dict_count_bytes();
-		$arQ[] = gw_sql_update($qDict, TBL_DICT, "id = '".$arDictParam['id']."'");
+		$arQ[] = gw_sql_update($qDict, gw_get_tbl_name('dict'), "id = '".$arDictParam['id']."'");
 
 		$arQ[] = 'CHECK TABLE `' . $arDictParam['tablename'] .'`';
 		$arQ[] = 'ALTER TABLE `'. $arDictParam['tablename'] .'` PACK_KEYS=1 CHECKSUM=0 DELAY_KEY_WRITE=1';
