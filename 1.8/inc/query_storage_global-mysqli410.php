@@ -128,16 +128,15 @@ $tmp['ar_queries'] = [
 						ORDER BY g.int_sort
 					',
     'get-theme'                   => 'SELECT ths.settings_key, ths.settings_value
-                                        FROM ' . $sys['tbl_prefix'] . 'theme AS th,
-                                             ' . $sys['tbl_prefix'] . 'theme_settings AS ths,
-                                             ' . $sys['tbl_prefix'] . 'theme_group AS g
-                                        WHERE ths.id_theme = \'%s\'
-                                        AND th.id_theme = ths.id_theme
-                                        AND th.is_active = 1
-                                        AND ths.settings_key = g.settings_key
-                                        AND g.id_group IN (%s)
-                                        GROUP BY g.settings_key
-                                        ORDER BY g.id_group, g.int_sort',
+						FROM ' . $sys['tbl_prefix'] . 'theme AS th, ' . $sys['tbl_prefix'] . 'theme_settings AS ths, ' . $sys['tbl_prefix'] . 'theme_group AS g
+						WHERE ths.id_theme = "%s"
+						AND th.id_theme = ths.id_theme
+						AND th.is_active = "1"
+						AND ths.settings_key = g.settings_key
+						AND g.id_group IN (%s)
+						GROUP BY g.settings_key
+						ORDER BY g.id_group, g.int_sort
+					',
     'get-abbr-code'               => 'SELECT a.id_group, a.id_abbr, b.abbr_short, b.abbr_long
 						FROM `' . $sys['tbl_prefix'] . 'abbr` AS a, `' . $sys['tbl_prefix'] . 'abbr_phrase` AS b
 						WHERE a.id_abbr = b.id_abbr
