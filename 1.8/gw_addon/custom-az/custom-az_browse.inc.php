@@ -16,8 +16,8 @@ if (!defined('IN_GW')) {
 }
 /* Included from $oAddonAdm->alpha(); */
 
-$tid                = isset($this->gw_this['vars'][GW_TARGET_ID]) ? (int)$this->gw_this['vars'][GW_TARGET_ID] : 0;
-$selected_letter_id = isset($this->gw_this['vars']['w1']) ? (int)$this->gw_this['vars']['w1'] : 0;
+$tid                = $this->gw_this['vars'][GW_TARGET_ID];
+$selected_letter_id = $this->gw_this['vars']['w1'];
 $page_admin_url     = $this->sys['page_admin'];
 $html_charset       = 'UTF-8';
 
@@ -96,7 +96,7 @@ if ($tid > 0) {
     foreach ($ar_sql as $row_index => $ar_v) {
         $is_up     = 1;
         $is_down   = 1;
-        $id_letter = isset($ar_v['id_letter']) ? (int)$ar_v['id_letter'] : 0;
+        $id_letter = $ar_v['id_letter'];
         $bgcolor   = ($row_number % 2) ? $this->ar_theme['color_1'] : $this->ar_theme['color_2'];
 
         if ($row_index === 0) {
@@ -119,31 +119,19 @@ if ($tid > 0) {
         $up_url = $this->oUrlBuilder->build_admin_url(
             GW_A_EDIT,
             $this->component,
-            [
-                'mode'       => 'up',
-                GW_TARGET_ID => $tid,
-                'w1'         => $id_letter,
-            ]
+            ['mode' => 'up', GW_TARGET_ID => $tid, 'w1' => $id_letter]
         );
 
         $down_url = $this->oUrlBuilder->build_admin_url(
             GW_A_EDIT,
             $this->component,
-            [
-                'mode'       => 'down',
-                GW_TARGET_ID => $tid,
-                'w1'         => $id_letter,
-            ]
+            ['mode' => 'down', GW_TARGET_ID => $tid, 'w1' => $id_letter,]
         );
 
         $remove_url = $this->oUrlBuilder->build_admin_url(
             GW_A_EDIT,
             $this->component,
-            [
-                'mode'       => 'remove',
-                GW_TARGET_ID => $tid,
-                'w1'         => $id_letter,
-            ]
+            ['mode' => 'remove', GW_TARGET_ID => $tid, 'w1' => $id_letter,]
         );
 
         $confirm_label = trim(strip_tags($az_value . ' ' . $az_value_lc));
@@ -178,9 +166,11 @@ if ($tid > 0) {
 
         $this->str .= ' ';
 
+        $this->oHtml->setTag('a', 'class', 'submitdel');
         $this->oHtml->setTag('a', 'onclick', 'return confirm(\'' . $confirm_text . '\')');
         $this->str .= $this->oHtml->a($remove_url, $this->oL->m('3_remove'));
         $this->oHtml->setTag('a', 'onclick', '');
+        $this->oHtml->setTag( 'a', 'class', '' );
 
         $this->str .= '</td>';
         $this->str .= '</tr>';
@@ -203,7 +193,7 @@ if ($tid > 0) {
     $this->str .= '</form>';
 
     if ($selected_letter_id > 0) {
-        $this->str .= CRLF . '<script type="text/javascript">/*<![CDATA[*/';
+        $this->str .= PHP_EOL . '<script type="text/javascript">/*<![CDATA[*/';
         $this->str .= 'window.scrollTo(0, jsUtils.GetRealPos(gw_getElementById("az-' . $selected_letter_id . '")).top );';
         $this->str .= '/*]]>*/</script>';
     }
