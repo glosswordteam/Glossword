@@ -57,7 +57,7 @@ include_once( $sys['path_gwlib'] . '/class.xslt.php' );
 include_once( $sys['path_gwlib'] . '/class.render.php' ); /* extends gw_htmlforms */
 /* New from Glossword 2.0 */
 include_once( $sys['path_gwlib']. '/class.db.cache.php' );
-include_once( $sys['path_gwlib']. '/class.db.mysql.php');
+include_once( $sys['path_gwlib']. '/class.db.mysqli.php');
 include_once( $sys['path_gwlib']. '/class.db.q.php' );
 include_once( $sys['path_include'] . '/query_storage.php' ); /* extends gw_query */
 include_once( $sys['path_gwlib']. '/class.domxml.php' );
@@ -71,6 +71,7 @@ include_once( $sys['path_gwlib']. '/class.ua.php' );
 include_once( $sys['path_gwlib']. '/class.tpl.php' ); /* requires class.ua.php */
 #include_once( $sys['path_include'] . '/class.session.ext.php' ); /* extends gw_sessions */
 include_once( $sys['path_include'] . '/class.template.ext.php' ); /* extends gwv_template */
+include_once( $sys['path_gwlib']. '/class.route.php' );
 if (!isset($sys['server_proto']))
 {
 	$sys['server_proto'] = 'http://';
@@ -175,25 +176,8 @@ if ($sys['is_cache_sql'])
 	$oDb->cache_lifetime = $sys['cache_lifetime'];
 	$oDb->setCache($sys['path_cache_sql']);
 }
-
 /* ------------------------------------------------------- */
-/* New functions */
-if (!function_exists('str_split')) { 
-function str_split($chaine, $length = 1) {
-	$retour = FALSE;
-	$incrmt = (int)$length;
-	if (0 < $incrmt) {
-		$retour = array();
-		$offset = 0;
-		$limite = strlen($chaine);
-		while ($offset < $limite) {
-			$retour[] = substr($chaine, $offset, $incrmt);
-			$offset += $incrmt;
-		}
-	}
-	return ($retour);
-}}
 $tmp['time_php_init'] = $oTimer->end();
 $oTimer = new gw_timer;
+$oUrlBuilder = new gwUrlBuilder($sys);
 /* end of file */
-?>

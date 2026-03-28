@@ -87,7 +87,7 @@ elseif ($this->gw_this['vars']['mode'] == 'reset')
 }
 elseif ($this->gw_this['vars']['mode'] == 'off')
 {
-	$arKeys = ctlgGetTree($this->ar, $this->gw_this['vars']['tid']);
+	$arKeys = gw_ctlg_get_tree($this->ar, $this->gw_this['vars']['tid']);
 	$this->oDb->sqlExec('UPDATE `'.$this->sys['tbl_prefix'].'pages`
 						SET `is_active` = "0"
 						WHERE `id_page` IN ('.implode(',', $arKeys).')' );
@@ -96,7 +96,7 @@ elseif ($this->gw_this['vars']['mode'] == 'off')
 }
 elseif ($this->gw_this['vars']['mode'] == 'on')
 {
-	$arKeys = ctlgGetTree($this->ar, $this->gw_this['vars']['tid']);
+	$arKeys = gw_ctlg_get_tree($this->ar, $this->gw_this['vars']['tid']);
 	$this->oDb->sqlExec('UPDATE `'.$this->sys['tbl_prefix'].'pages`
 						SET `is_active` = "1"
 						WHERE `id_page` IN ('.implode(',', $arKeys).')' );
@@ -212,7 +212,7 @@ else
 	/* Set ‘is_active' for subpages */
 	if (isset($this->ar[$this->gw_this['vars']['tid']]['ch']))
 	{
-		$arKeys = ctlgGetTree($this->ar, $this->gw_this['vars']['tid']);
+		$arKeys = gw_ctlg_get_tree($this->ar, $this->gw_this['vars']['tid']);
 		while (is_array($arKeys) && list($k, $v) = each($arKeys))
 		{
 			$arQ[] = 'UPDATE `'.$this->sys['tbl_prefix'].'pages` SET `is_active` = "'.$q1['is_active'].'" WHERE id_parent = "' . $v . '"';

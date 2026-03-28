@@ -775,7 +775,7 @@ function ctlgGetTopicsRow($ar = array(), $startId = 0, $cntRow = 1)
 	/* parents with selected tid (same for delete) */
 	if ($cntRow == 1)
 	{
-		$arParents = ctlgGetTree($ar, $tid);
+		$arParents = gw_ctlg_get_tree($ar, $tid);
 	}
 
 	if (sizeof($ar) > 0)
@@ -865,10 +865,10 @@ function ctlgGetTopicsRow($ar = array(), $startId = 0, $cntRow = 1)
 				if ($isBuild)
 				{
 					/* Strip long topic names */
-					$topic_len = $oFunc->mb_strlen($ar[$startId]['title']);
+					$topic_len = mb_strlen($ar[$startId]['title']);
 					if ($topic_len > 45)
 					{
-						$ar[$startId]['title'] = $oFunc->mb_substr($ar[$startId]['title'], 0, 45).'&#8230;';
+						$ar[$startId]['title'] = mb_substr($ar[$startId]['title'], 0, 45).'&#8230;';
 					}
 					$str .= '<option ' . $selected . 'style="background:'.$bgcolor.'" value="'.$ar[$startId]["id"].'">';
 					$str .= '&#160;' . $image . '&#160;' . $ar[$startId]['title'];
@@ -928,31 +928,38 @@ function ctlgGetTopicsRow($ar = array(), $startId = 0, $cntRow = 1)
 
 
 /**
- * Get branch from any tree. Recursive.
- * 
- * @users   global $arId;
- * @param   array with a tree structure
- * @param   chunk id
- * @return  array
+ * Get a branch from the tree recursively.
+ *
+ * Returns the specified node and all its child node IDs.
+ *
+ * @param array $tree Tree structure indexed by node ID.
+ * @param int $node_id Start node ID.
+ * @param array $result Internal accumulator.
+ * @param array $visited Internal list of processed node IDs.
+ * @return array
  */
-function ctlgGetTree($ar, $id)
+function gw_ctlg_get_tree(array $tree, $node_id, array &$result = [], array &$visited = [])
 {
-	global $arId;
-	if (isset($ar[$id]['ch']))
-	{
-		while(is_array($ar[$id]['ch']) && list($k, $v) = each($ar[$id]['ch']) )
-		{
-			if (isset($ar[$k]['ch']))
-			{
-				ctlgGetTree($ar, $k);
-			}
-			$arId[$k] = $k;
-		}
-	}
-	$arId[$id] = $id;
-	return $arId;
-}
+    $node_id = (int) $node_id;
 
+    if (isset($visited[$node_id])) {
+        return $result;
+    }
+
+    $visited[$node_id] = 1;
+    $result[$node_id] = $node_id;
+
+    if (!isset($tree[$node_id]['ch']) || !is_array($tree[$node_id]['ch'])) {
+        return $result;
+    }
+
+    foreach ($tree[$node_id]['ch'] as $child_id => $child_value) {
+        $child_id = (int) $child_id;
+        gw_ctlg_get_tree($tree, $child_id, $result, $visited);
+    }
+
+    return $result;
+}
 
 /* */
 function gw_get_thread_pages($ar = array(), $startId = 0, $cntRow = 1)
@@ -978,7 +985,7 @@ function gw_get_thread_pages($ar = array(), $startId = 0, $cntRow = 1)
 	/* Parents with selected tid (same for delete) */
 	if ($cntRow == 1)
 	{
-		$arParents = ctlgGetTree($ar, $gw_this['vars']['tid']);
+		$arParents = gw_ctlg_get_tree($ar, $gw_this['vars']['tid']);
 	}
 	if (sizeof($ar) > 0)
 	{
@@ -1061,10 +1068,10 @@ function gw_get_thread_pages($ar = array(), $startId = 0, $cntRow = 1)
 				}
 				if ($isBuild)
 				{
-					$int_title_len = $oFunc->mb_strlen($ar[$startId]['title']);
+					$int_title_len = mb_strlen($ar[$startId]['title']);
 					if ($int_title_len > 45)
 					{
-						$ar[$startId]['title'] = $oFunc->mb_substr($ar[$startId]['title'], 0, 45). '&#8230;';
+						$ar[$startId]['title'] = mb_substr($ar[$startId]['title'], 0, 45). '&#8230;';
 					}
 					$str .= '<option ' . $selected . 'style="background:'.$bgcolor.'" value="'.$ar[$startId]['id'].'">';
 					$str .= '&#160;' . $image . '&#160;' . $ar[$startId]['title'];
@@ -1073,7 +1080,7 @@ function gw_get_thread_pages($ar = array(), $startId = 0, $cntRow = 1)
 			} // form
 			elseif ($topic_mode == 'html')
 			{
-				$int_title_len = $oFunc->mb_strlen($ar[$startId]['title']);
+				$int_title_len = mb_strlen($ar[$startId]['title']);
 				
 				if ($gw_this['vars'][GW_TARGET] == 'topics')
 				{
@@ -1088,7 +1095,7 @@ function gw_get_thread_pages($ar = array(), $startId = 0, $cntRow = 1)
 				
 				if ($int_title_len > 45)
 				{
-					$ar[$startId]['title'] = $oFunc->mb_substr($ar[$startId]['title'], 0, 45). '&#8230;';
+					$ar[$startId]['title'] = mb_substr($ar[$startId]['title'], 0, 45). '&#8230;';
 				}
 				$str .= '<tr style="background:'.$bgcolor.'">';
 				$str .= '<td class="xt n" style="text-align:'.$sys['css_align_right'].'">' .  $cntRow . '</td>';

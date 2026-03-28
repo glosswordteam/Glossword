@@ -1,105 +1,62 @@
 <?php
+
 /**
- *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008-2012 Glossword.biz team <team at glossword dot biz>
- *  © 2002-2008 Dmitry N. Shilnikov
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
-if (!defined('IN_GW'))
-{
-	die('<!-- $Id: func.admin.inc.php 531 2008-07-09 19:20:16Z glossword_team $ -->');
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
 }
 /**
  *  Functions for administrative interface.
  */
 
-function gw_dict_browse_for_select($arDictParam)
+/**
+ * Build dictionary selector item HTML.
+ *
+ * @param array $ar_dict_param Dictionary parameters.
+ * @return string
+ */
+function gw_dict_browse_for_select(array $ar_dict_param)
 {
-	global $oHtml, $oL, $oFunc, $sys, $gw_this;
-	return '<div class="xw">'.
-			$oHtml->a($sys['page_admin'].'?'.GW_ACTION.'='.$gw_this['vars'][GW_ACTION] .'&'. GW_TARGET.'='.$gw_this['vars'][GW_TARGET]. '&id='.$arDictParam['id'], $arDictParam['title'] ).
-			'</div>'.
-			$oL->m(1364).': <strong>'.$arDictParam['id'].'</strong> &#8226; '.
-			$oL->m('termsamount').': <strong>'.$oFunc->number_format($arDictParam['int_terms'], 0, $oL->languagelist('4')).'</strong>';
+    global $gw_this, $oFunc, $oHtml, $oL, $oUrlBuilder;
+
+    $dict_id = isset($ar_dict_param['id']) ? (int)$ar_dict_param['id'] : 0;
+    $dict_title = isset($ar_dict_param['title']) ? (string)$ar_dict_param['title'] : '';
+    $terms_amount = isset($ar_dict_param['int_terms']) ? (int)$ar_dict_param['int_terms'] : 0;
+
+    return '<div class="xw">'
+        . $oHtml->a(
+            $oUrlBuilder->build_admin_url(
+                $gw_this['vars'][GW_ACTION],
+                $gw_this['vars'][GW_TARGET],
+                ['id' => $dict_id]
+            ),
+            $dict_title
+        )
+        . '</div>'
+        . $oL->m(1364) . ': <strong>' . $dict_id . '</strong> &#8226; '
+        . $oL->m('termsamount') . ': <strong>'
+        . $oFunc->number_format($terms_amount, 0, $oL->languagelist('4'))
+        . '</strong>';
 }
 
 /**
  * Recounts the number of dictionaries in each topic.
  */
-function gw_topic_recout()
+function gw_topic_recount()
 {
+    include_once( $sys['path_gwlib'] . '/class.topics_recounter.php' );
 	$o = new gw_topics_recounter();
-	$o->recout();
+	$o->recount();
 }
-class gw_topics_recounter
-{
-	var $oDb, $sys;
-	var $ar_sum_totals, $ar_parents, $ar_items_counted = array();
-	
-	/* Autoexec */
-	function gw_topics_recounter()
-	{
-		global $oDb, $sys;
-		$this->oDb =& $oDb;
-		$this->sys =& $sys;
-	}
-	function recout()
-	{
-		/* Create topic reference */ 
-		$sql = 'SELECT id_topic, id_parent
-				FROM `'.$this->sys['tbl_prefix'].'topics`
-				GROUP BY id_topic, id_parent';
-		$arSql = $this->oDb->sqlExec($sql);
-		while (is_array($arSql) && list($k, $arV) = each($arSql))
-		{
-			$this->ar_parents[$arV['id_parent']][] = $arV['id_topic'];
-		}
-		/* Count items for each topic */
-		$sql = 'SELECT id_topic, count(*) as cnt
-				FROM `'.$this->sys['tbl_prefix'].'dict`
-				GROUP BY id_topic';
-		$arSql = $this->oDb->sqlExec($sql);
-		while (is_array($arSql) && list($k, $arV) = each($arSql))
-		{
-			$this->ar_items_counted[$arV['id_topic']] = $arV['cnt'];
-		}
-		/* Select only root topics */
-		$sql = 'SELECT id_topic
-				FROM `'.$this->sys['tbl_prefix'].'topics`
-				WHERE id_parent ="0"';
-		$arSql = $this->oDb->sqlExec($sql);
-		/* Count topics for each root */
-		while (is_array($arSql) && list($k, $arV) = each($arSql))
-		{
-			$this->get_subitems($arV['id_topic'], $this->ar_items_counted, $this->ar_parents);
-		}
-		/* Update database */
-		for (reset($this->ar_sum_totals); list($id_topic, $v) = each($this->ar_sum_totals);)
-		{
-			$this->oDb->sqlExec( gw_sql_update(array('int_items' => $v), $this->sys['tbl_prefix'].'topics', 'id_topic = "'.$id_topic.'"') );
-		}
-	}
-	/* */
-	function get_subitems($id_topic, $ar_items_counted, $ar_parents)
-	{
-		/* Get number of item directly from root topics */
-		$cnt = isset($ar_items_counted[$id_topic]) ? $ar_items_counted[$id_topic] : 0;
-		/* Number of children items of this id_topic */
-		$int_ch = isset($ar_parents[$id_topic]) ? sizeof( $ar_parents[$id_topic] ) : 0;
-		for ($i = 0; $i < $int_ch; $i++)
-		{
-			$cnt += $this->get_subitems( $ar_parents[$id_topic][$i], $ar_items_counted, $ar_parents );
-		}
-		$this->ar_sum_totals[$id_topic] = $cnt;
-		return $cnt;
-	}
-}
-
 
 /* */
 function gw_after_redirect_url($action, $id_term = 0)
@@ -160,61 +117,183 @@ function gw_after_redirect_url($action, $id_term = 0)
 	return $str_url;
 }
 
-/* Update dictionary settings */
-function gw_sys_dict_update()
+
+/**
+ * Return validated dictionary table name.
+ *
+ * @return string
+ */
+function gw_sys_dict_get_table_name()
 {
-	global $arDictParam, $oDb;
-	if (isset($arDictParam['id']) && $arDictParam['id'])
-	{
-		$qDict['int_terms'] = $arDictParam['int_terms'] = gw_sys_dict_count_terms();
-		$qDict['int_terms_total'] = $arDictParam['int_terms_total'] = gw_sys_dict_count_terms_total();
-		$qDict['int_bytes'] = $arDictParam['int_bytes'] = gw_sys_dict_count_kb();
-		$sql = gw_sql_update($qDict, TBL_DICT, "id = '".$arDictParam['id']."'");
-		$oDb->sqlExec($sql);
-	}
+    global $arDictParam;
+
+    $table_name = isset($arDictParam['tablename']) ? (string)$arDictParam['tablename'] : '';
+    if ($table_name === '') {
+        return '';
+    }
+
+    if (!preg_match('/^[a-zA-Z0-9_]+$/', $table_name)) {
+        return '';
+    }
+
+    return $table_name;
 }
-/* Count the number of published terms */
+
+/**
+ * Read dictionary counters in a single query.
+ *
+ * Returns:
+ * - int_terms: published terms count
+ * - int_terms_total: total terms count except deleted
+ * - int_bytes: total bytes
+ *
+ * @param bool $is_reset Reset static cache for the current dictionary.
+ * @return array
+ */
+function gw_sys_dict_get_stats($is_reset = false)
+{
+    global $arDictParam, $oDb, $sys;
+
+    static $cache = [];
+
+    $table_name = gw_sys_dict_get_table_name();
+    if ($table_name === '') {
+        return [
+            'int_terms'       => 0,
+            'int_terms_total' => 0,
+            'int_bytes'       => 0,
+        ];
+    }
+
+    $dict_id = isset($arDictParam['id']) ? (int)$arDictParam['id'] : 0;
+    $time_now_gmt_unix = isset($sys['time_now_gmt_unix']) ? (int)$sys['time_now_gmt_unix'] : 0;
+
+    $cache_key = $dict_id . ':' . $table_name . ':' . $time_now_gmt_unix;
+
+    if ($is_reset) {
+        unset($cache[$cache_key]);
+    }
+
+    if (isset($cache[$cache_key])) {
+        return $cache[$cache_key];
+    }
+
+    $sql = 'SELECT
+                SUM(CASE WHEN is_active = 1 AND date_created <= ' . $time_now_gmt_unix . ' THEN 1 ELSE 0 END) AS int_terms,
+                SUM(CASE WHEN is_active != 3 AND date_created <= ' . $time_now_gmt_unix . ' THEN 1 ELSE 0 END) AS int_terms_total,
+                COALESCE(SUM(int_bytes), 0) AS int_bytes
+            FROM `' . $table_name . '`';
+
+    $ar_sql = $oDb->sqlExec($sql);
+    $ar_row = isset($ar_sql[0]) ? $ar_sql[0] : [];
+
+    $cache[$cache_key] = [
+        'int_terms'       => isset($ar_row['int_terms']) ? (int)$ar_row['int_terms'] : 0,
+        'int_terms_total' => isset($ar_row['int_terms_total']) ? (int)$ar_row['int_terms_total'] : 0,
+        'int_bytes'       => isset($ar_row['int_bytes']) ? (int)$ar_row['int_bytes'] : 0,
+    ];
+
+    return $cache[$cache_key];
+}
+
+/**
+ * Count the number of published terms.
+ *
+ * @return int
+ */
 function gw_sys_dict_count_terms()
 {
-	global $arDictParam, $oDb, $sys;
-	if (isset($arDictParam['tablename']))
-	{
-		$sql = 'SELECT count(*) as n FROM `' . $arDictParam['tablename'].'`
-				WHERE is_active = "1" AND date_created <= ' . $sys['time_now_gmt_unix'];
-		$arSql = $oDb->sqlExec($sql);
-	}
-	return isset($arSql[0]['n']) ? $arSql[0]['n'] : 0;
+    $ar_stats = gw_sys_dict_get_stats();
+
+    return $ar_stats['int_terms'];
 }
-/* Count the total number of terms */
+
+/**
+ * Count the total number of terms except deleted ones.
+ *
+ * @return int
+ */
 function gw_sys_dict_count_terms_total()
 {
-	global $arDictParam, $oDb, $sys;
-	if (isset($arDictParam['tablename']))
-	{
-		$sql = 'SELECT count(*) as n FROM `' . $arDictParam['tablename'].'`
-				WHERE is_active != 3 AND date_created <= ' . $sys['time_now_gmt_unix'];
-		$arSql = $oDb->sqlExec($sql);
-	}
-	return isset($arSql[0]['n']) ? $arSql[0]['n'] : 0;
+    $ar_stats = gw_sys_dict_get_stats();
+
+    return $ar_stats['int_terms_total'];
 }
-/* Count bytes */
-function gw_sys_dict_count_kb()
+
+/**
+ * Count total bytes for all terms.
+ *
+ * @return int
+ */
+function gw_sys_dict_count_bytes()
 {
-	global $arDictParam, $oDb;
-	if (isset($arDictParam['tablename']))
-	{
-		$sql = 'SELECT sum(int_bytes) AS bytes FROM `' . $arDictParam['tablename'].'`';
-		$arSql = $oDb->sqlExec($sql);
-		return isset($arSql[0]['bytes']) ? $arSql[0]['bytes'] : 0;
-	}
-	return 0;
+    $ar_stats = gw_sys_dict_get_stats();
+
+    return $ar_stats['int_bytes'];
 }
-/* CHECK & OPTIMIZE table */
+
+/**
+ * Update cached dictionary counters.
+ *
+ * @return void
+ */
+function gw_sys_dict_update()
+{
+    global $arDictParam, $oDb;
+
+    $dict_id = isset($arDictParam['id']) ? (int)$arDictParam['id'] : 0;
+    if ($dict_id <= 0) {
+        return;
+    }
+
+    $q_dict = gw_sys_dict_get_stats();
+
+    $arDictParam['int_terms'] = $q_dict['int_terms'];
+    $arDictParam['int_terms_total'] = $q_dict['int_terms_total'];
+    $arDictParam['int_bytes'] = $q_dict['int_bytes'];
+
+    $sql = gw_sql_update(
+        $q_dict,
+        TBL_DICT,
+        '`id` = ' . $dict_id
+    );
+
+    $oDb->sqlExec($sql);
+}
+
+/**
+ * Reset cached dictionary counters.
+ *
+ * @return void
+ */
+function gw_sys_dict_reset_stats_cache()
+{
+    gw_sys_dict_get_stats(true);
+}
+
+/**
+ * Check and optimize a dictionary table.
+ *
+ * @param string $table Table name.
+ * @return void
+ */
 function gw_sys_dict_check($table)
 {
-	global $oDb;
-	$oDb->sqlExec('CHECK TABLE `' . $table.'`');
-	$oDb->sqlExec('OPTIMIZE TABLE `' . $table.'`');
+    global $oDb;
+
+    $table = (string)$table;
+    if ($table === '') {
+        return;
+    }
+
+    if (!preg_match('/^[a-zA-Z0-9_]+$/', $table)) {
+        return;
+    }
+
+    $table = '`' . str_replace('`', '``', $table) . '`';
+
+    $oDb->sqlExec('CHECK TABLE ' . $table);
+    $oDb->sqlExec('OPTIMIZE TABLE ' . $table);
 }
 
 
@@ -230,27 +309,24 @@ function gw_sys_dict_check($table)
 function gw_admin_menu($a, $t)
 {
 	global $arDictParam, $sys, $gw_this, $ar_theme, $arPageNumbers;
-	global $oL, $oSess, $oHtml, $oDb, $oSqlQ;
-	/* */
-	$ar_perms = $oSess->ar_permissions;
-	foreach ($ar_perms AS $permission => $is)
-	{
-		if (!$is)
-		{
-			unset($ar_perms[$permission]);
-		}
-	}
+	global $oL, $oSess, $oHtml, $oDb, $oSqlQ, $oUrlBuilder;
+	/* Read globals */
+    $ar_perms = $oSess->ar_permissions;
+    foreach ($ar_perms as $permission => $is) {
+        if (!$is) {
+            unset($ar_perms[$permission]);
+        }
+    }
 	/* */
 	$ar_sql_like = 'cmm.req_permission_map LIKE "%:'.implode(':%" OR cmm.req_permission_map LIKE "%:', array_keys($ar_perms) ).':%"';
 	/* */
 	$arSql = $oDb->sqlRun($oSqlQ->getQ('get-components-actions', $ar_sql_like, '1=1', ' AND cm.is_active = "1" '));
 	$arMenu = array();
 	/* Re-arrange array */
-	for (; list($k1, $arV) = each($arSql);)
-	{
-		$arMenu[$arV['id_component_name']][] = $arV;
-		unset($arSql[$k1]);
-	}
+    foreach ($arSql as $k1 => $arV) {
+        $arMenu[$arV['id_component_name']][] = $arV;
+        unset($arSql[$k1]);
+    }
 	$gw_this['ar_actions_list'] = array();
 	/* Javascript collapsible objects */
 	$ar_js_ids = array();
@@ -263,57 +339,58 @@ function gw_admin_menu($a, $t)
 	/* */
 	$str = '<table id="admmenu" class="admmenu" cellspacing="0" cellpadding="1" border="0" width="100%">';
 	$str .= '<tbody>';
-	for (; list($id_component, $arV) = each($arMenu);)
+
+    foreach ($arMenu as $id_component => $arV)
 	{
 		/* for each component */
-		$oL->getCustom('addon_'.$id_component, $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'], 'join');
+        $oL->getCustom('addon_' . $id_component, $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc'], 'join');
 		/* background color */
 		$int_menu_el % 2 ? ($bgcolor = $ar_theme['color_2']) : ($bgcolor = $ar_theme['color_1']);
 
 		$ar_js_ids[$int_menu_el] = str_replace('_', '-', $id_component);
 
+        // Context action list
 		$gw_this['ar_actions_list'][$id_component] = array();
 
-		$str .= CRLF.'<tr>';
+		$str .= PHP_EOL.'<tr>';
 		$str .= '<td onclick="return toggle_collapse(\''.$ar_js_ids[$int_menu_el].'\')" class="admcomponents" style="text-align:' . $sys['css_align_left'] . '">';
 		$str .= '<img id="ci-'.$ar_js_ids[$int_menu_el].'" src="'.$sys['path_img'].'/collapse_on.png" alt="" width="9" height="21" />';
 		$str .= $oL->m($arV[0]['cname']);
 		$str .= '</td>';
 		$str .= '</tr><tr><td id="co-'.$ar_js_ids[$int_menu_el].'" class="actions-primary" style="text-align:' . $sys['css_align_left'] . '">';
-#		$str .= '<b>'.implode('</b> <b>', $arStr).'</b>';
+
 		/* for each component action */
-		for (; list($k2, $arV2) = each($arV);)
-		{
-			/* Include links to actions for a primary menu */
-			if ($arV2['is_in_menu'] == 1)
-			{
-				$str .= ' '.$oHtml->a( $sys['page_admin'] . '?' .
-							GW_TARGET . '=' . $id_component . '&' .
-							GW_ACTION . '=' . $arV2['aname_sys'],
-							'<span>'.$arV2['icon'].'</span>&#160;'. $oL->m($arV2['aname']),
-							 $oL->m($arV2['aname'])
-						);
-			}
-			/* Include links to actions for a secondary menu */
-			/* Do not include links to actions with is_in_menu = 0 */
-			if ($arV2['is_in_menu'] != 0)
-			{
-				$and_tid = '';
-				if ( $gw_this['vars']['tid'] && ($gw_this['vars'][GW_TARGET] == $id_component) )
-				{
-					$and_tid = '&tid='.$gw_this['vars']['tid'];
-				}
-				$gw_this['ar_actions_list'][$id_component][$arV2['aname_sys']] = 
-					$oHtml->a($sys['page_admin'] . '?'.GW_ACTION.'='.$arV2['aname_sys'].'&'.GW_TARGET.'='.$arV2['id_component_name'].$and_tid, $oL->m($arV2['aname']), $oL->m($arV2['cname']).': '.$oL->m($arV2['aname']) );
-			}
-		}
-		$str .= '</td></tr>';
-		$int_menu_el++;
-	}
+        foreach ($arV as $k2 => $arV2) {
+            /* Include links to actions for a primary menu */
+            if ($arV2['is_in_menu'] == 1) {
+                // Build link with an action name `aname`
+                $hrefInMenu = $oUrlBuilder->build_admin_url($arV2['aname_sys'], $id_component);
+                $str .= ' ' . $oHtml->a(
+                        $hrefInMenu,
+                        '<span>' . $arV2['icon'] . '</span>&#160;' . $oL->m($arV2['aname']),
+                        $oL->m($arV2['aname'])
+                    );
+            }
+            /* Include links to actions for a secondary menu */
+            /* Do not include links to actions with is_in_menu = 0 */
+            if ($arV2['is_in_menu'] != 0) {
+                $arUrlParams = [];
+                if ($gw_this['vars'][GW_TARGET_ID] && $gw_this['vars'][GW_TARGET] == $id_component) {
+                    $arUrlParams = [GW_TARGET_ID => $gw_this['vars'][GW_TARGET]];
+                }
+                $hrefInMenu = $oUrlBuilder->build_admin_url($arV2['aname_sys'], $arV2['id_component_name'], $arUrlParams);
+                $gw_this['ar_actions_list'][$id_component][$arV2['aname_sys']] = $oHtml->a(
+                    $hrefInMenu,
+                    $oL->m($arV2['aname']),
+                    $oL->m($arV2['cname']) . ': ' . $oL->m($arV2['aname'])
+                );
+            }
+        }
+        $str .= '</td></tr>';
+        $int_menu_el++;
+    }
 	$str .= '</tbody></table>';
 	
-#prn_r( $gw_this['ar_actions_list'] );
-#prn_r( sizeof($oL->lang) );
 	/* Restore path to localizaion files */
 	$oL->setHomeDir($sys['path_locale']);
 	/* Javascript */
@@ -325,8 +402,20 @@ function gw_admin_menu($a, $t)
 	return $str;
 }
 
+/**
+ * Outputs all database queries in readable format
+ *
+ * @param array $arQuery
+ * @return string debug information
+ * @access private
+ * @see htmlspecialchars2()
+ */
+function htmlspecialchars3($arQuery) {
+    $arQuery = array_map('htmlspecialchars_ltgt', $arQuery);
+    $arQuery = array_map('gw_highlight_sql', $arQuery);
 
-
+    return '<ul class="gwsql"><li>' . implode(';</li><li>', $arQuery) . ';</li></ul>';
+}
 
 /**
  * Post query to database
@@ -339,85 +428,73 @@ function gw_admin_menu($a, $t)
  */
 function postQuery($arQuery, $url = '', $isDebug = 0, $isPause = 1, $lock = '')
 {
-	global $oDb, $oSqlQ, $sys, $gw_this, $oSess, $oHtml;
+    global $oDb, $oSqlQ, $sys, $gw_this, $oSess, $oHtml;
 
-	$isPostError = true;
-	$str_status = isset($GLOBALS['oL']) ? $GLOBALS['oL']->m('2_success') : 'ok';
-	$str_continue = isset($GLOBALS['oL']) ? $GLOBALS['oL']->m('2_continue') : 'Continue';
-	/**
-	 * Outputs all database queries in readable format
-	 * @param    array   $arQuery
-	 * @return   string  debug information
-	 * @access   private
-	 * @see  htmlspecialchars2()
-	 */
-	function _gw_showhtml($arQuery)
-	{
-		$arQuery = array_map("htmlspecialchars_ltgt", $arQuery);
-		$arQuery = array_map("gw_highlight_sql", $arQuery);
-		return '<ul class="gwsql"><li>' . implode(';</li><li>', $arQuery). ';</li></ul>';
-	}
-	$url_to = ($url == '') ? $sys['page_admin'] : $sys['page_admin'] . '?' . $url;
-	if ($isDebug)
-	{
-		return _gw_showhtml($arQuery). '<p>' . $oHtml->a($url_to, $str_continue) . ' <span id="countdown"></span></p>';
-	}
-	## ----------------------------------------------------
-	## Insert into database
-	if ($lock != '')
-	{
-		sqlLock($lock);
-	}
-	$cntQ = sizeof($arQuery);
-	for ($i=0; $i < $cntQ; $i++)
-	{
-		if ($oDb->sqlExec($arQuery[$i])){ $isPostError = false; }
-		if ($isPostError)
-		{
-			$isPostError = preg_match("/^SELECT/", $arQuery[$i]) ? true : false;
-		}
-	}
-	if ($lock != '')
-	{
-		sqlUnlock();
-	}
-	##
-	## ----------------------------------------------------
-	// 12 jan 2003, No data
-	if ($cntQ == 0)
-	{
-		$isPostError = 0;
-	}
-	// Return status messages or redirect ofter post
-	if ($isPostError)
-	{
-		return '<span class="xt" class="red">ERROR:</span>' . $cntQ . htmlspecialchars3($arQuery);
-	}
-	/* Try to update dictionary settings */
-	global $arDictParam, $arPost;
-	if ( isset($arDictParam) && is_array($arPost) )
-	{
-		gw_sys_dict_update();
-	}
-	/* 12 June 2008 */
-	/* Recount the number of dictionaries in each topic */
-	if ($gw_this['vars'][GW_TARGET] == GW_T_TOPICS || $gw_this['vars'][GW_TARGET] == GW_T_DICTS)
-	{
-		gw_topic_recout();
-	}
-	/* */
-	if ($isPause)
-	{
-		global $strR;
-		$strR .= '<div class="center"><p class="actions-third xw">' .$oHtml->a($url_to, $str_continue.' <span id="countdown"></span>'). ' </p></div>';
-		return;
-	}
-	else
-	{
-		$oSess->user_close();
-		gwtk_header(append_url($url_to), $sys['is_delay_redirect']);
-	}
-	return true;
+    $isPostError = true;
+    $strContinue = isset($GLOBALS['oL']) ? $GLOBALS['oL']->m('2_continue') : 'Continue';
+    $urlTo = ($url == '') ? $sys['page_admin'] : $url;
+
+    if ($isDebug) {
+        return htmlspecialchars3($arQuery) . '<p>' . $oHtml->a($urlTo, $strContinue) . ' <span id="countdown"></span></p>';
+    }
+
+    ## ----------------------------------------------------
+    ## Insert into database
+    if (!empty($arQuery)) {
+        foreach ($arQuery as $query) {
+            $isSelect = (stripos(ltrim($query), 'SELECT') === 0);
+
+            if ($oDb->sqlExec($query)) {
+                $isPostError = false;
+                continue;
+            }
+
+            if ($isSelect) {
+                continue;
+            }
+
+
+            return '<span class="xt red">DB ERROR:</span>' . htmlspecialchars3($arQuery);
+        }
+    } else {
+        $isPostError = false;
+    }
+    ##
+    ## ----------------------------------------------------
+
+    // Return status messages or redirect ofter post
+    if ($isPostError) {
+        return '<span class="xt red">DB ERROR:</span>' . $countQuery . htmlspecialchars3($arQuery);
+    }
+
+    /* Try to update dictionary settings */
+    global $arDictParam, $arPost;
+    if (isset($arDictParam) && is_array($arPost)) {
+        gw_sys_dict_update();
+    }
+
+    /* 12 June 2008 */
+    /* Recount the number of dictionaries in each topic */
+    if (
+        $gw_this['vars'][GW_TARGET] == GW_T_TOPICS
+        || $gw_this['vars'][GW_TARGET] == GW_T_DICTS
+    ) {
+        gw_topic_recount();
+    }
+
+    /* */
+    if ($isPause) {
+        global $strR;
+        $strR .= '<div class="center"><p class="actions-third xw">'
+            . $oHtml->a($urlTo, $strContinue . ' <span id="countdown"></span>')
+            . ' </p></div>';
+        return;
+    }
+
+    $oSess->user_close();
+    gwtk_header(append_url($urlTo), $sys['is_delay_redirect']);
+
+    return true;
 }
 
 
@@ -446,34 +523,19 @@ function gw_ParsePre($arParsed, $arPre)
 	if (isset($arPre['trsp'][0][0]['value']))
 	{
 		$tmp['arTrsp'] = explode(CRLF, trim($arPre['trsp'][0]['value']));
-		while(is_array($tmp['arTrsp']) && list($k, $v) = each($tmp['arTrsp']))
-		{
-			$arPre['trsp'][0][$k]['value'] = $v;
-		}
+        if (is_array($tmp['arTrsp'])) {
+            foreach ($tmp['arTrsp'] as $k => $v) {
+                $arPre['trsp'][0][$k]['value'] = $v;
+            }
+        }
 	}
-#	if (isset($arPre['see'][0][0]['value']))
-#	{
-#        $tmp['arSyn'] = explode(CRLF, trim($arPre['syn'][0]['value']));
-#        while(is_array($tmp['arSyn']) && list($k, $v) = each($tmp['arSyn']))
-#        {
-#            $tmp['synText'] = preg_replace("'(.*)\[\[(.*?)\]\]'", ' \\2', $v);
-#            $v = preg_replace("'\[\[(.*?)\]\]'", '', $v );
-#            $tmp['synText'] = str_replace($v, '', $tmp['synText']);
-#            $arPre['syn'][$k]['value'] = $v;
-#            $arPre['syn'][$k]['attributes']['text'] = $tmp['synText'];
-#        }
-#        prn_r($arParsed['syn'], __LINE__.__FILE__);
-#	}
-	#prn_r($arPre['usg']);
-	//
-	//
-	for (reset($arPre); list($target_name, $arTarget) = each($arPre);) // for each target [ abbr | trns | defn | syn | .. ]
-	{
-		// replace structures
-		$arParsed[$target_name] = $arPre[$target_name];
-	}
-	for (reset($arPre); list($target_name, $arTarget) = each($arPre);) // for each target [ abbr | trns | defn | syn | .. ]
-	{
+    // for each target [ abbr | trns | defn | syn | .. ]
+    foreach ($arPre as $target_name => $arTarget) {
+        // replace structures
+        $arParsed[$target_name] = $arTarget;
+    }
+    // for each target [ abbr | trns | defn | syn | .. ]
+    foreach ($arPre as $target_name => $arTarget) {
 		// is there any direct instructions for this tag?
 		if (isset($arControl[$target_name])) // defn | abbr | trns
 		{
@@ -601,45 +663,61 @@ function gw_ParsePre($arParsed, $arPre)
  */
 function gw_tmp_clear($prefix = 'st')
 {
-	$str = $d1 = $d2 = '';
-	$strDir = $GLOBALS['sys']['path_cache_sql'];
-	$str .= '<span class="xt">Cache...';
-	$prefix = sprintf("%05d", $prefix);
-	if (is_dir($strDir))
-	{
-		$dir = opendir($strDir);
-		while (($f = readdir($dir)) !== false)
-		{
-			if ($f != '.' && $f != '..' && is_file($strDir.'/'.$f) && (preg_match("/^".$prefix."_/", $f)))
-			{
-				$d1 .= "<li>".$GLOBALS['sys']['path_cache_sql'].'/'.$f;
-				unlink($GLOBALS['sys']['path_cache_sql'].'/'.$f);
-			}
-		}
-	}
-	$prefix = 'st';
-	if (is_dir($strDir))
-	{
-		$dir = opendir($strDir);
-		while (($f = readdir($dir)) !== false)
-		{
-			if ($f != '.' && $f != '..' && is_file($strDir.'/'.$f) && (preg_match("/^".$prefix."_/", $f)))
-			{
-				$d1 .= "<li>".$GLOBALS['sys']['path_cache_sql'].'/'.$f;
-				unlink($GLOBALS['sys']['path_cache_sql'].'/'.$f);
-			}
-		}
-	}
-	$str .= ($d1) ? ('<ul class="red">' . $d1 . '</ul>') : false;
-	$str .= ($d2) ? ('<ul class="red">' . $d2 . '</ul>') : false;
-	$str .= ' finished.</span>';
-	// No cache found
-	if (($d1 == $d2) && ($d1 == ''))
-	{
-		$str = '';
-	}
-	return $str;
+    $str = '';
+    $deleted_files = '';
+    $str_dir = $GLOBALS['sys']['path_cache_sql'];
+
+    $str .= '<span class="xt">Cache...';
+
+    $prefixes = [
+        sprintf('%05d', $prefix),
+        'st',
+    ];
+
+    $processed = [];
+
+    if (is_dir($str_dir)) {
+        foreach ($prefixes as $current_prefix) {
+            if (isset($processed[$current_prefix])) {
+                continue;
+            }
+            $processed[$current_prefix] = true;
+
+            $dir = opendir($str_dir);
+            if ($dir !== false) {
+                while (($f = readdir($dir)) !== false) {
+                    if ($f === '.' || $f === '..') {
+                        continue;
+                    }
+
+                    $full_path = $str_dir . '/' . $f;
+
+                    if (!is_file($full_path)) {
+                        continue;
+                    }
+
+                    if (!preg_match('/^' . preg_quote($current_prefix, '/') . '_/', $f)) {
+                        continue;
+                    }
+
+                    $deleted_files .= '<li>' . $full_path;
+                    unlink($full_path);
+                }
+                closedir($dir);
+            }
+        }
+    }
+
+    if ($deleted_files !== '') {
+        $str .= '<ul class="red">' . $deleted_files . '</ul>';
+    }
+
+    $str .= ' finished.</span>';
+
+    if ($deleted_files === '') {
+        $str = '';
+    }
+
+    return $str;
 }
 
-/* end of file */
-?>

@@ -126,4 +126,28 @@ fieldset.admform legend { text-align: {v:css_align_left}; }
 	color: #444; background:#FFE;
 }
 
+.badge {
+	display: inline-block;
+	padding: 0.25em 0.4em;
+	font-size: 75%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: 0.25rem;
+}
+
+.badge-primary {
+	background-color: #47c0c7;
+}
+.badge-secondary {
+	background-color: #738b8c;
+}
+
+
+
 @media print { .non-print { display:none; } }
+
+

@@ -263,7 +263,7 @@ else
 		}
 		$cntFiles = ceil($arPost['int_terms'] / $int_split);
 
-		$fileS = getExportFilename(
+		$fileS = gw_get_export_filename(
 					$this->sys['path_export'] . '/'.
 					@date("Y-m[M]-d", $this->sys['time_now_gmt_unix']).
 					'_id'.$this->gw_this['vars']['id'].'_'.$arDictParam['tablename'],
@@ -404,7 +404,7 @@ else
 
 				/* 21 Aug 2007: Export `user to term` mapping */
 				$strQ = '';
-				$filename = sprintf(getExportFilename(
+				$filename = sprintf(gw_get_export_filename(
 						$sys['path_export'] . '/' . @date("Y-m[M]-d", $this->sys['time_now_gmt_unix']).
 						'_id'.$this->gw_this['vars']['id'].'_'.$arDictParam['tablename'].'_map_user_to_term',
 						$cntFiles,
@@ -445,7 +445,7 @@ else
 			for ($i = 0; $i < $cntFiles; $i++)
 			{
 				/* filename for wordmap */
-				$fileS = getExportFilename(
+				$fileS = gw_get_export_filename(
 					$sys['path_export'] . '/' . @date("Y-m[M]-d", $this->sys['time_now_gmt_unix']).
 					'_id'.$this->gw_this['vars']['id'].'_'.$arDictParam['tablename'] . '_'.TBL_WORDMAP,
 					$cntFiles, FORMAT_EXT
@@ -498,7 +498,7 @@ else
 				$tt = new gw_timer('sql_exp');
 
 				/* File name for wordlist */
-				$fileS = getExportFilename(
+				$fileS = gw_get_export_filename(
 					$sys['path_export'] . '/' . @date("Y-m[M]-d", $this->sys['time_now_gmt_unix']).
 					'_id'.$this->gw_this['vars']['id'].'_'.$arDictParam['tablename'] . '_'.TBL_WORDLIST,
 					$cntFiles, FORMAT_EXT

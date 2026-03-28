@@ -25,7 +25,7 @@ function gw_html_contents()
 	$str = '';
 	
 	$arKeyUnused = getUnusedKeywords();
-	$arWordlist = getTableInfo( $sys['tbl_prefix'].'wordlist' );
+	$arWordlist = gw_get_table_info( $sys['tbl_prefix'].'wordlist' );
 	$intKeyUnused = sizeof($arKeyUnused);
 	$arStatus[] = array($oL->m('1010'), sprintf('<strong>%s</strong>', number_format($arWordlist['Rows'], 0, '', ' ')));
 	$arStatus[] = array($oL->m('1011'), sprintf('<strong class="red">%s</strong>', number_format($intKeyUnused, 0, '', ' ')));

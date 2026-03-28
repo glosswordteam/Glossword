@@ -1,8 +1,9 @@
 <?php
+
 /**
- *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -10,6 +11,9 @@
  *  (at your option) any later version.
  *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+if (!defined('IN_GW')) {
+    die('<!-- Not in App  -->');
+}
 // --------------------------------------------------------
 /**
  * Database class.
@@ -86,7 +90,7 @@ class gwtkDataBase
 		if ($db_password != '') $this->password = $db_password;
 		if ($db_name != '') $this->database = $db_name;
 		/* */
-		if (!$this->link_id)
+		if (!$this->conn_id)
 		{
 			$this->database = trim(str_replace('`', '', $this->database));
 			if (defined("GW_DEBUG_SQL_TIME") && defined("IS_CLASS_TIMER") && GW_DEBUG_SQL_TIME == 1)
@@ -456,7 +460,7 @@ class gwtkDataBase
 		{
 			global $oCh;
 			$oCh->setKey($q, $cache_prefix);
-			$oCh->save($ar, 'array');
+			$oCh->save($ar);
 		}
 		//
 		if ( empty($ar) ) { $ar = $empty_value; }
@@ -473,7 +477,7 @@ class gwtkDataBase
 		{
 			global $oCh;
 			$oCh->setKey($q, $cache_prefix);
-			$is_cache = $oCh->checkout();
+			$is_cache = $oCh->isValid();
 		}
 		return $is_cache;
 	}

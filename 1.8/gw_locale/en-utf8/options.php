@@ -218,6 +218,7 @@ $lang['allow_letters'] = 'Show alphabetic toolbar (A-Z)';
 $lang['sysname'] = 'Database table name';
 $lang['options'] = 'Options';
 $lang['ed_xref'] = 'place link to a term';
+$lang['not_published'] = 'Inactive';
 /**
  * The end of translation file.
  */

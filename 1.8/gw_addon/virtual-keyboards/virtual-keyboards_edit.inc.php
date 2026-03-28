@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Glossword - glossary compiler (http://glossword.biz/)
  * © 2008-2026 Glossword.biz team <team at glossword dot biz>
@@ -16,14 +17,19 @@ if (!defined('IN_GW')) {
 
 /* Included from $oAddonAdm->alpha(); */
 
+$isPause = 0;
+$isDebugQ = 0;
+
 /* Page ID is not defined */
-if (!$this->gw_this['vars']['tid']) {
+if (!$this->gw_this['vars'][GW_TARGET_ID]) {
     /* Change heading */
     $this->sys['id_current_status'] = $this->oL->m($this->ar_component['cname']) . ': ' . $this->oL->m('3_browse');
     $this->gw_this['vars'][GW_ACTION] = 'browse';
-    $this->sys['path_component_action'] = $this->sys['path_addon'] . '/'
-        . $this->gw_this['vars'][GW_TARGET] . '/'
-        . $this->gw_this['vars'][GW_TARGET] . '_' . $this->gw_this['vars'][GW_ACTION] . '.inc.php';
+    $this->sys['path_component_action'] = $this->sys['path_addon']
+        . '/' . $this->gw_this['vars'][GW_TARGET]
+        . '/' . $this->gw_this['vars'][GW_TARGET]
+        . '_' . $this->gw_this['vars'][GW_ACTION]
+        . '.inc.php';
 
     include_once($this->sys['path_component_action']);
     return;
@@ -34,56 +40,53 @@ $this->str .= $this->_get_nav();
 
 /* Get profile settings */
 $arSql = $this->oDb->sqlExec(
-    $this->oSqlQ->getQ('get-vkbd-profile', $this->gw_this['vars']['tid']),
+    $this->oSqlQ->getQ('get-vkbd-profile', $this->gw_this['vars'][GW_TARGET_ID]),
     $this->component
 );
-$arSql = isset($arSql[0]) ? $arSql[0] : array();
+$arSql = isset($arSql[0]) ? $arSql[0] : [];
 
-$ar_query = array();
-//$this->sys['isDebugQ'] = 1;
+$ar_query = [];
 
 /* Switching On/off */
 if ($this->gw_this['vars']['mode'] == 'off') {
     $ar_query[] = 'UPDATE `' . $this->sys['tbl_prefix'] . 'virtual_keyboard`
                     SET `is_index_page` = "0"
-                    WHERE `id_profile` = "' . $this->gw_this['vars']['tid'] . '"';
+                    WHERE `id_profile` = "' . $this->gw_this['vars'][GW_TARGET_ID] . '"';
 
     $this->str .= postQuery(
         $ar_query,
-        GW_ACTION . '=' . GW_A_BROWSE . '&' . GW_TARGET . '=' . $this->gw_this['vars'][GW_TARGET],
-        $this->sys['isDebugQ'],
-        0
+        $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->component, ['saved' => 1]),
+        $isDebugQ,
+        $isPause
     );
     return;
 } elseif ($this->gw_this['vars']['mode'] == 'on') {
     /* Only one virtual keyboard for the index page */
     $ar_query[] = gw_sql_update(
-        array('is_index_page' => '0'),
+        ['is_index_page' => '0'],
         $this->sys['tbl_prefix'] . 'virtual_keyboard',
-        'is_index_page = \'1\' AND id_profile != \'' . $this->gw_this['vars']['tid'] . '\''
+        'is_index_page = \'1\' AND id_profile != \'' . $this->gw_this['vars'][GW_TARGET_ID] . '\''
     );
-
     $ar_query[] = 'UPDATE `' . $this->sys['tbl_prefix'] . 'virtual_keyboard`
                     SET `is_index_page` = "1"
-                    WHERE `id_profile` = "' . $this->gw_this['vars']['tid'] . '"';
+                    WHERE `id_profile` = "' . $this->gw_this['vars'][GW_TARGET_ID] . '"';
 
     $this->str .= postQuery(
         $ar_query,
-        GW_ACTION . '=' . GW_A_BROWSE . '&' . GW_TARGET . '=' . $this->gw_this['vars'][GW_TARGET],
-        $this->sys['isDebugQ'],
-        0
+        $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->component, ['saved' => 1]),
+        $isDebugQ,
+        $isPause
     );
     return;
 }
 
-$ar_req_fields = array('vkbd_name', 'vkbd_letters');
+$ar_req_fields = ['vkbd_name', 'vkbd_letters'];
 
 if ($this->gw_this['vars']['post'] == '') {
     /* Removing */
     if ($this->gw_this['vars']['remove']) {
         /* Change heading */
-        $this->sys['id_current_status'] = $this->oL->m($this->ar_component['cname'])
-            . ': ' . $this->oL->m('3_remove');
+        $this->sys['id_current_status'] = $this->oL->m($this->ar_component['cname']) . ': ' . $this->oL->m('3_remove');
 
         $msg = $arSql['vkbd_name'];
 
@@ -95,13 +98,11 @@ if ($this->gw_this['vars']['post'] == '') {
         $oFormConfirm->formbordercolor = $this->ar_theme['color_4'];
         $oFormConfirm->formbordercolorL = $this->ar_theme['color_1'];
         $oFormConfirm->setQuestion(
-            '<p class="xr"><strong class="red">' . $this->oL->m('9_remove') . '</strong></p>'
-            . '<p class="xt"><span class="gray">' . $this->oL->m('3_remove')
-            . ': </span>' . $msg . '</p>'
+            '<p class="xr"><strong class="red">' . $this->oL->m('9_remove') . '</strong></p>' . '<p class="xt"><span class="gray">' . $this->oL->m('3_remove') . ': </span>' . $msg . '</p>'
         );
         $oFormConfirm->tAlign = 'center';
         $oFormConfirm->formwidth = '400';
-        $oFormConfirm->setField('hidden', 'tid', $this->gw_this['vars']['tid']);
+        $oFormConfirm->setField('hidden', GW_TARGET_ID, $this->gw_this['vars']['tid']);
         $oFormConfirm->setField('hidden', GW_ACTION, GW_A_REMOVE);
         $oFormConfirm->setField('hidden', GW_TARGET, $this->gw_this['vars'][GW_TARGET]);
         $oFormConfirm->setField('hidden', $this->oSess->sid, $this->oSess->id_sess);
@@ -117,12 +118,10 @@ if ($this->gw_this['vars']['post'] == '') {
     $arPost['vkbd_letters'] = str_replace('  ', ' ', $arPost['vkbd_letters']);
 
     /* Fix on/off options */
-    $arIsV = array('is_active', 'is_index_page');
+    $arIsV = ['is_active', 'is_index_page'];
     foreach ($arIsV as $v) {
         $arPost[$v] = isset($arPost[$v]) ? $arPost[$v] : 0;
     }
-
-    #$this->sys['isDebugQ'] = 1;
 
     /* Checking posted vars */
     $ar_broken = validatePostWalk($arPost, $ar_req_fields);
@@ -133,26 +132,23 @@ if ($this->gw_this['vars']['post'] == '') {
         /* Only one virtual keyboard for the index page */
         if ($arPost['is_index_page']) {
             $ar_query[] = gw_sql_update(
-                array('is_index_page' => '0'),
+                ['is_index_page' => '0'],
                 $this->sys['tbl_prefix'] . 'virtual_keyboard',
-                'is_index_page = \'1\' AND id_profile != \'' . $this->gw_this['vars']['tid'] . '\''
+                'is_index_page = \'1\' AND id_profile != \'' . $this->gw_this['vars'][GW_TARGET_ID] . '\''
             );
         }
 
         $ar_query[] = gw_sql_update(
             $q1,
             $this->sys['tbl_prefix'] . 'virtual_keyboard',
-            'id_profile = "' . $this->gw_this['vars']['tid'] . '"'
+            'id_profile = "' . $this->gw_this['vars'][GW_TARGET_ID] . '"'
         );
 
         $this->str .= postQuery(
             $ar_query,
-            GW_ACTION . '=' . GW_A_BROWSE
-            . '&' . GW_TARGET . '=' . $this->component
-            . '&tid=' . $this->gw_this['vars']['tid']
-            . '&r=' . time(),
-            $this->sys['isDebugQ'],
-            0
+            $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->component, [GW_TARGET_ID => $this->gw_this['vars'][GW_TARGET_ID], 'r' => time()]),
+            $isDebugQ,
+            $isPause
         );
     } else {
         $this->oTpl->addVal('v:note_afterpost', gw_get_note_afterpost($this->oL->m(1370)));

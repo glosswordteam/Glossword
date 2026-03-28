@@ -279,7 +279,7 @@ if ($this->gw_this['vars']['w1'] == 'viewhistory')
 			/* */
 			$arV['date_modified'] += ($this->oSess->user_get_time_seconds());
 			$this->str .= '<td class="actions-third">' . $str_edit . '</td>';
-			$this->str .= '<td class="'.$class_color.'termpreview">' . $arV['term'] . '<div class="xq">'. htmlspecialchars($this->oFunc->mb_substr($arV['defn'], 0, 255, $this->sys['internal_encoding'])) . '</div></td>';
+			$this->str .= '<td class="'.$class_color.'termpreview">' . $arV['term'] . '<div class="xq">'. htmlspecialchars(mb_substr($arV['defn'], 0, 255, $this->sys['internal_encoding'])) . '</div></td>';
 			$this->str .= '<td class="xq" style="white-space:nowrap">';
 			$this->str .= date_extract_int($arV['date_modified'], '%H:%i:%s ') . (date_extract_int($arV['date_modified'], '%d') / 1) . date_extract_int($arV['date_modified'], '&#160;%F&#160;%Y');
 			$this->oHtml->setTag('a', 'class', 'ext');
@@ -322,7 +322,7 @@ elseif ($this->gw_this['vars']['w1'] == 'rollback')
 	unset($arH['keywords'], $arH['id_user'], $arH['id_term'], $arH['id_dict'], $arH['id']);
 	$arQ[] = gw_sql_update($arH, $arDictParam['tablename'], 'id = '. $arTermParam['tid']);
 	/* Replace search keywords */
-	gwAddNewKeywords($id_dict, $arTermParam['tid'], $arKeywords, $arTermParam['tid'], 1, $arTermParam['date_created']);
+    gw_add_keywords($id_dict, $arTermParam['tid'], $arKeywords, $arTermParam['tid'], 1, $arTermParam['date_created']);
 	/* Redirect to... */
 	$str_url = GW_ACTION.'='.GW_A_EDIT.'&w1=viewhistory&id='.$id_dict.'&amp;'.GW_TARGET.'='.GW_T_TERMS.'&tid='.$arTermParam['tid'];
 	$this->str .= postQuery($arQ, $str_url, $this->sys['isDebugQ'], 0);
@@ -398,7 +398,7 @@ if ($this->gw_this['vars']['post'] == '')
 		if ($arTermParam['defn'] != '')
 		{
 			$str_question .= '<p class="xt"><span class="gray">'. $this->oL->m('defn') . ':</span><br />';
-			$str_question .= $this->oFunc->mb_substr(strip_tags(str_replace('><', '> <', $arTermParam['defn'])), 0, $this->sys['int_max_char_defn']). '&#8230;</p>';
+			$str_question .= mb_substr(strip_tags(str_replace('><', '> <', $arTermParam['defn'])), 0, $this->sys['int_max_char_defn']). '&#8230;</p>';
 		}
 		/* */
 		$tmp['after_post'] = $this->oSess->user_get('after_post_term');

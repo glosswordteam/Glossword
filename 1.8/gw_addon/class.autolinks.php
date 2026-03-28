@@ -1,20 +1,23 @@
 <?php
+
+/**
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ */
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
+}
+
 /**
  * Autolinks for Glossword
- * © 2004 Dmitry N. Shilnikov <dev at glossword dot info>
- * $Id: class.autolinks.php,v 1.5 2006/10/06 12:06:09 yrtimd Exp $
- * http://glossword.info/dev/
- * 
- * TODO:
- * 		Change parsing method for large lists
- * 		Add special sytnax
- * 			word1 = :google:     => <a href="google.com/q=word1">word1</a>
- * 			word2 = :glossword:  => <a href="glossword.info/q=word2">word2</a>
- * 			word3 = :this:       => <a href="this_domain.tld/q=word3">word3</a>
  */
-	$tmp['mtime'] = explode(' ', microtime());
-	$tmp['start_time'] = (float)$tmp['mtime'][1] + (float)$tmp['mtime'][0];
-
 class gw_autolinks
 {
 	var $arLinks = array();

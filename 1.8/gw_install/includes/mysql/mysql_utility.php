@@ -250,5 +250,5 @@ class CI_DB_mysql_utility extends CI_DB_utility {
 
 }
 
-/* End of file mysql_utility.php */
-/* Location: ./system/database/drivers/mysql/mysql_utility.php */
+/* End of file mysqli_utility.php */
+/* Location: ./system/database/drivers/mysql/mysqli_utility.php */

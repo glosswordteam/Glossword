@@ -95,7 +95,7 @@ function gw_dict_merge($vars)
 	global $gw_this, $oDb, $oL, $sys;
 	$str = '<div class="xu">';
 	$arDictParam_target = getDictParam($vars['id_target']);
-	$id_term = $oDb->MaxId($arDictParam_target['tablename'], 'id');
+	$id_term = $oDb->NextId($arDictParam_target['tablename'], 'id');
 	$int_terms = 0;
 	for (reset($vars['id_source']); list($k, $id_dict) = each($vars['id_source']);)
 	{

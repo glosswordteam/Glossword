@@ -91,7 +91,7 @@ if (isset($ar[0]['ch'])) // Root branch ->
 		} // end of subtopics
 		// now count the number of dictionairies in each topic
 		$arId = array();
-		$arTreeId = ctlgGetTree($ar, $k);
+		$arTreeId = gw_ctlg_get_tree($ar, $k);
 		$arTreeId[$k] = $k;
 		while (is_array($arTreeId) && list($kn, $vn) = each($arTreeId))
 		{
@@ -134,7 +134,7 @@ $arAlltopics = array();
 $arId = array();
 if ($this->gw_this['vars']['w1'] )
 {
-	$arAlltopics = ctlgGetTree( $ar, $this->gw_this['vars']['w1'] );
+	$arAlltopics = gw_ctlg_get_tree( $ar, $this->gw_this['vars']['w1'] );
 }
 while (is_array($arAlltopics) && list($kp, $tp) = each ($arAlltopics))
 {
@@ -242,7 +242,7 @@ if ($this->gw_this['vars']['tid'] == '')
 	$this->str .= '<br />';
 	$this->str .= gw_html_block_small(
 			$this->oL->m('r_dict_updated'),
-			getTop10('DICT_UPDATED', $this->sys['max_dict_top'], 1),
+        gw_get_top10('DICT_UPDATED', $this->sys['max_dict_top'], 1),
 			0, 0);
 }
 

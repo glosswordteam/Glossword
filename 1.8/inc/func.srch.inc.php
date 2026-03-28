@@ -116,7 +116,7 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 			$arDictParam['min_srch_length'] = 1;
 		}
 		/* Check for empty queries */
-		if ( $oFunc->mb_strlen( str_replace( '*', '', $q ), $sys['internal_encoding'] ) < $arDictParam['min_srch_length'] )
+		if ( mb_strlen( str_replace( '*', '', $q ), $sys['internal_encoding'] ) < $arDictParam['min_srch_length'] )
 		{
 			$strA[0] = $oL->m( 'error' );
 			return $strA;
@@ -305,7 +305,7 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 						}
 						/* 18 July 2007: Enable auto-asterisks for Chinese characters */
 						/* 06 May 2008: Enable auto-asterisks for Japanese and Korean characters */
-						if ( $oFunc->mb_strlen( $v, $sys['internal_encoding'] ) == 1 && function_exists( 'mb_encode_numericentity' ) )
+						if ( mb_strlen( $v, $sys['internal_encoding'] ) == 1 && function_exists( 'mb_encode_numericentity' ) )
 						{
 							$v_numeric = $v;
 							/* Hiragana, Katakana, Bopomofo */
@@ -453,7 +453,7 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 					}
 					/* 18 July 2007: Enable auto-asterisks for Chinese characters */
 					/* 06 May 2008: Enable auto-asterisks for Japanese and Korean characters */
-					if ( $oFunc->mb_strlen( $v, $sys['internal_encoding'] ) == 1 && function_exists( 'mb_encode_numericentity' ) )
+					if ( mb_strlen( $v, $sys['internal_encoding'] ) == 1 && function_exists( 'mb_encode_numericentity' ) )
 					{
 						$v_numeric = $v;
 						/* Hiragana, Katakana, Bopomofo */
@@ -853,7 +853,7 @@ function gw_search_results ( $id_srch, $p, $id_dict = 0 )
 		$oTpl->tmp['d']['search_item'][$k1]['v:id_term'] = $v1['t_id'];
 		if ( GW_IS_BROWSE_ADMIN )
 		{
-			$oTpl->tmp['d']['search_item'][$k1]['v:status'] = $v1['is_active'] ? '' : '<span class="red">' . $oL->m( 'is_0' ) . '</span>';
+			$oTpl->tmp['d']['search_item'][$k1]['v:status'] = $v1['is_active'] ? '' : '<span class="badge badge-secondary">' . $oL->m( 'not_published' ) . '</span>';
 			/* Term is removed */
 			if ( $v1['is_active'] == 3 )
 			{

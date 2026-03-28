@@ -199,7 +199,7 @@ else
 		}
 
 		if (($arPost['tablename_old'] != $arPost['tablename'])
-		    && !getTableInfo($arPost['tablename']))
+		    && !gw_get_table_info($arPost['tablename']))
 		{
 			/* Database table name changed */
 			$q['tablename'] = $arPost['tablename'];
@@ -212,7 +212,7 @@ else
 		$q['date_created'] -= $this->oSess->user_get_time_seconds();
 		$q['int_terms'] = gw_sys_dict_count_terms();
 		$q['int_terms_total'] = gw_sys_dict_count_terms_total();
-		$q['int_bytes'] = gw_sys_dict_count_kb();
+		$q['int_bytes'] = gw_sys_dict_count_bytes();
 
 		/* Save dictionary settings */
 		$arQ[] = gw_sql_update($q, TBL_DICT, 'id = "'.$this->gw_this['vars']['id'].'"');

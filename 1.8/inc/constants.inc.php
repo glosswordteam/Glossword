@@ -72,6 +72,7 @@ define('GW_A_CONTENTS',   'contents');
 // Target URL parameters
 // '?index.php?a=import&t=[...]' calls file 'import_[...].at.php'
 define('GW_TARGET',       't');
+define('GW_TARGET_ID',    'tid');
 define('GW_T_TOPIC',      'topic'); /* below 1.8.7 */
 define('GW_T_TOPICS',     'topics');
 define('GW_T_DICT',       'dict'); /* below 1.8.7 */

@@ -176,10 +176,7 @@ class gw_html {
 				$url_new = $this->server_dir . '/';
 				/* depends on magic_quotes_gpc, 11 aug 2003 */
 				parse_str($param, $arQ);
-				if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc())
-				{
-					gw_stripslashes_array($arQ);
-				}
+
 				for (reset($this->mod_rewrite_rule); list($kR, $vR) = each($this->mod_rewrite_rule);)
 				{
 					if ($this->is_append_sid)

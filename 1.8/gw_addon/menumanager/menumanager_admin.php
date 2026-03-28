@@ -22,7 +22,7 @@ class gw_addon_menumanager_admin extends gw_addon
 	/* Current component name */
 	var $component;
 	/* Autoexec */
-	function gw_addon_menumanager_admin()
+	function __construct($str)
 	{
 		$this->init();
 #		$this->oL->setHomeDir($this->sys['path_locale']);

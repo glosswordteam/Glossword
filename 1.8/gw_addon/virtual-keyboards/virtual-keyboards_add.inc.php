@@ -19,11 +19,11 @@ if (!defined('IN_GW')) {
 
 $this->str .= $this->_get_nav();
 
-$ar_req_fields = array('vkbd_name', 'vkbd_letters');
+$ar_req_fields = ['vkbd_name', 'vkbd_letters'];
 
 if ($this->gw_this['vars']['post'] == '') {
     /* Profile */
-    $arPost = array();
+    $arPost = [];
     $arPost['is_active'] = 1;
     $arPost['is_index_page'] = 1;
     $arPost['vkbd_name'] = '';
@@ -34,7 +34,7 @@ if ($this->gw_this['vars']['post'] == '') {
     $arPost =& $this->gw_this['vars']['arPost'];
 
     /* Fix on/off options */
-    $arIsV = array('is_active');
+    $arIsV = ['is_active'];
 
     foreach ($arIsV as $v) {
         $arPost[$v] = isset($arPost[$v]) ? $arPost[$v] : 0;
@@ -46,11 +46,11 @@ if ($this->gw_this['vars']['post'] == '') {
 
     if (empty($ar_broken)) {
         $q1 =& $arPost;
-        $ar_query = array();
+        $ar_query = [];
         $ar_query[] = gw_sql_insert($q1, $this->sys['tbl_prefix'] . 'virtual_keyboard');
         $this->str .= postQuery(
             $ar_query,
-            GW_ACTION . '=' . GW_A_BROWSE . '&' . GW_TARGET . '=' . $this->component,
+            $this->oUrlBuilder->build_admin_url(GW_A_EDIT, $this->component),
             $this->sys['isDebugQ'],
             0
         );

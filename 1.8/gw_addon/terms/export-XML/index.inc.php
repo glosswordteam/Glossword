@@ -233,7 +233,7 @@ else
 		}
 		$cntFiles = ceil($arPost['int_terms'] / $int_split);
 
-		$fileS = getExportFilename(
+		$fileS = gw_get_export_filename(
 					$this->sys['path_export'] . '/'.
 					@date("Y-m[M]-d", $this->sys['time_now_gmt_unix']).
 					'_id'.$this->gw_this['vars']['id'].'_'.$arDictParam['tablename'],

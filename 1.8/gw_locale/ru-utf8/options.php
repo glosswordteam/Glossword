@@ -218,6 +218,7 @@ $lang['allow_letters'] = 'Показать алфавитный указател
 $lang['sysname'] = 'Имя таблицы базы данных';
 $lang['options'] = 'Опции';
 $lang['ed_xref'] = 'поставить ссылку на термин';
+$lang['not_published'] = 'Не активно';
 /**
  * The end of translation file.
  */

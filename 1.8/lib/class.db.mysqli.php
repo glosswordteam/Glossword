@@ -2,7 +2,7 @@
 
 /**
  * Glossword - glossary compiler (http://glossword.biz/)
- * © 2008-2021 Glossword.biz team <team at glossword dot biz>
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
  * © 2002-2008 Dmitry N. Shilnikov
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -196,14 +196,45 @@ if (!class_exists('gwtkDataBase')) {
 
                 return 0;
             }
+
             $this->record = mysqli_fetch_assoc($this->result_id);
             $this->row += 1;
-            $stat = is_array($this->record);
-            if (!$stat && self::IS_FREE_RESULT) {
+
+            if (is_array($this->record)) {
+                $this->record = $this->text_from_sql($this->record);
+                return 1;
+            }
+
+            if (self::IS_FREE_RESULT) {
                 $this->free_result();
             }
 
-            return $stat;
+            return 0;
+        }
+
+        /**
+         * Restores legacy SQL/LIKE-escaped value after reading from database.
+         *
+         * @param mixed $value
+         * @return mixed
+         */
+        public function text_from_sql($value)
+        {
+            if (is_array($value)) {
+                foreach ($value as $k => $v) {
+                    $value[$k] = $this->text_from_sql($v);
+                }
+                return $value;
+            }
+
+            if (!is_string($value)) {
+                return $value;
+            }
+
+            $value = str_replace('\\_', '_', $value);
+            $value = str_replace('\\%', '%', $value);
+
+            return $value;
         }
 
         /**
@@ -385,17 +416,29 @@ if (!class_exists('gwtkDataBase')) {
             return [];
         }
 
-        /* get last known maximum value */
-        public function MaxId($table_name, $field = 'id')
+        /**
+         * Returns next ID value based on MAX(field) + 1.
+         *
+         * Intended for administrative / batch operations where queries
+         * are prepared in advance and executed sequentially.
+         *
+         * WARNING:
+         * Not safe for concurrent writes.
+         *
+         * @param string $table_name Table name
+         * @param string $field      Field name (default: 'id')
+         * @return int Next ID value (MAX(field) + 1), or 1 if table is empty
+         */
+        public function NextId($table_name, $field = 'id')
         {
-            if ($table_name != '') {
-                $this->query('SELECT MAX(' . $field . ') AS n FROM `' . $table_name . '`;');
-                $arID = mysqli_fetch_assoc($this->result_id);
-
-                return ($arID['n'] + 1);
+            if ($table_name === '') {
+                return 1;
             }
 
-            return 1;
+            $this->query('SELECT MAX(' . $field . ') AS n FROM `' . $table_name . '`');
+            $arID = mysqli_fetch_assoc($this->result_id);
+
+            return (int)$arID['n'] > 0 ? ((int)$arID['n'] + 1) : 1;
         }
         // New from Glossword 2.0
 
@@ -406,28 +449,11 @@ if (!class_exists('gwtkDataBase')) {
          */
         public function sqlRun($q, $cache_prefix = '')
         {
-            return ($this->_sql_is_cached($q, $cache_prefix) ? $this->_sql_return($q, $cache_prefix) : $this->sqlExec($q, $cache_prefix, 1));
-            /* 02 feb 2006: Memory cache
-            global $gw_ar_cache_sql;
-            $qkey = sprintf("%u", crc32($q));
-            if (!isset($gw_ar_cache_sql['cnt']))
-            {
-                $gw_ar_cache_sql['cnt'] = 0;
+            if ($this->_sql_is_cached($q, $cache_prefix)) {
+                return $this->_sql_return($q, $cache_prefix);
             }
-            if (isset($gw_ar_cache_sql[$qkey]))
-            {
-                $gw_ar_cache_sql['cnt']++;
-                return unserialize($gw_ar_cache_sql[$qkey]);
-            }
-            else
-            {
-                $o = $this->_sql_is_cached($q, $cache_prefix)
-                    ? ($this->_sql_return($q, $cache_prefix))
-                    : ($this->sqlExec($q, $cache_prefix, 1));
-                $gw_ar_cache_sql[$qkey] = serialize($o);
-                return $o;
-            }
-            */
+
+            return $this->sqlExec($q, $cache_prefix, 1);
         }
 
         /**
@@ -438,45 +464,31 @@ if (!class_exists('gwtkDataBase')) {
          */
         public function sqlExec($q, $cache_prefix = '', $is_cache_def = 0)
         {
-            $ar = [];
-            // on error: Only `SELECT' query returns empty array, other returns FALSE
-            $empty_value = preg_match("/^SELECT/", $q) ? [] : false;
-            //
-            // Connect and post query
+            $is_select = $this->_isSelectQuery($q);
+
             $this->result_id = $this->query($q);
-            //
-            // on error: returned status for UPDATE, DELETE etc. (not SELECT)
-            if ($this->result_id) {
-                if (($this->affected_rows() > 0) && !$empty_value) {
-                    $empty_value = true;
-                } // on error: DELETE returns true when no affected rows
-                elseif (($this->affected_rows() == 0) && preg_match("/^(DELETE|UPDATE|DROP|CREATE|ALTER)/", $q)) {
-                    $empty_value = true;
-                }
-                // Is here any returned data row?
-                if ($this->num_rows() > 0) {
-                    while ($this->next_record()) {
-                        $ar[] = $this->record;
-                    }
-                }
-                // Fix quotes in array
-                gw_fixslash($ar, 'runtime');
-                //
-                // Put query into cache
-                if ($this->is_cache && $is_cache_def && preg_match("/^SELECT/", $q)) {
-                    global $oCh;
-                    $oCh->setKey($q, $cache_prefix);
-                    $oCh->save($ar, 'array');
-                }
-                //
-                if (empty($ar)) {
-                    $ar = $empty_value;
-                }
+
+            if (!$this->result_id) {
+                return $is_select ? array() : false;
             }
 
+            if (!$is_select) {
+                return true;
+            }
 
+            $rows = array();
 
-            return $ar;
+            while ($this->next_record()) {
+                $rows[] = $this->record;
+            }
+
+            if ($this->is_cache && $is_cache_def) {
+                global $oCh;
+                $oCh->setKey($q, $cache_prefix);
+                $oCh->save($rows);
+            }
+
+            return $rows;
         }
 
         /**
@@ -484,15 +496,18 @@ if (!class_exists('gwtkDataBase')) {
          */
         private function _sql_is_cached($q, $cache_prefix = '')
         {
-            // only SELECT can be cached
-            $is_cache = preg_match("/^SELECT/", $q) ? $this->is_cache : 0;
-            if ($is_cache) {
-                global $oCh;
-                $oCh->setKey($q, $cache_prefix);
-                $is_cache = $oCh->checkout();
+            if (!$this->is_cache) {
+                return false;
             }
 
-            return $is_cache;
+            if (!$this->_isSelectQuery($q)) {
+                return false;
+            }
+
+            global $oCh;
+            $oCh->setKey($q, $cache_prefix);
+
+            return $oCh->isValid();
         }
 
         /**
@@ -503,7 +518,7 @@ if (!class_exists('gwtkDataBase')) {
             global $oCh;
             $oCh->setKey($q, $cache_prefix);
 
-            return $oCh->load('array');
+            return $oCh->load();
         }
 
         /**
@@ -526,6 +541,16 @@ if (!class_exists('gwtkDataBase')) {
             }
 
             return ' LIMIT 0, ' . $perpage;
+        }
+
+        private function _isSelectQuery($q)
+        {
+            return (bool) preg_match('/^\s*SELECT\b/i', $q);
+        }
+
+        private function _isExecQuery($q)
+        {
+            return (bool) preg_match('/^\s*(DELETE|UPDATE|DROP|CREATE|ALTER|INSERT|REPLACE)\b/i', $q);
         }
 
     } // end of class

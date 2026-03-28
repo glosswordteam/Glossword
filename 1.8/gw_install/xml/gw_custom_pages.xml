@@ -35,42 +35,42 @@
 $oTpl->addVal( 'block:average_hits',
   gw_html_block_small(
     $oL->m('r_dict_averagehits'), 
-    getTop10('DICT_AVERAGEHITS', $sys['max_dict_top'], 1))
+    gw_get_top10('DICT_AVERAGEHITS', $sys['max_dict_top'], 1))
 );
 
 /* Newest dictionaries */
 $oTpl->addVal( 'block:dict_newest', 
   gw_html_block_small(
     $oL->m('r_dict_newest'), 
-    getTop10('DICT_NEWEST', $sys['max_dict_top'], 1))
+    gw_get_top10('DICT_NEWEST', $sys['max_dict_top'], 1))
 );
 
 /* Last updated dictionaries */
 $oTpl->addVal( 'block:dict_updated', 
   gw_html_block_small(
     $oL->m('r_dict_updated'), 
-    getTop10('DICT_UPDATED', $sys['max_dict_top'], 0))
+    gw_get_top10('DICT_UPDATED', $sys['max_dict_top'], 0))
 );
 
 /* The last search queries.*/
 $oTpl->addVal( 'block:search_last', 
   gw_html_block_small(
     $oL->m('1159'), 
-    getTop10('SEARCH_LAST', $sys['max_dict_top'], 0))
+    gw_get_top10('SEARCH_LAST', $sys['max_dict_top'], 0))
 );
 
 /* Top authors */
 $oTpl->addVal( 'block:user_top', 
   gw_html_block_small(
     $oL->m('1112'), 
-    getTop10('USER_ACTIVE', $sys['max_dict_top'], 0))
+    gw_get_top10('USER_ACTIVE', $sys['max_dict_top'], 0))
 );
 
 /* Last updated terms
 $oTpl->addVal( 'block:term_updated', 
   gw_html_block_small(
     $oL->m('r_term_updated'), 
-    getTop10('TERM_UPDATED', $sys['max_dict_top'] , 1), 
+    gw_get_top10('TERM_UPDATED', $sys['max_dict_top'] , 1),
     0, 0, $sys['css_align_left'])
 );
 */

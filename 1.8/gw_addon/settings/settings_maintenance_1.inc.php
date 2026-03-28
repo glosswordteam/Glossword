@@ -68,10 +68,6 @@ else
 		}
 		$str_mail_body .= '</xml>';
 		$str_mail_body = htmlspecialchars_ltgt($str_mail_body);
-		if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc())
-		{
-			$str_mail_body = gw_stripslashes($str_mail_body); 
-		}
 
 		$this->oL->getCustom('mail', $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc'], 'join');
 

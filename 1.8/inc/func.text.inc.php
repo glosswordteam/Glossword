@@ -266,23 +266,49 @@ function gw_bbcode_htmlspecialchars($t)
 	$t = htmlspecialchars($t, ENT_QUOTES, $sys['internal_encoding']);
 	return $t;
 }
-/* */
-function gw_bbcode_html($t)
+
+
+/**
+ * Converts BBCode-safe HTML fragments.
+ *
+ * @param string $text
+ * @return string
+ */
+function gw_bbcode_html($text)
 {
-	$regexfind[] = '/\&lt;(.+)\&gt;/esiU';
-	$t = str_replace('&amp;', '&', $t);
-	$t = str_replace('&quot;', '"', $t);
-	$t = str_replace('&039;', '\'', $t);
-	$regexreplace[] = "gw_bbcode_html_tag(gw_bbcode_htmlspecialchars('\\1'))";
-	$t = preg_replace($regexfind, $regexreplace, $t);
-#	$t = str_replace('&#', '&amp;#', $t);
-	$t = str_replace('![cdata', '![CDATA', $t);
-	$t = str_replace('!doctype', '!DOCTYPE', $t);
-	$t = str_replace("\t", '&#160;&#160;&#160;&#160;&#160;&#160;&#160;', $t);
-	$t = str_replace("\n", '<br />', $t);
-	$t = str_replace('  ', '&#160;&#160;', $t);
-	return $t;
+    $text = str_replace('&amp;', '&', $text);
+    $text = str_replace('&quot;', '"', $text);
+    $text = str_replace('&039;', '\'', $text);
+
+    $text = preg_replace_callback(
+        '/\&lt;(.+)\&gt;/isU',
+        'gw_bbcode_html_replace_tag_callback',
+        $text
+    );
+
+    // $text = str_replace('&#', '&amp;#', $text);
+    $text = str_replace('![cdata', '![CDATA', $text);
+    $text = str_replace('!doctype', '!DOCTYPE', $text);
+    $text = str_replace("\t", '&#160;&#160;&#160;&#160;&#160;&#160;&#160;', $text);
+    $text = str_replace("\n", '<br />', $text);
+    $text = str_replace('  ', '&#160;&#160;', $text);
+
+    return $text;
 }
+
+/**
+ * Callback for escaped HTML-like tags.
+ *
+ * @param array $matches
+ * @return string
+ */
+function gw_bbcode_html_replace_tag_callback(array $matches)
+{
+    return gw_bbcode_html_tag(
+        gw_bbcode_htmlspecialchars($matches[1])
+    );
+}
+
 function gw_bbcode_html_tag($t)
 {
 	$slash_s = $slash_e = '';
@@ -651,20 +677,21 @@ function kMakeUid($first = '', $maxchar = 8, $set = 0)
  */
 function array_merge_clobber($a1, $a2)
 {
-	if (!is_array($a1) || !is_array($a2)) { return false; }
-	$arNew = $a1;
-	while (list($key, $val) = each($a2))
-	{
-		if (is_array($val) && isset($arNew[$key]) && is_array($arNew[$key]))
-		{
-			$arNew[$key] = array_merge_clobber($arNew[$key], $val);
-		}
-		else
-		{
-			$arNew[$key] = $val;
-		}
-	}
-	return $arNew;
+    if (!is_array($a1) || !is_array($a2)) {
+        return false;
+    }
+
+    $arNew = $a1;
+
+    foreach ($a2 as $key => $val) {
+        if (is_array($val) && isset($arNew[$key]) && is_array($arNew[$key])) {
+            $arNew[$key] = array_merge_clobber($arNew[$key], $val);
+        } else {
+            $arNew[$key] = $val;
+        }
+    }
+
+    return $arNew;
 }
 
 
@@ -786,34 +813,34 @@ function gw_fix_tagnames($t)
  */
 function text2keywords($t, $min = 1, $max = 25, $enc = 'UTF-8')
 {
-	global $oFunc;
-	if ($min == 0){ return array(); }
-	$ar = array();
-	$t = $t . ' ';
-	/*
-		PHP 4.1.0 Unix, PHP 4.2.3 win32
-		0.000876
-	*/
-	$str_temp = ' ';
+    global $oFunc;
+    if ($min == 0) {
+        return [];
+    }
+    $ar = [];
+    $t = $t . ' ';
+    /*
+        PHP 4.1.0 Unix, PHP 4.2.3 win32
+        0.000876
+    */
+    $str_temp = ' ';
 #	prn_r( $t );
-	preg_match_all("/./u", $t, $ar_letters);
-	for (; list($k, $v) = each($ar_letters[0]);)
-	{
-		$str_temp .= $v;
-		if ($v == ' ')
-		{
-			$word = trim($str_temp);
-			$mb_len = $oFunc->mb_strlen($word, $enc);
-			if (($mb_len >= $min) && ($mb_len < $max))
-			{
-				$ar[] = $word;
-			}
-			$str_temp = '';
-		}
-	}
-	$ar = array_values(array_unique($ar));
-	return $ar;
+    preg_match_all("/./u", $t, $ar_letters);
+    for (; list($k, $v) = each($ar_letters[0]);) {
+        $str_temp .= $v;
+        if ($v == ' ') {
+            $word = trim($str_temp);
+            $mb_len = mb_strlen($word, $enc);
+            if (($mb_len >= $min) && ($mb_len < $max)) {
+                $ar[] = $word;
+            }
+            $str_temp = '';
+        }
+    }
+    $ar = array_values(array_unique($ar));
+    return $ar;
 }
+
 /* */
 function text2keywords_crc($t, $mn = 1, $mx = 25, $e = 'UTF-8')
 {
@@ -833,7 +860,7 @@ function text2keywords_crc($t, $mn = 1, $mx = 25, $e = 'UTF-8')
 		if ($v == ' ')
 		{
 			$w = trim($s);
-			$l = $oFunc->mb_strlen($w, $e);
+			$l = mb_strlen($w, $e);
 			if (($l >= $mn) && ($l <= $mx))
 			{
 				$i = $l;
@@ -1060,10 +1087,10 @@ function htmlFormsSelect($arData, $default, $formname = 'select', $class = 'inpu
 		/* Cut long names in order to proper display */
 		/* trim() is used to solve problems when function parameters comes 
 		 * from MySQL and database is not updated to the current MySQL version */
-		if ( $oFunc->mb_strlen( trim( $v ) ) > $sys['max_char_combobox'] )
+		if ( mb_strlen( trim( $v ) ) > $sys['max_char_combobox'] )
 		{
 			$ar_attr_option['title'] = htmlspecialchars( $v_src );
-			$v = $oFunc->mb_substr( $v, 0, $sys['max_char_combobox'] ) . '…';
+			$v = mb_substr( $v, 0, $sys['max_char_combobox'] ) . '…';
 		}
 		
 		$ar_attr_option['value'] = ( string ) $k;
@@ -1193,6 +1220,8 @@ function gw_text_smooth_defn($t, $is_debug = 0)
 
 /**
  * Depreciated function name
+ *
+ * @depreciated
  */
 function textcodetoform($t)
 {
@@ -1204,38 +1233,47 @@ function textcodetoform($t)
 	return $t;
 }
 /**
- * Depreciated
- *
  * Validates HTML-form
+ *
+ * @depreciated
  */
-function validatePostWalk($a, $reqFieldsA = array())
+function validatePostWalk($a, $reqFieldsA = [])
 {
-	$brokenFieldsA = array();
-	for (reset($a); list($k1, $v1) = each($a);) // read posted array, usually HTTP_POST_VARS
-	{
-		for (reset($reqFieldsA); list($reqk1, $reqv1) = each($reqFieldsA );) // read required
-		{
-			if ($k1 == $reqv1) // posted == required
-			{
-				if (!is_array($v1))
-				{
-					$v1 = gw_text_sql($v1);
-					// url check
-					if ($reqv1 == 'url') { if (str_replace("http://","",$v1) == ''){ $v1 = ''; } }
-					if ($v1 == ''){ $brokenFieldsA[$k1] = ''; }
-				}
-				else
-				{
-					for (reset($v1); list ($k2, $v2)= each($v1);)
-					{
-						$v1[$k2] = gw_text_sql($v2);
-						if ($v1[$k2] == ''){ $brokenFieldsA[$k1] = ''; }
-					}
-				}
-			} //
-		} //
-	} //
-	return $brokenFieldsA;
+    $brokenFieldsA = [];
+
+    foreach ($a as $key1 => $value1)
+    {
+        foreach ($reqFieldsA as $reqKey1 => $reqValue1) // read required
+        {
+            if ($key1 == $reqValue1) // posted == required
+            {
+                if (!is_array($value1)) {
+                    $value1 = gw_text_sql($value1);
+
+                    // url check
+                    if ($reqValue1 == 'url') {
+                        if (str_replace('http://', '', $value1) == '') {
+                            $value1 = '';
+                        }
+                    }
+
+                    if ($value1 == '') {
+                        $brokenFieldsA[$key1] = '';
+                    }
+                } else {
+                    foreach ($value1 as $key2 => $value2) {
+                        $value1[$key2] = gw_text_sql($value2);
+
+                        if ($value1[$key2] == '') {
+                            $brokenFieldsA[$key1] = '';
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return $brokenFieldsA;
 }
 
 //

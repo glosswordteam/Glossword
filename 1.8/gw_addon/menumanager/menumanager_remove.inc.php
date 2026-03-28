@@ -1,69 +1,62 @@
 <?php
+
 /**
- *  Glossword - glossary compiler (http://glossword.info/)
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
-if (!defined('IN_GW'))
-{
-	die('<!-- $Id: menumanager_remove.inc.php 491 2008-06-13 10:05:06Z glossword_team $ -->');
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
 }
+
 /* Included from $oAddonAdm->alpha(); */
 
-$ar_q = array();
-if (!$this->gw_this['vars']['isConfirm'])
-{
-	/* Should be confirmed */
-	return;
+if (!$this->gw_this['vars']['isConfirm']) {
+    /* Deletion must be confirmed */
+    return;
 }
-/* */
-$ar_query = array();
-switch ($this->gw_this['vars']['w1'])
-{
-	case 'primary':
-		$ar_query[] = 'DELETE FROM `'.$this->sys['tbl_prefix'].'component` WHERE `id_component` = "'.$this->gw_this['vars']['tid'].'"';
-		$ar_query[] = 'DELETE FROM `'.$this->sys['tbl_prefix'].'component_map` WHERE `id_component` = "'.$this->gw_this['vars']['tid'].'"';
-	break;
-	case 'secondary':
-		$ar_query[] = 'DELETE FROM `'.$this->sys['tbl_prefix'].'component_map` WHERE `id` = "'.$this->gw_this['vars']['tid'].'"';
-	break;
-}
-/* Run queries now */
-foreach ($ar_query as $q)
-{
-	$this->oDb->sqlExec($q);
-}
-$ar_query = array();
-/* Check for empty actions */
-/*
-2 SELECTs:
-SELECT cma.id_action
-FROM `gw_component_actions` as cma
-WHERE cma.id_action NOT IN (SELECT id_action FROM `gw_component_map`)
-*/
-$sql = 'SELECT cma.id_action 
-		FROM `'.$this->sys['tbl_prefix'].'component_actions` as cma
-		LEFT JOIN `'.$this->sys['tbl_prefix'].'component_map` AS cmm
-		ON cmm.id_action = cma.id_action
-		WHERE cmm.id_action IS NULL';
-$arSql = $this->oDb->sqlExec($sql);
-$ar_ids = array();
-foreach ($arSql as $arV)
-{
-	$ar_ids[] = $arV['id_action'];
-}
-if (!empty($ar_ids))
-{
-	$sql = 'DELETE FROM `'.$this->sys['tbl_prefix'].'component_actions` WHERE `id_action` IN ('. implode(',', $ar_ids) .')';
-	$this->oDb->sqlExec($sql);
-}
-$this->str .= postQuery($ar_query, GW_ACTION.'='.GW_A_BROWSE.'&'.GW_TARGET.'='.$this->component, $this->sys['isDebugQ'], 0);
 
+$ar_query = [];
+$target_id = (int) $this->gw_this['vars'][GW_TARGET_ID];
+$delete_mode = isset($this->gw_this['vars']['w1']) ? (string) $this->gw_this['vars']['w1'] : '';
 
-/* end of file */
-?>
+switch ($delete_mode) {
+    case 'primary':
+        $ar_query[] = gw_sql_delete(
+            $this->sys['tbl_prefix'] . 'component',
+            ['id_component' => $target_id]
+        );
+        $ar_query[] = gw_sql_delete(
+            $this->sys['tbl_prefix'] . 'component_map',
+            ['id_component' => $target_id]
+        );
+        break;
+
+    case 'secondary':
+        $ar_query[] = gw_sql_delete(
+            $this->sys['tbl_prefix'] . 'component_map',
+            ['id' => $target_id]
+        );
+        break;
+}
+
+/* Remove orphan actions */
+$ar_query[] = 'DELETE cma
+    FROM `' . $this->sys['tbl_prefix'] . 'component_actions` AS cma
+    LEFT JOIN `' . $this->sys['tbl_prefix'] . 'component_map` AS cmm
+        ON cmm.id_action = cma.id_action
+    WHERE cmm.id_action IS NULL';
+
+/* Redirect */
+$this->str .= postQuery(
+    $ar_query,
+    $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->component),
+    $this->sys['isDebugQ'],
+    $this->sys['isPause']
+);

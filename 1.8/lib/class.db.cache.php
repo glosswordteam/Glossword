@@ -1,188 +1,306 @@
 <?php
+
 /**
  * Glossword - glossary compiler (http://glossword.biz/)
- * © 2008-2021 Glossword.biz team <team at glossword dot biz>
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
  * © 2002-2008 Dmitry N. Shilnikov
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  */
-// --------------------------------------------------------
-/**
- * Usage:
- *  Special usage is not required.
- *  Implemented into database class, sqlExec() function
- */
-if ( ! class_exists('gwtkCache')) {
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
+}
+
+if (!class_exists('gwtkCache')) {
+    /**
+     * Simple file cache for SQL results and temporary data.
+     *
+     * Notes:
+     * - No gzip support
+     * - No legacy escaping/unescaping
+     * - Atomic writes via temporary file + rename()
+     * - Any PHP value is stored and restored via serialize()/unserialize()
+     */
     class gwtkCache
     {
-        // --------------------------------------------------------
-        // Variables
-        // --------------------------------------------------------
+        /** @var string */
         public $path_root = '.';
-        public $path_store = 'cache/sql';  // path to cache files
-        public $cache_ex = '.tmp';         // cache filename extension
-        public $cache_prefix = '';         // cache prefix filename
-        public $cache_lifetime = 5;        // n - seconds | 0 - never expire
-        public $cache_subdir = '';         // cache subdirectory name
-        public $filename = '_';            // cache filename
-        public $is_Zlib = 0;               // compress files with Zlib
-        public $q = '_';                   // cache key name, md5()
-        public $query_array = array();     // queries container
-        public $cnt_queries_debug = 0;
-        // --------------------------------------------------------
-        // Supply functions
-        // --------------------------------------------------------
+
+        /** @var string */
+        public $path_store = 'cache/sql';
+
+        /** @var string */
+        public $cache_ex = '.tmp';
+
+        /** @var string */
+        public $cache_prefix = '';
+
         /**
-         * @access  public
+         * Cache lifetime in seconds.
+         * 0 means never expire.
+         *
+         * @var int
+         */
+        public $cache_lifetime = 5;
+
+        /** @var string */
+        public $cache_subdir = '';
+
+        /** @var string */
+        public $filename = '_';
+
+        /**
+         * Cache key, usually md5 hash.
+         *
+         * @var string
+         */
+        private $_cache_key_hash = '_';
+
+        /**
+         * Debug log.
+         *
+         * @var array
+         */
+        public $query_array = array();
+
+        /** @var int */
+        public $cnt_queries_debug = 0;
+
+        /**
+         * Set cache directory path relative to root.
+         *
+         * @param string $dir
+         * @return void
          */
         public function setPath($dir)
         {
-            $this->path_store = $dir;
+            $this->path_store = (string) $dir;
         }
 
         /**
-         * @access  public
+         * Set cache key and optional filename prefix.
+         *
+         * @param string $str
+         * @param string $prefix
+         * @return void
          */
         public function setKey($str, $prefix)
         {
-            $this->q            = md5($str);
-            $this->cache_prefix = $prefix;
+            $this->_cache_key_hash = md5((string) $str);
+            $this->cache_prefix = (string) $prefix;
         }
 
         /**
-         * @access  private
-         */
-        private function _setFilename()
-        {
-            $this->filename = $this->_filename();
-        }
-
-        /**
-         * @return string Path to current cache filename
-         */
-        private function _filename()
-        {
-            if ($this->is_Zlib) {
-                $this->cache_ex = $this->cache_ex . '.gz';
-            }
-            if ( ! file_exists($this->path_root . '/' . $this->path_store)) {
-                @mkdir($this->path_root . '/' . $this->path_store, 0777);
-            }
-            if ( ! file_exists($this->path_root . '/' . $this->path_store . '/' . $this->cache_subdir)) {
-                @mkdir($this->path_root . '/' . $this->path_store . '/' . $this->cache_subdir, 0777);
-            }
-            $filename_subdir = ($this->cache_subdir != '') ? $this->cache_subdir . '/' : '';
-            $str             = $this->path_root . '/' . $this->path_store . '/' . $filename_subdir . $this->cache_prefix . '_' . md5($this->is_Zlib . $this->q) . $this->cache_ex;
-            // reset prefix
-            $this->cache_prefix = '';
-
-            return $str;
-        }
-
-        /**
-         * Removes cache file from disk
-         */
-        private function _delete()
-        {
-            if (file_exists($this->filename)) {
-                $this->query_array[] = 'Delete ' . $this->filename;
-                unlink($this->filename);
-            }
-        }
-
-        /**
-         * Saves cache contents using Zlib
+         * Prepare current filename.
          *
-         * @return boolean
+         * @return void
          */
-        private function _save_gz($content)
+        private function setFilename()
         {
-            if ( ! function_exists("gzopen")) {
-                $this->query_array[] = sprintf("Function <b>%s</b> not installed.", "gzopen");
-
-                return false;
-            }
-            $fp = gzopen($this->filename, "w");
-            if ($fp) {
-                gzwrite($fp, $content);
-                gzclose($fp);
-            } else {
-                $this->query_array[] = 'Can\'t write with Zlib: ' . $this->filename;
-
-                return false;
-            }
-
-            return true;
+            $this->filename = $this->buildFilename();
         }
 
         /**
-         * Loads cache contents using Zlib
+         * Build full cache filename.
          *
          * @return string
          */
-        private function _load_gz($mode)
+        private function buildFilename()
         {
-            return implode('', gzfile($this->filename));
+            $dir = $this->buildDirectoryPath();
+            if (!$this->ensureDirectoryExists($dir)) {
+                return '_';
+            }
+
+            return $dir . '/' . $this->buildBasename();
         }
-        // --------------------------------------------------------
-        // Public functions
-        // --------------------------------------------------------
+
         /**
-         * Checking for cache
+         * Build full directory path for cache storage.
          *
-         * @return  boolean TRUE when current cache file exists, otherwise FALSE
-         * @see     _setFilename();
+         * @return string
          */
-        public function checkout()
+        private function buildDirectoryPath()
         {
-            $this->_setFilename();
-            if (file_exists($this->filename)) {
-                if ($this->cache_lifetime != 0) // expire
-                {
-                    $m1 = filemtime($this->filename);
-                    $m2 = (time() - $this->cache_lifetime);
-                    if ($m2 > $m1) {
-                        $this->_delete();
+            $parts = array(
+                rtrim($this->path_root, '/'),
+                trim($this->path_store, '/')
+            );
 
-                        return false;
-                    }
-                    #else
-                    #{
-#					$this->query_array = ($m1 - $m2). ' second(s) left';
-                    #}
-                }
+            if ($this->cache_subdir !== '') {
+                $parts[] = trim($this->cache_subdir, '/');
+            }
 
+            return implode('/', $parts);
+        }
+
+        /**
+         * Build cache file basename.
+         *
+         * @return string
+         */
+        private function buildBasename()
+        {
+            $prefix = ($this->cache_prefix !== '') ? $this->cache_prefix . '_' : '';
+
+            return $prefix . $this->cache_key_hash . $this->cache_ex;
+        }
+
+        /**
+         * Ensure cache directory exists.
+         *
+         * @param string $dir
+         * @return bool
+         */
+        private function ensureDirectoryExists($dir)
+        {
+            if (is_dir($dir)) {
                 return true;
             }
 
+            if (mkdir($dir, 0777, true)) {
+                return true;
+            }
+
+            if (is_dir($dir)) {
+                return true;
+            }
+
+            $this->query_array[] = 'Cannot create directory: ' . $dir;
+
             return false;
-        } // end of func checkout
+        }
 
         /**
-         * Saves cache contents
+         * Delete current cache file from disk.
          *
-         * @return boolean
+         * @return bool
          */
-        public function save($content, $mode = "string")
+        private function deleteFile()
         {
-            if ($mode == "array") {
-                $content = serialize($content);
-                $content = addslashes($content);
+            if (!is_file($this->filename)) {
+                return true;
             }
-            if ($this->is_Zlib) {
-                return $this->_save_gz($content, $mode);
+
+            $this->query_array[] = 'Delete ' . $this->filename;
+
+            if (unlink($this->filename)) {
+                return true;
             }
+
+            $this->query_array[] = 'Cannot delete: ' . $this->filename;
+
+            return false;
+        }
+
+        /**
+         * Check whether current cache file exists and is not expired.
+         *
+         * @return bool
+         */
+        public function isValid()
+        {
+            $this->setFilename();
+
+            if ($this->filename === '_' || !is_file($this->filename)) {
+                return false;
+            }
+
+            if ($this->cache_lifetime > 0) {
+                $file_mtime = filemtime($this->filename);
+                if ($file_mtime === false) {
+                    $this->query_array[] = 'Cannot read mtime: ' . $this->filename;
+                    $this->deleteFile();
+
+                    return false;
+                }
+
+                if ($file_mtime < (time() - (int) $this->cache_lifetime)) {
+                    $this->deleteFile();
+
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /**
+         * Save any PHP value into cache.
+         *
+         * @param mixed $content
+         * @return bool
+         */
+        public function save($content)
+        {
+            if ($this->filename === '_' || $this->filename === '') {
+                $this->setFilename();
+            }
+
+            if ($this->filename === '_') {
+                return false;
+            }
+
+            $payload = serialize($content);
+
             $this->query_array[] = 'Save ' . $this->filename;
-            $fp                  = fopen($this->filename, "w");
-            if ($fp) {
-                fwrite($fp, $content);
-                fclose($fp);
-            } else {
-                $this->query_array[] = 'Can\'t write: ' . $this->filename;
+
+            return $this->writeFileAtomic($this->filename, $payload);
+        }
+
+        /**
+         * Load any PHP value from cache.
+         *
+         * Returns NULL on failure.
+         *
+         * @return mixed
+         */
+        public function load()
+        {
+            if ($this->filename === '_' || $this->filename === '') {
+                $this->setFilename();
+            }
+
+            $this->query_array[] = 'Load ' . $this->filename;
+            ++$this->cnt_queries_debug;
+
+            if (!is_file($this->filename)) {
+                return null;
+            }
+
+            $payload = file_get_contents($this->filename);
+            if ($payload === false) {
+                $this->query_array[] = 'Cannot read: ' . $this->filename;
+
+                return null;
+            }
+
+            return $this->safeUnserialize($payload);
+        }
+
+        /**
+         * Write file atomically.
+         *
+         * @param string $filename
+         * @param string $content
+         * @return bool
+         */
+        private function writeFileAtomic($filename, $content)
+        {
+            $tmp_filename = $filename . '.part';
+
+            if (file_put_contents($tmp_filename, $content, LOCK_EX) === false) {
+                $this->query_array[] = 'Cannot write: ' . $tmp_filename;
+
+                return false;
+            }
+
+            if (!rename($tmp_filename, $filename)) {
+                @unlink($tmp_filename);
+                $this->query_array[] = 'Cannot rename ' . $tmp_filename . ' to ' . $filename;
 
                 return false;
             }
@@ -191,33 +309,30 @@ if ( ! class_exists('gwtkCache')) {
         }
 
         /**
-         * Loads cache contents
+         * Unserialize cached payload safely.
          *
-         * @param   string  $mode  [ string (default) | array ]
+         * Returns NULL on failure.
          *
-         * @return array|string
-         * @see gw_fixslash();
+         * @param string $payload
+         * @return mixed
          */
-        public function load($mode = 'string')
+        private function safeUnserialize($payload)
         {
-            $this->query_array[] = 'Load ' . $this->filename;
-            ++$this->cnt_queries_debug;
-            $content = implode('', file($this->filename));
-            if ($this->is_Zlib) {
-                $content = $this->_load_gz($mode);
-            }
-            // fix quotes in array
-            gw_fixslash($content, 'runtime');
-            if ($mode == 'array') {
-                $content = stripslashes($content);
-                $return  = @unserialize($content);
+            if ($payload === '') {
+                $this->query_array[] = 'Empty cache payload: ' . $this->filename;
 
-                return empty($return) ? array() : $return;
+                return null;
             }
 
-            // fix quotes in array
-            return $content;
+            $value = @unserialize($payload);
+
+            if ($value === false && $payload !== 'b:0;') {
+                $this->query_array[] = 'Cannot unserialize cache: ' . $this->filename;
+
+                return null;
+            }
+
+            return $value;
         }
-    } // end of class
+    }
 }
-?>

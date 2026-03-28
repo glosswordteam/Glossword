@@ -36,31 +36,26 @@ foreach ($this->ar_profiles as $profileKey => $profile) {
     $profile['vkbd_letters'] = str_replace(',', ', ', $profile['vkbd_letters']);
     $bgColor = ($countRow % 2) ? $this->ar_theme['color_1'] : $this->ar_theme['color_2'];
 
+    $hrefEdit = $this->oUrlBuilder->build_admin_url(GW_A_EDIT, $this->component, [GW_TARGET_ID => $profile['id_profile']]);
+    $hrefRemove = $this->oUrlBuilder->build_admin_url(GW_A_REMOVE, $this->component, [GW_TARGET_ID => $profile['id_profile'], 'isConfirm' => 1, 'remove' => 1]);
+    /* 1.8.12: on/off elements */
+    $hrefTurnOn = $this->oUrlBuilder->build_admin_url(GW_A_EDIT, $this->component, [GW_TARGET_ID => $profile['id_profile'], 'mode' => 'on']);
+    $hrefTurnOff = $this->oUrlBuilder->build_admin_url(GW_A_EDIT, $this->component, [GW_TARGET_ID => $profile['id_profile'], 'mode' => 'off']);
+    $strStatus = $profile['is_active'] ? '' : ' <span class="badge badge-secondary"> ' . $this->oL->m('not_published') . '</span>';
+
     $this->str .= '<tr style="color:' . $this->ar_theme['color_5'] . ';background:' . $bgColor . '">';
     $this->str .= '<td class="xt n" style="text-align:' . $this->sys['css_align_right'] . '">' . $countRow . '</td>';
-    $this->str .= '<td class="xu gray">' . $this->oHtml->a(
-            $this->sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . $this->component . '&tid=' . $profile['id_profile'],
-            $profile['vkbd_name']
-        ) . '</td>';
-    $this->str .= '<td class="xu gray">' . $this->oHtml->a(
-            $this->sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . $this->component . '&tid=' . $profile['id_profile'],
-            $profile['vkbd_letters']
-        ) . '</td>';
-
-    /* 1.8.12: Default for the index page on/off */
-    $hrefOnOff = $this->sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . $this->gw_this['vars'][GW_TARGET] . '&tid=' . $profile['id_profile'];
+    $this->str .= '<td class="xu gray">' . $this->oHtml->a($hrefEdit, $profile['vkbd_name']) . $strStatus . '</td>';
+    $this->str .= '<td class="xu gray">' . $this->oHtml->a($hrefEdit, $profile['vkbd_letters']) . '</td>';
 
     $this->str .= '<td class="actions-third" style="width:1%;text-align:center">';
     $this->str .= $profile['is_index_page']
-        ? $this->oHtml->a($hrefOnOff . '&mode=off', '<span class="green">' . $this->oL->m('is_1') . '</span>')
-        : $this->oHtml->a($hrefOnOff . '&mode=on', '<span class="red">' . $this->oL->m('is_0') . '</span>', $this->oL->m('1057'));
+        ? $this->oHtml->a($hrefTurnOff, '<span class="green">' . $this->oL->m('is_1') . '</span>')
+        : $this->oHtml->a($hrefTurnOn, '<span class="red">' . $this->oL->m('is_0') . '</span>');
     $this->str .= '</td>';
 
     $this->str .= '<td class="actions-third" style="text-align:center">';
-    $this->str .= $this->oHtml->a(
-        $this->sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . $this->component . '&tid=' . $profile['id_profile'],
-        $this->oL->m('3_edit')
-    );
+    $this->str .= $this->oHtml->a($hrefEdit, $this->oL->m('3_edit'));
     $this->str .= ' ';
 
     $this->oHtml->setTag('a', 'class', 'submitdel');
@@ -69,10 +64,8 @@ foreach ($this->ar_profiles as $profileKey => $profile) {
         'onclick',
         'return confirm(\'' . $this->oL->m('3_remove') . ': &quot;' . $profile['vkbd_name'] . '&quot;. ' . $this->oL->m('9_remove') . '\' )'
     );
-    $this->str .= $this->oHtml->a(
-        $this->sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_REMOVE . '&' . GW_TARGET . '=' . $this->component . '&isConfirm=1&remove=1&tid=' . $profile['id_profile'],
-        $this->oL->m('3_remove')
-    );
+
+    $this->str .= $this->oHtml->a($hrefRemove, $this->oL->m('3_remove'));
     $this->oHtml->setTag('a', 'onclick', '');
 
     $this->str .= '</td>';

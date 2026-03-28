@@ -113,9 +113,9 @@ table.tbl-browse tr, table.tbl-browse tr td {
 }
 table.tbl-browse thead th {
 	font: bold 76% "Segoe UI", sans-serif;
-	height: 20px;
+	line-height: 100%;
 	text-align: center;
-	padding: 0px 2px;
+	padding: 6px 2px;
 	vertical-align: middle;
 	color: #fffffc;
 	background: #47c0c7 url('bg_thead.png');
@@ -138,9 +138,10 @@ table.tbl-browse td.n { color: #999; background: #F8F8F8; }
 
 /* */
 .xmtitle td {
-	padding: 3px 3px;
-	font: 100% "Segoe UI",arial,sans-serif;
-	color: #222; background: #b9e3de url('bg_h3.png'); 
+	padding: 6px 6px;
+	font: 100% "Segoe UI", arial, sans-serif;
+	color: #222;
+	background: #b9e3de url('bg_h3.png');
 }
 
 /* actions */

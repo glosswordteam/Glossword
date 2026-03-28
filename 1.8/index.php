@@ -1,10 +1,7 @@
 <?php
 /**
- *  $Id: index.php 543 2008-07-24 06:05:47Z glossword_team $
- */
-/**
  * Glossword - glossary compiler (http://glossword.biz/)
- * © 2008-2012 Glossword.biz team <team at glossword dot biz>
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
  * © 2002-2008 Dmitry N. Shilnikov
  *
  * This program is free software; you can redistribute it and/or modify
@@ -553,7 +550,7 @@ else if (isset($gw_this['vars']['srch']['by']) && $gw_this['vars']['srch']['by']
 	// Search by topics
 	$arTplVars['srch'][] = array('v:chk_srch_by_topic' => ' checked="checked"' );
 	// Get topic's tree ID
-	$gw_this['arTreeId'] = ctlgGetTree($gw_this['ar_topics_list'], $gw_this['vars']['id_topic']);
+	$gw_this['arTreeId'] = gw_ctlg_get_tree($gw_this['ar_topics_list'], $gw_this['vars']['id_topic']);
 	for (reset($gw_this['ar_dict_list']); list($kDict, $vDict) = each($gw_this['ar_dict_list']);)
 	{
 		// check if dictionary presents in the selected topic

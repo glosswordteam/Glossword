@@ -19,81 +19,108 @@ if (!defined('IN_GW'))
  */
 // --------------------------------------------------------
 
+/**
+ * Returns list of themes for select input.
+ *
+ * @return array Theme names indexed by theme ID
+ */
 function gw_get_themes_select()
 {
-	global $gw_this;
-	$ar = array();
-	for (; list($k, $v) = each($gw_this['ar_themes']);)
-	{
-		$ar[$k] = $v['theme_name'];
-		if (GW_IS_BROWSE_ADMIN)
-		{
-			$ar[$k] .= ' '.$v['theme_version']. ' ('. $v['theme_author'].')';
-		}
-	}
-	return $ar;
+    global $gw_this;
+
+    $themes = [];
+
+    if (!is_array($gw_this['ar_themes'])) {
+        return [];
+    }
+
+    foreach ($gw_this['ar_themes'] as $key => $theme) {
+        $themes[$key] = $theme['theme_name'];
+
+        if (GW_IS_BROWSE_ADMIN) {
+            $themes[$key] .= ' ' . $theme['theme_version'] . ' (' . $theme['theme_author'] . ')';
+        }
+    }
+
+    return $themes;
 }
+
 /**
- * Get the list of active themes.
+ * Returns list of active themes.
  *
- * @return  array   The list of themes with id_theme as array keys.
+ * Array keys are id_theme values.
+ *
+ * @return array List of themes indexed by theme ID
  */
 function gw_get_themes_list()
 {
-	global $sys, $oDb, $oSqlQ;
+    global $sys, $oDb, $oSqlQ;
 
-	if (GW_IS_BROWSE_ADMIN)
-	{
-		$arSql = $oDb->sqlExec($oSqlQ->getQ('get-themes-adm'));
-	}
-	else
-	{
-		$arSql = $oDb->sqlRun($oSqlQ->getQ('get-themes'), 'theme');
-	}
-	/* re-format */
-	$arVars = array();
-	for (; list($kV, $arV) = each($arSql);)
-	{
-		$arV['theme_version'] = $arV['v1'].'.'.$arV['v2'].'.'.$arV['v3'];
-		unset($arV['v1'], $arV['v2'], $arV['v3']);
-		$arVars[$arV['id_theme']] = $arV;
-		unset($arSql[$kV]);
-	}
-	return $arVars;
+    if (GW_IS_BROWSE_ADMIN) {
+        $themeRows = $oDb->sqlExec($oSqlQ->getQ('get-themes-adm'));
+    } else {
+        $themeRows = $oDb->sqlRun($oSqlQ->getQ('get-themes'), 'theme');
+    }
+
+    // Reformat rows
+    $themes = [];
+
+    foreach ($themeRows as $row) {
+        $row['theme_version'] = $row['v1'] . '.' . $row['v2'] . '.' . $row['v3'];
+        unset($row['v1'], $row['v2'], $row['v3']);
+
+        $themes[$row['id_theme']] = $row;
+    }
+
+    return $themes;
 }
+
 /**
- * Get a group of settings from a visual theme.
+ * Returns settings for a visual theme.
  *
- * @param   string  $themename        The name of visual theme
- * @return  array   All settings for the theme
+ * Loads custom theme settings first. If theme is not found,
+ * falls back to the default visual theme.
+ *
+ * @param string $themeName Theme name
+ * @return array Theme settings
  */
-function gw_get_theme($theme_name)
+function gw_get_theme($themeName)
 {
-	global $sys, $oDb, $oSqlQ;
-	$ar_theme = array();
-	/* 1,2 - theme settings only (colors, theme credits) */
-	$arSql = $oDb->sqlRun($oSqlQ->getQ('get-theme', gw_text_sql($theme_name), '1,2'), 'theme');
-	if (empty($arSql))
-	{
-		/* custom theme is not found, load default theme */
-		$theme_name = $sys['path_theme'] = $sys['visualtheme'];
-		$arSql = $oDb->sqlRun($oSqlQ->getQ('get-theme', gw_text_sql($theme_name), '1,2'), 'theme');
-		if (empty($arSql))
-		{
-			die('Unable to load visual theme `' . $theme_name.'` from table `'.$sys['tbl_prefix'].'themes`. Check database settings or re-install the software.');
-		}
-	}
-	else
-	{
-		$sys['path_theme'] = $theme_name;
-	}
-	for (; list($kV, $arV) = each($arSql);)
-	{
-		$ar_theme[$arV['settings_key']] = $arV['settings_value'];
-		unset($arSql[$kV]);
-	}
-	return $ar_theme;
+    global $sys, $oDb, $oSqlQ;
+
+    $themeSettings = [];
+
+    // 1,2 - theme settings only (colors, theme credits)
+    $themeRows = $oDb->sqlRun(
+        $oSqlQ->getQ('get-theme', gw_text_sql($themeName), '1,2'),
+        'theme'
+    );
+
+    if (empty($themeRows)) {
+        // Custom theme not found, load default theme
+        $themeName = $sys['visualtheme'];
+        $sys['path_theme'] = $themeName;
+
+        $sql = $oSqlQ->getQ('get-theme', gw_text_sql($themeName), '1,2');
+        $themeRows = $oDb->sqlRun($sql, 'theme');
+
+        if (empty($themeRows)) {
+            die(
+                'Unable to load visual theme `' . $themeName . '` from table `' .
+                $sys['tbl_prefix'] . 'themes`. Check database settings or reinstall the software.'
+            );
+        }
+    } else {
+        $sys['path_theme'] = $themeName;
+    }
+
+    foreach ($themeRows as $row) {
+        $themeSettings[$row['settings_key']] = $row['settings_value'];
+    }
+
+    return $themeSettings;
 }
+
 /**
  * Construct HTML-code for the list of terms.
  *
@@ -312,7 +339,7 @@ function gw_sql2defnpreview($arSql)
 			$arA[$k]['defn_tooltip'] = strip_tags($arA[$k]['defn']);
 			$arA[$k]['defn_tooltip'] = preg_replace('/&#[x0-9a-f]+;/', ' ', $arA[$k]['defn_tooltip']);
 			$arA[$k]['defn_tooltip'] = preg_replace('/&[a-z]+;/', ' ', $arA[$k]['defn_tooltip']);
-			$arA[$k]['defn_tooltip'] = $oFunc->mb_substr(trim($arA[$k]['defn_tooltip']), 0, 128, $sys['internal_encoding']);
+			$arA[$k]['defn_tooltip'] = mb_substr(trim($arA[$k]['defn_tooltip']), 0, 128, $sys['internal_encoding']);
 			$arA[$k]['defn_tooltip'] = htmlspecialchars($arA[$k]['defn_tooltip'], ENT_QUOTES, $sys['internal_encoding']);
 		}
 		if (!empty($arDuplicates[$k]))
@@ -368,12 +395,12 @@ function gw_sql2defnpreview($arSql)
 		}
 		$oHtml->setTag('a', 'title', '');
 		/* Chunk long definitions */
-		$int_defn_length = $oFunc->mb_strlen($arA[$k]['defn'], $sys['internal_encoding']);
+		$int_defn_length = mb_strlen($arA[$k]['defn'], $sys['internal_encoding']);
 		if ($int_defn_length > $sys['int_max_char_defn'] )
 		{
 			$arA[$k]['defn'] = $oFunc->mb_wordwrap_first($arA[$k]['defn'], $sys['int_max_char_defn'], $sys['txt_magic_splitter'], 0);
 #			$arA[$k]['defn'] = $arA[$k]['defn'];
-			$int_s = $oFunc->mb_strpos($arA[$k]['defn'], $sys['txt_magic_splitter'], $sys['internal_encoding']);
+			$int_s = mb_strpos($arA[$k]['defn'], $sys['txt_magic_splitter'], $sys['internal_encoding']);
 			$arA[$k]['kb'] = $oFunc->number_format($arV[1]['int_bytes'] / 1024, 1, $oL->languagelist('4')) .'&#160;'. $oL->m('kb');
 			/* $sys['txt_magic_splitter'] is not found */
 			if ($int_s === false)
@@ -610,314 +637,389 @@ function gw_custom_page($id_page)
 }
 
 
+/**
+ * Render top list block.
+ *
+ * Supported modes depend on the included file:
+ * top.<mode>.inc.php
+ *
+ * @param string $mode Display mode identifier.
+ * @param int    $amount Number of items to show.
+ * @param int    $isItemOnly Show terms only, without dates and dictionary links.
+ * @param int    $order Sorting order.
+ * @param int    $top10Display Display mode:
+ *                             0 - disabled,
+ *                             1 - table,
+ *                             >1 - inline preview list.
+ * @return string Rendered HTML.
+ */
+function gw_get_top10($mode, $amount = 10, $isItemOnly = 0, $order = 0, $top10Display = 1)
+{
+    global $sys, $gw_this, $ar_theme, $arDictParam;
+    global $oL, $oHtml, $oDb, $oSqlQ, $oFunc, $oSess;
+
+    if (!$top10Display) {
+        return '{v:}';
+    }
+
+    $str = '';
+    $strFoot = '';
+    $strHead = '';
+    $strData = '';
+    $strTopicName = '';
+    $cnt = 0;
+
+    /* Current date in UNIX timestamp */
+    $curDateMk = $sys['time_now_gmt_unix'];
+
+    $arThText = [];
+    $arThWidth = [];
+    $arTop10List = [];
+
+    $mode = strtolower($mode);
+    $filename = $sys['path_include'] . '/top.' . $mode . '.inc.php';
+
+    if (file_exists($filename)) {
+        include_once($filename);
+    }
+    else {
+        $str .= "\n" . '<!-- Missing file: ' . htmlspecialchars($filename, ENT_QUOTES, 'UTF-8') . ' -->' . "\n";
+    }
+
+    /* Create inline list */
+    if ($top10Display > 1) {
+        $str .= '<h4>' . $strTopicName . '</h4><div class="termpreview">';
+        $str .= implode(', ', $arTop10List) . '</div>';
+
+        return $str;
+    }
+
+    /* Create table */
+    $intRows = sizeof($arThWidth);
+
+    if (!empty($arThText) || !empty($arThWidth)) {
+        if (GW_IS_BROWSE_ADMIN) {
+            $str .= '<table class="tbl-browse gray" cellspacing="1" cellpadding="0" border="0" width="100%">';
+        }
+        else {
+            $str .= '<table style="background:' . $ar_theme['color_1'] . '" width="100%" border="0" cellpadding="3" cellspacing="1">';
+        }
+
+        if ($strTopicName != '') {
+            $strHead .= '<tr>'
+                . '<td style="text-align:' . $sys['css_align_left'] . '" colspan="' . ($intRows + 1) . '">'
+                . '<h4>' . $strTopicName . '</h4></td>'
+                . '</tr>';
+        }
+
+        if (!empty($arThText)) {
+            $strHead .= '<tr>';
+            $strHead .= '<th class="gw" style="text-align:center;width:1%">N</th>';
+
+            foreach ($arThText as $keyTh => $valueTh) {
+                $strWidth = '';
+
+                if (isset($arThWidth[$keyTh]) && $arThWidth[$keyTh]) {
+                    $strWidth = ' style="width:' . $arThWidth[$keyTh] . '"';
+                }
+
+                $strHead .= '<th class="gw"' . $strWidth . '>' . $valueTh . '</th>';
+            }
+
+            $strHead .= '</tr>';
+        }
+        else {
+            if (!empty($arThWidth)) {
+                $strFoot .= '<tr>';
+                $strFoot .= '<th style="font-size:1px;height:1px;width:1%"></th>';
+
+                foreach ($arThWidth as $keyTh => $valueTh) {
+                    $strWidth = '';
+
+                    if (isset($arThWidth[$keyTh]) && ($arThWidth[$keyTh] != '')) {
+                        $strWidth = ' style="font-size:1px;height:1px;width:' . $arThWidth[$keyTh] . '"';
+                    }
+
+                    $strFoot .= '<th' . $strWidth . '></th>';
+                }
+
+                $strFoot .= '</tr>';
+            }
+        }
+
+        if ($strHead != '') {
+            $str .= '<thead>' . $strHead . '</thead>';
+        }
+
+        if ($strFoot != '') {
+            $str .= '<tfoot>' . $strFoot . '</tfoot>';
+        }
+
+        $str .= '<tbody>';
+        $str .= $strData;
+        $str .= '</tbody>';
+        $str .= '</table>';
+    }
+
+    return $str;
+}
 
 /**
- * Top 10
+ * Returns list of valid dictionary IDs (cached).
  *
- * @param    int    $m [ R_DICT_AVERAGEHITS | R_DICT_EFFIC |
- *                       R_DICT_NEWEST | R_TERM_NEWEST |
- *                       R_DICT_UPDATED | R_USER_TOP | R_POLL ] // todo ...
- * @param   int     The amount of items (terms or dictionaries)
- * @param   int     Show terms only (without dates and links to dictionaries)
- * @param   int     Sorting order
- * @return   string complete HTML-code
- * @global $oL
+ * @return array
  */
-function getTop10($m, $amount = 10, $isItemOnly = 0, $order = 0, $top10_display = 1)
+function get_valid_dict_ids()
 {
-	if (!$top10_display) { return '{v:}'; }
-	global $sys, $gw_this, $ar_theme, $arDictParam;
-	global $oL, $oHtml, $oDb, $oSqlQ, $oFunc, $oSess;
-	$str = $str_foot = $str_head = '';
-	$cnt = 0;
-	/* Current date in UNIX timestamp */
-	$curDateMk = $sys['time_now_gmt_unix'];
-	$arThText = $arThWidth = $ar_top10_list = array();
-	$strData = $strTopicName = '';
-	$m = strtolower($m);
-	$filename = $sys['path_include'] . '/top.' . $m . '.inc.php';
-	if (file_exists($filename))
-	{
-		include_once( $filename );
-	}
-	else
-	{
-		print("<br />Can't find " . $filename);
-	}
-	/* Create list */
-	if ($top10_display > 1)
-	{
-		$str .= '<h4>'. $strTopicName .'</h4><div class="termpreview">';
-		$str .= implode(', ', $ar_top10_list).'</div>';
-		return $str;
-	}
-	/* Create table */
-	$intRows = sizeof($arThWidth);
-	if (!empty($arThText) || !empty($arThWidth))
-	{
-		if (GW_IS_BROWSE_ADMIN)
-		{
-			$str .= '<table class="tbl-browse gray" cellspacing="1" cellpadding="0" border="0" width="100%">';
-		}
-		else
-		{
-			$str .= '<table style="background:'.$ar_theme['color_1'].'" width="100%" border="0" cellpadding="3" cellspacing="1">';
-		}
-		if ($strTopicName != '')
-		{
-			$str_head .= '<tr>'
-				 . '<td style="text-align:'.$sys['css_align_left'].'" colspan="' . ($intRows + 1) . '">'
-				 . '<h4>' . $strTopicName . '</h4></td>'
-				 . '</tr>';
-		}
-		if (!empty($arThText))
-		{
-			$str_head .= '<tr>';
-			$str_head .= '<th class="gw" style="text-align:center;width:1%">N</th>';
-			for (reset($arThText); list ($kT, $vT)= each($arThText);)
-			{
-				$str_width = '';
-				if (isset($arThWidth[$kT]) && $arThWidth[$kT])
-				{
-					$str_width = ' style="width:'. $arThWidth[$kT] . '"';
-				}
-				$str_head .= '<th class="gw"'.$str_width.'>' . $vT . '</th>';
-			}
-			$str_head .= '</tr>';
-		}
-		else if (!empty($arThWidth))
-		{
-			$str_foot .= '<tr>';
-			$str_foot .= '<th style="font-size:1px;height:1px;width:1%"></th>';
-			for (reset($arThWidth); list ($kT, $vT)= each($arThWidth);)
-			{
-				$str_width = '';
-				if (isset($arThWidth[$kT]) && ($arThWidth[$kT] != ''))
-				{
-					$str_width = ' style="font-size:1px;height:1px;width:'. $arThWidth[$kT] . '"';
-				}
-				$str_foot .= '<th'.$str_width.'></th>';
-			}
-			$str_foot .= '</tr>';
-		}
-		if ($str_head)
-		{
-			$str .= '<thead>'.$str_head.'</thead>';
-		}
-		if ($str_foot)
-		{
-			$str .= '<tfoot>'.$str_foot.'</tfoot>';
-		}
-		$str .= '<tbody>';
-		$str .= $strData;
-		$str .= '</tbody>';
-		$str .= '</table>';
-	}
-	return $str;
+    global $oSqlQ, $oDb;
+
+    return $oDb->sqlRun($oSqlQ->getQ('get-dict-valid'), 'dict');
 }
 
-/* Get dictionary IDs, cached */
-function getValidDictID()
+/**
+ * Returns dictionary statistics.
+ *
+ * Includes total number of terms and current timestamp.
+ *
+ * @return array ['num' => int, 'sum' => int, 'date' => int]
+ */
+function gw_get_dict_stats()
 {
-	global $oSqlQ, $oDb;
-	return $oDb->sqlRun($oSqlQ->getQ('get-dict-valid'), 'dict');
+    global $oSqlQ, $oDb, $sys;
+
+    $rows = $oDb->sqlRun($oSqlQ->getQ('get-terms-total'), 'stat');
+
+    $stats = isset($rows[0])
+        ? $rows[0]
+        : ['num' => 0, 'sum' => 0];
+
+    $stats['date'] = $sys['time_now_gmt_unix'];
+
+    return $stats;
 }
 
-/* */
-function getStat()
-{
-	global $oSqlQ, $oDb, $sys;
-	$arSql = $oDb->sqlRun($oSqlQ->getQ('get-terms-total'), 'st');
-	$arSql = isset($arSql[0]) ? $arSql[0] : array('num' => 0, 'sum' => 0);
-	$arSql['date'] = $sys['time_now_gmt_unix'];
-	return $arSql;
-}
-
-/* */
+/**
+ * Returns system settings as key-value array.
+ *
+ * If settings are missing and installer exists, redirects to installation.
+ *
+ * @return array System settings
+ */
 function getSettings()
 {
-	global $oSqlQ, $oDb, $oFunc, $sys;
-	$strA = array();
-	$arSql = $oDb->sqlRun($oSqlQ->getQ('get-settings'), 'st');
+    global $oSqlQ, $oDb, $oFunc, $sys;
 
-	/* No system settings found, run install */
-	if (empty($arSql))
-	{
-		if (file_exists('gw_install/index.php'))
-		{
-			$sys['server_proto'] = 'http://';
-			$sys['server_host'] = (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '' );
-			$sys['server_dir'] = (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '' );
-			$ar_path = explode("/", $sys['server_dir']);
-			unset( $ar_path[sizeof($ar_path)-1] );
-			$sys['server_dir'] = implode('/', $ar_path);
-			gwtk_header( $sys['server_proto'].$sys['server_host'].$sys['server_dir'].'/gw_install/index.php' );
-		}
-		print '<p>Software is not installed.</p>';
-		print '<p><a href="'.$sys['server_dir'].'/gw_install/index.php">Run installation script</a></p>';
-		exit;
-	}
-	for (; list($k, $v) = each($arSql);)
-	{
-		$strA[$v['settings_key']] = $v['settings_val'];
-	}
-	return $strA;
-}
+    $settings = [];
+    $settingsRows = $oDb->sqlRun($oSqlQ->getQ('get-settings'), 'st');
 
+    // No system settings found, run installer
+    if (empty($settingsRows)) {
+        if (file_exists('gw_install/index.php')) {
+            $sys['server_proto'] = gw_get_protocol();
+            $sys['server_host'] = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+            $sys['server_dir'] = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
 
+            $pathParts = explode('/', $sys['server_dir']);
+            unset($pathParts[count($pathParts) - 1]);
+            $sys['server_dir'] = implode('/', $pathParts);
 
-/**
- * Builds HTML-code for page navigation, like [ Pages: 1 .. 5 6 7 .. 11 ]
- * 12 Mar 2008: Old pagination code has been completely replaced.
- *
- * @return   string  simple HTML-code, ready to put inside a table or else.
- */
-function getNavToolbar($page_total, $page_current = 1, $url)
-{
-	global $sys, $oHtml, $ar_theme;
-	if ($page_total == 1 || $page_total == 0)
-	{
-		return '&#160;';
-	}
-	$ar_pages = array();
-	/* HTML-tag to select the current page */
-	$str_tag = 'strong';
-	/* Language strings */
-	$str_page_prev = '&lt;&lt;&#160;'.$GLOBALS['oL']->m('1_prevpage');
-	$str_page_next = $GLOBALS['oL']->m('1_nextpage').'&#160;&gt;&gt;';
-	/* String placed between the first and last page numbers */
-	$str_more = '..';
-	/* String to separate page numbers */
-	$str_d = isset($ar_theme['split_pagenumbers']) ? $ar_theme['split_pagenumbers'] : ' | ';
-	/* URL for paging */
-	$str_url = str_replace('%', '%%', $url).'%d';
-	/* The number of links to pages displayed before and after the current page. 1 2 (3) 1 2 */
-	$int_max = $sys['max_page_links'];
-	/* Some counters */
-	$cnt_max = $page_current + $int_max;
-	$cnt_min = $page_current - $int_max;
-	/* Fix the maximum number of pages */
-	if ($cnt_max > $page_total)
-	{
-		$cnt_max = $page_total;
-	}
-	/* Links to Next/Prev pages */
-	if ($page_current > 1)
-	{
-		$ar_pages[] = $oHtml->a(sprintf($str_url, ($page_current - 1)), $str_page_prev);
-	}
-	/* The first page */
-	if ($cnt_min > 1)
-	{
-		$ar_pages[] = $oHtml->a(sprintf($str_url, 1), 1);
-		/* Do not show .. for `1 | .. | 2 | 3` */
-		if (($page_current - $int_max) != 0)
-		{
-			$ar_pages[] = $str_more;
-		}
-	}
-	/* For each page number */
-	for ($i = 1; $i <= $page_total; $i++)
-	{
-		if ( ($i >= $cnt_min && $i <= $cnt_max) )
-		{
-			if ($i == $page_current)
-			{
-				$ar_pages[] = $oHtml->a(sprintf($str_url, $i), '<'.$str_tag.' class="on">'.$i.'</'.$str_tag.'>');
-			}
-			else
-			{
-				$ar_pages[] = $oHtml->a(sprintf($str_url, $i), $i);
-			}
-		}
-	}
-	/* The last page */
-	if ($cnt_max > 1 && ($page_current + $int_max) < $page_total)
-	{
-		/* Do not show .. for `25 | 26 | .. | 27` */
-		if (($page_current + $int_max + 1) < $page_total)
-		{
-			$ar_pages[] = $str_more;
-		}
-		$ar_pages[] = $oHtml->a(sprintf($str_url, $page_total), $page_total);
-	}
-	/* Links to Next/Prev pages */
-	if ($page_current < $page_total)
-	{
-		$ar_pages[] = $oHtml->a(sprintf($str_url, ($page_current + 1)), $str_page_next);
-	}
-	return implode($str_d, $ar_pages);
+            gwtk_header(
+                $sys['server_proto'] . $sys['server_host'] . $sys['server_dir'] . '/gw_install/index.php'
+            );
+        }
+
+        print '<p>Software is not installed.</p>';
+        print '<p><a href="' . $sys['server_dir'] . '/gw_install/index.php">Run installation script</a></p>';
+        exit;
+    }
+
+    foreach ($settingsRows as $row) {
+        $settings[$row['settings_key']] = $row['settings_val'];
+    }
+
+    return $settings;
 }
 
 
 /**
- * Get all dictionary parameters, such as:
- * title, description, number of terms, sql-table name etc.
+ * Builds HTML code for page navigation.
  *
- * @param    int     dictionary ID
- * @return   array   dictionary name, description, total terms etc.
+ * Example: [ Pages: 1 .. 5 6 7 .. 11 ]
+ * 12 Mar 2008: old pagination code was fully replaced.
+ *
+ * @param int $pageTotal Total number of pages
+ * @param int $pageCurrent Current page number
+ * @param string $url URL pattern without page number suffix
+ * @return string HTML code ready to use in layout
  */
-function getDictParam($id_dict)
+function getNavToolbar($pageTotal, $pageCurrent = 1, $url)
 {
-	global $gw_this, $sys, $oDb, $oSqlQ;
-	$ar = array();
-	/* */
-	switch ($sys['pages_link_mode'])
-	{
-		case GW_PAGE_LINK_NAME:
-			$compare_to = 'title';
-			if (is_numeric($id_dict))
-			{
-				$compare_to = 'id';
-			}
-		break;
-		case GW_PAGE_LINK_URI:
-			$compare_to = 'dict_uri';
-		break;
-		default:
-			$compare_to = 'id';
-		break;
-	}
-	if (!is_array($gw_this['ar_dict_list']))
-	{
-		return array();
-	}
-	if ( GW_IS_BROWSE_ADMIN || ($gw_this['vars']['a'] == GW_A_SEARCH) )
-	{
-		$compare_to = 'id';
-	}
-#prn_r( $compare_to );
-	/* For for each dictionary */
-	for (reset($gw_this['ar_dict_list']); list($kDict, $vDict) = each($gw_this['ar_dict_list']);)
-	{
-		if ($vDict[$compare_to] == $id_dict)
-		{
-			$vDict['dict_settings'] = unserialize($vDict['dict_settings']);
-			if (is_array($vDict['dict_settings']))
-			{
-				/* merge dictionary settings into one array */
-				$vDict = array_merge($vDict, $vDict['dict_settings']);
-			}
-			unset($vDict['dict_settings']);
-			/* add dictionary uri */
-			switch ($sys['pages_link_mode'])
-			{
-				case GW_PAGE_LINK_NAME:
-					$vDict['uri'] = urlencode($vDict['title']);
-					break;
-				case GW_PAGE_LINK_URI:
-					$vDict['uri'] = urlencode($vDict['dict_uri']);
-					break;
-				default:
-					$vDict['uri'] = $id_dict;
-				break;
-			}
-#			prn_r( $vDict );
-			return $vDict;
-		}
-	}
-	/* no such dictionary */
-	return false;
+    global $sys, $oHtml, $ar_theme;
+
+    if ($pageTotal == 1 || $pageTotal == 0) {
+        return '&#160;';
+    }
+
+    $pageCurrent = (int)$pageCurrent;
+    $pageTotal = (int)$pageTotal;
+
+    if ($pageCurrent < 1) {
+        $pageCurrent = 1;
+    }
+    if ($pageCurrent > $pageTotal) {
+        $pageCurrent = $pageTotal;
+    }
+
+    $pages = [];
+
+    // HTML tag used to highlight current page
+    $tagName = 'strong';
+
+    // Language strings
+    $pagePrevText = '&lt;&lt;&#160;' . $GLOBALS['oL']->m('1_prevpage');
+    $pageNextText = $GLOBALS['oL']->m('1_nextpage') . '&#160;&gt;&gt;';
+
+    // String placed between distant page numbers
+    $moreText = '..';
+
+    // String used to separate page numbers
+    $separator = isset($ar_theme['split_pagenumbers']) ? $ar_theme['split_pagenumbers'] : ' | ';
+
+    // URL pattern for paging
+    $pageUrl = str_replace('%', '%%', $url) . '%d';
+
+    // Number of page links shown before and after current page: 1 2 (3) 1 2
+    $maxLinks = $sys['max_page_links'];
+
+    // Visible page range
+    $maxPage = $pageCurrent + $maxLinks;
+    $minPage = $pageCurrent - $maxLinks;
+
+    // Fix maximum page number
+    if ($maxPage > $pageTotal) {
+        $maxPage = $pageTotal;
+    }
+
+    // Links to previous page
+    if ($pageCurrent > 1) {
+        $pages[] = $oHtml->a(sprintf($pageUrl, $pageCurrent - 1), $pagePrevText);
+    }
+
+    // First page
+    if ($minPage > 1) {
+        $pages[] = $oHtml->a(sprintf($pageUrl, 1), 1);
+
+        // Do not show ".." for "1 | 2 | 3"
+        if (($pageCurrent - $maxLinks) != 0) {
+            $pages[] = $moreText;
+        }
+    }
+
+    // Page number links
+    for ($pageNumber = 1; $pageNumber <= $pageTotal; $pageNumber++) {
+        if ($pageNumber >= $minPage && $pageNumber <= $maxPage) {
+            if ($pageNumber == $pageCurrent) {
+                $pages[] = $oHtml->a(
+                    sprintf($pageUrl, $pageNumber),
+                    '<' . $tagName . ' class="on">' . $pageNumber . '</' . $tagName . '>'
+                );
+            } else {
+                $pages[] = $oHtml->a(sprintf($pageUrl, $pageNumber), $pageNumber);
+            }
+        }
+    }
+
+    // Last page
+    if ($maxPage > 1 && ($pageCurrent + $maxLinks) < $pageTotal) {
+        // Do not show ".." for "25 | 26 | 27"
+        if (($pageCurrent + $maxLinks + 1) < $pageTotal) {
+            $pages[] = $moreText;
+        }
+
+        $pages[] = $oHtml->a(sprintf($pageUrl, $pageTotal), $pageTotal);
+    }
+
+    // Links to next page
+    if ($pageCurrent < $pageTotal) {
+        $pages[] = $oHtml->a(sprintf($pageUrl, $pageCurrent + 1), $pageNextText);
+    }
+
+    return implode($separator, $pages);
+}
+
+
+/**
+ * Returns dictionary parameters such as title, description,
+ * number of terms and SQL table name.
+ *
+ * @param int|string $dictId Dictionary ID, title or URI depending on link mode
+ * @return array|false Dictionary parameters or FALSE if not found
+ */
+function getDictParam($dictId)
+{
+    global $gw_this, $sys, $oDb, $oSqlQ;
+
+    $dictParams = [];
+
+    switch ($sys['pages_link_mode']) {
+        case GW_PAGE_LINK_NAME:
+            $compareTo = 'title';
+
+            if (is_numeric($dictId)) {
+                $compareTo = 'id';
+            }
+            break;
+
+        case GW_PAGE_LINK_URI:
+            $compareTo = 'dict_uri';
+            break;
+
+        default:
+            $compareTo = 'id';
+            break;
+    }
+
+    if (!is_array($gw_this['ar_dict_list'])) {
+        return [];
+    }
+
+    if (GW_IS_BROWSE_ADMIN || $gw_this['vars']['a'] == GW_A_SEARCH) {
+        $compareTo = 'id';
+    }
+
+    // For each dictionary
+    foreach ($gw_this['ar_dict_list'] as $dictKey => $dictItem) {
+        if ($dictItem[$compareTo] == $dictId) {
+            $dictItem['dict_settings'] = unserialize($dictItem['dict_settings']);
+
+            if (is_array($dictItem['dict_settings'])) {
+                // Merge dictionary settings into one array
+                $dictItem = array_merge($dictItem, $dictItem['dict_settings']);
+            }
+
+            unset($dictItem['dict_settings']);
+
+            // Add dictionary URI
+            switch ($sys['pages_link_mode']) {
+                case GW_PAGE_LINK_NAME:
+                    $dictItem['uri'] = urlencode($dictItem['title']);
+                    break;
+
+                case GW_PAGE_LINK_URI:
+                    $dictItem['uri'] = urlencode($dictItem['dict_uri']);
+                    break;
+
+                default:
+                    $dictItem['uri'] = $dictId;
+                    break;
+            }
+
+            return $dictItem;
+        }
+    }
+
+    // No such dictionary
+    return false;
 }
 
 
@@ -931,11 +1033,336 @@ function getTermRandom()
 	global $gw_this, $oDb, $oSqlQ;
 	$arDictParam = $gw_this['ar_dict_list'][mt_rand(0, sizeof($gw_this['ar_dict_list'])-1)];
 	$sql = $oSqlQ->getQ('get-term-rand', $arDictParam['tablename']);
-	$arSql = $oDb->sqlExec($sql, '', 0);
+	$arSql = $oDb->sqlExec($sql);
 	$arSql = isset($arSql[0]) ? $arSql[0] : array();
 	$arSql = array_merge($arDictParam, $arSql);
 	return $arSql;
 }
+
+/**
+ * Returns default term structure.
+ *
+ * @return array
+ */
+function getTermParamInit()
+{
+    return [
+        'is_active' => '0',
+        'is_complete' => '0',
+        'term' => '',
+        'term_uri' => '',
+        'term_1' => ' ',
+        'term_2' => ' ',
+        'term_3' => ' ',
+        'defn' => '',
+        'tid' => '',
+        'term_order' => '',
+        'date_created' => 0,
+        'date_modified' => 0
+    ];
+}
+
+/**
+ * Returns field name used as term URI in current link mode.
+ *
+ * @return string
+ */
+function getTermUriField()
+{
+    global $sys;
+
+    switch ($sys['pages_link_mode']) {
+        case GW_PAGE_LINK_NAME:
+            return 'term';
+
+        case GW_PAGE_LINK_URI:
+            return 'term_uri';
+
+        default:
+            return 'tid';
+    }
+}
+
+/**
+ * Builds SQL query to find term by ID, name or URI depending on link mode.
+ *
+ * @param string|int $termId
+ * @return string
+ */
+function getTermParamSqlById($termId)
+{
+    global $gw_this, $arDictParam, $oSqlQ, $sys;
+
+    if (GW_IS_BROWSE_ADMIN) {
+        return $oSqlQ->getQ('get-term-by-id-adm', $arDictParam['tablename'], $termId);
+    }
+
+    switch ($sys['pages_link_mode']) {
+        case GW_PAGE_LINK_NAME:
+        case GW_PAGE_LINK_URI:
+            $sql = $oSqlQ->getQ(
+                'get-term-by-term',
+                $arDictParam['tablename'],
+                gw_text_sql($termId),
+                gw_text_sql($termId),
+                $sys['time_now_db']
+            );
+
+            // Switch to term ID lookup when possible (faster)
+            if (is_numeric($termId) || $gw_this['vars']['a'] == GW_A_CUSTOMPAGE) {
+                $sql = $oSqlQ->getQ(
+                    'get-term-by-id',
+                    $arDictParam['tablename'],
+                    gw_text_sql($termId),
+                    $sys['time_now_db']
+                );
+            }
+
+            return $sql;
+
+        default:
+            return $oSqlQ->getQ(
+                'get-term-by-id',
+                $arDictParam['tablename'],
+                gw_text_sql($termId),
+                $sys['time_now_db']
+            );
+    }
+}
+
+/**
+ * Finds term by ID, term text or term URI depending on current mode.
+ *
+ * @param string|int $termId
+ * @return array
+ */
+function getTermParamById($termId)
+{
+    global $gw_this, $oDb;
+
+    $defaultTerm = getTermParamInit();
+    $sql = getTermParamSqlById($termId);
+
+    $rows = $oDb->sqlExec($sql, sprintf('%05d', $gw_this['vars'][GW_ID_DICT]), 0);
+
+    if (!isset($rows[0])) {
+        return $defaultTerm;
+    }
+
+    $term = $rows[0];
+
+    // Temporary cleanup
+    $term['defn'] = str_replace('<![CDATA[', '', $term['defn']);
+    $term['defn'] = str_replace(']]>', '', $term['defn']);
+
+    return $term;
+}
+
+
+/**
+ * Redirects to canonical term URL when needed.
+ *
+ * @param string|int $requestedId
+ * @param array $term
+ * @param string $termUriField
+ * @return void
+ */
+function redirectCanonicalTermUrl($requestedId, $term, $termUriField)
+{
+    global $gw_this, $arDictParam, $sys, $oHtml;
+
+    if (!GW_IS_BROWSE_WEB) {
+        return;
+    }
+
+    $isRedirect = 0;
+
+    switch ($sys['pages_link_mode']) {
+        case GW_PAGE_LINK_NAME:
+            $isRedirect = ($requestedId != $term['term']);
+            break;
+
+        case GW_PAGE_LINK_URI:
+            $isRedirect = ($term['term_uri'] && ($requestedId != $term['term_uri']));
+            break;
+
+        default:
+            $isRedirect = ($requestedId != $term['tid']);
+            break;
+    }
+
+    if ($isRedirect && $gw_this['vars']['a'] == GW_T_TERM && !$gw_this['vars']['is_print']) {
+        $hrefTerm = $sys['page_index']
+            . '?' . GW_ACTION . '=term'
+            . '&' . GW_ID_DICT . '=' . $arDictParam['uri']
+            . '&t=' . $term[$termUriField];
+
+        gwtk_header(
+            $sys['server_proto'] . $sys['server_host'] . $oHtml->url_normalize($hrefTerm),
+            $sys['is_delay_redirect'],
+            __FILE__,
+            __LINE__
+        );
+    }
+}
+
+
+/**
+ * Builds SQL query to search term by normalized name.
+ *
+ * @param string $wordSearchSql
+ * @return string
+ */
+function getTermParamSqlByName($wordSearchSql)
+{
+    global $gw_this, $arDictParam, $oSqlQ;
+
+    if (GW_IS_BROWSE_ADMIN) {
+        return $oSqlQ->getQ(
+            'get-term-by-name-adm',
+            TBL_WORDLIST,
+            TBL_WORDMAP,
+            $arDictParam['tablename'],
+            $gw_this['vars'][GW_ID_DICT],
+            $wordSearchSql
+        );
+    }
+
+    return $oSqlQ->getQ(
+        'get-term-by-name',
+        TBL_WORDLIST,
+        TBL_WORDMAP,
+        $arDictParam['tablename'],
+        $gw_this['vars'][GW_ID_DICT],
+        $wordSearchSql
+    );
+}
+
+
+/**
+ * Selects best matched term from search results.
+ *
+ * @param array $rows
+ * @param string $name
+ * @param array $keywordsTarget
+ * @return array
+ */
+function findMatchedTermByName($rows, $name, $keywordsTarget)
+{
+    $found = [];
+
+    foreach ($rows as $row) {
+        $isTermExist = 0;
+
+        // First method, 08 Jul 2000
+        if (!$isTermExist && $row['term'] == $name) {
+            $isTermExist = 1;
+            $found = $row;
+            break; // usually stops on first loop
+        }
+
+        $keywordsQuery = text2keywords(text_normalize($row['term']), 1); // 1 = minimum length
+        $div1 = count(gw_array_exclude($keywordsTarget, $keywordsQuery));
+        $div2 = count(gw_array_exclude($keywordsQuery, $keywordsTarget));
+        $isTermNotMatched = ($div1 + $div2);
+
+        // If sum of excluded arrays is 0, the term already exists
+        if (!$isTermNotMatched) { // double negative, yes
+            $isTermExist = 1;
+        }
+
+        if ($isTermExist) {
+            $found = $row;
+        }
+    }
+
+    return $found;
+}
+
+
+/**
+ * Search term by name.
+ *
+ * @param string $name
+ * @return array
+ */
+function getTermParamByName($name)
+{
+    global $gw_this, $oDb;
+
+    // Normalize input and strip special characters.
+    // This is legacy behavior used for keyword-based matching.
+    $keywordsTarget = text2keywords(text_normalize(stripslashes($name)), 1);
+    $wordSearchSql = "'" . implode("', '", $keywordsTarget) . "'";
+
+    $sql = getTermParamSqlByName($wordSearchSql);
+    $rows = $oDb->sqlExec($sql, sprintf('%05d', $gw_this['vars'][GW_ID_DICT]), 0);
+
+    return findMatchedTermByName($rows, $name, $keywordsTarget);
+}
+
+/**
+ * Adds public URI field to found term.
+ *
+ * @param array $term
+ * @param string|int $termId
+ * @return array
+ */
+function finalizeTermParam($term, $termId)
+{
+    global $sys;
+
+    switch ($sys['pages_link_mode']) {
+        case GW_PAGE_LINK_NAME:
+            $term['uri'] = urlencode($term['term']);
+            break;
+
+        case GW_PAGE_LINK_URI:
+            $term['uri'] = urlencode($term['term_uri']);
+            break;
+
+        default:
+            $term['uri'] = $termId;
+            break;
+    }
+
+    return $term;
+}
+
+
+/**
+ * Returns term parameters by term ID or by term name.
+ *
+ * @param int|string $tid Term ID, term text or URI depending on current mode
+ * @param string $name Term name
+ * @return array Term parameters
+ */
+function getTermParam($tid = '', $name = '')
+{
+    $found = getTermParamInit();
+    $termUriField = getTermUriField();
+
+    if ($tid) {
+        $found = getTermParamById($tid);
+        redirectCanonicalTermUrl($tid, $found, $termUriField);
+    } elseif ($name !== '') {
+        $foundByName = getTermParamByName($name);
+
+        if (!empty($foundByName)) {
+            $found = $foundByName;
+        }
+    }
+
+    $found = finalizeTermParam($found, $tid);
+
+    if (empty($found)) {
+        $found = getTermParamInit();
+    }
+
+    return $found;
+}
+
+
 
 
 /**
@@ -945,7 +1372,7 @@ function getTermRandom()
  * @param    string  term name
  * @return   array   term id, defn id, name, definition(s), synonym(s)
  */
-function getTermParam($tid = '', $name = '')
+function getTermParam2($tid = '', $name = '')
 {
 	global $gw_this, $oL, $arDictParam, $oDb, $oSqlQ, $oSess, $sys;
 	$arFound = $arFoundInit = array(
@@ -1031,7 +1458,8 @@ function getTermParam($tid = '', $name = '')
 	{
 		/* search for a term by name */
 		/* remove specials */
-		$arKeywordsT = text2keywords( text_normalize( gw_stripslashes($name) ), 1);
+        /* @TODO gw_sql_unescape_like */
+		$arKeywordsT = text2keywords( text_normalize( stripslashes($name) ), 1);
 		$word_srch_sql = "'" . implode("', '", $arKeywordsT) . "'";
 		if (GW_IS_BROWSE_ADMIN)
 		{
@@ -1115,346 +1543,365 @@ function getTermParam($tid = '', $name = '')
 
 ## --------------------------------------------------------
 ## Toolbar functions A-Z, 00-ZZ
-
 /**
  * === Toolbar functions.
  * 1 of 2 functions to create alphabetic index.
- * Get first letters from all terms in dictionary
+ * Gets first letters from all terms in dictionary.
  *
- * @param    int     $id_dict dictionary ID
- * @param    int     $w      second symbol (optional) // not in use since 1.3
- * @return   array   initial letters 00-ZZ
+ *  Example (urlencoded):
+ *  S%CC%8C  = "S" + combining caron
+ *  %C5%A0   = precomposed "Š"
+  *
+ * @param int $id_dict Dictionary ID
+ * @param string $w Second symbol (optional, not used since 1.3)
+ * @return array Initial letters (00-ZZ structure)
  */
 function getLettersArray($id_dict, $w = '')
 {
-	global $oDb, $oSqlQ, $oFunc;
-	global $arDictParam, $gw_this, $sys;
-	$az_sql = '';
-	if ($arDictParam['az_order'])
-	{
-		$az_sql = 'FIELD(t.term_a, '.$arDictParam['az_order'].
-					'), FIELD(t.term_b, '.$arDictParam['az_order'].
-					'), FIELD(t.term_c, '.$arDictParam['az_order'].'), ';
-	}
+    global $oDb, $oSqlQ, $oFunc;
+    global $arDictParam, $gw_this, $sys;
 
-	/* Since 1.8.4 cannot be cached because of use delayed postings */
-	$arSql = $oDb->sqlExec($oSqlQ->getQ('get-az', $arDictParam['tablename'], $sys['time_now_db'], $az_sql) );
+    $az_sql = '';
 
-	/* One array for both indexes (single and double) */
-	$arA = array();
-	$sys['ar_az_last_characters'] = array();
-	for (; list($k, $v) = each($arSql);)
-	{
-		/* Must be mb_substr($v['L1'], 0, 1), but parameter (0, 3) allows to override 
-		   Unicode sorting order for diacritics. Example (urlencoded): S%CC%8C overrides %C5%A0
-		05 jul 2005: varchar(0, 64) allows to use toolbar as the list of topics.
-		24 jul 2006: toolbar limits removed for higher performance.
-		16 may 2007: 3rd toolbar added
-		27 nov 2007: only 1 letter allowed, varchar(0, 4) - 4 bytes is the maximum length for a single character in UTF-8.
-		*/
-#		if (!$v['int_sort'])
-#		{
-#			$sys['ar_az_last_characters'][$v['L1']] = '';
-#		}
-		if ( $gw_this['vars']['a'] == GW_T_TERM || ($gw_this['vars']['w1'] != '' && $gw_this['vars']['w2'] != '') )
-		{
-			/* w1, w2, w3 or w1, w2 selected */
-			if ($gw_this['vars']['a'] == GW_T_TERM || ($gw_this['vars']['w1'] == $v['L1'] && $gw_this['vars']['w2'] == $v['L2']))
-			{
-				/* shows w3 for selected w2 only */
-				$arA[$v['L1']][$v['L2']][$v['L3']] = '';
-			}
-			else
-			{
-				$arA[$v['L1']][$v['L2']] = '';
-			}
-		}
-		elseif ($gw_this['vars']['w1'] != '')
-		{
-			/* w1 selected */
-			/* shows w2 for selected w1 only */
-			if ($gw_this['vars']['w1'] == $v['L1'])
-			{
-				$arA[$v['L1']][$v['L2']] = '';
-			}
-			else
-			{
-				$arA[$v['L1']] = '';
-			}
-		}
-		else
-		{
-			/* nothing selected */
-			$arA[$v['L1']] = '';
-		}
-		unset($arSql[$k]);
-	}
-	return $arA;
+    if ($arDictParam['az_order']) {
+        $az_sql = 'FIELD(t.term_a, ' . $arDictParam['az_order'] .
+            '), FIELD(t.term_b, ' . $arDictParam['az_order'] .
+            '), FIELD(t.term_c, ' . $arDictParam['az_order'] . '), ';
+    }
+
+    // Since 1.8.4: cannot be cached because of delayed postings
+    $arSql = $oDb->sqlExec(
+        $oSqlQ->getQ('get-az', $arDictParam['tablename'], $sys['time_now_db'], $az_sql)
+    );
+
+    // One array for both indexes (single and double)
+    $arA = [];
+    $sys['ar_az_last_characters'] = [];
+
+    foreach ($arSql as $k => $v) {
+
+        /**
+         *  Must not be reduced to mb_substr($v['L1'], 0, 1).
+         *  Some letters with diacritics may be stored either as a single precomposed
+         *  Unicode character or as a base letter followed by combining marks.
+         *  Using a longer slice preserves this distinction for alphabetic sorting.
+         *
+         * 05 Jul 2005: varchar(0, 64) allows using toolbar as a list of topics.
+         * 24 Jul 2006: toolbar limits removed for better performance.
+         * 16 May 2007: 3rd toolbar level added.
+         * 27 Nov 2007: only 1 letter allowed, varchar(0, 4) - max UTF-8 char length (4 bytes).
+         */
+
+        /*
+        if (!$v['int_sort'])
+        {
+            $sys['ar_az_last_characters'][$v['L1']] = '';
+        }
+        */
+
+        if ($gw_this['vars']['a'] == GW_T_TERM
+            || ($gw_this['vars']['w1'] != '' && $gw_this['vars']['w2'] != '')
+        ) {
+            // w1, w2, w3 OR w1, w2 selected
+            if ($gw_this['vars']['a'] == GW_T_TERM
+                || ($gw_this['vars']['w1'] == $v['L1'] && $gw_this['vars']['w2'] == $v['L2'])
+            ) {
+                // Show w3 only for selected w2
+                $arA[$v['L1']][$v['L2']][$v['L3']] = '';
+            } else {
+                $arA[$v['L1']][$v['L2']] = '';
+            }
+        } elseif ($gw_this['vars']['w1'] != '') {
+            // w1 selected
+
+            // Show w2 only for selected w1
+            if ($gw_this['vars']['w1'] == $v['L1']) {
+                $arA[$v['L1']][$v['L2']] = '';
+            } else {
+                $arA[$v['L1']] = '';
+            }
+        } else {
+            // Nothing selected
+            $arA[$v['L1']] = '';
+        }
+
+        unset($arSql[$k]); // keep legacy behavior
+    }
+
+    return $arA;
 }
 
 /**
- * === Toolbar functions.
- * 2 of 2 functions to create alphabetic index.
- * Get HTML-code for A-Z letters. Universal function.
+ * Builds HTML for alphabetic index links.
  *
- * @param    array   $ar array[49][49] = 11;
- * @param    string  $id_dict Dictionary ID, for links only
- * @param    string  $w1 Alphabetic order 1
- * @param    string  $w2 Alphabetic order 2
- * @param    string  $w3 Alphabetic order 3
- * @return   string  HTML-code
+ * Supports 1-, 2- and 3-level alphabetic navigation.
+ *
+ * @param array $letters Letters tree
+ * @param string $dictId Dictionary ID, used in links only
+ * @param string $w1 Alphabetic level 1
+ * @param string $w2 Alphabetic level 2
+ * @param string $w3 Alphabetic level 3
+ * @return string HTML code
  */
-function getLetterHtml($ar, $id_dict, $w1 = '', $w2 = '', $w3 = '')
+function getLetterHtml($letters, $dictId, $w1 = '', $w2 = '', $w3 = '')
 {
-	global $oFunc, $oHtml, $sys, $arDictParam;
+    global $oFunc, $oHtml, $sys, $arDictParam;
 
-	/* Basic Multilingual Plane: */
-	/* http://www.unicode.org/roadmaps/bmp/ */
-	/* Break alphabetic toolbar per every set of characters */
-	if (strtoupper($sys['internal_encoding']) == 'UTF-8')
-	{
-		$arUnicodeMap = array(
-			array('20', 'Basic Latin Digits'),
-			array('41', 'Basic Latin'),
-			array('c280', 'Latin Extended'),
-			array('c990', 'IPA Extensions'),
-			array('cab0', 'Spacing Modifiers'),
-			array('cc80', 'Combining Diacritics'),
-			array('cdb0', 'Greek'),
-			array('d080', 'Cyrillic, Cyrillic Supplement'),
-			array('d4b0', 'Armenian')
-		);
-	}
-	else
-	{
-		$arUnicodeMap = array(
-			array('20', 'Basic Latin Digits'),
-			array('41', 'Basic Latin'),
-			array('c0', 'Cyrillic, Cyrillic Supplement'),
-			array('ff', 'Other')
-		);
-	}
-	$int_cnt = 0;
-	$arS = array();
-	$ar_tb_last = end($arUnicodeMap);
-	$int_tb_last = hexdec($ar_tb_last[0]);
-	/* links to letters */
-	$arTmp['href'][GW_ACTION] = GW_A_LIST;
-	$arTmp['href'][GW_TARGET] = GW_T_DICT;
-	$arTmp['href'][GW_ID_DICT] = $id_dict;
-	/* for each letter */
-	for (reset($ar); list($k1, $v1) = each($ar);)
-	{
-		$int_cnt++;
-		$cnt1_str = (isset($sys['is_print_toolbar_num']) && $sys['is_print_toolbar_num'] == 1) ? $int_cnt : '';
-		/* 0-Z */
-		if (($w1 != '') && ($w2 == ''))
-		{
-			$oHtml->setTag('a', 'title', $cnt1_str);
-			$arTmp['href']['w1'] = urlencode($k1);
-			/* current letter */
-			$int_utf2hex = (ord($k1) >= 127) ? ($oFunc->text_utf2hex($k1, 0)) : dechex(ord($k1));
-			reset($arUnicodeMap);
-			while (($arDictParam['id_custom_az'] == 1) && list($k2, $v2) = each($arUnicodeMap))
-			{
-				/* next letter */
-				if (isset($arUnicodeMap[$k2+1]))
-				{
-					$int_utf2hex_tb_to = ($arUnicodeMap[$k2+1][0]);
-				}
-				else
-				{
-					$int_utf2hex_tb_to = $int_tb_last;
-				}
-				/* start letter */
-				$int_utf2hex_tb_from = ($v2[0]);
-				/* start letter > current letter < next letter */
-				if (($int_utf2hex >= $int_utf2hex_tb_from) 
-					&& ($int_utf2hex < $int_utf2hex_tb_to))
-				{
-#prn_r( $int_utf2hex_tb_from . '=> '. $int_utf2hex .' ('.  $k1 . ') <=' .$int_utf2hex_tb_to );
-					$oHtml->setTag('a', 'class', '');
-					if (strval($k1) == (trim($w1)))
-					{
-						$oHtml->setTag('a', 'class', 'on');
-					}
-					$arS[$k2][] = $oHtml->a( $sys['page_index'].'?'.
-									$oHtml->paramValue($arTmp['href'], '&', ''),
-									($k1));
+    // Basic Multilingual Plane:
+    // http://www.unicode.org/roadmaps/bmp/
+    // Split alphabetic toolbar by character block
+    $unicodeMap = [
+        ['20', 'Basic Latin Digits'],
+        ['41', 'Basic Latin'],
+        ['c280', 'Latin Extended'],
+        ['c990', 'IPA Extensions'],
+        ['cab0', 'Spacing Modifiers'],
+        ['cc80', 'Combining Diacritics'],
+        ['cdb0', 'Greek'],
+        ['d080', 'Cyrillic, Cyrillic Supplement'],
+        ['d4b0', 'Armenian']
+    ];
 
-				}
-			}
-			/* 1.8.6-dev: Custom alphabetic order */
-			if ($arDictParam['id_custom_az'] > 1)
-			{
-				$oHtml->setTag('a', 'class', '');
-				if (strval($k1) == (trim($w1)))
-				{
-					$oHtml->setTag('a', 'class', 'on');
-				}
-				if (isset($sys['ar_az_last_characters'][$k1]))
-				{
-					$arS[0][] = $oHtml->a( $sys['page_index'].'?'. $oHtml->paramValue($arTmp['href'], '&', ''), ($k1));
-				}
-				else
-				{
-					$arS[1][] = $oHtml->a( $sys['page_index'].'?'. $oHtml->paramValue($arTmp['href'], '&', ''), $k1 );
-				}
-			}
-			$oHtml->setTag('a', 'title', '');
-		}
-		else if (($w3 != ''))
-		{
-			/* 000-ZZZ */
-			if (strval($k1) == (trim($w1))  )
-			{
-  				for (reset($v1); list($k2, $v2) = each($v1);)
-				{
-					if (empty($v1[(trim($w2))])){ continue; }
-					if (strval($k2) != (trim($w2)) ) { continue; } /* fix for getLettersArray() */
-					for (reset($v2); list($k3, $v3) = each($v2);)
-					{
-						$oHtml->setTag('a', 'class', '');
-						if (strval($k3) == (trim($w3)))
-						{
-							$oHtml->setTag('a', 'class', 'on');
-						}
-						$arTmp['href']['w1'] = urlencode($k1);
-						$arTmp['href']['w2'] = urlencode($k2);
-						$arTmp['href']['w3'] = urlencode($k3);
-						$arS['0z'][] = $oHtml->a($sys['page_index'].'?'.
-										$oHtml->paramValue($arTmp['href'], '&', ''),
-										$k1.$k2.$k3);
-					}
-				}
-			}
-		}
-		else
-		{
-			/* 00-ZZ */
-			if (strval($k1) == (trim($w1)))
-			{
-				if (!is_array($v1)){ continue; }
-				for (reset($v1); list($k2, $v2) = each($v1);)
-				{
-					$oHtml->setTag('a', 'class', '');
-					if (strval($k2) == (trim($w2)))
-					{
-						$oHtml->setTag('a', 'class', 'on');
-					}
-					$arTmp['href']['w1'] = urlencode($k1);
-					$arTmp['href']['w2'] = urlencode($k2);
-					$arS['0z'][] = $oHtml->a($sys['page_index'].'?'.
-										$oHtml->paramValue($arTmp['href'], '&', ''),
-										 $k1.$k2);
-				}
-			}
-		}
-	}
-	unset($ar);
-	$oHtml->setTag('a', 'title', '');
-	$oHtml->setTag('a', 'class', '');
-	/* Build html-code */
-	$str = '';
-	ksort($arS);
-	for (reset($arS); list($k1, $v1) = each($arS);)
-	{
-		if (is_array($v1))
-		{
-			$str .= implode(' ', $v1);
-			$str .= '<br />';
-		}
-	}
-	return $str;
+    $letterCount = 0;
+    $sections = [];
+
+    $lastToolbarBlock = end($unicodeMap);
+    $lastToolbarHex = hexdec($lastToolbarBlock[0]);
+
+    // Letter link template
+    $linkData = [];
+    $linkData['href'][GW_ACTION] = GW_A_LIST;
+    $linkData['href'][GW_TARGET] = GW_T_DICT;
+    $linkData['href'][GW_ID_DICT] = $dictId;
+
+    foreach ($letters as $key1 => $value1) {
+        $letterCount++;
+        $titleCount = (isset($sys['is_print_toolbar_num']) && $sys['is_print_toolbar_num'] == 1) ? $letterCount : '';
+
+        // 0-Z
+        if ($w1 != '' && $w2 == '') {
+            $oHtml->setTag('a', 'title', $titleCount);
+            $linkData['href']['w1'] = urlencode($key1);
+
+            // Current letter
+            $letterHex = (ord($key1) >= 127) ? $oFunc->text_bytes_to_hex($key1, 0) : dechex(ord($key1));
+
+            if ($arDictParam['id_custom_az'] == 1) {
+                foreach ($unicodeMap as $key2 => $value2) {
+                    // Next block start
+                    if (isset($unicodeMap[$key2 + 1])) {
+                        $toolbarHexTo = $unicodeMap[$key2 + 1][0];
+                    } else {
+                        $toolbarHexTo = $lastToolbarHex;
+                    }
+
+                    // Current block start
+                    $toolbarHexFrom = $value2[0];
+
+                    // Current letter belongs to this block
+                    if ($letterHex >= $toolbarHexFrom && $letterHex < $toolbarHexTo) {
+                        $oHtml->setTag('a', 'class', '');
+
+                        if ((string)$key1 == trim($w1)) {
+                            $oHtml->setTag('a', 'class', 'on');
+                        }
+
+                        $sections[$key2][] = $oHtml->a(
+                            $sys['page_index'] . '?' . $oHtml->paramValue($linkData['href'], '&', ''),
+                            $key1
+                        );
+                    }
+                }
+            }
+
+            // 1.8.6-dev: custom alphabetic order
+            if ($arDictParam['id_custom_az'] > 1) {
+                $oHtml->setTag('a', 'class', '');
+
+                if ((string)$key1 == trim($w1)) {
+                    $oHtml->setTag('a', 'class', 'on');
+                }
+
+                if (isset($sys['ar_az_last_characters'][$key1])) {
+                    $sections[0][] = $oHtml->a(
+                        $sys['page_index'] . '?' . $oHtml->paramValue($linkData['href'], '&', ''),
+                        $key1
+                    );
+                } else {
+                    $sections[1][] = $oHtml->a(
+                        $sys['page_index'] . '?' . $oHtml->paramValue($linkData['href'], '&', ''),
+                        $key1
+                    );
+                }
+            }
+
+            $oHtml->setTag('a', 'title', '');
+        } elseif ($w3 != '') {
+            // 000-ZZZ
+            if ((string)$key1 == trim($w1)) {
+                foreach ($value1 as $key2 => $value2) {
+                    if (empty($value1[trim($w2)])) {
+                        continue;
+                    }
+                    if ((string)$key2 != trim($w2)) {
+                        continue; // Fix for getLettersArray()
+                    }
+
+                    foreach ($value2 as $key3 => $value3) {
+                        $oHtml->setTag('a', 'class', '');
+
+                        if ((string)$key3 == trim($w3)) {
+                            $oHtml->setTag('a', 'class', 'on');
+                        }
+
+                        $linkData['href']['w1'] = urlencode($key1);
+                        $linkData['href']['w2'] = urlencode($key2);
+                        $linkData['href']['w3'] = urlencode($key3);
+
+                        $sections['0z'][] = $oHtml->a(
+                            $sys['page_index'] . '?' . $oHtml->paramValue($linkData['href'], '&', ''),
+                            $key1 . $key2 . $key3
+                        );
+                    }
+                }
+            }
+        } else {
+            // 00-ZZ
+            if ((string)$key1 == trim($w1)) {
+                if (!is_array($value1)) {
+                    continue;
+                }
+
+                foreach ($value1 as $key2 => $value2) {
+                    $oHtml->setTag('a', 'class', '');
+
+                    if ((string)$key2 == trim($w2)) {
+                        $oHtml->setTag('a', 'class', 'on');
+                    }
+
+                    $linkData['href']['w1'] = urlencode($key1);
+                    $linkData['href']['w2'] = urlencode($key2);
+
+                    $sections['0z'][] = $oHtml->a(
+                        $sys['page_index'] . '?' . $oHtml->paramValue($linkData['href'], '&', ''),
+                        $key1 . $key2
+                    );
+                }
+            }
+        }
+    }
+
+    unset($letters);
+
+    $oHtml->setTag('a', 'title', '');
+    $oHtml->setTag('a', 'class', '');
+
+    // Build HTML code
+    $html = '';
+    ksort($sections);
+
+    foreach ($sections as $key1 => $value1) {
+        if (is_array($value1)) {
+            $html .= implode(' ', $value1);
+            $html .= '<br />';
+        }
+    }
+
+    return $html;
 }
 ## Toolbar functions A-Z, 00-ZZ
 ## --------------------------------------------------------
 
 
-
-
 /**
- * Parses XML-data and converts it into structured array.
+ * Parses XML data and converts it into structured array.
  *
- * @param   string  $str        XML-code, (from database)
- * @return  array   Fields content structure
+ * @param string $xmlString XML code (from database)
+ * @return array Parsed field structure
  */
-function gw_Xml2Array($str)
+function gw_Xml2Array($xmlString)
 {
-	global $arFields;
-	//
-	$xmlRoot = array();
-	$xmlTags = array();
-	$xmlAttr = array('link', 'lang', 'text', 'size'); /* possible attributes */
-	$str_tmp = '';
-	/* Fix for empty definitions */
-	$str = str_replace('<defn><![CDATA[]]></defn>', '', $str);
-	// Get defined tags
-	for (reset($arFields); list($fk, $fv) = each($arFields);)
-	{
-		$fieldname = 'is_'.$fv[0];
-		if (isset($fv[4]) && $fv[4]) // root
-		{
-			$xmlRoot[] = $fv[0];
-		}
-		else // not root elements
-		{
-			$xmlTags[] = $fv[0];
-		}
-	}
-	/* Go for each root element */
-	for (reset($xmlRoot); list($kp, $vp) = each($xmlRoot);)
-	{
-		preg_match_all("/<$vp>(.+?)<\/$vp>/s", $str, $strDefnA); // root tags without attributes
-		if (!isset($strDefnA[0]) || !isset($strDefnA[0][0]) || empty($strDefnA[0][0]))
-		{
-			continue;
-		}
-		/* the number of definitions */
-		$intDefnS = sizeof($strDefnA[0]);
-		/* for each <defn> */
-		for ($intDefnC = 0; $intDefnC < $intDefnS; $intDefnC++)
-		{
-			/* 10 march 2003: based on `value' */
-			$parsedAr[$vp][$intDefnC]['value'] = $strDefnA[1][$intDefnC];
-			/* search for attributtes */
-			for (reset($xmlTags); list($kt, $vt) = each($xmlTags);)
-			{
-				preg_match_all("/<$vt(.*?)\>(.*?)\<\/$vt\>/s", $strDefnA[1][$intDefnC], $strTmpA);
-				if (!isset($strTmpA[0]) || empty($strTmpA[0]))
-				{
-					continue;
-				}
-				$intTmpS = sizeof($strTmpA[0]);
-				for ($intTmpC = 0; $intTmpC < $intTmpS; $intTmpC++) /* foreach */
-				{
-					$parsedAr[$vt][$intDefnC][$intTmpC]['value'] = $strTmpA[2][$intTmpC];
-					$parsedAr[$vp][$intDefnC]['value'] = trim(str_replace($strTmpA[0][$intTmpC], '', $parsedAr[$vp][$intDefnC]['value']));
-					if (!isset($strTmpA[1][0]) || empty($strTmpA[1][0]))
-					{
-						continue;
-					}
-					/* 22 jan 2006: read any attributes per any tag */
-					for (reset($xmlAttr); list($ka, $va) = each($xmlAttr);)
-					{
-						preg_match_all("/$va=\"(.*?)\"/", $strTmpA[1][$intTmpC], $ar_attr);
-						if (!isset($ar_attr[1][0]) || empty($ar_attr[1][0]))
-						{
-							continue;
-						}
-						if ($va == 'link' && $ar_attr[1][0] != '')
-						{
-							$parsedAr[$vt][$intDefnC][$intTmpC]['attributes']['is_link'] = 1;
-						}
-						$parsedAr[$vt][$intDefnC][$intTmpC]['attributes'][$va] = $ar_attr[1][0];
-					}
-				}
-			} /* $xmlTags  */
-		} /* end of for each defn */
-	} /* end of $xmlRoot */
-	if (!isset($parsedAr)){ $parsedAr['defn'][0] = ''; }
-	return $parsedAr;
+    global $arFields;
+
+    $xmlRoot = [];
+    $xmlTags = [];
+    $xmlAttr = ['link', 'lang', 'text', 'size']; // possible attributes
+
+    // Fix empty definitions
+    $xmlString = str_replace('<defn><![CDATA[]]></defn>', '', $xmlString);
+
+    // Get defined tags
+    foreach ($arFields as $fieldKey => $fieldValue) {
+        $fieldName = 'is_' . $fieldValue[0];
+
+        if (isset($fieldValue[4]) && $fieldValue[4]) { // root element
+            $xmlRoot[] = $fieldValue[0];
+        } else { // non-root element
+            $xmlTags[] = $fieldValue[0];
+        }
+    }
+
+    // Process each root element
+    foreach ($xmlRoot as $rootKey => $rootTag) {
+        preg_match_all("/<$rootTag>(.+?)<\/$rootTag>/s", $xmlString, $rootMatches); // root tags without attributes
+
+        if (!isset($rootMatches[0]) || !isset($rootMatches[0][0]) || empty($rootMatches[0][0])) {
+            continue;
+        }
+
+        // Number of root elements found
+        $rootCount = count($rootMatches[0]);
+
+        // Process each <defn> / root entry
+        for ($rootIndex = 0; $rootIndex < $rootCount; $rootIndex++) {
+            // 10 Mar 2003: based on "value"
+            $parsedAr[$rootTag][$rootIndex]['value'] = $rootMatches[1][$rootIndex];
+
+            // Search nested tags and their attributes
+            foreach ($xmlTags as $tagKey => $tagName) {
+                preg_match_all("/<$tagName(.*?)\>(.*?)\<\/$tagName\>/s", $rootMatches[1][$rootIndex], $tagMatches);
+
+                if (!isset($tagMatches[0]) || empty($tagMatches[0])) {
+                    continue;
+                }
+
+                $tagCount = count($tagMatches[0]);
+
+                for ($tagIndex = 0; $tagIndex < $tagCount; $tagIndex++) { // for each matched tag
+                    $parsedAr[$tagName][$rootIndex][$tagIndex]['value'] = $tagMatches[2][$tagIndex];
+
+                    $parsedAr[$rootTag][$rootIndex]['value'] = trim(
+                        str_replace($tagMatches[0][$tagIndex], '', $parsedAr[$rootTag][$rootIndex]['value'])
+                    );
+
+                    if (!isset($tagMatches[1][0]) || empty($tagMatches[1][0])) {
+                        continue;
+                    }
+
+                    // 22 Jan 2006: read any attribute for any tag
+                    foreach ($xmlAttr as $attrKey => $attrName) {
+                        preg_match_all("/$attrName=\"(.*?)\"/", $tagMatches[1][$tagIndex], $attrMatches);
+
+                        if (!isset($attrMatches[1][0]) || empty($attrMatches[1][0])) {
+                            continue;
+                        }
+
+                        if ($attrName == 'link' && $attrMatches[1][0] != '') {
+                            $parsedAr[$tagName][$rootIndex][$tagIndex]['attributes']['is_link'] = 1;
+                        }
+
+                        $parsedAr[$tagName][$rootIndex][$tagIndex]['attributes'][$attrName] = $attrMatches[1][0];
+                    }
+                }
+            } // end of $xmlTags
+        } // end of root entries loop
+    } // end of $xmlRoot
+
+    if (!isset($parsedAr)) {
+        $parsedAr['defn'][0] = '';
+    }
+
+    return $parsedAr;
 }
 
 /* end of file */
-?>

@@ -20,12 +20,12 @@ if ( !defined( 'IN_GW' ) )
 class gw_addon_visual_themes_admin extends gw_addon
 {
 
-	var $component = 'visual-themes';
-	var $int_found;
+    public $component = 'visual-themes';
+    public $int_found;
 	/* Autoexec */
 
 
-	function gw_addon_visual_themes_admin ()
+	public function __construct()
 	{
 		$this->init();
 	}
@@ -33,7 +33,7 @@ class gw_addon_visual_themes_admin extends gw_addon
 	/* */
 
 
-	function _get_nav ()
+    public function _get_nav ()
 	{
 		return '<div class="actions-secondary">' .
 		implode( ' ', $this->gw_this['ar_actions_list'][$this->component] ) .

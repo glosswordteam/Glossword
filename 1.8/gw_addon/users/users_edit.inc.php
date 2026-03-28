@@ -230,7 +230,7 @@ else {
 						|| ($ar_img_size[1] > $this->sys['avatar_max_y']))
 					{
 						include_once( $this->sys['path_include'] . '/func.img.inc.php' );
-						gw_image_resize($this->sys['path_temporary'].'/a/'.$file_target, $this->sys['path_temporary'].'/a/'.$file_target, $this->sys['avatar_max_x'], 'gd2', 0);
+						gw_image_resize($this->sys['path_temporary'].'/a/'.$file_target, $this->sys['path_temporary'].'/a/'.$file_target, $this->sys['avatar_max_x'], 0);
 						$ar_img_size = getimagesize($this->sys['path_temporary'].'/a/'.$file_target);
 					}
 					$arPost['user_settings']['avatar_img_x'] = $ar_img_size[0];

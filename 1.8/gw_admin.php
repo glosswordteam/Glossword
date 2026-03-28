@@ -272,7 +272,7 @@ $ar_menu_info = array();
 $ar_menu_info[] = '<span class="white xt"><strong>' . $oL->m('online') . '</strong></span>: <strong>'.
 				$oHtml->a( $sys['page_admin'].'?'.GW_ACTION.'=edit-own'. '&t=users', $oSess->user_get('user_fname').' '.$oSess->user_get('user_sname'), $oL->m('3_profile') ) .
 				'</strong>';
-$ar_menu_info[] = '<span class="white xt">'.$oFunc->date_SecToTime( $sys['time_now_gmt_unix'] - $oSess->user_get('date_login') ).'</span>';
+$ar_menu_info[] = '<span class="white xt">'.$oFunc->dateSecToTime( $sys['time_now_gmt_unix'] - $oSess->user_get('date_login') ).'</span>';
 $ar_menu_info[] = $oHtml->a( $sys['page_admin'].'?a=logout&amp;uri='.base64_encode($_SERVER['QUERY_STRING']), $oL->m('3_logout') );
 
 // --------------------------------------------------------
@@ -568,7 +568,7 @@ $strL .= gw_admin_menu($gw_this['vars'][GW_ACTION], $gw_this['vars'][GW_TARGET])
 /* */
 if (empty($arDictParam)){ $arDictParam = array(); }
 /* */
-$gw_this['vars']['q'] = trim($oFunc->mb_substr($gw_this['vars']['q'], 0, 254));
+$gw_this['vars']['q'] = trim(mb_substr($gw_this['vars']['q'], 0, 254));
 /* Search for terms */
 if ($gw_this['vars'][GW_ACTION] == GW_A_SEARCH)
 {
@@ -770,14 +770,14 @@ if ($sys['id_current_status'] == '2_page__')
 		$oTpl->addVal( 'block:dict_updated',
 			gw_html_block_small(
 				$oL->m('r_dict_updated'),
-				getTop10('DICT_UPDATED', $sys['max_dict_top'], 1),
+                gw_get_top10('DICT_UPDATED', $sys['max_dict_top'], 1),
 				0, 0)
 		);
 		/* Last updated terms */
 		$oTpl->addVal( 'block:term_updated',
 			gw_html_block_small(
 				$oL->m('r_term_updated'),
-				getTop10('TERM_UPDATED', intval($sys['max_dict_top']/2), 0),
+                gw_get_top10('TERM_UPDATED', intval($sys['max_dict_top']/2), 0),
 				0, 0)
 		);
 	}

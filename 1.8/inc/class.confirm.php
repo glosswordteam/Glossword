@@ -1,101 +1,148 @@
 <?php
+
 /**
- * Easy confirm window constructor
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
- * @author   Dmitry Shilnikov <dev at glossword dot info>
- * @version  1.3
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ */
+
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
+}
+
+/**
+ * Easy confirm window constructor.
+ *
+ * Builds simple confirmation form HTML.
  */
 class gwConfirmWindow
 {
-    var $strQuestion     = "Confirm?";
-    var $strFields       = "";
-    var $inputFieldtype  = "hidden";
-    var $tAlign          = "center";
-    var $formwidth       = "400";
-    var $formname        = "post";
-    var $enctype         = "application/x-www-form-urlencoded";    
-    var $action          = "post.php";
-    var $submitok        = " Yes ";
-    var $submitcancel    = " No ";
-    var $formbgcolor     = "#DDD";
-    var $formbordercolor = "#444";
-    var $formbordercolorL= "#FFF";
-    var $css_align_right = 'right';
-    var $css_align_left  = 'left'; 
-    var $submitclass     = 'submitdel';
-    
-    /**
-     * Constructs <input> tag
-     *
-     * @param    string      field type [ hidden | input ]
-     * @param    string      field name
-     * @param    string      name value
-     */
-    function setField($fieldtype, $var, $val)
-    {
-        $this->strFields .= '<input type="'.$fieldtype.'" name="'.$var.'" value="'.$val.'" />';
-    } // end of setField();
+    /** @var string */
+    public $strQuestion = 'Confirm?';
+    /** @var string */
+    public $strFields = '';
+    /** @var string */
+    public $inputFieldtype = 'hidden';
+    /** @var string */
+    public $tAlign = 'center';
+    /** @var string */
+    public $formwidth = '400';
+    /** @var string */
+    public $formname = 'post';
+    /** @var string */
+    public $enctype = 'application/x-www-form-urlencoded';
+    /** @var string */
+    public $action = 'post.php';
+    /** @var string */
+    public $submitok = ' Yes ';
+    /** @var string */
+    public $submitcancel = ' No ';
+    /** @var string */
+    public $formbgcolor = '#DDD';
+    /** @var string */
+    public $formbordercolor = '#444';
+    /** @var string */
+    public $formbordercolorL = '#FFF';
+    /** @var string */
+    public $css_align_right = 'right';
+    /** @var string */
+    public $css_align_left = 'left';
+    /** @var string */
+    public $submitclass = 'submitdel';
 
     /**
-     * Sets question to form
+     * Construct <input> tag and append to internal fields buffer.
      *
-     * @param    string      Question text
-     * @return   string      Question text
+     * @param string $field_type Field type (hidden|text|submit etc.).
+     * @param string $name Field name.
+     * @param string $value Field value.
+     *
+     * @return void
      */
-    function setQuestion($text)
+    public function setField($field_type, $name, $value)
     {
-        $this->strQuestion=$text;
-    } // end of setQuestion();
+        // NOTE: values are assumed to be pre-escaped by caller when needed.
+        $this->strFields .=
+            '<input type="' . $field_type . '" name="' . $name . '" value="' . $value . '" />';
+    }
 
     /**
-     * Constructs confirmation window
+     * Set question text for form.
      *
-     * @return   string      full html-code for form
+     * @param string $text Question text (raw HTML allowed).
+     *
+     * @return void
      */
-    function Form()
+    public function setQuestion($text)
     {
-        $str = "";
-        $str .= '<div style="text-align:center"><form name="'.$this->formname.'" action="'.$this->action.'" enctype="'.$this->enctype.'" method="post" style="margin:0">';
-        $str .= '<table width="1%" border="0" cellspacing="1" cellpadding="1" style="margin:0 auto;background:'.$this->formbordercolor.'"><tr><td style="background-color:'.$this->formbordercolorL.'">';
-        $str .= '<table width="'.$this->formwidth.'" border="0" cellspacing="0" cellpadding="5" style="background:'.$this->formbgcolor.'">';
-    
-        $str .= '<tr>';
-        $str .= '<td align="'.$this->css_align_left.'" style="background:'.$this->formbgcolor.'">';
-        $str .= $this->strQuestion;
-        $str .= "</td>";
-        $str .= "</tr>";
-    
-        $str .= '<tr align="center" style="background-color:'.$this->formbgcolor.'">';
-        $str .= '<td>';
-            $str .= '<table width="150" border="0" cellpadding="0" id="confirmboxtable"><tr align="center">';
-            $str .= '<td width="50%">';
-            $str .= '<input class="'.$this->submitclass.'" type="submit" value="'.$this->submitok.'" ';
-            $str .= "onclick=\"document.all.confirmboxtable.style.visibility='hidden'\"/></td>";
-            $str .= '<td width="50%">';
-            $str .= '<input type="reset" value="'.$this->submitcancel.'" class="submitcancel" onclick="history.back(-1);document.all.confirmboxtable.style.visibility=\'hidden\';"/></td>';
-            $str .= "</tr></table>";
-        $str .= "</td>";
-        $str .= "</tr>";
-        $str .= "</table>";
-        
-        $this->setField("hidden", "isConfirm", 1);
-        $str .= $this->strFields;
-        
-        $str .= "</td></tr></table>";
-        $str .= "</form></div>";
-        return $str;
-    } // end of Form();
+        $this->strQuestion = $text;
+    }
 
     /**
-     * Debug helper
+     * Build confirmation window HTML.
      *
-     * @return   string  html-code only for fileds
+     * @return string Full HTML code for form.
      */
-    function FieldsOnly()
+    public function Form()
+    {
+        $html = '';
+
+        $html .= '<div style="text-align:center">';
+        $html .= '<form name="' . $this->formname . '" action="' . $this->action . '"';
+        $html .= ' enctype="' . $this->enctype . '" method="post" style="margin:0">';
+
+        $html .= '<table width="1%" border="0" cellspacing="1" cellpadding="1"';
+        $html .= ' style="margin:0 auto;background:' . $this->formbordercolor . '">';
+        $html .= '<tr><td style="background-color:' . $this->formbordercolorL . '">';
+
+        $html .= '<table width="' . $this->formwidth . '" border="0" cellspacing="0" cellpadding="5"';
+        $html .= ' style="background:' . $this->formbgcolor . '">';
+
+        $html .= '<tr>';
+        $html .= '<td align="' . $this->css_align_left . '" style="background:' . $this->formbgcolor . '">';
+        $html .= $this->strQuestion;
+        $html .= '</td>';
+        $html .= '</tr>';
+
+        $html .= '<tr align="center" style="background-color:' . $this->formbgcolor . '">';
+        $html .= '<td>';
+        $html .= '<table width="150" border="0" cellpadding="0" id="confirmboxtable"><tr align="center">';
+        $html .= '<td width="50%">';
+        $html .= '<input class="' . $this->submitclass . '" type="submit" value="' . $this->submitok . '" ';
+        $html .= 'onclick="document.all.confirmboxtable.style.visibility=\'hidden\'" />';
+        $html .= '</td>';
+        $html .= '<td width="50%">';
+        $html .= '<input type="reset" value="' . $this->submitcancel . '" class="submitcancel" ';
+        $html .= 'onclick="history.back(-1);document.all.confirmboxtable.style.visibility=\'hidden\';" />';
+        $html .= '</td>';
+        $html .= '</tr></table>';
+        $html .= '</td>';
+        $html .= '</tr>';
+
+        $html .= '</table>';
+
+        $this->setField('hidden', 'isConfirm', 1);
+        $html .= $this->strFields;
+
+        $html .= '</td></tr></table>';
+        $html .= '</form></div>';
+
+        return $html;
+    }
+
+    /**
+     * Debug helper: return only fields HTML.
+     *
+     * @return string HTML code only for fields.
+     */
+    public function FieldsOnly()
     {
         return $this->strFields;
-    } // end of FieldsOnly();
-
-} // end of class gwConfirmWindow
-
-?>
+    }
+}

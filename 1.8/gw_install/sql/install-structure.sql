@@ -1,7 +1,7 @@
 
 DROP TABLE IF EXISTS `{prefix}abbr`;
 CREATE TABLE IF NOT EXISTS `{prefix}abbr` (
-  `id_abbr` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id_abbr` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `id_dict` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `id_group` tinyint(3) unsigned NOT NULL DEFAULT '1',
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}captcha` (
 
 DROP TABLE IF EXISTS `{prefix}component`;
 CREATE TABLE IF NOT EXISTS `{prefix}component` (
-  `id_component` tinyint(2) unsigned NOT NULL AUTO_INCREMENT,
+  `id_component` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `id_component_name` varchar(64) NOT NULL,
   `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `int_sort` mediumint(8) unsigned NOT NULL DEFAULT '10',
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}component` (
 
 DROP TABLE IF EXISTS `{prefix}component_actions`;
 CREATE TABLE IF NOT EXISTS `{prefix}component_actions` (
-  `id_action` tinyint(2) unsigned NOT NULL AUTO_INCREMENT,
+  `id_action` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `aname` varchar(64) NOT NULL,
   `aname_sys` varchar(64) NOT NULL,
   `icon` varchar(64) NOT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}component_actions` (
 
 DROP TABLE IF EXISTS `{prefix}component_map`;
 CREATE TABLE IF NOT EXISTS `{prefix}component_map` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `id_component` tinyint(2) unsigned NOT NULL DEFAULT '1',
   `id_action` tinyint(2) unsigned NOT NULL DEFAULT '1',
   `is_active_map` tinyint(1) unsigned NOT NULL DEFAULT '1',
@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}custom_az` (
 
 DROP TABLE IF EXISTS `{prefix}custom_az_profiles`;
 CREATE TABLE IF NOT EXISTS `{prefix}custom_az_profiles` (
-  `id_profile` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `id_profile` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `profile_name` tinyblob NOT NULL,
   PRIMARY KEY (`id_profile`)
@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}custom_az_profiles` (
 
 DROP TABLE IF EXISTS `{prefix}dict`;
 CREATE TABLE IF NOT EXISTS `{prefix}dict` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `id_topic` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `is_active` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `id_user` smallint(5) unsigned NOT NULL DEFAULT '1',
@@ -262,7 +262,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}map_user_to_term` (
 
 DROP TABLE IF EXISTS `{prefix}pages`;
 CREATE TABLE IF NOT EXISTS `{prefix}pages` (
-  `id_page` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id_page` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `id_user` smallint(5) unsigned NOT NULL DEFAULT '2',
   `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `int_sort` smallint(5) unsigned NOT NULL DEFAULT '10',
@@ -284,7 +284,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}pages` (
 
 DROP TABLE IF EXISTS `{prefix}pages_phrase`;
 CREATE TABLE IF NOT EXISTS `{prefix}pages_phrase` (
-  `id_page_phrase` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `id_page_phrase` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `id_page` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `id_lang` varchar(10) NOT NULL DEFAULT 'en-utf8',
   `page_title` varbinary(255) NOT NULL DEFAULT '',
@@ -350,7 +350,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}settings` (
 
 DROP TABLE IF EXISTS `{prefix}stat_dict`;
 CREATE TABLE IF NOT EXISTS `{prefix}stat_dict` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `hits` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
@@ -437,7 +437,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}theme_settings` (
 
 DROP TABLE IF EXISTS `{prefix}topics`;
 CREATE TABLE IF NOT EXISTS `{prefix}topics` (
-  `id_topic` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id_topic` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `id_user` smallint(5) unsigned NOT NULL DEFAULT '2',
   `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `int_sort` smallint(5) unsigned NOT NULL DEFAULT '10',
@@ -457,7 +457,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}topics` (
 
 DROP TABLE IF EXISTS `{prefix}topics_phrase`;
 CREATE TABLE IF NOT EXISTS `{prefix}topics_phrase` (
-  `id_topic_phrase` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `id_topic_phrase` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `id_topic` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `id_lang` varchar(10) NOT NULL DEFAULT 'en-utf8',
   `topic_title` varbinary(255) NOT NULL DEFAULT '',
@@ -498,7 +498,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}users` (
 
 DROP TABLE IF EXISTS `{prefix}virtual_keyboard`;
 CREATE TABLE IF NOT EXISTS `{prefix}virtual_keyboard` (
-  `id_profile` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `id_profile` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `is_index_page` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `vkbd_name` tinyblob NOT NULL,

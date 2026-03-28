@@ -1,69 +1,97 @@
-<?
-class xmlTinyParser {
+<?php
 
-    var $encoding   = "UTF-8";
-    var $method     = "xml";
+/**
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ */
 
-function parse($strXmlData = "", $strXslData = "")
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
+}
+
+/**
+ * Validate XML string syntax.
+ */
+class gw_xml_validator
 {
-    if ($strXmlData == ''){ $strXmlData = $this->getXmlData(); }
-    if ($strXslData == ''){ $strXslData = $this->getXslData(); }
-        
-    $strXslData = $this->getXslData();
+    /** @var string */
+    public $encoding = 'UTF-8';
 
-#   $strXslData = iconv("windows-1251", "UTF-8", $strXslData);
+    /** @var string */
+    public $last_error = '';
 
-    $arguments = array(
-        '/_xml' => $strXmlData,
-        '/_xsl' => $strXslData
-    );
-
-    $xh = xslt_create();
-    error_reporting(0);
-    if ( xslt_process($xh, 'arg:/_xml', 'arg:/_xsl', NULL, $arguments) )
+    /**
+     * Validate XML syntax.
+     *
+     * @param string $xml_data
+     * @return bool
+     */
+    public function parse($xml_data = '')
     {
+        $this->last_error = '';
+
+        if (!is_string($xml_data) || $xml_data === '') {
+            $this->last_error = 'XML data is empty.';
+
+            return false;
+        }
+
+        if (!extension_loaded('dom')) {
+            $this->last_error = 'Required PHP extension `dom` is not loaded.';
+
+            return false;
+        }
+
+        $xml_document = new DOMDocument('1.0', $this->encoding);
+
+        libxml_use_internal_errors(true);
+
+        $is_loaded = $xml_document->loadXML($xml_data);
+
+        if (!$is_loaded) {
+            $this->last_error = $this->_get_libxml_error_message();
+            libxml_clear_errors();
+
+            return false;
+        }
+
+        libxml_clear_errors();
+
         return true;
     }
-    else
-    {   
-        $str = "<ul><li>Error string: " . xslt_error($xh) . "</li>\n";
-        $str .= "<li>Error code: " . xslt_errno($xh) . "</li></ul>\n";
-        return false;
+
+    /**
+     * Return last validation error.
+     *
+     * @return string
+     */
+    public function get_last_error()
+    {
+        return $this->last_error;
     }
-    xslt_free($xh);
+
+    /**
+     * Build readable libxml error message.
+     *
+     * @return string
+     */
+    private function _get_libxml_error_message()
+    {
+        $errors = libxml_get_errors();
+
+        if (empty($errors)) {
+            return 'Unknown XML parsing error.';
+        }
+
+        $first_error = reset($errors);
+
+        return trim($first_error->message) . ' at line ' . (int) $first_error->line;
+    }
 }
-
-
-function getXmlData(){
-    $strXmlData = '<'.'?xml version="1.0"'.'?><body> Body </body>';
-
-return $strXmlData;
-}
-
-function getXslData()
-{
-
-$strXslData = '
-<xsl:stylesheet
-  version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:fo="http://www.w3.org/1999/XSL/Format">
-<xsl:output method="' . $this->method . '" indent="no" encoding="' . $this->encoding . '"/>
-<xsl:preserve-space elements="pre"/>
-<xsl:strip-space elements="*"/>
-
-<xsl:template match="*">
-
-<xsl:apply-templates/>
-
-</xsl:template>
-</xsl:stylesheet>
-';
-
-    return $strXslData;
-}
-
-
-}
-
-?>

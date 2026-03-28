@@ -184,7 +184,7 @@ class gw_addon_vkbd_admin extends gw_addon
         $strForm .= '</fieldset>';
 
         if ($this->gw_this['vars'][GW_ACTION] == GW_A_EDIT) {
-            $strForm .= $oForm->field('hidden', 'tid', $this->gw_this['vars']['tid']);
+            $strForm .= $oForm->field('hidden', GW_TARGET_ID, $this->gw_this['vars'][GW_TARGET_ID]);
         }
 
         $strForm .= $oForm->field('hidden', GW_ACTION, $this->gw_this['vars'][GW_ACTION]);

@@ -1,19 +1,21 @@
 <?php
-if (!defined('IN_GW'))
-{
-	die('<!-- $Id: a.export.inc.php 472 2008-05-14 16:55:36Z glossword_team $ -->');
-}
+
 /**
- *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
+}
+
 // --------------------------------------------------------
 /**
  *  Export. External utility for a dictionary.
@@ -28,52 +30,63 @@ if (!defined('IN_GW'))
 // --------------------------------------------------------
 
 /**
+ * Get min/max term dates for given dictionary table.
  *
+ * @param string $tablename Dictionary table name.
+ *
+ * @return array{min:int,max:int}
  */
-function getTermDates($id_dict, $DBTABLE)
+function gw_get_term_dates($tablename)
 {
-	global $oDb, $oSqlQ, $sys, $oSess;
-	global $arDictParam;
+    global $oDb, $oSqlQ, $sys;
 
-	$arSql = $oDb->sqlExec( $oSqlQ->getQ('get-date-mm', $arDictParam['tablename']) );
-	$strA = array('max' => time(), 'min' => 0);
-	for (; list($arK, $arV) = each($arSql);)
-	{
-		if (empty($arV['max']) && empty($arV['min']))
-		{
-			/* no date */
-			$strA['max'] = $strA['min'] = $sys['time_now_gmt_unix'];
-		}
-		else
-		{
-			$strA['max'] = $arV['max'];
-			$strA['min'] = $arV['min'];
-		}
-	}
-	return $strA;
+    // Execute query for min/max dates
+    $sql_result = $oDb->sqlExec(
+        $oSqlQ->getQ('get-date-mm', $tablename)
+    );
+
+    $dates = [
+        'max' => time(),
+        'min' => 0,
+    ];
+
+    foreach ($sql_result as $row_key => $row_value) {
+        if (empty($row_value['max']) && empty($row_value['min'])) {
+            // No date found, fallback to current GMT timestamp
+            $dates['max'] = $sys['time_now_gmt_unix'];
+            $dates['min'] = $sys['time_now_gmt_unix'];
+        } else {
+            $dates['max'] = (int) $row_value['max'];
+            $dates['min'] = (int) $row_value['min'];
+        }
+    }
+
+    return $dates;
 }
+
+
 /**
+ * Build export filename with sequence placeholder.
  *
+ * Example result pattern: "file_%02d_of_%02d.ext".
+ *
+ * @param string $filename       Base filename without extension.
+ * @param int    $parts_count    Total parts count.
+ * @param string $format         File extension or format.
+ *
+ * @return string
  */
-function getExportFilename($f, $cnt, $fmt)
+function gw_get_export_filename($filename, $parts_count, $format)
 {
-	$r = strlen($cnt);
-	$seq = "_%0" . $r . "d_of_%0" . $r . "d";
-	return $f . $seq . '.' . $fmt;
+    $digits = strlen((string) $parts_count);
+
+    // Sequence part for sprintf, e.g. "_%02d_of_%02d"
+    $sequence_pattern = '_%0' . $digits . 'd_of_%0' . $digits . 'd';
+
+    return $filename . $sequence_pattern . '.' . $format;
 }
-/* */
-function gw_file_copy($oldname, $newname)
-{
-	if (is_file($oldname))
-	{
-		$perms = fileperms($oldname);
-		return copy($oldname, $newname) && chmod($newname, $perms);
-	}
-	else
-	{
-		die("Cannot copy file: $oldname (it's neither a file nor a directory)");
-	}
-}
+
+
 /**
  *
  */
@@ -200,7 +213,7 @@ case GW_A_ADD:
 	if ($post == '') // not saved
 	{
 		// get MAX and MIN date from terms
-		$vars = getTermDates($id, $DBTABLE);
+		$vars = gw_get_term_dates($id, $DBTABLE);
 		$ar_formats = file_readDirD($sys['path_include'] . '/', "/^export_/");
 		$vars['arFmt'] = str_replace('export_', '', $ar_formats);
 		$vars['arFmt'] = str_replace('_', ' ', $vars['arFmt']);

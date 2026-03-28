@@ -89,7 +89,7 @@ elseif ($this->gw_this['vars']['mode'] == 'reset')
 }
 elseif ($this->gw_this['vars']['mode'] == 'off')
 {
-	$arKeys = ctlgGetTree($arParsed['ar'], $this->gw_this['vars']['tid']);
+	$arKeys = gw_ctlg_get_tree($arParsed['ar'], $this->gw_this['vars']['tid']);
 	$arQ[] = 'UPDATE `'.$this->sys['tbl_prefix'].'topics`
 						SET `is_active` = "0"
 						WHERE `id_topic` IN ('.implode(',', $arKeys).')';
@@ -98,7 +98,7 @@ elseif ($this->gw_this['vars']['mode'] == 'off')
 }
 elseif ($this->gw_this['vars']['mode'] == 'on')
 {
-	$arKeys = ctlgGetTree($arParsed['ar'], $this->gw_this['vars']['tid']);
+	$arKeys = gw_ctlg_get_tree($arParsed['ar'], $this->gw_this['vars']['tid']);
 	$arQ[] = 'UPDATE `'.$this->sys['tbl_prefix'].'topics`
 						SET `is_active` = "1"
 						WHERE `id_topic` IN ('.implode(',', $arKeys).')';
@@ -139,7 +139,7 @@ if ($this->gw_this['vars']['post'] == '')
 		if (isset($arParsed['ar'][$this->gw_this['vars']['tid']]['ch']))
 		{
 			$msg_error .= '<p class="xt">' . $this->oL->m('reason_2').'</p>';
-			$arKeys = ctlgGetTree($arParsed['ar'], $this->gw_this['vars']['tid']);
+			$arKeys = gw_ctlg_get_tree($arParsed['ar'], $this->gw_this['vars']['tid']);
 			/* Unset the current Topic ID from subtopics tree */
 			unset($arKeys[$this->gw_this['vars']['tid']]);
 			while (is_array($arKeys) && list($k, $v) = each($arKeys))
@@ -186,8 +186,6 @@ else
 	/* */
 	$arPre =& $this->gw_this['vars']['arPre'];
 
-	/* Enter debug mode */
-#$this->sys['isDebugQ'] = 1;
 	/* Fix on/off options */
 	$arIsV = array('is_active');
 	for (; list($k, $v) = each($arIsV);)
@@ -204,7 +202,7 @@ else
 	$ar =& $this->gw_this['ar_topics_list'];
 	if (isset($ar[$this->gw_this['vars']['tid']]['ch']))
 	{
-		$arKeys = ctlgGetTree($ar, $this->gw_this['vars']['tid']);
+		$arKeys = gw_ctlg_get_tree($ar, $this->gw_this['vars']['tid']);
 		while (is_array($arKeys) && list($k, $v) = each($arKeys))
 		{
 			$arQ[] = 'UPDATE `'.$this->sys['tbl_prefix'].'topics` SET `is_active` = "'.$q1['is_active'].'" WHERE id_parent = "' . $v . '"';

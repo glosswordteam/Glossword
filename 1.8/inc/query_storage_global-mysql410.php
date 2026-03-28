@@ -1,9 +1,9 @@
 <?php
 /*
  * Query storage
- *  � 2008-2012 Glossword.biz team <team at glossword dot biz>
- *  � 2002-2008 Dmitry N. Shilnikov
- * $Id: query_storage_global-mysql410.php 491 2008-06-13 10:05:06Z glossword_team $
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  */
 
 $tmp['ar_queries'] = array(
@@ -105,7 +105,7 @@ $tmp['ar_queries'] = array(
 						AND th.is_active = "1"
 						AND ths.settings_key = "%s"
 					',
-	'get-theme-code-gp' => 'SELECT g.id_group, ths.settings_key, ths.settings_value, ths.date_modified, ths.date_compiled, ths.code, ths.code_i
+	'get-theme-code-gp' => 'SELECT g.id_group, g.settings_key, ths.settings_value, ths.date_modified, ths.date_compiled, ths.code, ths.code_i
 						FROM '.$sys['tbl_prefix'].'theme AS th, '.$sys['tbl_prefix'].'theme_settings AS ths, '.$sys['tbl_prefix'].'theme_group AS g
 						WHERE ths.id_theme = "%s"
 						AND th.id_theme = ths.id_theme
@@ -114,14 +114,13 @@ $tmp['ar_queries'] = array(
 						AND g.id_group IN (%s)
 						ORDER BY g.int_sort
 					',
-	'get-theme' => 'SELECT ths.settings_key, ths.settings_value
+	'get-theme' => 'SELECT DISTINCT g.settings_key, ths.settings_value
 						FROM '.$sys['tbl_prefix'].'theme AS th, '.$sys['tbl_prefix'].'theme_settings AS ths, '.$sys['tbl_prefix'].'theme_group AS g
 						WHERE ths.id_theme = "%s"
 						AND th.id_theme = ths.id_theme
 						AND th.is_active = "1"
 						AND ths.settings_key = g.settings_key
 						AND g.id_group IN (%s)
-						GROUP BY g.settings_key
 						ORDER BY g.id_group, g.int_sort
 					',
 	'get-abbr-code' => 'SELECT a.id_group, a.id_abbr, b.abbr_short, b.abbr_long
@@ -506,7 +505,7 @@ $tmp['ar_queries'] = array(
 					',
 	'get-term-exists-spec' => 'SELECT t.id, t.term, t.term_uri
 						FROM `%s` AS t
-						WHERE (t.term LIKE "%s" OR t.id = "%d")
+						WHERE (t.term = "%s" OR t.id = "%d")
 						AND t.is_active != "3"
 						GROUP BY t.id
 					',
@@ -605,5 +604,3 @@ $tmp['ar_queries'] = array(
 					 ) ENGINE=MyISAM DEFAULT CHARSET=utf8
 					"
 );
-/* end of file */
-?>

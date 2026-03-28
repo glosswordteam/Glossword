@@ -511,7 +511,7 @@ class gw_addon_topic_admin extends gw_addon
 		if (isset($ar[$this->gw_this['vars']['tid']]['ch']))
 		{
 			$msg_error .= '<br />' . $this->oL->m('reason_2');
-			$arKeys = ctlgGetTree($ar, $this->gw_this['vars']['tid']);
+			$arKeys = gw_ctlg_get_tree($ar, $this->gw_this['vars']['tid']);
 			/* Unset the current Topic ID from subtopics tree */
 			unset($arKeys[$this->gw_this['vars']['tid']]);
 			while (is_array($arKeys) && list($k, $v) = each($arKeys))

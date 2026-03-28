@@ -321,7 +321,7 @@ class gw_addon_feedback extends gw_addon
 				/* Limit the string length */
 				for ( reset( $vars ); list($k, $v) = each( $vars ); )
 				{
-					$vars[$k] = $this->oFunc->mb_substr( $v, 0, $this->int_max_length );
+					$vars[$k] = mb_substr( $v, 0, $this->int_max_length );
 				}
 				/* Checking subject */
 				$vars['subject'] = htmlspecialchars_ltgt( strip_tags( $vars['subject'] ) );

@@ -117,25 +117,29 @@ function gw_import_xml()
 		$gw_this['vars']['int_bytes'] = strlen($gw_this['vars']['arPost']['xml']);
 
 		/* XML-syntax check */
-		$isPostError = 0;
-		/* PHP4 */
-		if ($gw_this['vars']['arPost']['is_validate'] && function_exists('xslt_create'))
-		{
-			include_once( $sys['path_include']. '/class.xmlparse.php' );
-			$xml_parser = new xmlTinyParser();
-			$is_return = $xml_parser->parse($gw_this['vars']['arPost']['xml']);
-			if (!$is_return)
-			{
-				// Uploaded file can be too big,
-				// so we do not need to put file contents into HTML-form,
-				// show filename instead
-				if (file_exists($xml_file) && is_uploaded_file($xml_file))
-				{
-					$gw_this['vars']['arPost']['xml'] = $file_location['name'];
-				}
-				$arBroken['xml'] = $isPostError = 1;
-			}
-		}
+        $isPostError = 0;
+
+        if ($gw_this['vars']['arPost']['is_validate']) {
+            include_once($sys['path_include'] . '/class.xml_validator.php');
+
+            $xml_validator = new gw_xml_validator();
+            $is_valid = $xml_validator->parse($gw_this['vars']['arPost']['xml']);
+
+            if (!$is_valid) {
+                // Uploaded file can be too big,
+                // so we do not need to put file contents into HTML form,
+                // show filename instead
+                if (file_exists($xml_file) && is_uploaded_file($xml_file)) {
+                    $gw_this['vars']['arPost']['xml'] = $file_location['name'];
+                }
+
+                $arBroken['xml'] = 1;
+                $isPostError = 1;
+
+                // Optional: show parser error near the field
+                $gw_this['vars']['xml_error'] = $xml_validator->get_last_error();
+            }
+        }
 		if ($isPostError)
 		{
 			/* Call HTML-form again */
@@ -331,7 +335,7 @@ function gw_import_xml()
 					/* 22 jul 2003, 26 june 2005: Custom Term ID */
 					$qT['id'] = $oDom->get_attribute('id', $v2['tag'], $v2);
 					$qT['id'] = preg_replace("/[^0-9]/", '', trim($qT['id']));
-					$id_term_db = $oDb->MaxId($arDictParam['tablename'], 'id');
+					$id_term_db = $oDb->NextId($arDictParam['tablename'], 'id');
 					/* 21 jul 2003: Better protection by using random number for Next ID */
 					$qT['id'] = ($qT['id'] == '') ? mt_rand($id_term_db, ($sys['leech_factor']) + $id_term_db) : $qT['id'];
 
@@ -372,23 +376,28 @@ function gw_import_xml()
 						/* Strict search for an existent term including special chars */
 						if ($gw_this['vars']['arPost']['is_specialchars'])
 						{
-							$ar_chars_sql = array('\\' => '\\\\', '\\%' => '\\\\\\\%', '\\_' => '\\\\\\\_', '\\"' => '\\\\\\\"', "\\'" => "\\\\\\\'");
-							$sql = $oSqlQ->getQ('get-term-exists-spec',
-										$arDictParam['tablename'],
-										str_replace(array_keys($ar_chars_sql), array_values($ar_chars_sql), gw_addslashes($str_term_src)),
-										$qT['id']
-							);
+                            $sql = $oSqlQ->getQ(
+                                'get-term-exists-spec',
+                                $arDictParam['tablename'],
+                                gw_text_sql($str_term_src),
+                                $qT['id']
+                            );
 						}
 						else
 						{
-							/* Search for an existent term by matched keywords */
-							$sql_word_search = "k.word_text IN ('" . implode("', '", $ar_keywords[1]) . "')";
-							$sql = $oSqlQ->getQ('get-term-exists', TBL_WORDLIST,
-								$arDictParam['tablename'], $arDictParam['id'], 1, $sql_word_search
-							);
+                            /* Search for an existent term by matched keywords */
+                            $sql_word_search = "k.word_text IN ('" . implode("', '", $ar_keywords[1]) . "')";
+                            $sql = $oSqlQ->getQ(
+                                'get-term-exists',
+                                TBL_WORDLIST,
+                                $arDictParam['tablename'],
+                                $arDictParam['id'],
+                                1,
+                                $sql_word_search
+                            );
 						}
 						$arSql = $oDb->sqlExec($sql);
-#prn_r( $arSql );
+                        #prn_r( $arSql );
 						/* Compare founded values with imported values */
 						for (; list($arK, $arV) = each($arSql);)
 						{
@@ -437,9 +446,9 @@ function gw_import_xml()
 					$str_term_src_uc = $oCase->uc( $str_term_src );
 					$qT['term_order'] = $str_term_src_uc;
 					$qT['term_a'] = $qT['term_b'] = $qT['term_c'] = $qT['term_d'] = $qT['term_e'] = $qT['term_f'] = 0;
-					$qT['term_3'] = ($qT['term_3'] == '') ? $oFunc->mb_substr($str_term_src_uc, 2, 1, $sys['internal_encoding']) : $qT['term_3'];
-					$qT['term_2'] = ($qT['term_2'] == '') ? $oFunc->mb_substr($str_term_src_uc, 1, 1, $sys['internal_encoding']) : $qT['term_2'];
-					$qT['term_1'] = ($qT['term_1'] == '') ? $oFunc->mb_substr($str_term_src_uc, 0, 1, $sys['internal_encoding']) : $qT['term_1'];
+					$qT['term_3'] = ($qT['term_3'] == '') ? mb_substr($str_term_src_uc, 2, 1, $sys['internal_encoding']) : $qT['term_3'];
+					$qT['term_2'] = ($qT['term_2'] == '') ? mb_substr($str_term_src_uc, 1, 1, $sys['internal_encoding']) : $qT['term_2'];
+					$qT['term_1'] = ($qT['term_1'] == '') ? mb_substr($str_term_src_uc, 0, 1, $sys['internal_encoding']) : $qT['term_1'];
 					/* 1.8.7 */
 					$ar_field_names = array('a','b','c','d','e','f');
 					preg_match_all("/./u", $str_term_src_uc, $ar_letters);
@@ -534,7 +543,7 @@ function gw_import_xml()
 		if (!$is_term_exists)
 		{
 			++$gw_this['vars']['int_items_added'];
-			gwAddNewKeywords($arDictParam['id'], $qT['id'], $ar_keywords, $id_term_old, $is_clean_map, $qT['date_created']);
+            gw_add_keywords($arDictParam['id'], $qT['id'], $ar_keywords, $id_term_old, $is_clean_map, $qT['date_created']);
 			$arQ[] = gw_sql_replace($qT, $arDictParam['tablename'], 1);
 			$arQ[] = gw_sql_replace($arTermMap, TBL_MAP_USER_TERM, 1);
 
@@ -961,7 +970,7 @@ function gw_import_csv()
 		$qT['id'] = $arData[$uid]['id'];
 		if ($qT['id'] == '')
 		{
-			$id_term_db = $oDb->MaxId($arDictParam['tablename'], 'id');
+			$id_term_db = $oDb->NextId($arDictParam['tablename'], 'id');
 			$qT['id'] = mt_rand($id_term_db, ($sys['leech_factor'] * 2) + $id_term_db);
 		}
 		/* Set time */
@@ -1030,9 +1039,9 @@ function gw_import_csv()
 		$str_term_src_uc = $oCase->uc( $str_term_src );
 		$qT['term_order'] = $str_term_src_uc;
 		$qT['term_a'] = $qT['term_b'] = $qT['term_c'] = $qT['term_d'] = $qT['term_e'] = $qT['term_f'] = 0;
-		$qT['term_3'] = ($arData[$uid]['term_3'] == '') ? $oFunc->mb_substr($str_term_src_uc, 2, 1, $sys['internal_encoding']) : $arData[$uid]['term_3'];
-		$qT['term_2'] = ($arData[$uid]['term_2'] == '') ? $oFunc->mb_substr($str_term_src_uc, 1, 1, $sys['internal_encoding']) : $arData[$uid]['term_2'];
-		$qT['term_1'] = ($arData[$uid]['term_1'] == '') ? $oFunc->mb_substr($str_term_src_uc, 0, 1, $sys['internal_encoding']) : $arData[$uid]['term_1'];
+		$qT['term_3'] = ($arData[$uid]['term_3'] == '') ? mb_substr($str_term_src_uc, 2, 1, $sys['internal_encoding']) : $arData[$uid]['term_3'];
+		$qT['term_2'] = ($arData[$uid]['term_2'] == '') ? mb_substr($str_term_src_uc, 1, 1, $sys['internal_encoding']) : $arData[$uid]['term_2'];
+		$qT['term_1'] = ($arData[$uid]['term_1'] == '') ? mb_substr($str_term_src_uc, 0, 1, $sys['internal_encoding']) : $arData[$uid]['term_1'];
 
 		/* 24 apr 2008: Even better URI. Added transliteration. */
 		$qT['term_uri'] = ($arData[$uid]['term_uri'] == '') ? $qT['id'].'-'.$oCase->translit( $oCase->lc($str_term_src)) : $arData[$uid]['term_uri'];
@@ -1072,7 +1081,7 @@ function gw_import_csv()
 			$arTermMap['term_id'] = $qT['id'];
 			$arTermMap['dict_id'] = $arDictParam['id'];
 			++$gw_this['vars']['int_items_added'];
-			gwAddNewKeywords($arDictParam['id'], $qT['id'], $ar_keywords[$uid], $id_term_old, $is_clean_map, $qT['date_created']);
+            gw_add_keywords($arDictParam['id'], $qT['id'], $ar_keywords[$uid], $id_term_old, $is_clean_map, $qT['date_created']);
 			$arQ[] = gw_sql_replace($qT, $arDictParam['tablename'], 1);
 			$arQ[] = gw_sql_replace($arTermMap, TBL_MAP_USER_TERM, 1);
 

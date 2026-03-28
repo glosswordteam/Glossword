@@ -171,39 +171,65 @@ switch ( $gw_this['vars']['layout'] )
 		}
 		break;
 	case GW_A_CONTENTS: /* Dictionary contents, all terms A-Z */
-		{
-			$oTpl->addVal( 'v:az', '' );
-			$oTpl->addVal( 'l:pages', '&#160;' );
-			$oTpl->addVal( 'v:nav_pages', '' );
+        {
+            $oTpl->addVal('v:az', '');
+            $oTpl->addVal('l:pages', '&#160;');
+            $oTpl->addVal('v:nav_pages', '');
 
-			$oTpl->addVal( 'block:page_content', gw_get_dict_terms( $arDictParam['tablename'], $arDictParam['uri'] ) );
-			/* current section */
-			$gw_this['ar_breadcrumb'][0] = $oHtml->a( $sys['page_index'] .
-							'?' . GW_ACTION . '=index' .
-							'&' . GW_ID_DICT . '=' . $arDictParam['uri'],
-							strip_tags( $arDictParam['title'] )
-			);
-			$gw_this['ar_breadcrumb'][1] = $oL->m( '1058' );
-			$gw_this['arTitle'][] = $arDictParam['title'];
-			$gw_this['arTitle'][] = $oL->m( '1058' );
-			$gw_this['id_tpl_page'] = GW_TPL_CUSTOM_PAGE;
-		}
+            $oTpl->addVal('block:page_content', gw_get_dict_terms($arDictParam['tablename'], $arDictParam['uri']));
+            /* current section */
+            $gw_this['ar_breadcrumb'][0] = $oHtml->a(
+                $sys['page_index'] .
+                '?' . GW_ACTION . '=index' .
+                '&' . GW_ID_DICT . '=' . $arDictParam['uri'],
+                strip_tags($arDictParam['title'])
+            );
+            $gw_this['ar_breadcrumb'][1] = $oL->m('1058');
+            $gw_this['arTitle'][] = $arDictParam['title'];
+            $gw_this['arTitle'][] = $oL->m('1058');
+            $gw_this['id_tpl_page'] = GW_TPL_CUSTOM_PAGE;
+        }
 		break;
 	case 'index': /* Dictionary title page */
 		{
-			$oTpl->addVal( 'v:terms_recent', getTop10( 'TERM_NEWEST', $arDictParam['recent_terms_number'], 0, $arDictParam['recent_terms_sorting'], $arDictParam['recent_terms_display'] ) );
+            $oTpl->addVal(
+                'v:terms_recent',
+                gw_get_top10(
+                    'TERM_NEWEST',
+                    $arDictParam['recent_terms_number'],
+                    0,
+                    $arDictParam['recent_terms_sorting'],
+                    $arDictParam['recent_terms_display']
+                )
+            );
 
-			$oTpl->addVal( 'v:dict_date_modified', sprintf( '<span class="gray">%s:</span> %s', $oL->m( 'date_modif' ), date_extract_int( $arDictParam['date_modified'], "%d %F %Y" ) ) );
-			$oTpl->addVal( 'l:pages', $oL->m( 'L_pages' ) );
-			$gw_this['vars']['p'] = 0;
-			$oTpl->addVal( 'v:nav_pages', getNavToolbar( $intSumPages, $gw_this['vars']['p'], $sys['page_index'] . '?' . GW_ACTION . '=' . GW_A_LIST . '&d=' . $arDictParam['uri'] . '&p=' ) );
-			$gw_this['href_add_a_term'] = $oHtml->url_normalize( $sys['page_index'] . '?' . GW_ACTION . '=' . GW_A_CUSTOMPAGE . '&id=1&d=' . $arDictParam['uri'] . '&uid=newterm' );
-			$oHtml->setTag( 'a', 'onclick', "self.location='" . $gw_this['href_add_a_term'] . "';return false" );
-			$gw_this['url_add_a_term'] = $oHtml->a( 'javascript:void(0)', $oL->m( '1095' ) );
-			$oHtml->setTag( 'a', 'onclick', '' );
-			$oTpl->addVal( 'url:add_term', $gw_this['url_add_a_term'] );
-			$gw_this['arTitle'][] = $arDictParam['title'];
-			$gw_this['id_tpl_page'] = GW_TPL_DICT;
+            $oTpl->addVal(
+                'v:dict_date_modified',
+                sprintf(
+                    '<span class="gray">%s:</span> %s',
+                    $oL->m('date_modif'),
+                    date_extract_int($arDictParam['date_modified'], "%d %F %Y")
+                )
+            );
+            $oTpl->addVal('l:pages', $oL->m('L_pages'));
+            $gw_this['vars']['p'] = 0;
+            $oTpl->addVal(
+                'v:nav_pages',
+                getNavToolbar(
+                    $intSumPages,
+                    $gw_this['vars']['p'],
+                    $sys['page_index'] . '?' . GW_ACTION . '=' . GW_A_LIST . '&d=' . $arDictParam['uri'] . '&p='
+                )
+            );
+            $gw_this['href_add_a_term'] = $oHtml->url_normalize(
+                $sys['page_index'] . '?' . GW_ACTION . '=' . GW_A_CUSTOMPAGE . '&id=1&d=' . $arDictParam['uri'] . '&uid=newterm'
+            );
+            $oHtml->setTag('a', 'onclick', "self.location='" . $gw_this['href_add_a_term'] . "';return false");
+            $gw_this['url_add_a_term'] = $oHtml->a('javascript:void(0)', $oL->m('1095'));
+            $oHtml->setTag('a', 'onclick', '');
+            $oTpl->addVal('url:add_term', $gw_this['url_add_a_term']);
+            $gw_this['arTitle'][] = $arDictParam['title'];
+            $gw_this['id_tpl_page'] = GW_TPL_DICT;
 		}
 		break;
 	case GW_A_LIST:
@@ -300,7 +326,7 @@ switch ( $gw_this['vars']['layout'] )
 
 			if ( $arDictParam['recent_terms_sorting'] )
 			{
-				$oTpl->addVal( 'v:terms_recent', getTop10( 'TERM_NEWEST', $arDictParam['recent_terms_number'], 0, $arDictParam['recent_terms_sorting'] ) );
+				$oTpl->addVal( 'v:terms_recent', gw_get_top10( 'TERM_NEWEST', $arDictParam['recent_terms_number'], 0, $arDictParam['recent_terms_sorting'] ) );
 			}
 
 			$oTpl->addVal( 'v:path_img_dict', $sys['path_img'] . '/' . sprintf( '%05d', $gw_this['vars'][GW_ID_DICT] ) );
@@ -605,7 +631,7 @@ switch ( $gw_this['vars']['layout'] )
 			}
 
 			$str_dict_name = $oL->m( '2_page__srch' );
-			$gw_this['vars']['q'] = trim( $oFunc->mb_substr( $gw_this['vars']['q'], 0, 255 ) );
+			$gw_this['vars']['q'] = trim(mb_substr( $gw_this['vars']['q'], 0, 255 ) );
 			/* */
 			$gw_this['arSrchResults'] = array ( );
 			$gw_this['arSrchResults']['id_d'] = 0;
@@ -784,7 +810,7 @@ switch ( $gw_this['vars']['layout'] )
 			$oTpl->addVal( 'block:catalog', getDictList( '', 99, 1, 99 ) );
 			## ------------------------------------------------
 			## Statistics
-			$arStatCommon = getStat();
+			$arStatCommon = gw_get_dict_stats();
 			$oTpl->addVal( 'block:stats', gw_html_block_small( $oL->m( 'web_stat' ),
 							'<span class="gray">' . (date_extract_int( $arStatCommon['date'], "%d" ) / 1) . date_extract_int( $arStatCommon['date'], (" %FL %Y" ) ) . '</span>'
 							. '<br />' . $oL->m( 'stat_dict' ) . ': ' . $oFunc->number_format( $arStatCommon['num'], 0, $oL->languagelist( '4' ) )
@@ -792,8 +818,8 @@ switch ( $gw_this['vars']['layout'] )
 			);
 			## ------------------------------------------------
 			## Last updated dictionaries
-			$oTpl->addVal( 'block:dict_updated', gw_html_block_small( $oL->m( 'r_dict_updated' ), getTop10( 'DICT_UPDATED', $sys['max_dict_updated'], 1 ), 0, 0, $sys['css_align_left'] ) );
-			$oTpl->addVal( 'block:term_updated', gw_html_block_small( $oL->m( 'r_term_updated' ), getTop10( 'TERM_UPDATED', $sys['max_dict_top'], 1 ), 0, 0, $sys['css_align_left'] ) );
+			$oTpl->addVal( 'block:dict_updated', gw_html_block_small( $oL->m( 'r_dict_updated' ), gw_get_top10( 'DICT_UPDATED', $sys['max_dict_updated'], 1 ), 0, 0, $sys['css_align_left'] ) );
+			$oTpl->addVal( 'block:term_updated', gw_html_block_small( $oL->m( 'r_term_updated' ), gw_get_top10( 'TERM_UPDATED', $sys['max_dict_top'], 1 ), 0, 0, $sys['css_align_left'] ) );
 			$gw_this['id_tpl_page'] = GW_TPL_TITLE;
 		}
 		break;
@@ -996,9 +1022,9 @@ if ( $arDictParam['id']
 	/* Create highlighted link to a dictionary */
 	$s_dict_title = $s_dict_title_cut = strip_tags( $arDictParam['title'] );
 	/* 29 Oct 2010: Cut a dictionary title */
-	if ( $oFunc->mb_strlen($s_dict_title_cut) > 30 )
+	if ( mb_strlen($s_dict_title_cut) > 30 )
 	{
-		$s_dict_title_cut = $oFunc->mb_substr( $s_dict_title, 0, 30 ).'…';
+		$s_dict_title_cut = mb_substr( $s_dict_title, 0, 30 ).'…';
 	}
 	$oHtml->setTag( 'a', 'class', 'on' );
 	$oHtml->setTag( 'a', 'title', $s_dict_title );

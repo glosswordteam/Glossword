@@ -1,1323 +1,1293 @@
 <?php
+
 /**
- *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+
 /* --------------------------------------------------------
  * Library functions for daily use
  * ----------------------------------------------------- */
-	$tmp['mtime'] = explode(' ', microtime());
-	$tmp['start_time'] = (float)$tmp['mtime'][1] + (float)$tmp['mtime'][0];
+$tmp['mtime'] = explode(' ', microtime());
+$tmp['start_time'] = (float)$tmp['mtime'][1] + (float)$tmp['mtime'][0];
 /* --------------------------------------------------------
  * Functions that must work without class initialization
  * ----------------------------------------------------- */
-/**
- * Includes a php-file.
- * Replacement for include_once(), require_once().
- * Restructions on access to variables apply.
- * Test results for 1000 included files less than 65 KB:
- *     0.004 gw2_include_once()
- *     0.429 include_once()
- *     0.434 require_once()
- *     0.569 include()
- *     0.574 require()
- * Test results for 1000 included files more than 65 KB:
- *     0.005 gw2_include_once()
- *     0.444 include_once()
- *     0.452 require_once()
- *    23.645 include()
- *    24.791 require()
- * @param  string  Path to file
- */
-function gw2_include_once($f)
-{
-	static $ar = array();
-	if (!array_key_exists(($rf = crc32($f)), $ar))
-	{
-		$ar[$rf] = true;
-		if (file_exists($f))
-		{
-			include_once($f);
-#			eval('? >'. file_get_contents($f) .'< ? php');
-		}
-	}
-}
-/**
- * Shuffles an array. Replacement for shuffle().
- * @usage: usort($arB, 'gw_rand_cmp');
- * @return  int     Random value
- */
-function gw_rand_cmp( $a, $b )
-{
-	return round( (rand(0, 2) - 1) );
-}
+
+
 /**
  * Replacement for print_r()
  *
- * @param   string  $a Any string, object, or array.
- * @param   string  $c Additional marker for better visual display. Try "__FILE__"
+ * @param string $a Any string, object, or array.
+ * @param string $c Additional marker for better visual display. Try "__FILE__"
  */
 function prn_r($a, $c = '')
 {
-	if (is_array($a))
-	{
-		ksort($a);
-		$a = htmlspecialchars_ltgt($a);
-	}
-	elseif (is_object($a) || is_string($a))
-	{
-		$a = htmlspecialchars_ltgt($a);
-	}
-	/* Set font size in pixels because function can be called from various places */
-	print '<pre style="text-align:left;color:#000;background:#FFF;font: 14px/16px Consolas,\'Courier New\',monospace">';
-	if ($c)
-	{
-		print '===&gt; <strong>'.$c."</strong>\n";
-	}
-	/* Placing the output into buffer */
-	ob_start();
-	print_r( $a );
-	$b = ob_get_clean();
-	/* compress indents */
-	$b = preg_replace("/(^)?(    )([\(|\)|\[])?/", "  \\3", $b);
-	/* highlight Array and Object */
-	$b = str_replace('] => Array', '] => <span style="color:#080">Array</span>', $b);
-	$b = str_replace('] => Object', '] => <span style="color:#080">Object</span>', $b);
-	/* highlight numeric positive and negative keys */
-	$b = preg_replace("/\[(-)?(\d+)\] =>/", '<span style="color:#888">&#91;<span style="color:#00C">\\1\\2</span>] =></span>', $b);
-	$b = preg_replace("/\[(.*)\] =>/", '<span style="color:#888">&#91;<span style="color:#C50">\\1</span>] =></span>', $b);
-	print $b;
-	if ($c)
-	{
-		print '&lt;===';
-	}
-	print '</pre>';
+    if (is_array($a)) {
+        ksort($a);
+        $a = htmlspecialchars_ltgt($a);
+    } elseif (is_object($a) || is_string($a)) {
+        $a = htmlspecialchars_ltgt($a);
+    }
+    /* Set font size in pixels because function can be called from various places */
+    print '<pre style="text-align:left;color:#000;background:#FFF;font: 14px/16px Consolas,\'Courier New\',monospace">';
+    if ($c) {
+        print '===&gt; <strong>' . $c . "</strong>\n";
+    }
+    /* Placing the output into buffer */
+    ob_start();
+    print_r($a);
+    $b = ob_get_clean();
+    /* compress indents */
+    $b = preg_replace("/(^)?(    )([\(|\)|\[])?/", "  \\3", $b);
+    /* highlight Array and Object */
+    $b = str_replace('] => Array', '] => <span style="color:#080">Array</span>', $b);
+    $b = str_replace('] => Object', '] => <span style="color:#080">Object</span>', $b);
+    /* highlight numeric positive and negative keys */
+    $b = preg_replace(
+        "/\[(-)?(\d+)\] =>/",
+        '<span style="color:#888">&#91;<span style="color:#00C">\\1\\2</span>] =></span>',
+        $b
+    );
+    $b = preg_replace(
+        "/\[(.*)\] =>/",
+        '<span style="color:#888">&#91;<span style="color:#C50">\\1</span>] =></span>',
+        $b
+    );
+    print $b;
+    if ($c) {
+        print '&lt;===';
+    }
+    print '</pre>';
 }
+
 /**
- * Makes SQL-queries more readable
+ * Adds simple HTML highlighting to SQL fragments.
  *
- * @param   string  $str Any string or array.
+ * Supports strings and arrays recursively.
+ *
+ * @param mixed $value String or array to highlight
+ * @return mixed Highlighted string or array
  */
-function gw_highlight_sql($s)
+function gw_highlight_sql($value)
 {
-	if (is_array($s))
-	{
-		/* can't use array_walk() on byself with reference */
-		for (reset($s); list($k, $v) = each($s);)
-		{
-			$s[$k] = gw_highlight_sql($v);
-		}
-		return $s;
-	}
-	elseif (is_string($s))
-	{
-		$s = str_replace('(', '<b>(</b>', $s);
-		$s = str_replace(')', '<b>)</b>', $s);
-		$s = str_replace('&lt;', '<strong>&lt;</strong>', $s);
-		$s = str_replace('&gt;', '<strong>&gt;</strong>', $s);
-		$s = str_replace('&lt;/', '<strong>&lt;/</strong>', $s);
-		$s = str_replace(',', '<i>,</i>', $s);
-	}
-	return $s;
+    if (is_array($value)) {
+        foreach ($value as $key => $item) {
+            $value[$key] = gw_highlight_sql($item);
+        }
+        return $value;
+    }
+
+    if (is_string($value)) {
+        $value = str_replace('(', '<b>(</b>', $value);
+        $value = str_replace(')', '<b>)</b>', $value);
+        $value = str_replace('&lt;/', '<strong>&lt;/</strong>', $value);
+        $value = str_replace('&lt;', '<strong>&lt;</strong>', $value);
+        $value = str_replace('&gt;', '<strong>&gt;</strong>', $value);
+        $value = str_replace(',', '<i>,</i>', $value);
+    }
+
+    return $value;
 }
+
 /**
  * Converts a few characters only, recursive. Faster than htmlspecialchars().
  *
- * @param   string  $str Any string or array.
+ * @param string $str Any string or array.
  * @return  string  Transformed string.
  */
 function htmlspecialchars_ltgt($s)
 {
-	if (is_array($s))
-	{
-		/* can't use array_walk() on byself with reference */
-		for (reset($s); list($k, $v) = each($s);)
-		{
-			$s[$k] = htmlspecialchars_ltgt($v);
-		}
-		return $s;
-	}
-	elseif (is_object($s))
-	{
-		$ar = get_class_vars(get_class($s));
-		for (reset($ar); list($k, $v) = each($ar);)
-		{
-			$ar[$k] = htmlspecialchars_ltgt($s->$k);
-		}
-		return $ar;
-	}
-	elseif (is_string($s))
-	{
-		return str_replace(array('&','<','>','{','[','"'), array('&amp;','&lt;','&gt;','&#123;','&#091;','&quot;'), $s);
-	}
-	return $s;
+    if (is_array($s)) {
+        /* can't use array_walk() on byself with reference */
+        for (reset($s); list($k, $v) = each($s);) {
+            $s[$k] = htmlspecialchars_ltgt($v);
+        }
+        return $s;
+    } elseif (is_object($s)) {
+        $ar = get_class_vars(get_class($s));
+        for (reset($ar); list($k, $v) = each($ar);) {
+            $ar[$k] = htmlspecialchars_ltgt($s->$k);
+        }
+        return $ar;
+    } elseif (is_string($s)) {
+        return str_replace(['&', '<', '>', '{', '[', '"'], ['&amp;', '&lt;', '&gt;', '&#123;', '&#091;', '&quot;'], $s);
+    }
+    return $s;
 }
+
 function unhtmlspecialchars_ltgt($s)
 {
-	if (is_array($s))
-	{
-		/* can't use array_walk() on byself with reference */
-		for (reset($s); list($k, $v) = each($s);)
-		{
-			$s[$k] = unhtmlspecialchars_ltgt($v);
-		}
-		return $s;
-	}
-	elseif (is_object($s))
-	{
-		$ar = get_class_vars(get_class($s));
-		for (reset($ar); list($k, $v) = each($ar);)
-		{
-			$ar[$k] = unhtmlspecialchars_ltgt($s->$k);
-		}
-		return $ar;
-	}
-	elseif (is_string($s))
-	{
-		return str_replace(array('&amp;','&lt;','&gt;','&#123;','&#091;','&quot;'), array('&','<','>','{','[','"'), $s);
-	}
-	return $s;
+    if (is_array($s)) {
+        /* can't use array_walk() on byself with reference */
+        for (reset($s); list($k, $v) = each($s);) {
+            $s[$k] = unhtmlspecialchars_ltgt($v);
+        }
+        return $s;
+    } elseif (is_object($s)) {
+        $ar = get_class_vars(get_class($s));
+        for (reset($ar); list($k, $v) = each($ar);) {
+            $ar[$k] = unhtmlspecialchars_ltgt($s->$k);
+        }
+        return $ar;
+    } elseif (is_string($s)) {
+        return str_replace(['&amp;', '&lt;', '&gt;', '&#123;', '&#091;', '&quot;'], ['&', '<', '>', '{', '[', '"'], $s);
+    }
+    return $s;
 }
+
 /* */
 function gw_htmlspecialamp($s)
 {
-	if (!is_string($s)){ return $s; }
-	$s = str_replace('&', '&amp;', $s);
-	$s = str_replace('"', '&quot;', $s);
-	$s = str_replace('\'', '&#039;', $s);
-	$s = preg_replace('/&amp;#([0-9]+);/', '&#\\1;', $s);
+    if (!is_string($s)) {
+        return $s;
+    }
+    $s = str_replace('&', '&amp;', $s);
+    $s = str_replace('"', '&quot;', $s);
+    $s = str_replace('\'', '&#039;', $s);
+    $s = preg_replace('/&amp;#([0-9]+);/', '&#\\1;', $s);
 #	$s = preg_replace('/&amp;([a-z]+);/', '&\\1;', $s);
-	return $s;
+    return $s;
 }
+
 function gw_unhtmlspecialamp($s)
 {
-	if (!is_string($s)){ return $s; }
-	$s = str_replace('&amp;', '&', $s);
-	$s = str_replace('&quot;', '"', $s);
-	$s = str_replace('&AMP;', '&', $s);
-	$s = str_replace('&QUOT;', '"', $s);
-	$s = str_replace('&#039;', '\'', $s);
-	return $s;
+    if (!is_string($s)) {
+        return $s;
+    }
+    $s = str_replace('&amp;', '&', $s);
+    $s = str_replace('&quot;', '"', $s);
+    $s = str_replace('&AMP;', '&', $s);
+    $s = str_replace('&QUOT;', '"', $s);
+    $s = str_replace('&#039;', '\'', $s);
+    return $s;
 }
+
 /**
- * Fixes 'slash problem', recursive, calls by reference
+ * Legacy compatibility wrapper.
  *
- * @param   string  $str Any string or array.
- * @param   string  $type Type of quotes to check. [ runtime | gpc ]
- * @param   string  $mode Where to check for quotes. [ php | sql ], 05 may 2003
+ * @param mixed $str
+ * @param string $type
+ * @param string $mode
+ *
+ * @return void
  */
 function gw_fixslash(&$str, $type = 'gpc', $mode = 'php')
 {
-	$gpc = false;
-	$runtime = false;
-	if ($type == 'gpc')
-	{
-		$gpc = true;
-	}
-	elseif ($type == 'runtime')
-	{
-		$runtime = true;
-	}
-	if ($str != '')
-	{
-		if (is_array($str) || is_object($str))
-		{
-			for (reset($str); list($k, $v) = each($str);)
-			{
-				gw_fixslash($str[$k], $type, $mode);
-			}
-			reset($str);
-		}
-		else
-		{
-			if ($gpc && function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc())
-			{
-				$str = gw_stripslashes($str);
-			}
-			elseif ($runtime && function_exists('get_magic_quotes_runtime') && @get_magic_quotes_runtime() )
-			{
-				$str = gw_stripslashes($str);
-			}
-			else
-			{
-				$str = gw_stripslashes($str, 'light');
-			}
-			$isFirst = true;
-		}
-	}
+    // no-op
 }
+
+/**
+ * Escapes string using mysqli connection.
+ *
+ * @param mysqli $conn Active MySQLi connection
+ * @param string $str Input string
+ * @return string Escaped string
+ */
+function gw_mysqli_escape($conn, $str)
+{
+    return mysqli_real_escape_string($conn, $str);
+}
+
 /**
  * Replacement for addslashes()
  *
- * @param   string  $str String to convert
- * @param   string  $mode What mode to use to add slashes.
- *                        [ hard - internal by PHP | light - custom ], 06 may 2003
+ * @param string $str String to convert
  * @return  string  Slashed string
  */
-function gw_addslashes($str, $mode = 'hard')
+function gw_addslashes($str)
 {
-	if ($mode == 'hard')
-	{
-		$str = addslashes($str);
-	}
-	$str = str_replace('_', '\\_', $str);
-	$str = str_replace('%', '\\%', $str);
-	return $str;
+    $str = addslashes($str);
+    return $str;
 }
+
 /**
- * Replacement for stripslashes()
+ * Escapes value(s) for SQL queries using mysqli.
  *
- * @param   string  $str String to convert
- * @param   string  $mode What mode to use to strip slashes.
- *                        [ hard - internal by PHP | light - custom ], 06 may 2003
- * @return  string  Stripped slashes string
+ * Supports scalar values and arrays (recursively).
+ *
+ * @param mysqli $conn Active MySQLi connection
+ * @param mixed $value Scalar or array to escape
+ * @return mixed Escaped value
  */
-function gw_stripslashes($str, $mode = 'hard')
+function gw_text_sql($conn, $value)
 {
-	if (!is_string($str)) { return $str; }
-	if ($mode == 'hard')
-	{
-		$str = stripslashes($str);
-	}
-	$str = str_replace('\\_', '_', $str);
-	$str = str_replace('\\%', '%', $str);
-	if (ini_get('magic_quotes_sybase') && stripslashes("''") == "''")
-	{
-		$str = str_replace('\'\'', '\'', $str);
-	}
-	return $str;
+    if (is_array($value)) {
+        array_walk($value, function (&$item) use ($conn) {
+            $item = gw_text_sql($conn, $item);
+        });
+        return $value;
+    }
+
+    if (is_object($value)) {
+        // Do not modify objects
+        return $value;
+    }
+
+    return mysqli_real_escape_string($conn, (string)$value);
 }
-/* */
-function gw_stripslashes_array(&$ar)
-{
-	if (is_array($ar) || is_object($ar))
-	{
-		for (reset($ar); list($k, $v) = each($ar);)
-		{
-			$ar[$k] = gw_stripslashes($v);
-		}
-		reset($ar);
-	}
-}
+
 /**
- * Every value for SQL-query should be passed through this function
+ * Escapes string for SQL LIKE clause using mysqli.
+ *
+ * Escapes:
+ * - quotes via mysqli_real_escape_string()
+ * - LIKE wildcards: % and _
+ *
+ * @param mysqli $conn Active MySQLi connection
+ * @param string $str Input string
+ * @return string Escaped string safe for LIKE
  */
-function gw_text_sql($t)
+function gw_sql_escape_like($conn, $str)
 {
-	if (is_array($t) || is_object($t))
-	{
-		array_walk($t, 'gw_text_sql');
-	}
-	else
-	{
-		$t = gw_addslashes($t);
-		/* when magic_quotes_sybase is ON
-		   it completely overrides magic_quotes_gpc
-		   but this function should add slashes anyway */
-		if (ini_get('magic_quotes_sybase'))
-		{
-			$t = str_replace("''", "'", $t);
-			$t = str_replace('\\_', '_', $t);
-			$t = str_replace('\\%', '%"', $t);
-			$t = str_replace('\\', '\\\\', $t);
-			$t = str_replace('\'', '\\\'', $t);
-			$t = str_replace('"', '\\"', $t);
-			$t = str_replace('_', '\\_', $t);
-			$t = str_replace('%', '\\%"', $t);
-		}
-	}
-	return $t;
+    $str = mysqli_real_escape_string($conn, $str);
+    return str_replace(['%', '_'], ['\\%', '\\_'], $str);
 }
+
 /**
- * Depreciated.
- * 
  * Normalizes new line character. Recursive, calls by reference.
  * Note: Windows - CRLF, *nix - LF, Mac - CR
  *
+ * @depreciated
  * @param string $str String to normalize
  */
 function gw_fix_newline(&$t)
 {
-	if ($t == ''){ return; }
-	if (is_array($t) || is_object($t))
-	{
-		array_walk($t, 'gw_fix_newline');
-	}
-	else
-	{
-		/* parsing 10 KB: preg_replace = 0.021457, str_replace = 0.000364 */
-		$t = str_replace("\r\n", "\x01", $t);
-		$t = str_replace("\n", "\x01", $t);
-		$t = str_replace("\r", "\x01", $t);
-		$t = str_replace("\x01", CRLF, $t);
-	}
+    if ($t == '') {
+        return;
+    }
+    if (is_array($t) || is_object($t)) {
+        array_walk($t, 'gw_fix_newline');
+    } else {
+        /* parsing 10 KB: preg_replace = 0.021457, str_replace = 0.000364 */
+        $t = str_replace("\r\n", "\x01", $t);
+        $t = str_replace("\n", "\x01", $t);
+        $t = str_replace("\r", "\x01", $t);
+        $t = str_replace("\x01", CRLF, $t);
+    }
 }
+
 /**
  * Safely redirects to another location. Replacement for header()
  *
  * @param string $url Resourse locator name
- * @param int    $isDebug [ 0 - silent | 1 - do not redirect and print URL ]
+ * @param int $isDebug [ 0 - silent | 1 - do not redirect and print URL ]
  */
-function gwtk_header($url, $isDebug = 0, $fromfile = '', $fromline = '')
+function gwtk_header($url, $is_debug = 0, $fromfile = '', $fromline = '')
 {
-	global $db;
-	/* fixes */
-	$url = str_replace("&amp;", "&", $url);
-	if (!empty($db)){ $db->close(); }
-	$filename = $linenum = 0;
-	if ($isDebug || headers_sent($filename, $linenum))
-	{
-		if ($filename)
-		{
-			print 'Headers already sent in '.$filename.' on line '. $linenum.'<br />';
-		}
-		print 'Location:<br />' . sprintf('<a href="%s">%s</a><br />%s <b>%s</b>', $url, $url, $fromfile, $fromline);
-		exit;
-	}
-	if (@preg_match('/Microsoft|WebSTAR|Xitami/', getenv('SERVER_SOFTWARE')))
-	{
-		exit( header('Refresh: 0; URL=' . $url) );
-	}
-	/* redirect */
-	if (!preg_match("/cgi/", PHP_SAPI))
-	{
-		@header('HTTP/1.1 301 Moved Permanently');
-	}
-	header('Location: ' . $url);
-	print '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">';
-	print '<HTML><HEAD>';
-	print '<TITLE>302 Found</TITLE>';
-	print '</HEAD><BODY>';
-	print '<H1>Found</H1>';
-	print 'The document has moved <a href="'.$url.'">here</a>.<p>';
-	print '</BODY></HTML>';
-	exit;
+    global $db;
+
+    $url = str_replace('&amp;', '&', $url);
+
+    if (!empty($db)) {
+        $db->close();
+    }
+
+    if ($is_debug || headers_sent($filename, $linenum)) {
+        if ($filename) {
+            print 'Headers already sent in ' . $filename . ' on line ' . $linenum . '<br />';
+        }
+
+        print 'Location:<br />' . sprintf(
+                '<a href="%s">%s</a><br />%s <b>%s</b>',
+                htmlspecialchars($url, ENT_QUOTES, 'UTF-8'),
+                htmlspecialchars($url, ENT_QUOTES, 'UTF-8'),
+                htmlspecialchars($fromfile, ENT_QUOTES, 'UTF-8'),
+                htmlspecialchars($fromline, ENT_QUOTES, 'UTF-8')
+            );
+        exit;
+    }
+
+    header('Location: ' . $url, true, 303);
+    exit;
 }
+
 /**
- * Detects user IP
+ * Returns client IP address.
  *
- * @return  string   IP-address
+ * Priority:
+ * 1. First valid public IP from X-Forwarded-For
+ * 2. REMOTE_ADDR
+ *
+ * @return string
  */
 function gwGetRemoteIp()
 {
-	$HTTP_X_FW = getenv("HTTP_X_FORWARDED_FOR");
-	$HTTP_RA = getenv("REMOTE_ADDR");
-	$arIana = array("127.0.", "192.168.", "1.", "0.", "10.", "172.16.", "224.", "240.");
-	if ($HTTP_X_FW != '')
-	{
-		for (reset($arIana); list($k, $v) = each($arIana);) // check values
-		{
-			if (preg_match("/^" . $v . "/", $HTTP_X_FW) ||
-				!preg_match("/^([0-9]{1,3}\.){3,3}[0-9]{1,3}$/", $HTTP_X_FW))
-			{
-				return $HTTP_RA;
-			}
-		}
-		$HTTP_RA = $HTTP_X_FW;
-	}
-	if (HTTP_HOST == $HTTP_RA)
-	{
-		$HTTP_RA = '127.0.0.1';
-	}
-	return $HTTP_RA;
+    $remote_addr = getenv('REMOTE_ADDR');
+    if ($remote_addr === false || $remote_addr === '') {
+        $remote_addr = '127.0.0.1';
+    }
+
+    $x_forwarded_for = getenv('HTTP_X_FORWARDED_FOR');
+    if ($x_forwarded_for !== false && $x_forwarded_for !== '') {
+        $ip_list = explode(',', $x_forwarded_for);
+
+        foreach ($ip_list as $ip) {
+            $ip = trim($ip);
+
+            if ($ip === '') {
+                continue;
+            }
+
+            if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+                continue;
+            }
+
+            if (gwIsPrivateIpv4($ip)) {
+                continue;
+            }
+
+            return $ip;
+        }
+    }
+
+    if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === $remote_addr) {
+        return '127.0.0.1';
+    }
+
+    return $remote_addr;
 }
 
-/* Generates a hash value */
-if (!function_exists('hash'))
+/**
+ * Checks whether IPv4 address is private, loopback, multicast, reserved or local.
+ *
+ * @param string $ip
+ * @return bool
+ */
+function gwIsPrivateIpv4($ip)
 {
-	function hash($t, $s, $raw_output = 0)
-	{
-		if ($t == 'md5') { return(md5($s)); }
-		if ($t == 'sha1') { return(sha1($s)); }
-		if ($t == 'crc32') { return(crc32($s)); }
-	}
+    return (
+        strpos($ip, '127.') === 0 ||
+        strpos($ip, '10.') === 0 ||
+        strpos($ip, '192.168.') === 0 ||
+        preg_match('/^172\.(1[6-9]|2[0-9]|3[0-1])\./', $ip) ||
+        strpos($ip, '0.') === 0 ||
+        strpos($ip, '224.') === 0 ||
+        strpos($ip, '240.') === 0
+    );
 }
+
+/**
+ * Store flash message (one-time message)
+ *
+ * @param string $key
+ * @param string $message
+ * @return void
+ */
+function gw_flash_set($key, $message)
+{
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
+
+    if (!isset($_SESSION['_flash'])) {
+        $_SESSION['_flash'] = [];
+    }
+
+    $_SESSION['_flash'][$key] = $message;
+}
+
+/**
+ * Get and remove flash message
+ *
+ * @param string $key
+ * @return string
+ */
+function gw_flash_get($key)
+{
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
+
+    if (empty($_SESSION['_flash'][$key])) {
+        return '';
+    }
+
+    $message = $_SESSION['_flash'][$key];
+    unset($_SESSION['_flash'][$key]);
+
+    // optional cleanup
+    if (empty($_SESSION['_flash'])) {
+        unset($_SESSION['_flash']);
+    }
+
+    return $message;
+}
+
+
+/**
+ * Detect current request protocol (http / https).
+ *
+ * @return string
+ */
+function gw_get_protocol()
+{
+    // HTTPS via standard server var
+    if (
+        (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)
+    ) {
+        return 'https://';
+    }
+
+    // HTTPS via reverse proxy
+    if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+        if (strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') {
+            return 'https://';
+        }
+    }
+
+    return 'http://';
+}
+
 
 
 /* --------------------------------------------------------
  * Other useful functions
  * ----------------------------------------------------- */
-class gw_functions {
+
+class gw_functions
+{
 
 
-	function js_addslashes($t)
-	{
-		return str_replace(array('\\', '\'', "\n", "\r") , array('\\\\', "\\'","\\n", "\\r") , $t);
-	}
-	/* */
-	function text_htmlspecialchars($t)
-	{
-		return str_replace(array('&', '<', '>', '"'), array('&amp;', '&lt;', '&gt;', '&quot;'), $t);
-	}
-	/* */
-	function text_unhtmlspecialchars($t)
-	{
-		return str_replace(array('&lt;', '&gt;', '&quot;', '&amp;'), array('<', '>', '"', '&'), $t);
-	}
-	/**
-	 *
-	 */
-	function text_crc_unsigned($t, $pass = '')
-	{
-		return sprintf("%010u", crc32($pass.$t));
-	}
-	/**
-	 * Convert HTML-code into Javascript using document.write()
-	 *
-	 * @param   string Text to output
-	 * @return  Javascript code
-	 */
-	function text_html2js($t)
-	{
-		$t = '<script type="text/javascript">/*<![CDATA[*/'
-			. 'document.write(\''
-			. str_replace("'", "\'", $t)
-			. '\');/*]]>*/</script>';
-		return $t;
-	}
-	/**
-	 * Generates random string. Better characters` strength,
-	 * two groups of illegal symbols excluded.
-	 *
-	 * @param    int    $maxchar  Maximum generated string length
-	 * @param    int    $nChar    Character set, 22 Oct 2003, n = numbers, uc = uppercase, lc = lowercase
-	 *                            [0 = all | 1 - n | 2 - lc | 3 - uc | 4 - n+lc | 5 - lc+uc ]
-	 * @param    string $first    First character for returned string
-	 * @return   string Generated text
-	 */
-	function text_make_uid($maxchar = 8,  $nChar = 0, $first = '')
-	{
-		/* Exclude bad symbols. */
-		/* 1st bad group: 0, 1, l, I */
-		/* 2nd bad group: a, c, e, o, p, x, A, C, E, H, O, K, M, P, X */
-		$str = "";
-		$charN = '23456789';
-		$charL = 'bdfghijkmnqrstuvwyz';
-		$charU = 'QWRYUSDFGJLZVN';
-		$charN = ($nChar == 1)
-				? $charN
-				: (($nChar == 2) ? $charL
-					: (($nChar == 3) ? $charU
-					: ($nChar == 4) ? $charN.$charL
-					: ($nChar == 5) ? $charL.$charU
-					: $charN.$charL.$charU)
-				);
-		$len = strlen($charN);
-		mt_srand( (double) microtime()*1000000);
-		for ($i = 0; $i < $maxchar; $i++)
-		{
-			$sed = mt_rand(0, $len-1);
-			$str .= $charN[$sed];
-		}
-		$str = $first . substr($str, 0, strlen($str) - strlen($first));
-		return $str;
-	}
+    public function js_addslashes($t)
+    {
+        return str_replace(['\\', '\'', "\n", "\r"], ['\\\\', "\\'", "\\n", "\\r"], $t);
+    }
 
-	/**
-	 * Returns correct number format in HTML-code.
-	 * For example, English notation:
-	 * 1,234.56
-	 * French (also Russian and many others) notation:
-	 * 1 234,56
-	 * This function also fixes problem with HTML-code
-	 * occured by space in every group of thousands (French notation).
-	 *
-	 * @param   integer $int   numbers
-	 * @param   integer $dec   decimals
-	 * @return  string  complete HTML-code
-	 */
-	function number_format($int, $dec = 0, $ar = array('decimal_separator'=> '.', 'thousands_separator'=> ' '))
-	{
-		return str_replace(' ', '&#160;',
-					number_format($int, $dec, $ar['decimal_separator'], $ar['thousands_separator'] )
-				);
-	}
+    /* */
+    public function text_htmlspecialchars($t)
+    {
+        return str_replace(['&', '<', '>', '"'], ['&amp;', '&lt;', '&gt;', '&quot;'], $t);
+    }
 
-	/**
-	 * Get a random number
-	 * @return  float  Random number
-	 */
-	function make_seed()
-	{
-		list($usec, $sec) = explode(' ', microtime());
-		return (float) $sec + ((float) $usec * 100000);
-	}
+    /* */
+    public function text_unhtmlspecialchars($t)
+    {
+        return str_replace(['&lt;', '&gt;', '&quot;', '&amp;'], ['<', '>', '"', '&'], $t);
+    }
 
-	/**
-	 * Executes php-code.
-	 *
-	 * @param   string  $filename Full path to filename
-	 * @param   int     $is_db_restart Re-connect to database. Useful when included script connects to another database.
-	 * @return  string  File results
-	 */
-	function file_exe_contents($filename, $is_db_restart = 1)
-	{
-		$str = '';
-		if (file_exists($filename))
-		{
-			ob_start();
-			include($filename);
-			$str_return = ob_get_contents();
-			ob_end_clean();
-			if ($is_db_restart)
-			{
-				global $oDb;
-				$oDb = new gwtkDb;
-			}
-			return $str_return;
-		}
-		else
-		{
-			return '[loadfile: file '. $filename . ' does not exist]';
-		}
-	}
+    /**
+     *
+     */
+    public function text_crc_unsigned($t, $pass = '')
+    {
+        return sprintf("%010u", crc32($pass . $t));
+    }
 
-	/**
-	 * Get file contents. Binary and fail safe.
-	 *
-	 * @param   string  $filename Full path to filename
-	 * @return  string  File contents
-	 */
-	function file_get_contents($filename)
-	{
-		if (!file_exists($filename))
-		{
-			return '[file_get_contents: file '. $filename . ' does not exist]';
-		}
-		if (function_exists('file_get_contents')) /* PHP4 CVS only */
-		{
-			$str = file_get_contents($filename);
-		}
-		else
-		{
-			/* file() is binary safe from PHP 4.3.0
-			faster: $str = implode('', file($filename));
-			*/
-			$fd = fopen($filename, "rb");
-			$str = fread($fd, filesize($filename));
-			fclose($fd);
-		}
-		if ($str == '')
-		{
-			return '[loadfile: ' . $filename. ' is empty]';
-		}
-		if (function_exists('get_magic_quotes_runtime') && @get_magic_quotes_runtime()) /* remove slashes, 23 march 2002 */
-		{
-			$str = stripslashes($str);
-		}
-		return $str;
-	}
-	/**
-	 * Put contents into a file. Binary and fail safe.
-	 *
-	 * @param   string  $filename Full path to filename
-	 * @param   string  $content File contents
-	 * @param   string  $mode [ w = write new file (default) | a = append ]
-	 * @return  TRUE if success, FALSE otherwise
-	 */
-	function file_put_contents($filename, $content, $mode = "w")
-	{
-		$filename = str_replace('\\', '/', $filename);
-		/* new file */
-		if (!file_exists($filename))
-		{
-			/* check & create directories first */
-			$arParts = explode('/', $filename);
-			$intParts = (sizeof($arParts) - 1);
-			$d = '';
-			for ($i = 0; $i < $intParts; $i++)
-			{
-				$d .= $arParts[$i] . '/';
-				if (is_dir($d))
-				{
-					continue;
-				}
-				else
-				{
-					$oldumask = umask(0);
-					@mkdir($d, 0777);
-					@chmod($d, 0777);
-					umask($oldumask);
-				}
-			}
-			/* Nothing to write */
-			if ($content == '')
-			{
-				return true;
-			}
-			/* Write to file */
-			$oldumask = umask(0002);
-			$fp = @fopen($filename, "wb");
-			@chmod($filename, 0777);
-			if ($fp)
-			{
-				fputs($fp, $content);
-			}
-			else
-			{
-				return false;
-			}
-			umask($oldumask);
-			fclose($fp);
-		}
-		else
-		{
-			/* Append to file */
-			/* note: binary mode is transparent */
-			if ($fp = @fopen($filename, $mode.'b'))
-			{
-				$is_allow = flock($fp, 2); /* lock for writing & reading */
-				if ($is_allow)
-				{
-					fputs($fp, $content, strlen($content));
-				}
-				flock($fp, 3); /* unlock */
-				fclose($fp);
-			}
-			else
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-	/**
-	 * Removes file from disk
-	 */
-	function file_remove_f($filename)
-	{
-		if (file_exists($filename) && is_file($filename) && unlink($filename))
-		{
-			return true;
-		}
-		return false;
-	}
-	/**
-	 * Makes string wrapped, multibyte.
-	 * 1999
-	 * 31 march 2003
-	 * 1 Nov 2005
-	 * 4 Apr 2008 - fixes for the end of lines
-	 *
-	 * @param   string  $str A string to wrap
-	 * @param   int     $len Maximum length, characters
-	 * @param   string  $d Delimiter, default is "\n"
-	 * @param   int     $isBinary [ 0 - off | 1 - use binary-safe convertion ]
-	 * @return  string  Parsed string
-	 */
-	function mb_wordwrap($str, $len, $d = "\n", $isBinary = 0)
-	{
+    /**
+     * Convert HTML-code into Javascript using document.write()
+     *
+     * @param string Text to output
+     * @return  Javascript code
+     */
+    public function text_html2js($t)
+    {
+        $t = '<script type="text/javascript">/*<![CDATA[*/'
+            . 'document.write(\''
+            . str_replace("'", "\'", $t)
+            . '\');/*]]>*/</script>';
+        return $t;
+    }
+
+    /**
+     * Generates a random string using a reduced character set.
+     *
+     * Ambiguous characters are excluded to improve readability.
+     * Two groups of confusing symbols are removed.
+     *
+     * @param int $maxChar Maximum generated string length
+     * @param int $charSet Character set selector:
+     *                     0 = all,
+     *                     1 = numbers,
+     *                     2 = lowercase,
+     *                     3 = uppercase,
+     *                     4 = numbers + lowercase,
+     *                     5 = lowercase + uppercase
+     * @param string $first Prefix for returned string
+     * @return string Generated string
+     */
+    public function text_make_uid($maxChar = 8, $charSet = 0, $first = '')
+    {
+        // Exclude ambiguous characters.
+        // Group 1: 0, 1, l, I
+        // Group 2: a, c, e, o, p, x, A, C, E, H, O, K, M, P, X
+        $result = '';
+        $charsNumbers = '23456789';
+        $charsLower = 'bdfghijkmnqrstuvwyz';
+        $charsUpper = 'QWRYUSDFGJLZVN';
+
+        if ($charSet == 1) {
+            $chars = $charsNumbers;
+        } elseif ($charSet == 2) {
+            $chars = $charsLower;
+        } elseif ($charSet == 3) {
+            $chars = $charsUpper;
+        } elseif ($charSet == 4) {
+            $chars = $charsNumbers . $charsLower;
+        } elseif ($charSet == 5) {
+            $chars = $charsLower . $charsUpper;
+        } else {
+            $chars = $charsNumbers . $charsLower . $charsUpper;
+        }
+
+        $charsLength = strlen($chars);
+
+        for ($i = 0; $i < $maxChar; $i++) {
+            $randomIndex = mt_rand(0, $charsLength - 1);
+            $result .= $chars[$randomIndex];
+        }
+
+        $first = (string)$first;
+        if ($first !== '') {
+            $result = $first . substr($result, 0, strlen($result) - strlen($first));
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns correct number format in HTML-code.
+     * For example, English notation:
+     * 1,234.56
+     * French (also Russian and many others) notation:
+     * 1 234,56
+     * This function also fixes problem with HTML-code
+     * occured by space in every group of thousands (French notation).
+     *
+     * @param integer $int numbers
+     * @param integer $dec decimals
+     * @return  string  complete HTML-code
+     */
+    public function number_format($int, $dec = 0, $ar = ['decimal_separator' => '.', 'thousands_separator' => ' '])
+    {
+        return str_replace(
+            ' ',
+            '&#160;',
+            number_format($int, $dec, $ar['decimal_separator'], $ar['thousands_separator'])
+        );
+    }
+
+    /**
+     * Get a random number
+     * @return  float  Random number
+     */
+    public function make_seed()
+    {
+        list($usec, $sec) = explode(' ', microtime());
+        return (float)$sec + ((float)$usec * 100000);
+    }
+
+    /**
+     * Executes php-code.
+     *
+     * @param string $filename Full path to filename
+     * @param int $is_db_restart Re-connect to database. Useful when included script connects to another database.
+     * @return  string  File results
+     */
+    public function file_exe_contents($filename, $is_db_restart = 1)
+    {
+        $str = '';
+        if (file_exists($filename)) {
+            ob_start();
+            include($filename);
+            $str_return = ob_get_contents();
+            ob_end_clean();
+            if ($is_db_restart) {
+                global $oDb;
+                $oDb = new gwtkDb;
+            }
+            return $str_return;
+        } else {
+            return '[loadfile: file ' . $filename . ' does not exist]';
+        }
+    }
+
+    /**
+     * Get file contents. Binary and fail safe.
+     *
+     * @param string $filename Full path to filename
+     * @return  string  File contents
+     */
+    public function file_get_contents($filename)
+    {
+        if (!file_exists($filename)) {
+            return '[file_get_contents: file ' . $filename . ' does not exist]';
+        }
+        if (function_exists('file_get_contents')) /* PHP4 CVS only */ {
+            $str = file_get_contents($filename);
+        } else {
+            /* file() is binary safe from PHP 4.3.0
+            faster: $str = implode('', file($filename));
+            */
+            $fd = fopen($filename, "rb");
+            $str = fread($fd, filesize($filename));
+            fclose($fd);
+        }
+        if ($str == '') {
+            return '[loadfile: ' . $filename . ' is empty]';
+        }
+        if (function_exists('get_magic_quotes_runtime') && @get_magic_quotes_runtime(
+            )) /* remove slashes, 23 march 2002 */ {
+            $str = stripslashes($str);
+        }
+        return $str;
+    }
+
+    /**
+     * Put contents into a file. Binary and fail safe.
+     *
+     * @param string $filename Full path to filename
+     * @param string $content File contents
+     * @param string $mode [ w = write new file (default) | a = append ]
+     * @return  TRUE if success, FALSE otherwise
+     */
+    public function file_put_contents($filename, $content, $mode = "w")
+    {
+        $filename = str_replace('\\', '/', $filename);
+        /* new file */
+        if (!file_exists($filename)) {
+            /* check & create directories first */
+            $arParts = explode('/', $filename);
+            $intParts = (sizeof($arParts) - 1);
+            $d = '';
+            for ($i = 0; $i < $intParts; $i++) {
+                $d .= $arParts[$i] . '/';
+                if (is_dir($d)) {
+                    continue;
+                } else {
+                    $oldumask = umask(0);
+                    @mkdir($d, 0777);
+                    @chmod($d, 0777);
+                    umask($oldumask);
+                }
+            }
+            /* Nothing to write */
+            if ($content == '') {
+                return true;
+            }
+            /* Write to file */
+            $oldumask = umask(0002);
+            $fp = @fopen($filename, "wb");
+            @chmod($filename, 0777);
+            if ($fp) {
+                fputs($fp, $content);
+            } else {
+                return false;
+            }
+            umask($oldumask);
+            fclose($fp);
+        } else {
+            /* Append to file */
+            /* note: binary mode is transparent */
+            if ($fp = @fopen($filename, $mode . 'b')) {
+                $is_allow = flock($fp, 2); /* lock for writing & reading */
+                if ($is_allow) {
+                    fputs($fp, $content, strlen($content));
+                }
+                flock($fp, 3); /* unlock */
+                fclose($fp);
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Removes file from disk
+     */
+    public function file_remove_f($filename)
+    {
+        if (file_exists($filename) && is_file($filename) && unlink($filename)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Makes string wrapped, multibyte.
+     * 1999
+     * 31 march 2003
+     * 1 Nov 2005
+     * 4 Apr 2008 - fixes for the end of lines
+     *
+     * @param string $str A string to wrap
+     * @param int $len Maximum length, characters
+     * @param string $d Delimiter, default is "\n"
+     * @param int $isBinary [ 0 - off | 1 - use binary-safe convertion ]
+     * @return  string  Parsed string
+     */
+    public function mb_wordwrap($str, $len, $d = "\n", $isBinary = 0)
+    {
 #		prn_r( $str, 'mb_wordwrap' );
-		$arr = array();
-		/* return empty string, 31 march 2003 */
-		if ($len <= 0) { return $str; };
-		$str_temp = '';
-		$cnt_char = 0;
-		preg_match_all("/./u", $str.' ', $ar_letters);
-		for (; list($k, $v) = each($ar_letters[0]);)
-		{
+        $arr = [];
+        /* return empty string, 31 march 2003 */
+        if ($len <= 0) {
+            return $str;
+        };
+        $str_temp = '';
+        $cnt_char = 0;
+        preg_match_all("/./u", $str . ' ', $ar_letters);
+        for (; list($k, $v) = each($ar_letters[0]);) {
 #prn_r( $v .' '.$cnt_char );
-			if ($cnt_char < $len)
-			{
-				$str_temp .= $v;
-			}
-			else
-			{
-				if ($isBinary)
-				{
-					$arr[] = $str_temp;
-					$str_temp = $v;
-					$cnt_char = 0;
-				}
-				else
-				{
-					if ($v == ' ' || $v == "\r" || $v == "\n")
-					{
-						$arr[] = $str_temp;
-						$str_temp = $v;
-						$cnt_char = 0;
-					}
-					else
-					{
-						$str_temp .= $v;
-					}
-				}
-			}
-			++$cnt_char;
-		}
-		$arr[] = $str_temp;
-		return implode($d, $arr);
-	}
-	/* Special for chunking long strings. Returns the first line only. */
-	function mb_wordwrap_first($str, $len, $d = "\n", $isBinary = 0)
-	{
-		global $sys;
-		$arr = array();
-		$str = str_replace('&#032;', ' ', $str);
-		$str = str_replace('&#020;', ' ', $str);
-		$str = str_replace('&#32;', ' ', $str);
-		$str = str_replace('&#20;', ' ', $str);
-		/* return empty string, 31 march 2003 */
-		if ($len < 0) { return $str; };
-		$str_temp = '';
-		$cur_length = 0;
-		$ar_words = explode(' ', $str.' ', 100);
-		for (; list($k, $v) = each($ar_words);)
-		{
-			$cur_length += $this->mb_strlen(' '.$v);
-			if ($cur_length >= $len)
-			{
-				return $str_temp.$d;
-			}
-			$str_temp .= ' '.$v;
-		}
-		return $str;
-		/*
-		 too expensive
-		preg_match_all("/./u", $str.' ', $ar_letters);
-		for (; list($k, $v) = each($ar_letters[0]);)
-		{
-			if ( $k == ($len * (sizeof($arr) + 1) + $int_char) )
-			{
-				if ($isBinary)
-				{
-					$arr[$k] = $str_temp;
-					$str_temp = '';
-					return $arr[$k].$d;
-				}
-				else
-				{
-					if ($v == ' ')
-					{
-						$int_char = 0;
-						$arr[$k] = $str_temp;
-						$str_temp = '';
-						return $arr[$k].$d;
-					}
-					else
-					{
-						$int_char++;
-					}
-				}
-			}
-			else if ( $len * (sizeof($arr) + 1) + $int_char >= $slen
-				&& ($k) == $slen )
-			{
-				$arr[$k] = $str_temp;
-			}
-			$str_temp .= $v;
-		}
-		return implode($d, $arr);
-		*/
-	}
-	/**
-	 * Converts a string with e-mail address
-	 * into unresolvable crap for mail robots.
-	 *
-	 * @param   string  $s String with HTML-tag <a href="mailto:">
-	 * @return  string  Parsed string
-	 * @see hardWrap()
-	 */
-	function text_mailto($s)
-	{
-		preg_match_all("/href=\"mailto:(.*?)\">(.*?)<\/a>/i", $s, $e);
-		/* encode `mailto:' */
-		if (isset($e[1][0]))
-		{
-			$s = str_replace($e[1][0], '', $s);
-			$s = str_replace(
-						'href="mailto:',
-						'title="mailto:'. $e[1][0] .'" '.
-						'href="mailto:'.$this->text_make_uid(mt_rand(2,8), 2).'@'.$this->text_make_uid(mt_rand(2,8), 2).'.com" onmouseover="this.href=\''
-						. $this->mb_wordwrap('mailto:' . strtolower($e[1][0]), mt_rand(2,4), "'+'", 1)
-						. "'", $s);
-			return $s;
-		}
-	}
-	/**
-	 * Coverts a string into sequence of hex values, \xNN
-	 *
-	 * @param    string  $t Text data
-	 * @param    int     $is_x Print `\x' before a character
-	 * @return   string  Hex value for string
-	 */
-	function text_utf2hex($t, $is_x = 1)
-	{
-		$str = '';
-		$len = strlen($t);
-		for ($i = 0; $i < $len; $i++)
-		{
-			$o = ord(substr($t, $i, 1));
-			if ($o < 127)
-			{
-				$str .= substr($t, $i, 1);
-			}
-			else
-			{
-				$str .= ($is_x) ? '\x'.dechex($o) : dechex($o);
-			}
-		}
-		return $str;
-	}
-	/**
-	 * Converts a CSS-file contents into one string
-	 *
-	 * @param    string  $t Text data
-	 * @param    int     $is_debug Skip convertion
-	 * @return   string  Optimized string
-	 */
-	function text_smooth_css($t, $is_debug = 0)
-	{
-		if ($is_debug) { return $t; }
-		/* Remove comments */
-		$t = preg_replace("/\/\*(.*?)\*\//s", ' ', $t);
-		/* Remove new lines, spaces */
-		$t = preg_replace("/(\s{2,}|[\r\n|\n|\t|\r])/", ' ', $t);
-		/* Join rules */
-		$t = preg_replace('/([,|;|:|{|}]) /', '\\1', $t);
-		$t = str_replace(' {', '{', $t);
-		/* Remove ; for the last attribute */
-		$t = str_replace(';}', '}', $t);
-		$t = str_replace(' }', '}', $t);
-		return $t;
-	}
-	/**
-	 * Converts a HTML-file contents into one string
-	 *
-	 * @param    string  $t Text data
-	 * @param    int     $is_debug Skip convertion
-	 * @return   string  Optimized string
-	 * @globals  LF
-	 */
-	function text_smooth_html($t, $is_debug = 0)
-	{
-		/* Note that <pre>formatted text will be converted into single line too */
-		if ($is_debug) { return $t; }
-		/* Remove new lines and tabs */
-		$t = preg_replace("/(\r\n|\n|\r|\t)/", ' ', $t);
-		/* Remove comments */
-		$t = preg_replace("/<!--(.*?)-->/si", '', $t);
-		/* Connect HTML-tags */
-		$t = str_replace('> </' , '></', $t);
-		/* \s is not allowed for multibyte characters */
-		$t = preg_replace("/ {2,}/", ' ', $t);
-		/* Place a newline character if any */
-		$t = str_replace(LF, "\n", $t);
-		return $t;
-	}
-	/**
-	 * Automatic height for textarea in HTML-forms
-	 *
-	 * @param    string  $v Text data
-	 * @return   int     Number of lines
-	 * @see mb_strlen()
-	 */
-	function getFormHeight($v, $int_max = 25)
-	{
-		preg_match_all("/\n/", $v, $vLines);
-		$n = intval($this->mb_strlen($v) / 60) + count($vLines[0]) + 2;
-		if ($n > $int_max) { $n = $int_max; }
-		return $n;
-	}
-	/* */
-	function date_gmusertime($int_time_server, $user_offset)
-	{
-		return $int_time_server - (($user_offset + intval(date('I'))) * 3600);
-	}
-	/*
-		Calculates the number of years passed from a date.
-	*/
-	function date_get_passed_y($time_unix, $y, $m, $d)
-	{
-		/* 2678400 is number of seconds in month */
-		$years = date("Y", $time_unix) - $y;
-		if (date("m", $time_unix + 2678400) < $m)
-		{
-			$years--;
-		}
-		if ((date("m", $time_unix + 2678400) == $m)
-			&& ($d < intval(date("d", $time_unix))) )
-		{
-			$years--;
-		}
-		return $years;
-	}
-	/**
-	 * Get current time with GMT offset
-	 * @param float $gmt_offset GMT offset (+3 Moscow, -6 USA & Canada)
-	 * @param int $is_use_dst Day time saving
-	 */
-	function date_get_localtime($gmt_offset, $is_use_dst = 1)
-	{
-		$r = $gmt_offset * 3600;
-		if ($is_use_dst)
-		{
-			$r += 3600;
-		}
-		return time() + $r;
-	}
-	/**
-	 * Converts date from `timestamp(14)' into `time()' format
-	 *
-	 * @param   string  $t Date in timestamp(14) format
-	 * @return  int     Unixtime format
-	 */
-	function date_Ts14toTime($t)
-	{
-		$t = sprintf("%s", @mktime(substr($t,8,2),substr($t,10,2),substr($t,12,2),substr($t,4,2),substr($t,6,2),substr($t,0,4)));
-		if ( $t < 0 ) { $t = 0; }
-		return $t;
-	}
-	/**
-	 * Converts seconds into readable time format
-	 *
-	 * @param   int     $totalsec Amount of seconds
-	 * @return  string  Text pattern 00:00:00
-	 */
-	function date_SecToTime($totalsec)
-	{
-		$secH = intval($totalsec / 3600);
-		$secMin = intval($totalsec / 60);
-		$secSec = ($totalsec - ($secMin * 60));
-		$secMin = $secMin - ($secH * 60);
-		return sprintf("%02d:%02d:%02d", $secH, $secMin, $secSec);
-	}
-	/**
-	 * Finds whether a variable is a positive integer number
-	 *
-	 * @param   int  $v Some string to check
-	 * @return  TRUE if var is a number, FALSE otherwise.
-	 */
-	function is_num($v)
-	{
-		if ( preg_match("/^\d+$/", $v) )
-		{
-			return true;
-		}
-		return false;
-	}
-	/**
-	 * Get string length, multibyte.
-	 *
-	 * @param   string  $t Any string content
-	 * @return  int     String length
-	 */
-	function mb_strlen($t, $encoding = 'UTF-8')
-	{
-		/* --enable-mbstring */
-		if (function_exists('mb_strlen'))
-		{
-			return mb_strlen($t, $encoding);
-		}
-		else
-		{
-			return strlen(utf8_decode($t));
-		}
-	}
-	/**
-	 * Replacement for substr(), multibyte
-	 * Returns the portion of $t specified by the $start and $end parameters.
-	 *
-	 * @param  string  $t String to substr
-	 * @param  int     $start Start position, positive
-	 * @param  int     $end End position, positive
-	 * @param  string  $encoding Charset encoding [ UTF-8 (default) | windows-1251 | ISO-8859-1 ]
-	 * @return string
-	 */
-	function mb_substr($t, $start = 0, $end = 0, $encoding = 'UTF-8')
-	{
-		/* --enable-mbstring */
-		if (function_exists('mb_substr'))
-		{
-			return mb_substr($t, $start, $end, $encoding); /* hundred times faster, ~0.000382 */
-		}
-		$strD = '';
-		$pos = $cntLetter = 0;
-		$len = strlen($t);
-		if ($end == 0)
-		{
-			$end = $len;
-		}
-		while ($pos < $len)
-		{
-			$charAt = substr($t, $pos, 1);
-			$asciiPos = ord($charAt);
-			$isConcat = (($cntLetter >= $start) && ($cntLetter < ($start + $end))) ? 1 : 0;
-			if (($asciiPos >= 240) && ($asciiPos <= 255))
-			{
-				$char2 = substr($t, $pos, 4);
-				$strD .= ($isConcat) ? $char2 : '';
-				$cntLetter++;
-				$pos += 4;
-			}
-			elseif (($asciiPos >= 224) && ($asciiPos <= 239))
-			{
-				$char2 = substr($t, $pos, 3);
-				$strD .= ($isConcat) ? $char2 : '';
-				$cntLetter++;
-				$pos += 3;
-			}
-			elseif (($asciiPos >= 192) && ($asciiPos <= 223))
-			{
-				$char2 = substr($t, $pos, 2);
-				$strD .= ($isConcat) ? $char2 : '';
-				$cntLetter++;
-				$pos += 2;
-			}
-			else
-			{
-				$strD .= ($isConcat) ? $charAt : '';
-				$cntLetter++;
-				$pos++;
-			}
-		}
-		return $strD;
-	}
-	/**
-	 * Get character position, multibyte.
-	 *
-	 * @param   string  $t Any string contents
-	 * @param   string  $s Character to find
-	 * @param   string  $encoding Charset encoding [ UTF-8 (default) | windows-1251 | ISO-8859-1 ]
-	 * @return  int     String position
-	 */
-	function mb_strpos($t, $s, $encoding = 'UTF-8')
-	{
-		/* --enable-mbstring */
-		if (function_exists('mb_strpos'))
-		{
-			return mb_strpos($t, $s, 0, $encoding);
-		}
-		else
-		{
-			/* convert $s character into something,
-			   which will be not converted into question mark "?"
-			   after parsing through utf8_decode() */
-			$s_new = "\x01";
-			$t = str_replace($s, $s_new, $t);
-			return strpos(utf8_decode($t), $s_new);
-		}
-	}
-	/**
-	 * Detect UTF-8 encoding, multibyte.
-	 *
-	 * @param   string  $t Any string content
-	 * @return  boolean TRUE if the string is UTF-8, FALSE otherwise
-	 */
-	function is_detect_utf8($t)
-	{
-		/* --enable-mbstring */
-		if (function_exists('mb_detect_encoding') && @ini_get('mbstring.internal_encoding') == 'UTF-8')
-		{
-			return (mb_detect_encoding($t, 'UTF-8, GB2312, Windows-1251') == 'UTF-8') ? true : false;
-		}
-		else
-		{
-			$is_high = preg_match( '/[\x80-\xff]/', $t);
-			return ($is_high ? preg_match( '/^([\x00-\x7f]|[\xc0-\xdf][\x80-\xbf]|' .
-					'[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xf7][\x80-\xbf]{3})+$/', $t ) : true );
-		}
-	}
-	/* Converts any HTML-entities into characters */
-	function gw_numeric2character($t)
-	{
-		if (function_exists('mb_decode_numericentity'))
-		{
-			$convmap = array(0x0, 0x2FFFF, 0, 0xFFFF);
-			return mb_decode_numericentity($t, $convmap, 'UTF-8');
-		}
-		return $t;
-	}
-	/* Converts any characters into HTML-entities */
-	function gw_character2numeric($t)
-	{
-		if (function_exists('mb_encode_numericentity'))
-		{
-			$convmap = array(0x0, 0x2FFFF, 0, 0xFFFF);
-			return mb_encode_numericentity($t, $convmap, 'UTF-8');
-		}
-		return $t;
-	}
-	/**
-	 * Converts character encoding
-	 *
-	 * @param   string    $str The string encoded in $from encoding
-	 * @param   string    $from Source encoding
-	 * @param   string    $to Target encoding
-	 * @return  string    Encoded string
-	 * @todo    read xD3 (in xD0xD3)
-	 */
-	function gwConvertCharset($str, $from, $to)
-	{
-		/* Skip processing when two strings are the same, 6 jan 2003 */
-		if ($from == $to)
-		{
-			return $str;
-		}
-		/* Process */
-		if (function_exists('mb_convert_encoding'))
-		{
-			/* Some people have the same problem:
-				http://bugs.php.net/bug.php?id=23470
-				Text returned from mb_convert_encoding() and iconv()
-				must be the same, but often it is not
-				when only iconv() is correct.
-			*/
-			$result_mb = @mb_convert_encoding($str, $to, $from);
-			$result_iconv = @iconv($from, $to, $str);
-			if ($result_mb != $result_iconv)
-			{
-				return $result_iconv;
-			}
-			return $result_mb;
-		}
-		elseif (function_exists('iconv'))
-		{
-			return iconv($from, $to, $str);
-		}
-		elseif (function_exists('recode_string')) /* Linux */
-		{
-			return recode_string($from . '..' . $to, $str);
-		}
-		else
-		{
-			print '<br />Error: function <b>iconv</b> not installed. Update your PHP version.';
-			return $str;
-		}
-	}
-	/* */
-	function math_hexdec($ar)
-	{
-		for (reset($ar); list($k, $v) = each($ar);)
-		{
-			$ar[$k] = hexdec($v);
-		}
-		return $ar;
-	}
-	/* Inverts color */
-	function math_hex2negative($t)
-	{
-		$arHex = $this->math_hex2ar($t);
-		$arDec = $this->math_hexdec($arHex);
-		for (reset($arDec); list($k, $v) = each($arDec);)
-		{
-			$v2 = (255 - $v);
-			/* remove gray */
-			$v2 = (($v2 > 50) && ($v2 < 150)) ? 255 : $v2;
-			/* */
-			$arHex[$k] = sprintf("%02X", $v2);
-		}
-		return implode('', $arHex);
-	}
-	/**
-	 * Converts hex values into array with integer values
-	 * @usage math_hexbg2ar('0F0');
-	 * @usage math_hexbg2ar('EE4400');
-	 */
-	function math_hex2ar($t)
-	{
-		$t = str_replace('#', '', $t);
-		/* convert short form into full form */
-		if (strlen($t) == 3)
-		{
-			list($r, $g, $b) = sscanf($t, '%1s%1s%1s');
-			$t = $r.$r.$g.$g.$b.$b;
-		}
-		return $this->str_split($t, 2);
-	}
-	/* Calculates factorial (a!) of a. */
-	function math_fact($a)
-	{
-		$r = 1;
-		for ($f = 1; $f <= $a; $f++)
-		{
-			$r = $f * $r;
-		}
-		return $r;
-	}
-	/**
-	 * Fail-safe str_split() function
-	 * PHP 5 CVS only
-	 */
-	function str_split($t, $length = 1)
-	{
-		if (function_exists('str_split'))
-		{
-			return str_split($t, $length);
-		}
-		return explode(':', wordwrap($t, $length, ':', 1));
-	}
-	/**
-	 * Converts dotted IP-address (IPV4) into database storable format.
-	 */
-	function ip2int($ip)
-	{
-		return sprintf("%u", ip2long($ip));
-	}
-	/**
-	 * Converts IP-address (IPV4) from storable format into dotted
-	 */
-	function int2ip($ip)
-	{
-		return long2ip($ip);
-	}
-	/**
-	 * Create a GZip-compressed string
-	 *
-	 * @param  string $t Input data
-	 * @param  int    $level Gzip compress level [1..9], 1 by default.
-	 * @param  int    $is_send_header Use headers class [1 - yes | 0 - no]
-	 * @return string GZipped text
-	 * @globals  $_SERVER, $oHdr, PHP_VERSION_INT
-	 */
-	function text_gzip($str_return, $level = 1, $is_send_header = 1)
-	{
-		global $_SERVER, $oHdr;
-		$int_length = strlen($str_return);
-		$encoding = 0;
-		if (function_exists('crc32') && function_exists('gzcompress'))
-		{
-			/* strpos() should be always compared as boolean */
-			if (strpos(' ' . $_SERVER['HTTP_ACCEPT_ENCODING'], 'x-gzip') !== false)
-			{
-				$encoding = 'x-gzip';
-			}
-			elseif (strpos(' ' . $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false)
-			{
-				$encoding = 'gzip';
-			}
-			if ($encoding)
-			{
-				if (function_exists('gzencode') && PHP_VERSION_INT > 40200)
-				{
-					$str_return = gzencode($str_return, $level);
-				}
-				else
-				{
-					$size = strlen($str_return);
-					$crc = crc32($str_return);
-					$str_return = "\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff";
-					$str_return .= substr(gzcompress($str_return, $level), 2, -4);
-					$str_return .= pack('V', $crc);
-					$str_return .= pack('V', $size);
-				}
-				if ($is_send_header)
-				{
-					$oHdr->add('Content-Encoding: ' . $encoding);
-					$oHdr->add('Content-Length: ' . strlen($str_return));
-				}
-			}
-		}
-		return $str_return;
-	}
+            if ($cnt_char < $len) {
+                $str_temp .= $v;
+            } else {
+                if ($isBinary) {
+                    $arr[] = $str_temp;
+                    $str_temp = $v;
+                    $cnt_char = 0;
+                } else {
+                    if ($v == ' ' || $v == "\r" || $v == "\n") {
+                        $arr[] = $str_temp;
+                        $str_temp = $v;
+                        $cnt_char = 0;
+                    } else {
+                        $str_temp .= $v;
+                    }
+                }
+            }
+            ++$cnt_char;
+        }
+        $arr[] = $str_temp;
+        return implode($d, $arr);
+    }
+
+    /* Special for chunking long strings. Returns the first line only. */
+    public function mb_wordwrap_first($str, $len, $d = "\n", $isBinary = 0)
+    {
+        global $sys;
+        $arr = [];
+        $str = str_replace('&#032;', ' ', $str);
+        $str = str_replace('&#020;', ' ', $str);
+        $str = str_replace('&#32;', ' ', $str);
+        $str = str_replace('&#20;', ' ', $str);
+        /* return empty string, 31 march 2003 */
+        if ($len < 0) {
+            return $str;
+        };
+        $str_temp = '';
+        $cur_length = 0;
+        $ar_words = explode(' ', $str . ' ', 100);
+        for (; list($k, $v) = each($ar_words);) {
+            $cur_length += mb_strlen(' ' . $v);
+            if ($cur_length >= $len) {
+                return $str_temp . $d;
+            }
+            $str_temp .= ' ' . $v;
+        }
+        return $str;
+        /*
+         too expensive
+        preg_match_all("/./u", $str.' ', $ar_letters);
+        for (; list($k, $v) = each($ar_letters[0]);)
+        {
+            if ( $k == ($len * (sizeof($arr) + 1) + $int_char) )
+            {
+                if ($isBinary)
+                {
+                    $arr[$k] = $str_temp;
+                    $str_temp = '';
+                    return $arr[$k].$d;
+                }
+                else
+                {
+                    if ($v == ' ')
+                    {
+                        $int_char = 0;
+                        $arr[$k] = $str_temp;
+                        $str_temp = '';
+                        return $arr[$k].$d;
+                    }
+                    else
+                    {
+                        $int_char++;
+                    }
+                }
+            }
+            else if ( $len * (sizeof($arr) + 1) + $int_char >= $slen
+                && ($k) == $slen )
+            {
+                $arr[$k] = $str_temp;
+            }
+            $str_temp .= $v;
+        }
+        return implode($d, $arr);
+        */
+    }
+
+    /**
+     * Converts a string with e-mail address
+     * into unresolvable crap for mail robots.
+     *
+     * @param string $s String with HTML-tag <a href="mailto:">
+     * @return  string  Parsed string
+     * @see hardWrap()
+     */
+    public function text_mailto($s)
+    {
+        preg_match_all("/href=\"mailto:(.*?)\">(.*?)<\/a>/i", $s, $e);
+        /* encode `mailto:' */
+        if (isset($e[1][0])) {
+            $s = str_replace($e[1][0], '', $s);
+            $s = str_replace(
+                'href="mailto:',
+                'title="mailto:' . $e[1][0] . '" ' .
+                'href="mailto:' . $this->text_make_uid(mt_rand(2, 8), 2) . '@' . $this->text_make_uid(
+                    mt_rand(2, 8),
+                    2
+                ) . '.com" onmouseover="this.href=\''
+                . $this->mb_wordwrap('mailto:' . strtolower($e[1][0]), mt_rand(2, 4), "'+'", 1)
+                . "'",
+                $s
+            );
+            return $s;
+        }
+    }
+
+    /**
+     * Converts a string to a sequence of hex byte values.
+     *
+     * ASCII characters are kept unchanged. Non-ASCII bytes are converted
+     * to hex form, optionally prefixed with "\x".
+     *
+     * @param string $text Input text
+     * @param int $withPrefix Whether to prepend "\x" before each hex byte
+     * @return string Converted string
+     */
+    public function text_bytes_to_hex($text, $withPrefix = 1)
+    {
+        $result = '';
+        $length = strlen($text);
+
+        for ($i = 0; $i < $length; $i++) {
+            $byte = ord($text[$i]);
+
+            if ($byte < 128) {
+                $result .= $text[$i];
+            } else {
+                $hex = sprintf('%02x', $byte);
+                $result .= $withPrefix ? '\\x' . $hex : $hex;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Converts a CSS-file contents into one string
+     *
+     * @param string $t Text data
+     * @param int $is_debug Skip convertion
+     * @return   string  Optimized string
+     */
+    public function text_smooth_css($t, $is_debug = 0)
+    {
+        if ($is_debug) {
+            return $t;
+        }
+        /* Remove comments */
+        $t = preg_replace("/\/\*(.*?)\*\//s", ' ', $t);
+        /* Remove new lines, spaces */
+        $t = preg_replace("/(\s{2,}|[\r\n|\n|\t|\r])/", ' ', $t);
+        /* Join rules */
+        $t = preg_replace('/([,|;|:|{|}]) /', '\\1', $t);
+        $t = str_replace(' {', '{', $t);
+        /* Remove ; for the last attribute */
+        $t = str_replace(';}', '}', $t);
+        $t = str_replace(' }', '}', $t);
+        return $t;
+    }
+
+    /**
+     * Converts a HTML-file contents into one string
+     *
+     * @param string $t Text data
+     * @param int $is_debug Skip convertion
+     * @return   string  Optimized string
+     * @globals  LF
+     */
+    public function text_smooth_html($t, $is_debug = 0)
+    {
+        /* Note that <pre>formatted text will be converted into single line too */
+        if ($is_debug) {
+            return $t;
+        }
+        /* Remove new lines and tabs */
+        $t = preg_replace("/(\r\n|\n|\r|\t)/", ' ', $t);
+        /* Remove comments */
+        $t = preg_replace("/<!--(.*?)-->/si", '', $t);
+        /* Connect HTML-tags */
+        $t = str_replace('> </', '></', $t);
+        /* \s is not allowed for multibyte characters */
+        $t = preg_replace("/ {2,}/", ' ', $t);
+        /* Place a newline character if any */
+        $t = str_replace(LF, "\n", $t);
+        return $t;
+    }
+
+    /**
+     * Calculates recommended textarea height based on content.
+     *
+     * @param string $text Input text
+     * @param int $maxRows Maximum number of rows
+     * @return int
+     */
+    public function getFormHeight($text, $maxRows = 25)
+    {
+        $text = (string)$text;
+
+        $lineBreaks = substr_count($text, "\n");
+        $rows = (int)(mb_strlen($text) / 60) + $lineBreaks + 2;
+
+        return ($rows > (int)$maxRows) ? (int)$maxRows : $rows;
+    }
+
+
+    /**
+     * Calculates full years passed since a given date.
+     *
+     * @param int $unixTime Reference Unix timestamp
+     * @param int $year Start year
+     * @param int $month Start month
+     * @param int $day Start day
+     * @return int Number of full years passed
+     */
+    public function dateGetPassedYears($time_unix, $y, $m, $d)
+    {
+        $currentYear = (int)date('Y', $unixTime);
+        $currentMonth = (int)date('n', $unixTime);
+        $currentDay = (int)date('j', $unixTime);
+
+        $yearsPassed = $currentYear - (int)$year;
+
+        if (
+            $currentMonth < (int)$month
+            || ($currentMonth === (int)$month && $currentDay < (int)$day)
+        ) {
+            $yearsPassed--;
+        }
+
+        return $yearsPassed;
+    }
+
+    /**
+     * Returns current Unix time shifted by GMT offset.
+     *
+     * Optionally adds one extra hour for daylight saving time.
+     *
+     * @param float $gmtOffset GMT offset in hours (+3 Moscow, -6 USA & Canada)
+     * @param int $useDst Whether to add one DST hour
+     * @return int Shifted Unix timestamp
+     */
+    public function date_get_localtime($gmtOffset, $useDst = 1)
+    {
+        $offsetSeconds = (float)$gmtOffset * 3600;
+
+        if ((int)$useDst === 1) {
+            $offsetSeconds += 3600;
+        }
+
+        return time() + (int)$offsetSeconds;
+    }
+
+    /**
+     * Converts seconds to HH:MM:SS format.
+     *
+     * @param int $totalSeconds Amount of seconds
+     * @return string Time in HH:MM:SS format
+     */
+    public function dateSecToTime($totalSeconds)
+    {
+        $totalSeconds = (int)$totalSeconds;
+
+        if ($totalSeconds < 0) {
+            $totalSeconds = 0;
+        }
+
+        $hours = (int)($totalSeconds / 3600);
+        $minutes = (int)(($totalSeconds % 3600) / 60);
+        $seconds = $totalSeconds % 60;
+
+        return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+    }
+
+    /**
+     * Checks whether a value is a non-negative integer (digits only).
+     *
+     * Accepts numeric strings like "123" and integers.
+     *
+     * @param mixed $value Value to check
+     * @return bool TRUE if value is a non-negative integer, FALSE otherwise
+     */
+    public function is_num($v)
+    {
+        return filter_var($value, FILTER_VALIDATE_INT) !== false && $value >= 0;
+    }
+
+    /**
+     * Get string length, multibyte.
+     *
+     * @param string $t Any string content
+     * @return  int     String length
+     */
+    public function mb_strlen($t, $encoding = 'UTF-8')
+    {
+        /* --enable-mbstring */
+        if (function_exists('mb_strlen')) {
+            return mb_strlen($t, $encoding);
+        } else {
+            return strlen(utf8_decode($t));
+        }
+    }
+
+    /**
+     * Decodes numeric HTML entities into UTF-8 characters.
+     *
+     * Example:
+     * - &#1040; -> À
+     *
+     * @param string $string Input string
+     * @return string Decoded string
+     */
+    public function gw_numeric2character($string)
+    {
+        if (!function_exists('mb_decode_numericentity')) {
+            return $string;
+        }
+
+        $convMap = [0x0000, 0x2FFFF, 0, 0xFFFF];
+
+        return mb_decode_numericentity($string, $convMap, 'UTF-8');
+    }
+
+    /**
+     * Encodes UTF-8 characters as numeric HTML entities.
+     *
+     * Example:
+     * - À -> &#1040;
+     *
+     * @param string $string Input string
+     * @return string Encoded string
+     */
+    public function gw_character2numeric($string)
+    {
+        if (!function_exists('mb_encode_numericentity')) {
+            return $string;
+        }
+
+        $convMap = [0x0000, 0x2FFFF, 0, 0xFFFF];
+
+        return mb_encode_numericentity($string, $convMap, 'UTF-8');
+    }
+
+    /**
+     * Converts string between character encodings.
+     *
+     * Prefers iconv() when available because conversion results may differ
+     * between iconv() and mb_convert_encoding() for some legacy encodings.
+     *
+     * @param string $string Input string
+     * @param string $fromEncoding Source encoding
+     * @param string $toEncoding Target encoding
+     * @return string Converted string
+     */
+    public function gwConvertCharset($string, $fromEncoding, $toEncoding)
+    {
+        // Skip conversion when encodings are the same
+        if ($fromEncoding === $toEncoding) {
+            return $string;
+        }
+
+        // Prefer iconv() when available
+        if (function_exists('iconv')) {
+            $result = @iconv($fromEncoding, $toEncoding, $string);
+
+            if ($result !== false) {
+                return $result;
+            }
+        }
+
+        // Fallback to mb_convert_encoding()
+        if (function_exists('mb_convert_encoding')) {
+            $result = @mb_convert_encoding($string, $toEncoding, $fromEncoding);
+
+            if ($result !== false) {
+                return $result;
+            }
+        }
+
+        // Legacy fallback for older environments
+        if (function_exists('recode_string')) {
+            $result = @recode_string($fromEncoding . '..' . $toEncoding, $string);
+
+            if ($result !== false) {
+                return $result;
+            }
+        }
+
+        // Return original string if no converter is available
+        return $string;
+    }
+
+    /**
+     * Converts array of hex strings to decimal values.
+     *
+     * @param array $hexArray Array of hex values (e.g. ['FF', '00', 'AA'])
+     * @return array Array of integers
+     */
+    public function math_hexdec($hexArray)
+    {
+        foreach ($hexArray as $key => $value) {
+            $hexArray[$key] = hexdec($value);
+        }
+
+        return $hexArray;
+    }
+
+    /**
+     * Converts hex color to its "negative" version.
+     *
+     * @param string $hex Hex color string
+     * @return string
+     */
+    public function math_hex2negative($hex)
+    {
+        $hexArray = $this->math_hex2ar($hex);
+        $decArray = array_map('hexdec', $hexArray);
+
+        foreach ($decArray as $key => $value) {
+            $inverted = 255 - $value;
+
+            if ($inverted > 50 && $inverted < 150) {
+                $inverted = 255;
+            }
+
+            $hexArray[$key] = sprintf('%02X', $inverted);
+        }
+
+        return implode('', $hexArray);
+    }
+
+    /**
+     * Converts hex color into RGB array with integer values.
+     *
+     * Examples:
+     * - math_hex2ar('0F0') returns [0, 255, 0]
+     * - math_hex2ar('EE4400') returns [238, 68, 0]
+     *
+     * @param string $hex Hex color string with or without leading #
+     * @return array RGB values
+     */
+    public function math_hex2ar($hex)
+    {
+        $hex = str_replace('#', '', $hex);
+
+        // Convert short form like "0F0" to full form "00FF00"
+        if (strlen($hex) == 3) {
+            list($r, $g, $b) = sscanf($hex, '%1s%1s%1s');
+            $hex = $r . $r . $g . $g . $b . $b;
+        }
+
+        return array_map('hexdec', str_split($hex, 2));
+    }
+
+    /**
+     * Calculates factorial (n!) for a non-negative integer.
+     *
+     * Uses BCMath if available, fallback to integer math.
+     *
+     * @param int $n Input number (must be >= 0)
+     * @return int|float|string Factorial value
+     */
+    public function math_fact($n)
+    {
+        $n = (int)$n;
+
+        if ($n < 0) {
+            return 0;
+        }
+
+        if ($n === 0) {
+            return 1;
+        }
+
+        // Use BCMath if available (for big numbers)
+        if (function_exists('bcmul')) {
+            $result = '1';
+            for ($i = 2; $i <= $n; $i++) {
+                $result = bcmul($result, (string)$i);
+            }
+            return $result;
+        }
+
+        // Fallback (fast, but limited by PHP int/float)
+        $result = 1;
+        for ($i = 2; $i <= $n; $i++) {
+            $result *= $i;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Converts dotted IP-address (IPV4) into database storable format.
+     */
+    public function ip2int($ip)
+    {
+        return sprintf("%u", ip2long($ip));
+    }
+
+    /**
+     * Create a GZip-compressed string
+     *
+     * @param string $t Input data
+     * @param int $level Gzip compress level [1..9], 1 by default.
+     * @param int $is_send_header Use headers class [1 - yes | 0 - no]
+     * @return string GZipped text
+     * @globals  $_SERVER, $oHdr, PHP_VERSION_INT
+     */
+    public function text_gzip($str_return, $level = 1, $is_send_header = 1)
+    {
+        global $_SERVER, $oHdr;
+        $int_length = strlen($str_return);
+        $encoding = 0;
+        if (function_exists('crc32') && function_exists('gzcompress')) {
+            /* strpos() should be always compared as boolean */
+            if (strpos(' ' . $_SERVER['HTTP_ACCEPT_ENCODING'], 'x-gzip') !== false) {
+                $encoding = 'x-gzip';
+            } elseif (strpos(' ' . $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false) {
+                $encoding = 'gzip';
+            }
+            if ($encoding) {
+                if (function_exists('gzencode') && PHP_VERSION_INT > 40200) {
+                    $str_return = gzencode($str_return, $level);
+                } else {
+                    $size = strlen($str_return);
+                    $crc = crc32($str_return);
+                    $str_return = "\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff";
+                    $str_return .= substr(gzcompress($str_return, $level), 2, -4);
+                    $str_return .= pack('V', $crc);
+                    $str_return .= pack('V', $size);
+                }
+                if ($is_send_header) {
+                    $oHdr->add('Content-Encoding: ' . $encoding);
+                    $oHdr->add('Content-Length: ' . strlen($str_return));
+                }
+            }
+        }
+        return $str_return;
+    }
 }
+
 $tmp['mtime'] = explode(' ', microtime());
 $tmp['endtime'] = (float)$tmp['mtime'][1] + (float)$tmp['mtime'][0];
 $tmp['time'][__FILE__] = ($tmp['endtime'] - $tmp['start_time']);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Glossword - glossary compiler (http://glossword.biz/)
  * © 2008-2026 Glossword.biz team <team at glossword dot biz>
@@ -10,25 +11,38 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
-if (!defined('IN_GW'))
-{
-    die('<!-- Not in App  -->');
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
 }
+
 /* Included from $oAddonAdm->alpha(); */
 
-$ar_q = array();
-if (!$this->gw_this['vars']['isConfirm'])
-{
-	/* Should be confirmed */
-	return;
+$ar_query = [];
+
+if (!$this->gw_this['vars']['isConfirm']) {
+    /* Deletion must be confirmed */
+    return;
 }
-/* Enter debug mode */
-#$this->sys['isDebugQ'] = 1;
+
+$target_id = (int) $this->gw_this['vars']['tid'];
 
 /* Remove from profiles */
-$ar_query[] = gw_sql_delete($this->sys['tbl_prefix'].'virtual_keyboard', array('id_profile' => $this->gw_this['vars']['tid']));
-/* Replace with a default profile */
-$ar_query[] = gw_sql_update(array('id_vkbd' => '0'), $this->sys['tbl_prefix'].'dict', 'id_vkbd = "'.$this->gw_this['vars']['tid'].'"');
-/* */
-$this->str .= postQuery($ar_query, GW_ACTION.'='.GW_A_BROWSE.'&'.GW_TARGET.'='.$this->component, $this->sys['isDebugQ'], 0);
-/* end of file */
+$ar_query[] = gw_sql_delete(
+    $this->sys['tbl_prefix'] . 'virtual_keyboard',
+    ['id_profile' => $target_id]
+);
+
+/* Replace with the default profile */
+$ar_query[] = gw_sql_update(
+    ['id_vkbd' => 0],
+    $this->sys['tbl_prefix'] . 'dict',
+    '`id_vkbd` = ' . $target_id
+);
+
+/* Redirect */
+$this->str .= postQuery(
+    $ar_query,
+    $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->component),
+    $this->sys['isDebugQ'],
+    $this->sys['isPause']
+);

@@ -13,7 +13,7 @@ class gw_addon_check_file_versions extends gw_addon
 {
 	var $addon_name = 'check_file_versions';
 	/* Autoexec */
-	function gw_addon_check_file_versions()
+	function __construct()
 	{
 		$this->init_m();
 	}

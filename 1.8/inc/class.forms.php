@@ -131,7 +131,7 @@ class gwForms {
 				$this->setTag('input', 'size', '20');
 			}
 			/* fix for too long strings */
-			if ($oFunc->mb_strlen($value) > $this->tags['input']['size'])
+			if (mb_strlen($value) > $this->tags['input']['size'])
 			{
 				$this->setTag('input', 'style', 'width:'.intval($this->tags['input']['size']/1.2).'em');
 			}
