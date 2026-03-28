@@ -17,6 +17,7 @@ define('IN_GW', 1);
 include_once('db_config.php');
 $sys['id_prepend'] = 0;
 include_once($sys['path_include_local'] . '/config.inc.php');
+include_once( $sys['path_include'] . '/func.sql.inc.php' );
 
 define('GW_REQUEST_URI', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI']
 					: ((getenv('REQUEST_URI') != '') ? getenv('REQUEST_URI')

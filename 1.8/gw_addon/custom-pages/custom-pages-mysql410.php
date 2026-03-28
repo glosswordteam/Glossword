@@ -12,5 +12,3 @@ $tmp['ar_queries'] = array(
 						WHERE gp.id_page = "%d"
 					',
 );
-/* end of file */
-?>

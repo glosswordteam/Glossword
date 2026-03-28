@@ -20,4 +20,3 @@ $tmp['ar_queries'] = array(
 				LIMIT 1
 			'
 );
-?>

@@ -1050,7 +1050,87 @@ function gw_sql_update(array $sqlNames, $tableName, $where)
 }
 
 
+/**
+ * Return character map for legacy database storage format.
+ *
+ * @return array
+ */
+function gw_db_legacy_chars()
+{
+    return [
+        '%' => '\\%',
+        '_' => '\\_',
+    ];
+}
 
+/**
+ * Convert application text into legacy database storage format.
+ *
+ * @param string $value
+ * @return string
+ */
+function gw_db_legacy_encode($value)
+{
+    return addslashes(strtr((string)$value, gw_db_legacy_chars()));
+}
+
+/**
+ * Decode legacy database value.
+ *
+ * @param mixed $value
+ * @return mixed
+ */
+function gw_db_legacy_decode($value)
+{
+    if (is_array($value)) {
+        foreach ($value as $key => $item) {
+            $value[$key] = gw_db_legacy_decode($item);
+        }
+
+        return $value;
+    }
+
+    if (is_object($value)) {
+        return $value;
+    }
+
+    return stripslashes(strtr(
+        (string)$value,
+        array_flip(gw_db_legacy_chars())
+    ));
+}
+
+/**
+ * Escape string for SQL literal.
+ *
+ * @param string $value
+ * @return string
+ */
+function gw_sql_escape($value)
+{
+    global $oDb;
+
+    return mysqli_real_escape_string($oDb->conn_id, (string)$value);
+}
+
+/**
+ * Escape value for SQL LIKE pattern.
+ *
+ * @param string $value
+ * @return string
+ */
+function gw_sql_escape_like($value)
+{
+    $value = gw_sql_escape((string)$value);
+
+    $value = str_replace(
+        ['\\', '%', '_'],
+        ['\\\\', '\\%', '\\_'],
+        $value
+    );
+
+    return $value;
+}
 
 
 /**
@@ -1066,18 +1146,7 @@ function gw_sql_update(array $sqlNames, $tableName, $where)
  */
 function gw_text_sql($value)
 {
-    return strtr(
-        (string) $value,
-        [
-            "\\" => "\\\\",
-            "\0" => "\\0",
-            "\n" => "\\n",
-            "\r" => "\\r",
-            "'" => "\\'",
-            '"' => '\\"',
-            "\x1a" => "\\Z",
-        ]
-    );
+    return gw_db_legacy_encode($value);
 }
 
 /**

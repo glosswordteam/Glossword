@@ -89,13 +89,11 @@ function gw_get_theme($themeName)
     global $sys, $oDb, $oSqlQ;
 
     $themeSettings = [];
-
     // 1,2 - theme settings only (colors, theme credits)
     $themeRows = $oDb->sqlRun(
         $oSqlQ->getQ('get-theme', gw_text_sql($themeName), '1,2'),
         'theme'
     );
-
     if (empty($themeRows)) {
         // Custom theme not found, load default theme
         $themeName = $sys['visualtheme'];
@@ -395,12 +393,12 @@ function gw_sql2defnpreview($arSql)
 		}
 		$oHtml->setTag('a', 'title', '');
 		/* Chunk long definitions */
-		$int_defn_length = mb_strlen($arA[$k]['defn'], $sys['internal_encoding']);
+		$int_defn_length = mb_strlen($arA[$k]['defn']);
 		if ($int_defn_length > $sys['int_max_char_defn'] )
 		{
 			$arA[$k]['defn'] = $oFunc->mb_wordwrap_first($arA[$k]['defn'], $sys['int_max_char_defn'], $sys['txt_magic_splitter'], 0);
 #			$arA[$k]['defn'] = $arA[$k]['defn'];
-			$int_s = mb_strpos($arA[$k]['defn'], $sys['txt_magic_splitter'], $sys['internal_encoding']);
+			$int_s = mb_strpos($arA[$k]['defn'], $sys['txt_magic_splitter']);
 			$arA[$k]['kb'] = $oFunc->number_format($arV[1]['int_bytes'] / 1024, 1, $oL->languagelist('4')) .'&#160;'. $oL->m('kb');
 			/* $sys['txt_magic_splitter'] is not found */
 			if ($int_s === false)

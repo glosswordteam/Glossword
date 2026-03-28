@@ -53,7 +53,8 @@ function gw_dict_browse_for_select(array $ar_dict_param)
  */
 function gw_topic_recount()
 {
-    include_once( $sys['path_gwlib'] . '/class.topics_recounter.php' );
+    global $sys;
+    include_once( $sys['path_include'] . '/class.topics_recounter.php' );
 	$o = new gw_topics_recounter();
 	$o->recount();
 }

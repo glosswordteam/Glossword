@@ -107,12 +107,12 @@ class pch_template extends gwv_template
 	{
 		return false;
 	}
-	function _file_save($filename, $str, $field = '', $id_style = 1)
+	function _file_save($filename, $str, $mode = '', $id_style = 1)
 	{
 		global $oDb, $sys;
 		$sql = sprintf('UPDATE %s SET %s = "%s", date_compiled = %d
 				WHERE settings_key = "%s" AND id_theme = "%s"', 
-				$this->db_table, $field, gw_text_sql($str), $sys['time_now_gmt_unix'], gw_text_sql($filename), gw_text_sql($id_style)
+				$this->db_table, $mode, gw_text_sql($str), $sys['time_now_gmt_unix'], gw_text_sql($filename), gw_text_sql($id_style)
 		);
 		$oDb->sqlExec($sql);
 	}

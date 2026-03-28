@@ -62,25 +62,27 @@ if (!class_exists('gw_query_storage')) {
             return $this->q_import(['query_storage_global']);
         }
 
-        /* */
-        public function getQ()
+        /**
+         * Return SQL query by key with optional sprintf parameters.
+         *
+         * @return string
+         */
+        public function getQ($query_key)
         {
             $args = func_get_args();
-            $ar = [];
-            /* 8 parameters allowed */
-            /* See also `return sprintf' at the end of the function */
-            for ($i = 0; $i <= 8; $i++) {
-                $ar[] = isset($args[$i]) ? $args[$i] : '';
-            }
-            $arSql = array_merge($this->setQ(), $this->setCustomQ());
+            $sql_map = array_merge($this->setQ(), $this->setCustomQ());
 
-            if (isset($arSql[$ar[0]])) {
-                $arSql[$ar[0]] = str_replace(["\n", "\r", "\t", "  "], ' ', $arSql[$ar[0]]);
-
-                return sprintf($arSql[$ar[0]], $ar[1], $ar[2], $ar[3], $ar[4], $ar[5], $ar[6], $ar[7], $ar[8]);
+            if (!isset($sql_map[$query_key])) {
+                return '';
             }
 
-            return '';
+            $sql = str_replace(["\n", "\r", "\t"], ' ', $sql_map[$query_key]);
+            $sql = preg_replace('/\s{2,}/', ' ', $sql);
+
+            array_shift($args);
+            $args = array_pad($args, 8, '');
+
+            return vsprintf($sql, $args);
         }
     } /* end of class */
 }

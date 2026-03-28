@@ -201,7 +201,7 @@ if (!class_exists('gwtkDataBase')) {
             $this->row += 1;
 
             if (is_array($this->record)) {
-                $this->record = $this->text_from_sql($this->record);
+                $this->record = gw_db_legacy_decode($this->record);
                 return 1;
             }
 
@@ -210,31 +210,6 @@ if (!class_exists('gwtkDataBase')) {
             }
 
             return 0;
-        }
-
-        /**
-         * Restores legacy SQL/LIKE-escaped value after reading from database.
-         *
-         * @param mixed $value
-         * @return mixed
-         */
-        public function text_from_sql($value)
-        {
-            if (is_array($value)) {
-                foreach ($value as $k => $v) {
-                    $value[$k] = $this->text_from_sql($v);
-                }
-                return $value;
-            }
-
-            if (!is_string($value)) {
-                return $value;
-            }
-
-            $value = str_replace('\\_', '_', $value);
-            $value = str_replace('\\%', '%', $value);
-
-            return $value;
         }
 
         /**
@@ -288,7 +263,11 @@ if (!class_exists('gwtkDataBase')) {
 
         public function haltmsg($msg)
         {
-            echo '<div style="margin:3px 0;border:3px solid #EEE;font:10pt sans-serif;width:98%;overflow:hidden">' . '<dl>' . '<dt style="padding:0 1em;color:#C80"><strong>Database error</strong></dt>' . '<dd>' . substr($msg, 0, 1024) . '</dd>' . '</dl>' . ($this->errno ? '<dl><dt style="padding:0 1em;color:#C08"><strong>MySQL Error</strong></dt> <dd>' . $this->errno . ' (' . $this->error . ')</dd></dl>' : '') . '</div>';
+            echo '<div style="margin:3px 0;border:3px solid #EEE;font:10pt sans-serif;width:98%;overflow:hidden">' . '<dl>' . '<dt style="padding:0 1em;color:#C80"><strong>Database error</strong></dt>' . '<dd>' . substr(
+                    htmlspecialchars_ltgt($msg),
+                    0,
+                    1024
+                ) . '</dd>' . '</dl>' . ($this->errno ? '<dl><dt style="padding:0 1em;color:#C08"><strong>MySQL Error</strong></dt> <dd>' . $this->errno . ' (' . htmlspecialchars_ltgt($this->error ) . ')</dd></dl>' : '') . '</div>';
         }
         ##
         ## ------------------------------------------
@@ -481,6 +460,8 @@ if (!class_exists('gwtkDataBase')) {
             while ($this->next_record()) {
                 $rows[] = $this->record;
             }
+
+            #prn_r($rows);
 
             if ($this->is_cache && $is_cache_def) {
                 global $oCh;

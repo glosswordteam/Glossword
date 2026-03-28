@@ -209,49 +209,6 @@ function gw_addslashes($str)
 }
 
 /**
- * Escapes value(s) for SQL queries using mysqli.
- *
- * Supports scalar values and arrays (recursively).
- *
- * @param mysqli $conn Active MySQLi connection
- * @param mixed $value Scalar or array to escape
- * @return mixed Escaped value
- */
-function gw_text_sql($conn, $value)
-{
-    if (is_array($value)) {
-        array_walk($value, function (&$item) use ($conn) {
-            $item = gw_text_sql($conn, $item);
-        });
-        return $value;
-    }
-
-    if (is_object($value)) {
-        // Do not modify objects
-        return $value;
-    }
-
-    return mysqli_real_escape_string($conn, (string)$value);
-}
-
-/**
- * Escapes string for SQL LIKE clause using mysqli.
- *
- * Escapes:
- * - quotes via mysqli_real_escape_string()
- * - LIKE wildcards: % and _
- *
- * @param mysqli $conn Active MySQLi connection
- * @param string $str Input string
- * @return string Escaped string safe for LIKE
- */
-function gw_sql_escape_like($conn, $str)
-{
-    $str = mysqli_real_escape_string($conn, $str);
-    return str_replace(['%', '_'], ['\\%', '\\_'], $str);
-}
-
-/**
  * Normalizes new line character. Recursive, calls by reference.
  * Note: Windows - CRLF, *nix - LF, Mac - CR
  *

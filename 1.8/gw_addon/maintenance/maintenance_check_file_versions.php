@@ -151,7 +151,7 @@ class gw_addon_check_file_versions extends gw_addon
 		$ar_files[] = 'lib/class.case.php';
 		$ar_files[] = 'lib/class.cells_tpl.php';
 		$ar_files[] = 'lib/class.db.cache.php';
-		$ar_files[] = 'lib/class.db.mysql.php';
+		$ar_files[] = 'lib/class.db.mysqli.php';
 		$ar_files[] = 'lib/class.db.q.php';
 		$ar_files[] = 'lib/class.domxml.php';
 		$ar_files[] = 'lib/class.func.php';

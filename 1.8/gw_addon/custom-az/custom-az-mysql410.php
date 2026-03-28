@@ -15,4 +15,3 @@ $tmp['ar_queries'] = array(
 				ORDER BY profile_name
 				',
 );
-?>

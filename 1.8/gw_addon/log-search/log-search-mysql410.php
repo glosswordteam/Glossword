@@ -49,4 +49,3 @@ $tmp['ar_queries'] = array(
 				WHERE %s
 			',
 );
-?>
