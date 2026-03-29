@@ -132,6 +132,7 @@ class gw_html {
 		}
 		return $str;
 	}
+
 	/* */
 	function url_normalize($url)
 	{
@@ -208,10 +209,8 @@ class gw_html {
 					}
 				}
 				$url = $url_new.$this->mod_rewrite_suffix;
-#				$url = preg_replace('/\/([-]{2,})'.$this->mod_rewrite_suffix.'/', $this->mod_rewrite_index, $url);
 				$url = preg_replace('/([-]{2,})'.$this->mod_rewrite_suffix.'/', $this->mod_rewrite_suffix, $url);
 				$url = preg_replace('/([,]{2,})'.$this->mod_rewrite_suffix.'/', $this->mod_rewrite_suffix, $url);
-#				$url = str_replace(',,'.$this->mod_rewrite_suffix, $this->mod_rewrite_index, $url);
 				$url = str_replace('..'.$this->mod_rewrite_suffix, $this->mod_rewrite_index, $url);
 				$url = str_replace('/-'.$this->mod_rewrite_suffix, '/'.$this->mod_rewrite_index, $url);
 				$url = str_replace('/'.$this->mod_rewrite_suffix, '/'.$this->mod_rewrite_index, $url);
@@ -234,6 +233,8 @@ class gw_html {
 		}
 		return $url;
 	}
+
+
 	/* */
 	function url_dir2str($url)
 	{

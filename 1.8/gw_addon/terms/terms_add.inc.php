@@ -177,11 +177,14 @@ else
 		$arPre['date_created'] -= $this->oSess->user_get_time_seconds();
 		/* Making term viewable next after adding */
 		$arPre['date_created'] -= 60;
-		/* Automatically parse URLs */
-		if ($arPre['is_parse_url'])
-		{
-			$arPre['parameters']['xml'] = preg_replace("/(^|\[|\s)((http|https|news|ftp|aim|callto):\/\/\w+[^\s\[\\]]+)/ie"  , "gw_regex_url(array('html' => '\\2', 'show' => '\\2', 'st' => '\\1'))", $arPre['parameters']['xml']);
-		}
+        /* Automatically parse URLs */
+        if ($arPre['is_parse_url']) {
+            $arPre['parameters']['xml'] = preg_replace_callback(
+                '/(^|\[|\s)((http|https|news|ftp|aim|callto|ed2k):\/\/\w+[^\s\[\]\\\\]+)/i',
+                'gw_regex_url',
+                $arPre['parameters']['xml']
+            );
+        }
 #prn_r( $arPre );
 		/* Construct queries for the term */
 		$ar = gwAddTerm($arPre, $this->gw_this['vars']['id'], $arStop, 1, $arPre['is_specialchars'], $arPre['is_overwrite'], 0);

@@ -63,6 +63,7 @@ include_once($sys['path_gwlib'] . '/class.db.mysqli.php');
 include_once($sys['path_gwlib'] . '/class.db.q.php');
 include_once($sys['path_include'] . '/query_storage.php'); /* extends gw_query */
 include_once($sys['path_gwlib'] . '/class.globals.php');
+include_once($sys['path_include'] . '/functions.php');
 include_once($sys['path_gwlib'] . '/class.func.php');
 include_once($sys['path_gwlib'] . '/class.headers.php');
 
@@ -73,7 +74,7 @@ $oSqlQ->set_suffix('-'.$sys['db_type'].'410');
 $oTimer = new gw_timer;
 
 /* Append system settings */
-$sys = array_merge($sys, getSettings());
+$sys = array_merge($sys, gw_get_settings());
 /* Auto time for server  */
 $sys['time_now'] = time();
 $is_dst = intval(date('I', $sys['time_now']) - date('I'));

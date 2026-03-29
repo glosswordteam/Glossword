@@ -188,7 +188,7 @@ function gw_import_xml()
 					$val = preg_replace('/(^["\'])/', "", $val);
 					$val = preg_replace('/(["\']$)/', "", $val);
 					$val = trim($val);
-					$val = gw_htmlspecialamp(gw_unhtmlspecialamp($val));
+					$val = gw_htmlspecials_amp(gw_unhtmlspecials_amp($val));
 					/* fix repeated attributes */
 					if (isset($ar_attr[$attr]))
 					{
@@ -340,9 +340,9 @@ function gw_import_xml()
 					$qT['id'] = ($qT['id'] == '') ? mt_rand($id_term_db, ($sys['leech_factor']) + $id_term_db) : $qT['id'];
 
 					/* Used for keywords */
-					$str_term_filtered = trim(gw_unhtmlspecialamp($oDom->get_content($v2)));
+					$str_term_filtered = trim(gw_unhtmlspecials_amp($oDom->get_content($v2)));
 					/* Used in database */
-					$str_term_src = gw_htmlspecialamp($str_term_filtered);
+					$str_term_src = gw_htmlspecials_amp($str_term_filtered);
 
 					$qT['date_modified'] = $oDom->get_attribute('date_modified', $v2['tag'], $v2);
 					$qT['date_modified'] = ($qT['date_modified'] == '') ? $sys['time_now_gmt_unix'] - 60 : $qT['date_modified'];
@@ -473,9 +473,9 @@ function gw_import_xml()
 					$qT['defn'] = trim($qT['defn']);
 
 					/* Fix htmlspecial characters */
-					$qT['term_1'] = gw_htmlspecialamp(gw_unhtmlspecialamp($qT['term_1']));
-					$qT['term_2'] = gw_htmlspecialamp(gw_unhtmlspecialamp($qT['term_2']));
-					$qT['term_3'] = gw_htmlspecialamp(gw_unhtmlspecialamp($qT['term_3']));
+					$qT['term_1'] = gw_htmlspecials_amp(gw_unhtmlspecials_amp($qT['term_1']));
+					$qT['term_2'] = gw_htmlspecials_amp(gw_unhtmlspecials_amp($qT['term_2']));
+					$qT['term_3'] = gw_htmlspecials_amp(gw_unhtmlspecials_amp($qT['term_3']));
 
 					$qT['int_bytes'] = strlen($qT['defn']);
 					/* 1.8.10: Create checksum for terms only. Not unsigned. */
@@ -963,7 +963,11 @@ function gw_import_csv()
 			$arData[$uid]['defn'] = preg_replace('/[^\\\](\\\r\\\n|\\\r|\\\n|\\\t)/', '\\\\' . "\\1", $arData[$uid]['defn']);
 		}
 		/* Automatically parse URLs */
-		$arData[$uid]['defn'] = preg_replace("/(^|\[|\s)((http|https|news|ftp|aim|callto|ed2k):\/\/\w+[^\s\[\\]]+)/ie"  , "gw_regex_url(array('html' => '\\2', 'show' => '\\2', 'st' => '\\1'))", $arData[$uid]['defn']);
+        $arData[$uid]['defn'] = preg_replace_callback(
+            '/(^|\[|\s)((http|https|news|ftp|aim|callto|ed2k):\/\/\w+[^\s\[\]\\\\]+)/i',
+            'gw_regex_url',
+            $arData[$uid]['defn']
+        );
 
 		$qT = $arTermMap = $arQ = array();
 		$id_term = $id_term_old = $is_clean_map = $is_term_exists = 0;
@@ -986,7 +990,7 @@ function gw_import_csv()
 				$ar_chars_sql = array('\\' => '\\\\', '\\%' => '\\\\\\\%', '\\_' => '\\\\\\\_', '\\"' => '\\\\\\\"', "\\'" => "\\\\\\\'");
 				$sql = $oSqlQ->getQ('get-term-exists-spec',
 								$arDictParam['tablename'],
-							str_replace(array_keys($ar_chars_sql), array_values($ar_chars_sql), gw_addslashes($str_term_src)),
+							str_replace(array_keys($ar_chars_sql), array_values($ar_chars_sql), addslashes($str_term_src)),
 							$qT['id']
 				);
 			}
@@ -1219,7 +1223,7 @@ function getFormImport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 	##
 	## ----------------------------------------------------
 	$arBoxId = array();
-	$strForm .= getFormTitleNav($oL->m('1061'), '<span style="float:right">'.
+	$strForm .= gw_get_form_title_nav($oL->m('1061'), '<span style="float:right">'.
 				$oForm->get_button('submit').'</span>');
 	$strForm .= '<table class="gw2TableFieldset" width="100%"><tbody>';
 	$strForm .= '<tr><td style="width:1%"></td><td></td></tr>';
@@ -1243,7 +1247,7 @@ function getFormImport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 					'<td class="td2">' . $arBrokenMsg['xml'] . '<textarea '.
 					' onfocus="if(typeof(document.layers)==\'undefined\'||typeof(ts)==\'undefined\'){ts=1;this.form.elements[\'arPost[\'+\'xml\'+\']\'].select();}"'.
 					' style="width:100%;font:85% \'verdana\',arial,sans-serif"'.
-					' name="arPost[xml]" id="arPost_xml_" dir="ltr" cols="45" rows="10">' . htmlspecialchars_ltgt($vars['xml']) . '</textarea>'.
+					' name="arPost[xml]" id="arPost_xml_" dir="ltr" cols="45" rows="10">' . gw_htmlspecialchars_ltgt($vars['xml']) . '</textarea>'.
 					'</td>'.
 					'</tr>';
 		/* 3 mar 2003 */
@@ -1284,7 +1288,7 @@ function getFormImport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 					'<td class="td2">' . $arBrokenMsg['csv'] . '<textarea '.
 					' onfocus="if(typeof(document.layers)==\'undefined\'||typeof(ts)==\'undefined\'){ts=1;this.form.elements[\'arPost[\'+\'csv\'+\']\'].select();}"'.
 					' style="width:100%;font:85% verdana,arial,sans-serif"'.
-					' name="arPost[csv]" id="arPost_csv_" dir="ltr" cols="45" rows="10">' . htmlspecialchars_ltgt($vars['csv']) . '</textarea>'.
+					' name="arPost[csv]" id="arPost_csv_" dir="ltr" cols="45" rows="10">' . gw_htmlspecialchars_ltgt($vars['csv']) . '</textarea>'.
 					'</td>'.
 					'</tr>';
 		/* 3 mar 2003 */
@@ -1324,7 +1328,7 @@ function getFormImport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 	$strForm .= '</table>';
 
 	/* After posting... */
-	$strForm .= getFormTitleNav($oL->m('options'));
+	$strForm .= gw_get_form_title_nav($oL->m('options'));
 	$tmp['after_post'] = $oSess->user_get('after_post_import');
 	if (!$tmp['after_post'])
 	{
@@ -1461,7 +1465,7 @@ switch ($gw_this['vars']['arPost'][GW_ACTION])
 		if ($vars['format'] == '') { $vars['format'] = 'csv'; }
 
 		$this->str .= getFormImport($vars, 0, 0, array());
-		$arHelpMap['XML'] = htmlspecialchars_ltgt('<line><term t1="T" t2="TE" is_active="1" id="1"><![CDATA[term]]></term><defn><trsp><![CDATA[trsp]]></trsp> <abbr><![CDATA[abbr]]></abbr> <trns><![CDATA[trns]]></trns><![CDATA[defn]]> <usg><![CDATA[usg]]></usg> <syn><![CDATA[syn]]></syn> <antonym><![CDATA[antonym]]></antonym> <see><![CDATA[see]]></see> <src><![CDATA[src]]></src> <address><![CDATA[address]]></address> <phone><![CDATA[phone]]></phone></defn></line>');
+		$arHelpMap['XML'] = gw_htmlspecialchars_ltgt('<line><term t1="T" t2="TE" is_active="1" id="1"><![CDATA[term]]></term><defn><trsp><![CDATA[trsp]]></trsp> <abbr><![CDATA[abbr]]></abbr> <trns><![CDATA[trns]]></trns><![CDATA[defn]]> <usg><![CDATA[usg]]></usg> <syn><![CDATA[syn]]></syn> <antonym><![CDATA[antonym]]></antonym> <see><![CDATA[see]]></see> <src><![CDATA[src]]></src> <address><![CDATA[address]]></address> <phone><![CDATA[phone]]></phone></defn></line>');
 		if (function_exists('xslt_create'))
 		{
 			$arHelpMap['validate'] = 'tip011';
@@ -1635,7 +1639,7 @@ switch ($gw_this['vars']['arPost'][GW_ACTION])
 			$t = str_replace("\n", ' ', $t);
 			$t = str_replace("\r", ' ', $t);
 			$t = str_replace("\t", ' ', $t);
-			$t = htmlspecialchars_ltgt($t);
+			$t = gw_htmlspecialchars_ltgt($t);
 			$t = gw_highlight_sql($t);
 			$this->str .= '<li>'.$t.'</li>';
 		}

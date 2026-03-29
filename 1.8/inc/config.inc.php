@@ -122,6 +122,7 @@ $sys['internal_encoding'] = 'UTF-8';
 /* I request you to retain the copyright notice! Ask for copyright removal. */
 $sys['str_branding'] = 'Powered&#160;by <a href="http://glossword.biz/" onclick="window.open(this);return false" title="Freeware dictionary/glossary PHP-script">Glossword</a>&#160;';
 
+include_once($sys['path_include'] . '/functions.php');
 include_once($sys['path_gwlib'] . '/class.func.php');
 /* ------------------------------------------------------- */
 /* Autoexec */

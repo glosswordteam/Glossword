@@ -94,7 +94,7 @@ function gw_parse_tree($path, $is_clean = 0)
 	return $ar;
 }
 /* Script action below */
-$this->str .= getFormTitleNav( $this->oL->m(1004) );
+$this->str .= gw_get_form_title_nav($this->oL->m(1004) );
 $arStatus = array();
 $arStatus = array_merge( $arStatus, gw_get_sql_cache() );
 $arStatus = array_merge( $arStatus, gw_get_file_cache() );

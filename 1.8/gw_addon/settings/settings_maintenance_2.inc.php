@@ -128,7 +128,7 @@ function getUnusedKeywords()
 }
 /* Script action below */
 
-$this->str .= getFormTitleNav($this->oL->m(1008));
+$this->str .= gw_get_form_title_nav($this->oL->m(1008));
 if ($this->gw_this['vars']['isConfirm'] == '1')
 {
 	$this->str .= gw_optimize_keywords();

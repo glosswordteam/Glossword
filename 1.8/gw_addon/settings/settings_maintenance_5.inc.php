@@ -37,7 +37,7 @@ function gw_dict_list_cnt($vars)
 	$oForm->Set('charset', $sys['internal_encoding']);
 
 	$strForm = '';
-	$strForm .=  getFormTitleNav( $oL->m(1005), '<span style="float:right">'.$oForm->get_button('submit').'</span>' );
+	$strForm .=  gw_get_form_title_nav($oL->m(1005), '<span style="float:right">'.$oForm->get_button('submit').'</span>' );
 	$strForm .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 	$strForm .= '<table class="gw2TableFieldset" width="100%">';
 	$strForm .= '<tbody>';

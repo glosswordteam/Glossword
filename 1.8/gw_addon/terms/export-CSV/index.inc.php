@@ -61,7 +61,7 @@ function getFormCsv($vars, $runtime = 0, $arBroken = array(), $arReq = array())
 		$oForm->setTag('input', 'maxlength', '5');
 		$oForm->setTag('input', 'dir', 'ltr' );
 
-		$strForm .= getFormTitleNav($oL->m('3_export'), '<span class="xr">'.FORMAT_NAME.'</span>');
+		$strForm .= gw_get_form_title_nav($oL->m('3_export'), '<span class="xr">'.FORMAT_NAME.'</span>');
 		$strForm .= '<table class="gw2TableFieldset" width="100%">';
 		$strForm .= '<tbody><tr><td style="width:11%"></td><td></td></tr>';
 
@@ -125,7 +125,7 @@ function getFormCsv($vars, $runtime = 0, $arBroken = array(), $arReq = array())
 
 	$strForm .= '</td><td>';
 
-		$strForm .= getFormTitleNav($oL->m('dictdump_split'));
+		$strForm .= gw_get_form_title_nav($oL->m('dictdump_split'));
 		$strForm .= '<table cellspacing="3" cellpadding="0" border="0" width="100%" class="gw2TableFieldset">';
 		$strForm .= '<tbody><tr><td style="width:30%"></td><td style="width:70%"></td></tr>';
 		$arBoxId = array();

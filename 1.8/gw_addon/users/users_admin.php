@@ -129,7 +129,7 @@ class gw_addon_users_admin extends gw_addon
 		/* */
 		$ar_timezones = array('-12'=>'UTC -12','-11'=>'UTC -11','-10'=>'UTC -10','-9.5'=>'UTC -9:30','-9'=>'UTC -9','-8'=>'UTC -8','-7'=>'UTC -7','-6'=>'UTC -6','-5'=>'UTC -5','-4'=>'UTC -4','-3.5'=>'UTC -3:30','-3'=>'UTC -3','-2.5'=>'UTC -2:30','-2'=>'UTC -2','-1'=>'UTC -1','0'=>$this->oL->m('1356'),'0.5'=>'UTC +0:30','1'=>'UTC +1','2'=>'UTC +2','3'=>'UTC +3','3.5'=>'UTC +3:30','4'=>'UTC +4','4.5'=>'UTC +4:30','5'=>'UTC +5','5.5'=>'UTC +5:30','5.75'=>'UTC +5:45','6'=>'UTC +6','6.5'=>'UTC +6:30','7'=>'UTC +7','7.5'=>'UTC +7:30','8'=>'UTC +8','9'=>'UTC +9','9.5'=>'UTC +9:30','10'=>'UTC +10','10.5'=>'UTC +10:30','11'=>'UTC +11','11.5'=>'UTC +11:30','12'=>'UTC +12','12.75'=>'UTC +12:45','13'=>'UTC +13','13.75'=>'UTC +13:45','14'=>'UTC +14');
 		/* */
-		$str_form .= getFormTitleNav($this->oL->m('user_reginfo'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
+		$str_form .= gw_get_form_title_nav($this->oL->m('user_reginfo'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
 		$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 		$str_form .= '<table class="gw2TableFieldset" width="100%">';
 		$str_form .= '<thead><tr><td style="width:'.$v_td1_width.'"></td><td></td></tr></thead><tbody>';
@@ -250,7 +250,7 @@ class gw_addon_users_admin extends gw_addon
 		$str_form .= '</fieldset>';
 
 		/* Options */
-		$str_form .= getFormTitleNav($this->oL->m('options'));
+		$str_form .= gw_get_form_title_nav($this->oL->m('options'));
 		$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 		$str_form .= '<table class="gw2TableFieldset" width="100%">';
 		$str_form .= '<thead><tr><td style="width:'.$v_td1_width.'"></td><td></td></tr></thead><tbody>';
@@ -306,7 +306,7 @@ class gw_addon_users_admin extends gw_addon
 			{
 				$vars['avatar_img_html'] = '<div id="user-avatar"><img width="'.$vars['user_settings']['avatar_img_x'].'" height="'.$vars['user_settings']['avatar_img_y'].'" src="'.$this->sys['path_temporary'].'/a/'.$vars['user_settings']['avatar_img'].'" alt="" /></div>';
 			}
-			$str_form .= getFormTitleNav($this->oL->m('1116'));
+			$str_form .= gw_get_form_title_nav($this->oL->m('1116'));
 			$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 			$str_form .= '<table class="gw2TableFieldset" width="100%">';
 			$str_form .= '<thead><tr><td style="width:'.$v_td1_width.'"></td><td></td></tr></thead><tbody>';
@@ -355,7 +355,7 @@ document.forms[\'vbform\'][\'submit1\'].click();
 		}
 				
 		/* Assigned dictionaries */
-		$str_form .= getFormTitleNav($this->oL->m('user_dictionaries'));
+		$str_form .= gw_get_form_title_nav($this->oL->m('user_dictionaries'));
 		$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 		$str_form .= '<table class="gw2TableFieldset" width="100%">';
 		$str_form .= '<thead><tr><td style="width:'.$v_td1_width.'"></td><td></td></tr></thead><tbody>';
@@ -453,7 +453,7 @@ document.forms[\'vbform\'][\'submit1\'].click();
 				'is-sys-mnt' => '1313',
 			)
 		);
-		$str_form .= getFormTitleNav($this->oL->m('1037'));
+		$str_form .= gw_get_form_title_nav($this->oL->m('1037'));
 		$ar_permissions_user = unserialize($vars['user_perm']);
 		$ar_permissions_ids = array();
 		if ($this->ar_state['is_profile'])

@@ -797,49 +797,6 @@ function gw_get_dict_stats()
 }
 
 /**
- * Returns system settings as key-value array.
- *
- * If settings are missing and installer exists, redirects to installation.
- *
- * @return array System settings
- */
-function getSettings()
-{
-    global $oSqlQ, $oDb, $oFunc, $sys;
-
-    $settings = [];
-    $settingsRows = $oDb->sqlRun($oSqlQ->getQ('get-settings'), 'st');
-
-    // No system settings found, run installer
-    if (empty($settingsRows)) {
-        if (file_exists('gw_install/index.php')) {
-            $sys['server_proto'] = gw_get_protocol();
-            $sys['server_host'] = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
-            $sys['server_dir'] = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-
-            $pathParts = explode('/', $sys['server_dir']);
-            unset($pathParts[count($pathParts) - 1]);
-            $sys['server_dir'] = implode('/', $pathParts);
-
-            gwtk_header(
-                $sys['server_proto'] . $sys['server_host'] . $sys['server_dir'] . '/gw_install/index.php'
-            );
-        }
-
-        print '<p>Software is not installed.</p>';
-        print '<p><a href="' . $sys['server_dir'] . '/gw_install/index.php">Run installation script</a></p>';
-        exit;
-    }
-
-    foreach ($settingsRows as $row) {
-        $settings[$row['settings_key']] = $row['settings_val'];
-    }
-
-    return $settings;
-}
-
-
-/**
  * Builds HTML code for page navigation.
  *
  * Example: [ Pages: 1 .. 5 6 7 .. 11 ]
@@ -1156,47 +1113,43 @@ function getTermParamById($termId)
     return $term;
 }
 
-
 /**
- * Redirects to canonical term URL when needed.
+ * Redirect to canonical term URL when needed.
  *
- * @param string|int $requestedId
+ * @param string|int $requested_id
  * @param array $term
- * @param string $termUriField
+ * @param string $term_uri_field
+ *
  * @return void
  */
-function redirectCanonicalTermUrl($requestedId, $term, $termUriField)
+function gw_redirect_canonical_term_url($requested_id, $term, $term_uri_field)
 {
-    global $gw_this, $arDictParam, $sys, $oHtml;
+    global $gw_this, $arDictParam, $sys, $oHtml, $oUrlBuilder;
 
     if (!GW_IS_BROWSE_WEB) {
         return;
     }
 
-    $isRedirect = 0;
+    $is_redirect = 0;
 
     switch ($sys['pages_link_mode']) {
         case GW_PAGE_LINK_NAME:
-            $isRedirect = ($requestedId != $term['term']);
+            $is_redirect = ($requested_id != $term['term']);
             break;
 
         case GW_PAGE_LINK_URI:
-            $isRedirect = ($term['term_uri'] && ($requestedId != $term['term_uri']));
+            $is_redirect = ($term['term_uri'] && ($requested_id != $term['term_uri']));
             break;
 
         default:
-            $isRedirect = ($requestedId != $term['tid']);
+            $is_redirect = ((int)$requested_id != (int)$term['tid']);
             break;
     }
 
-    if ($isRedirect && $gw_this['vars']['a'] == GW_T_TERM && !$gw_this['vars']['is_print']) {
-        $hrefTerm = $sys['page_index']
-            . '?' . GW_ACTION . '=term'
-            . '&' . GW_ID_DICT . '=' . $arDictParam['uri']
-            . '&t=' . $term[$termUriField];
-
+    if ($is_redirect && ($gw_this['vars'][GW_ACTION] == GW_T_TERM) && !$gw_this['vars']['is_print']) {
+        $href_term = $oUrlBuilder->build_index_url(GW_T_TERM, $term[$term_uri_field], [GW_ID_DICT => $arDictParam['uri']]);
         gwtk_header(
-            $sys['server_proto'] . $sys['server_host'] . $oHtml->url_normalize($hrefTerm),
+            $sys['server_proto'] . $sys['server_host'] . $oHtml->url_normalize($href_term),
             $sys['is_delay_redirect'],
             __FILE__,
             __LINE__
@@ -1342,7 +1295,7 @@ function getTermParam($tid = '', $name = '')
 
     if ($tid) {
         $found = getTermParamById($tid);
-        redirectCanonicalTermUrl($tid, $found, $termUriField);
+        gw_redirect_canonical_term_url($tid, $found, $termUriField);
     } elseif ($name !== '') {
         $foundByName = getTermParamByName($name);
 

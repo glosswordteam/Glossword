@@ -13,9 +13,9 @@ if (!defined('IS_CLASS_GW2_FUNCTIONS')) {
     {
         if (is_array($a)) {
             ksort($a);
-            $a = htmlspecialchars_ltgt($a);
+            $a = gw_htmlspecialchars_ltgt($a);
         } elseif (is_object($a) || is_string($a)) {
-            $a = htmlspecialchars_ltgt($a);
+            $a = gw_htmlspecialchars_ltgt($a);
         }
         /* Set font size in pixels because function can be called from various places */
         print '<pre style="text-align:left;color:#000;background:#FFF;font: 14px/16px Consolas,\'Courier New\',monospace">';
@@ -39,90 +39,6 @@ if (!defined('IS_CLASS_GW2_FUNCTIONS')) {
             print '&lt;===';
         }
         print '</pre>';
-    }
-
-    /**
-     * Converts a few characters only, recursive. Faster than htmlspecialchars().
-     *
-     * @param string $str Any string or array.
-     * @return  string  Transformed string.
-     */
-    function htmlspecialchars_ltgt($s)
-    {
-        if (is_array($s)) {
-            /* can't use array_walk() on byself with reference */
-            foreach ($s as $k => $v) {
-                $s[$k] = htmlspecialchars_ltgt($v);
-            }
-            return $s;
-        } elseif (is_object($s)) {
-            $ar = get_class_vars(get_class($s));
-            foreach ($ar as $k => $v) {
-                $ar[$k] = htmlspecialchars_ltgt($s->$k);
-            }
-            return $ar;
-        } elseif (is_string($s)) {
-            return str_replace(['&', '<', '>', '{', '[', '"'], ['&amp;', '&lt;', '&gt;', '&#123;', '&#091;', '&quot;'], $s);
-        }
-        return $s;
-    }
-
-    function unhtmlspecialchars_ltgt($s)
-    {
-        if (is_array($s)) {
-            /* can't use array_walk() on byself with reference */
-            foreach ($s as $k => $v) {
-                $s[$k] = unhtmlspecialchars_ltgt($v);
-            }
-            return $s;
-        } elseif (is_object($s)) {
-            $ar = get_class_vars(get_class($s));
-            foreach ($ar as $k => $v) {
-                $ar[$k] = unhtmlspecialchars_ltgt($s->$k);
-            }
-            return $ar;
-        } elseif (is_string($s)) {
-            return str_replace(['&amp;', '&lt;', '&gt;', '&#123;', '&#091;', '&quot;'], ['&', '<', '>', '{', '[', '"'], $s);
-        }
-        return $s;
-    }
-
-    /**
-     * Replacement for htmlspecialchars(). Can parse arrays.
-     *
-     * @param string $s Any string or array.
-     */
-    function gw_htmlspecialchars($s)
-    {
-        if (is_array($s)) {
-            /* can't use array_walk() on byself with reference */
-            foreach ($s as $k => $v) {
-                $s[$k] = gw_htmlspecialchars($v);
-            }
-            return $s;
-        } elseif (is_string($s)) {
-            $s = htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
-        }
-        return $s;
-    }
-
-    /**
-     * Replacement for gw_htmlspecialchars_decode(). Can parse arrays.
-     *
-     * @param string $s Any string or array.
-     */
-    function gw_htmlspecialchars_decode($s)
-    {
-        if (is_array($s)) {
-            /* can't use array_walk() on byself with reference */
-            foreach ($s as $k => $v) {
-                $s[$k] = htmlspecialchars_decode($v, ENT_QUOTES);
-            }
-            return $s;
-        } elseif (is_string($s)) {
-            $s = htmlspecialchars_decode($s, ENT_QUOTES);
-        }
-        return $s;
     }
 
 

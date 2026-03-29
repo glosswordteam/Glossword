@@ -76,7 +76,7 @@ class gw_addon_topic_admin extends gw_addon
 		$fieldname = 'topic';
 		$int_topics = sizeof($vars['topic']);
 
-		$str_form .= getFormTitleNav($this->oL->m('1061'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
+		$str_form .= gw_get_form_title_nav($this->oL->m('1061'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
 
 		for (; list($elK, $arV) = each($vars['topic']);)
 		{
@@ -107,11 +107,11 @@ class gw_addon_topic_admin extends gw_addon
 			$str_form .= '</td></tr><tbody>';
 			$str_form .= '<tr>'.
 						'<td class="'.$v_class_1.'">' . $this->oL->m('dict_name') . ':</td>'.
-						'<td class="'.$v_class_2.'">' . $oForm->field('input', 'arPre[topic]['.$elK.'][topic_title]', htmlspecialchars_ltgt($arV['topic_title'])) . '</td>'.
+						'<td class="'.$v_class_2.'">' . $oForm->field('input', 'arPre[topic]['.$elK.'][topic_title]', gw_htmlspecialchars_ltgt($arV['topic_title'])) . '</td>'.
 						'</tr>';
 			$str_form .= '<tr>'.
 						'<td class="'.$v_class_1.'">' . $this->oL->m('announce') . ':</td>'.
-						'<td class="'.$v_class_2.'">' . $oForm->field('textarea', 'arPre[topic]['.$elK.'][topic_descr]', htmlspecialchars_ltgt($arV['topic_descr']), $this->oFunc->getFormHeight($arV['topic_descr'])) . '</td>'.
+						'<td class="'.$v_class_2.'">' . $oForm->field('textarea', 'arPre[topic]['.$elK.'][topic_descr]', gw_htmlspecialchars_ltgt($arV['topic_descr']), $this->oFunc->getFormHeight($arV['topic_descr'])) . '</td>'.
 						'</tr>';
 			$str_form .= '<tr>'.
 						'<td class="'.$v_class_1.'">' . $this->oL->m('lang') . ':</td>'.
@@ -122,7 +122,7 @@ class gw_addon_topic_admin extends gw_addon
 			$str_form .= '</fieldset>';
 
 		}
-		$str_form .= getFormTitleNav($this->oL->m('1137'), '');
+		$str_form .= gw_get_form_title_nav($this->oL->m('1137'), '');
 		$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 		$str_form .= '<table class="gw2TableFieldset" width="100%">';
 		$str_form .= '<thead><tr><td style="width:'.$v_td1_width.'"></td><td></td></tr></thead><tbody>';
@@ -161,7 +161,7 @@ class gw_addon_topic_admin extends gw_addon
 		$oForm->setTag('input', 'onkeyup', 'gwJS.strNormalize(this)');
 		$str_form .= '<tr>'.
 					'<td class="'.$v_class_1.'">' . $this->oL->m('1060') . ':</td>'.
-					'<td class="'.$v_class_2.'">' . $this->sys['server_dir'].'/'.$this->sys['path_temporary'].'/t/'.$this->sys['visualtheme'].'/<br />' . $oForm->field('input', 'arPre[topic_icon]', htmlspecialchars_ltgt($vars['topic_icon'])) . '</td>'.
+					'<td class="'.$v_class_2.'">' . $this->sys['server_dir'].'/'.$this->sys['path_temporary'].'/t/'.$this->sys['visualtheme'].'/<br />' . $oForm->field('input', 'arPre[topic_icon]', gw_htmlspecialchars_ltgt($vars['topic_icon'])) . '</td>'.
 					'</tr>';
 		$oForm->setTag('input', 'onkeyup', '');
 		$str_form .= '</tbody></table>';
@@ -191,7 +191,7 @@ class gw_addon_topic_admin extends gw_addon
 		$oForm->Set('formwidth', '100%');
 		$oForm->Set('charset', $this->sys['internal_encoding']);
 		/* */
-		$str_form .= getFormTitleNav($this->oL->m('3_export'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
+		$str_form .= gw_get_form_title_nav($this->oL->m('3_export'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
 		$str_form .= '<table class="gw2TableFieldset" width="100%">';
 		$str_form .= '<tr><td style="width:25%"></td><td></td></tr><tbody>';
 
@@ -326,7 +326,7 @@ class gw_addon_topic_admin extends gw_addon
 		$oForm->Set('charset', $this->sys['internal_encoding']);
 		if ($this->sys['is_upload']) { $oForm->Set('enctype', 'multipart/form-data'); }
 		/* */
-		$str_form .= getFormTitleNav($this->oL->m('3_import'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
+		$str_form .= gw_get_form_title_nav($this->oL->m('3_import'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
 		$str_form .= '<table class="gw2TableFieldset gray" width="100%">';
 		$str_form .= '<tbody>';
 		$str_form .= '<tr><td style="width:1%"></td><td></td></tr><tbody>';
@@ -345,7 +345,7 @@ class gw_addon_topic_admin extends gw_addon
 					'<td class="td2"><textarea '.
 					' onfocus="if(typeof(document.layers)==\'undefined\'||typeof(ts)==\'undefined\'){ts=1;this.form.elements[\'arPost[\'+\'xml\'+\']\'].select();}"'.
 					' style="width:100%;font:85% \'verdana\',arial,sans-serif"'.
-					' name="arPost[xml]" id="arPost_xml_" dir="ltr" cols="45" rows="10">' . htmlspecialchars_ltgt($vars['xml']) . '</textarea>'.
+					' name="arPost[xml]" id="arPost_xml_" dir="ltr" cols="45" rows="10">' . gw_htmlspecialchars_ltgt($vars['xml']) . '</textarea>'.
 					'</td>'.
 					'</tr>';
 		/* Allows to upload a file */
@@ -479,7 +479,7 @@ class gw_addon_topic_admin extends gw_addon
 				$this->str .= '<ul class="gwsql">';
 				for (reset($arQ); list($k, $v) = each($arQ);)
 				{
-					$this->str .= '<li>'.htmlspecialchars_ltgt($this->oFunc->mb_wordwrap($v, 70, "\n", 1)).'</li>';
+					$this->str .= '<li>'.gw_htmlspecialchars_ltgt($this->oFunc->mb_wordwrap($v, 70, "\n", 1)).'</li>';
 				}
 				$this->str .= '</ul>';
 			}

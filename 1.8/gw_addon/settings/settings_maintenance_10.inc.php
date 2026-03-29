@@ -53,7 +53,7 @@ function gw_show_form($vars, $runtime = 0, $arBroken = array(), $arReq = array()
 	## ----------------------------------------------------
 
 	$strForm = '';
-	$strForm .=  getFormTitleNav( $oL->m(1363), '<span style="float:right">'.$oForm->get_button('submit').'</span>' );
+	$strForm .=  gw_get_form_title_nav($oL->m(1363), '<span style="float:right">'.$oForm->get_button('submit').'</span>' );
 	$strForm .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 	$strForm .= '<table class="gw2TableFieldset" width="100%">';
 	$strForm .= '<tbody>';
@@ -182,7 +182,7 @@ $this->sys['isDebugQ'] = 0;
 
 	if (empty($ar_broken))
 	{
-		$this->str .= getFormTitleNav($this->oL->m(1363));
+		$this->str .= gw_get_form_title_nav($this->oL->m(1363));
 		$this->str .= '<div class="contents xu">';
 		/* 4 => 12344, 3 => 4, 12344 => 4 */
 		$this->str .= html_array_to_table_multi( gw_do_task($arPost['id_new'], 12344, 0), 0 );

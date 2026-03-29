@@ -37,7 +37,7 @@ $oSqlQ = new $sys['class_queries'];
 $oSqlQ->set_suffix('-' . $sys['db_type'] . '410');
 /* ------------------------------------------------------- */
 /* Append system settings */
-$sys = array_merge($sys, getSettings());
+$sys = array_merge($sys, gw_get_settings());
 
 /* Fill empty settings */
 $sys['visualtheme'] = isset($sys['visualtheme']) ? $sys['visualtheme'] : 'gw_admin';
@@ -221,7 +221,7 @@ function gw_login_form($ar_vars, $ar_broken = [], $ar_req = [])
                 $oSess->url_login . '?' . GW_TARGET . '=' . GW_T_USERS . '&' . GW_ACTION . '=login',
                 '&gt; ' . $oL->m('2_login')
             ) . '</span>';
-        $strForm .= getFormTitleNav($str_formtitle);
+        $strForm .= gw_get_form_title_nav($str_formtitle);
         $strForm .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
         $strForm .= '<table class="gw2TableFieldset" width="100%"><tbody>';
         $strForm .= '<tr>' . '<td style="width:35%" class="' . $v_class_1 . '">' . $oL->m('login') . ':' . $ar_req_m['user_name'] . '</td>' . '<td class="' . $v_class_2 . '">' . $ar_broken_m['user_name'] . $oForm->field('input', 'arPost[user_name]', textcodetoform($ar_vars['user_name']), 16) . '</td>' . '</tr>';
@@ -243,7 +243,7 @@ function gw_login_form($ar_vars, $ar_broken = [], $ar_req = [])
         $str_formtitle = $oL->m('2_login');
 
         $oForm->setTag('input', 'maxlength', '32');
-        $strForm .= getFormTitleNav($str_formtitle);
+        $strForm .= gw_get_form_title_nav($str_formtitle);
         $strForm .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
         $strForm .= '<table class="gw2TableFieldset" width="100%">';
         $strForm .= '<tbody><tr>' . '<td style="width:35%" class="' . $v_class_1 . '"><label for="arPost_user_name_">' . $oL->m('login') . ':' . $ar_req_m['user_name'] . '</label></td>' . '<td class="' . $v_class_2 . '">' . $ar_broken_m['user_name'] . $oForm->field('input', 'arPost[user_name]', textcodetoform($ar_vars['user_name']), 16) . '</td>' . '</tr>';

@@ -51,7 +51,7 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
     /* Used in database */
     $str_term_src = gw_fix_input_to_db($str_term_filtered);
 
-    $str_term_filtered = gw_unhtmlspecialamp($str_term_filtered);
+    $str_term_filtered = gw_unhtmlspecials_amp($str_term_filtered);
     /* 22 jul 2003: Custom Term ID */
     $qT['id'] = $oDom->get_attribute('id', 'term', $arPre['term']);
     $qT['id'] = preg_replace("/[^0-9]/", '', trim($qT['id']));
@@ -99,7 +99,7 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
                 $sql = $oSqlQ->getQ(
                     'get-term-exists-spec',
                     $arDictParam['tablename'],
-                    str_replace(array_keys($ar_chars_sql), array_values($ar_chars_sql), gw_addslashes($str_term_src))
+                    str_replace(array_keys($ar_chars_sql), array_values($ar_chars_sql), addslashes($str_term_src))
                 );
             }
             $arSql = $oDb->sqlExec($sql);
@@ -216,9 +216,9 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
         }
     }
     /* Fix htmlspecial characters */
-    $qT['term_3'] = gw_htmlspecialamp(gw_unhtmlspecialamp($qT['term_3']));
-    $qT['term_2'] = gw_htmlspecialamp(gw_unhtmlspecialamp($qT['term_2']));
-    $qT['term_1'] = gw_htmlspecialamp(gw_unhtmlspecialamp($qT['term_1']));
+    $qT['term_3'] = gw_htmlspecials_amp(gw_unhtmlspecials_amp($qT['term_3']));
+    $qT['term_2'] = gw_htmlspecials_amp(gw_unhtmlspecials_amp($qT['term_2']));
+    $qT['term_1'] = gw_htmlspecials_amp(gw_unhtmlspecials_amp($qT['term_1']));
     /* */
     $qT['is_active'] = $oDom->get_attribute('is_active', 'term', $arPre['term']);
     $qT['is_complete'] = $oDom->get_attribute('is_complete', 'term', $arPre['term']);

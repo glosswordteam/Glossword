@@ -246,7 +246,7 @@ $int_pbar = intval( (100/$int_steps_total)*$int_step );
 $color_bg = ($int_pbar == 100) ? $this->ar_theme['color_4'] : $this->ar_theme['color_5'];
 
 $this->str .= text_progressbar($int_pbar, $this->ar_theme['color_black'], $color_bg);
-$this->str .= getFormTitleNav($this->oL->m('1266'));
+$this->str .= gw_get_form_title_nav($this->oL->m('1266'));
 $this->str .= '<div class="margin-inside xu">';
 $this->str .= $str_proc;
 $this->str .= '</div>';

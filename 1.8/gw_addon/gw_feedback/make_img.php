@@ -179,6 +179,7 @@ function gw_make_captcha()
     /* Insert CAPTCHA number into database */
     global $sys;
     include('../../db_config.php');
+    include('../../' . $sys['path_include'] . '/functions.php');
     include('../../' . $sys['path_gwlib'] . '/class.func.php');
     include('../../' . $sys['path_gwlib'] . '/class.db.mysqli.php');
     $oDb = new gwtkDb;

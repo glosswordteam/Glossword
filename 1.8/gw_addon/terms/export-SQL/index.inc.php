@@ -60,7 +60,7 @@ function getFormSql($vars, $runtime = 0, $arBroken = array(), $arReq = array())
 	$strForm .= '<table cellspacing="0" cellpadding="2" border="0" width="100%">';
 	$strForm .= '<tbody><tr valign="top"><td style="width:50%">';
 
-		$strForm .= getFormTitleNav(FORMAT_NAME);
+		$strForm .= gw_get_form_title_nav(FORMAT_NAME);
 		$strForm .= '<table cellspacing="3" cellpadding="0" border="0" width="100%" class="gw2TableFieldset">';
 		$strForm .= '<tbody><tr><td style="width:30%"></td><td style="width:70%"></td></tr>';
 		$arBoxId = array();
@@ -127,7 +127,7 @@ function getFormSql($vars, $runtime = 0, $arBroken = array(), $arReq = array())
 	$strForm .= '</td><td>';
 
 
-		$strForm .= getFormTitleNav($oL->m('dictdump_split'));
+		$strForm .= gw_get_form_title_nav($oL->m('dictdump_split'));
 		$strForm .= '<table cellspacing="3" cellpadding="0" border="0" width="100%" class="gw2TableFieldset">';
 		$strForm .= '<tbody><tr><td style="width:30%"></td><td style="width:70%"></td></tr>';
 		$arBoxId = array();
@@ -161,7 +161,7 @@ function getFormSql($vars, $runtime = 0, $arBroken = array(), $arReq = array())
 		$strForm .= '</tbody></table>';
 
 		$arBoxId = array();
-		$strForm .= getFormTitleNav($oL->m('1044'));
+		$strForm .= gw_get_form_title_nav($oL->m('1044'));
 		$strForm .= '<table cellspacing="3" cellpadding="0" border="0" width="100%" class="gw2TableFieldset">';
 		$strForm .= '<tbody><tr><td style="width:30%"></td><td style="width:70%"></td></tr>';
 #		$arBoxId['id'] = "cmptblty_323";

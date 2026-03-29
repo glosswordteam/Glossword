@@ -34,7 +34,7 @@ $oSqlQ = new $sys['class_queries'];
 $oSqlQ->set_suffix('-'.$sys['db_type'].'410');
 /* ------------------------------------------------------- */
 /* Append system settings */
-$sys = array_merge($sys, getSettings());
+$sys = array_merge($sys, gw_get_settings());
 /* Fill empty settings */
 $sys['visualtheme'] = isset($sys['visualtheme']) ? $sys['visualtheme'] : 'gw_brand';
 /* Auto time for server  */

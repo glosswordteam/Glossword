@@ -67,7 +67,7 @@ else
 			$str_mail_body .= '<'.$k .'><![CDATA[ '. $v . ']]></'.$k .'>';
 		}
 		$str_mail_body .= '</xml>';
-		$str_mail_body = htmlspecialchars_ltgt($str_mail_body);
+		$str_mail_body = gw_htmlspecialchars_ltgt($str_mail_body);
 
 		$this->oL->getCustom('mail', $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc'], 'join');
 

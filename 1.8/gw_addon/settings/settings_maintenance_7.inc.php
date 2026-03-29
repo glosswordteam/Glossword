@@ -55,11 +55,11 @@ function gw_get_html_code()
 		'{block:SearchSelect}'
 	);
 	$ar_vars_2 = array(
-		$sys['server_proto'].$sys['server_host'].$sys['page_index'],
-		$oL->m('3_srch_submit').' <a onclick="window.open(this.href);return false" href="'.$sys['server_proto'].$sys['server_host'].$sys['page_index'].'">'.$sys['site_name'].'</a>',
-		'<a onclick="window.open(this.href);return false" href="'.$sys['server_proto'].$sys['server_host'].$sys['page_index'].'">'.$sys['site_name'].'</a>',
-		$oL->m('3_srch_submit'),
-		htmlFormsSelect($arDictMap, 0, "d", '', 'width:16em', $oL->languagelist("1"))
+        $sys['server_proto'].$sys['server_host'].$sys['page_index'],
+        $oL->m('3_srch_submit').' <a onclick="window.open(this.href);return false" href="'.$sys['server_proto'].$sys['server_host'].$sys['page_index'].'">'.$sys['site_name'].'</a>',
+        '<a onclick="window.open(this.href);return false" href="'.$sys['server_proto'].$sys['server_host'].$sys['page_index'].'">'.$sys['site_name'].'</a>',
+        $oL->m('3_srch_submit'),
+        gw_html_forms_select($arDictMap, 0, "d", '', 'width:16em', $oL->languagelist("1"))
 	);
 	$str = str_replace($ar_vars_1, $ar_vars_2, $str);
 	$str = preg_replace("/(\r\n|\r|\n|\t)/s", '', $str);
@@ -67,7 +67,7 @@ function gw_get_html_code()
 	return $str;
 }
 /* Script action below */
-$this->str .= getFormTitleNav($this->oL->m(1007));
+$this->str .= gw_get_form_title_nav($this->oL->m(1007));
 
 $this->str .= '<div>';
 $this->str .= gw_get_html_code();

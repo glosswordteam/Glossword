@@ -79,7 +79,7 @@ class gw_addon_settings_admin extends gw_addon
 		$oForm->setTag('select', 'class',  'input50');
 		unset($this->gw_this['ar_themes_select']['gw_admin']);
 
-		$str_form .= getFormTitleNav($this->oL->m('1137'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
+		$str_form .= gw_get_form_title_nav($this->oL->m('1137'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
 
 		$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 		$str_form .= '<table class="gw2TableFieldset" width="100%">';
@@ -134,7 +134,7 @@ class gw_addon_settings_admin extends gw_addon
 		$str_form .= '</tbody></table>';
 		$str_form .= '</fieldset>'; 
 		  
-		$str_form .= getFormTitleNav($this->oL->m('1136'), '');
+		$str_form .= gw_get_form_title_nav($this->oL->m('1136'), '');
 		$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 		$str_form .= '<table class="gw2TableFieldset" width="100%">';
 		$str_form .= '<thead><tr><td style="width:'.$v_td1_width.'"></td><td></td></tr></thead><tbody>';
@@ -228,7 +228,7 @@ class gw_addon_settings_admin extends gw_addon
 		$oForm->setTag('input', 'dir', '');
 		
 		/* E-mail settings */
-		$str_form .= getFormTitleNav($this->oL->m('1351'));
+		$str_form .= gw_get_form_title_nav($this->oL->m('1351'));
 		$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 		$str_form .= '<table class="gw2TableFieldset" width="100%">';
 		$str_form .= '<thead><tr><td style="width:'.$v_td1_width.'"></td><td></td></tr></thead><tbody>';
@@ -255,7 +255,7 @@ class gw_addon_settings_admin extends gw_addon
 		$oForm->setTag('input', 'maxlength', '4');
 		$oForm->setTag('input', 'dir', $this->sys['css_dir_numbers'] );
 		
-		$str_form .= getFormTitleNav($this->oL->m('1116'));
+		$str_form .= gw_get_form_title_nav($this->oL->m('1116'));
 		$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 		$str_form .= '<table class="gw2TableFieldset" width="100%">';
 		$str_form .= '<thead><tr><td style="width:'.$v_td1_width.'"></td><td></td></tr></thead><tbody>';
@@ -278,7 +278,7 @@ class gw_addon_settings_admin extends gw_addon
 #	$oForm->setTag('input', 'size', '20');
 #	$oForm->setTag('input', 'dir', '');
 
-		$str_form .= getFormTitleNav($this->oL->m('1056'));
+		$str_form .= gw_get_form_title_nav($this->oL->m('1056'));
 		$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 		$str_form .= '<table class="gw2TableFieldset" width="100%">';
 		$str_form .= '<thead><tr><td style="width:'.$v_td1_width.'"></td><td></td></tr></thead><tbody>';
@@ -301,7 +301,7 @@ class gw_addon_settings_admin extends gw_addon
  		$str_form .= '</tbody></table>';
 		$str_form .= '</fieldset>';
 		
-		$str_form .= getFormTitleNav($this->oL->m('1135'));
+		$str_form .= gw_get_form_title_nav($this->oL->m('1135'));
 		$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 		$str_form .= '<table class="gw2TableFieldset" width="100%">';
 		$str_form .= '<thead><tr><td style="width:'.$v_td1_width.'"></td><td></td></tr></thead><tbody>';
@@ -353,7 +353,7 @@ class gw_addon_settings_admin extends gw_addon
 		$trClass = 'xt';
 		$str_form = '';
 
-		$str_form .= getFormTitleNav($this->oL->m('1001'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
+		$str_form .= gw_get_form_title_nav($this->oL->m('1001'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
 
 		$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 
@@ -397,7 +397,7 @@ class gw_addon_settings_admin extends gw_addon
 		$str_form .= '<tr><td class="td1">'.$this->oL->m('message').'</td>';
 		$str_form .= '<td class="td2">';
 		$str_form .= '<textarea class="input" name="arPost[message]" style="height:10em">'.
-					htmlspecialchars_ltgt($vars['message']).
+					gw_htmlspecialchars_ltgt($vars['message']).
 					'</textarea>';
 		$str_form .= '</td></tr>';
 		$str_form .= '<tr><td colspan="2">';
@@ -420,8 +420,8 @@ class gw_addon_settings_admin extends gw_addon
 		$str_form .= '</td></tr>';
 		$str_form .= '<tr><td colspan="2">';
 		$str_form .= '<div style="height:10em;border:1px solid #BCC8E2;overflow:auto;width:100%;color:#777;background:#FFF;font:70% verdana,arial,sans-serif">'.
-					htmlspecialchars_ltgt($str_config).
-					$oForm->field('hidden', 'arPost[sys_info]', htmlspecialchars_ltgt($str_config)).
+					gw_htmlspecialchars_ltgt($str_config).
+					$oForm->field('hidden', 'arPost[sys_info]', gw_htmlspecialchars_ltgt($str_config)).
 					'</div>';
 		$str_form .= '</td></tr>';
 
@@ -452,7 +452,7 @@ class gw_addon_settings_admin extends gw_addon
 		$v_td1_width = '20%';
 	
 		/* preview */
-		$str_form .= getFormTitleNav($this->oL->m('1035'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
+		$str_form .= gw_get_form_title_nav($this->oL->m('1035'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
 		$str_form .= '<table style="text-align:'.$this->sys['css_align_left'].'" class="gw2TableFieldset" width="100%"><tbody>';
 		$str_form .= '<tr class="'.$trClass.'"><td>'.$this->oL->m('y_name').'</td><td>'.$vars['name'].'</td></tr>';
 		$str_form .= '<tr class="'.$trClass.'"><td>'.$this->oL->m('y_email').'</td><td>'.$vars['email'].'</td></tr>';
@@ -473,7 +473,7 @@ class gw_addon_settings_admin extends gw_addon
 			{
 				continue;
 			}
-			$str_form .= $oForm->field('hidden', 'arPost['. $k .']', htmlspecialchars_ltgt($v));
+			$str_form .= $oForm->field('hidden', 'arPost['. $k .']', gw_htmlspecialchars_ltgt($v));
 		}
 		$str_form .= $oForm->field('hidden', $this->oSess->sid, $this->oSess->id_sess);
 		$str_form .= $oForm->field('hidden', GW_ACTION, $this->gw_this['vars'][GW_ACTION]);

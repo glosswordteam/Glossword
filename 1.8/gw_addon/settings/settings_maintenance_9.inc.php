@@ -111,7 +111,7 @@ function gw_clear_history()
 	return $arStatus;
 }
 /* Script action below */
-$this->str .= getFormTitleNav($this->oL->m('1305'));
+$this->str .= gw_get_form_title_nav($this->oL->m('1305'));
 $this->str .= '<div class="margin-inside xu">';
 if ($this->gw_this['vars']['w2'])
 {

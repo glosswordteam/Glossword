@@ -232,7 +232,7 @@ if ($this->gw_this['vars']['w1'] == 'viewhistory')
 {
 	$this->sys['id_current_status'] = $this->oL->m($this->ar_component['cname']).': '. $this->oL->m(1294);
 
-	$this->str .= getFormTitleNav( $this->oL->m('term') );
+	$this->str .= gw_get_form_title_nav($this->oL->m('term') );
 	/* Todo: pagination */
 	$arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-history-by-term_id', $this->gw_this['vars']['tid'], 'limit 0, 50'));
 	$cnt = 0;
@@ -330,7 +330,7 @@ elseif ($this->gw_this['vars']['w1'] == 'rollback')
 elseif ($this->gw_this['vars']['w1'] == 'viewkeywords')
 {
 	$arKeywords = $this->oDb->sqlExec($this->oSqlQ->getQ('get-keywords-by-term_id', $this->gw_this['vars']['tid'], $this->gw_this['vars']['id']));
-	$this->str .= getFormTitleNav( $this->oL->m('term') );
+	$this->str .= gw_get_form_title_nav($this->oL->m('term') );
 	$this->sys['id_current_status'] = $this->oL->m($this->ar_component['cname']).': '. $this->oL->m(1284);
 
 	$this->str .= '<table class="gw2TableFieldset" width="100%"><tbody>';
@@ -567,11 +567,14 @@ else
 
 		/* Exclude stopwords */
 		$arStop = gw_get_stopwords($arDictParam);
-		/* Automatically parse URLs */
-		if ($arPre['is_parse_url'])
-		{
-			$arPre['parameters']['xml'] = preg_replace("/(^|\[|\s)((http|https|news|ftp|aim|callto):\/\/\w+[^\s\[\\]]+)/ie"  , "gw_regex_url(array('html' => '\\2', 'show' => '\\2', 'st' => '\\1'))", $arPre['parameters']['xml']);
-		}
+        /* Automatically parse URLs */
+        if ($arPre['is_parse_url']) {
+            $arPre['parameters']['xml'] = preg_replace_callback(
+                '/(^|\[|\s)((http|https|news|ftp|aim|callto|ed2k):\/\/\w+[^\s\[\]\\\\]+)/i',
+                'gw_regex_url',
+                $arPre['parameters']['xml']
+            );
+        }
 		/* Construct queries for the term */
 		$ar = gwAddTerm($arPre, $this->gw_this['vars']['id'], $arStop, 1, $arPre['is_specialchars'], $arPre['is_overwrite'], 0, 1);
 		/* */

@@ -67,7 +67,8 @@ function gw_get_note_afterpost($text, $status = 0)
 			'<script type="text/javascript">/*<![CDATA[*/gwJS.FXfadeOpac(\'note-afterpost\');/*]]>*/</script>'.
 			$text.'</div>';
 }
-/* */ 
+
+/* */
 class gw_restore_quotes
 {
 	/* */
@@ -222,7 +223,7 @@ function gw_fix_input_to_db($s)
 	/* replace old tags (HTML 4.01) with new (XHTML 1.1) */
 	$s = gw_fix_tagnames(trim($s));
 	/* convert &amp;&"' => &amp;&amp;&quot;&#039; */
-	$s = gw_htmlspecialamp(gw_unhtmlspecialamp($s));
+	$s = gw_htmlspecials_amp(gw_unhtmlspecials_amp($s));
 	/* attribute fixes, convert title=&quot;123&quot;&quot; => title="123&quot;" */
 	$s = $gw_oW->parse($s);
 	/* restore the contents of <script> */
@@ -239,13 +240,14 @@ function gw_fix_input_to_db($s)
 	}
 	return $s;
 }
+
 /* */
 function gw_fix_db_to_field($s)
 {
 	if (is_string($s))
 	{
 		$s = preg_replace('/{(d [0-9a-zA-Z_\:\-]+|[0-9a-zA-Z_\:\-\/]+)}/', '{%\\1%}', $s);
-		$s = gw_unhtmlspecialamp($s);
+		$s = gw_unhtmlspecials_amp($s);
 		$s = str_replace('&', '&amp;', $s);
 		$s = str_replace('"', '&quot;', $s);
 		$s = str_replace('<', '&lt;', $s);
@@ -253,11 +255,13 @@ function gw_fix_db_to_field($s)
 	}
 	return $s;
 }
+
 /* */
 function gethtml_metarefresh($url, $time_refresh = 5)
 {
 	return '<meta http-equiv="Refresh" content="' . $time_refresh . ';url=' . $url . '" />';
 }
+
 /* */
 function gw_bbcode_htmlspecialchars($t)
 {
@@ -266,7 +270,6 @@ function gw_bbcode_htmlspecialchars($t)
 	$t = htmlspecialchars($t, ENT_QUOTES, $sys['internal_encoding']);
 	return $t;
 }
-
 
 /**
  * Converts BBCode-safe HTML fragments.
@@ -359,7 +362,8 @@ function gw_bbcode_html_tag($t)
 	$t = '<span style="color:#00F">&lt;'.$slash_s.'</span>'.$t.$attr.'<span style="color:#00F">'.$slash_e.'&gt;</span>';
 	return $t;
 }
-/** 
+
+/**
  * Draws progressbar in HTML+CSS 
  *
  * @param	int	$percent
@@ -371,7 +375,6 @@ function text_progressbar($percent = 100, $color_txt = '#000', $color_bg = '#6C3
 {
 	return '<div style="text-align:center;background:#F6F6F6;margin:5px 0;width:100%;border:1px solid #CCC"><div style="font:90% sans-serif;color:'.$color_txt.';background:'.$color_bg.';width:'.$percent.'%">'.$percent.'%</div></div>';
 }
-
 
 /**
  * Converts string into decimal equivalent.
@@ -389,6 +392,7 @@ function text_str2ord($s)
 	}
 	return $t;
 }
+
 /**
  * Converts string into hexademical.
  * 
@@ -418,6 +422,7 @@ function gw_text_parse_href($t)
 	$t = strip_tags($t);
 	return $t;
 }
+
 /* */
 function gw_text_parse_preview($t)
 {
@@ -438,35 +443,135 @@ function gw_text_parse_preview($t)
 }
 
 /**
- * Table template, used for all headers in HTML-form
+ * Build table header for HTML form blocks.
  *
- * @param    string  $title      text for header, 1st column
- * @param    string  $funcnav    text for header, 2nd column
- * @return   string  string      HTML-code for table header
- * @see getFormDefn()
+ * Title is displayed in the left cell.
+ * Optional navigation HTML is displayed in the right cell.
+ *
+ * @param string $title   Header text or trusted HTML.
+ * @param string $funcnav Optional action HTML.
+ *
+ * @return string
  */
-function getFormTitleNav($title = 'title', $funcnav = '')
+function gw_get_form_title_nav($title = 'title', $funcnav = '')
 {
-	global $sys, $ar_theme;
-	$str = '';
-	$str .= '<table cellspacing="0" cellpadding="2" border="0" width="100%">';
-	$str .= '<tbody><tr class="xmtitle">';
-	if ($funcnav != '')
-	{
-		$str .= '<td style="width:50%;text-align:'.$sys['css_align_left'].'">' . $title . '</td>';
-		$str .= '<td style="text-align:'.$sys['css_align_right'].'">' . $funcnav . '</td>';
-	}
-	else
-	{
-		$str .= '<td style="text-align:'.$sys['css_align_left'].'">' . $title . '</td>';
-	}
-	$str .= '</tr>';
-	$str .= '</tbody></table>';
-	return $str;
+    global $sys;
+
+    $align_left = isset($sys['css_align_left']) ? $sys['css_align_left'] : 'left';
+    $align_right = isset($sys['css_align_right']) ? $sys['css_align_right'] : 'right';
+
+    $html = '';
+    $html .= '<table cellspacing="0" cellpadding="2" border="0" width="100%">';
+    $html .= '<tbody><tr class="xmtitle">';
+
+    if ($funcnav !== '') {
+        $html .= '<td style="width:50%;text-align:' . $align_left . '">' . $title . '</td>';
+        $html .= '<td style="text-align:' . $align_right . '">' . $funcnav . '</td>';
+    } else {
+        $html .= '<td style="text-align:' . $align_left . '">' . $title . '</td>';
+    }
+
+    $html .= '</tr>';
+    $html .= '</tbody></table>';
+
+    return $html;
+}
+
+/**
+ * Build HTML link for an automatically detected URL.
+ *
+ * Callback for preg_replace_callback().
+ *
+ * Match indexes:
+ * - 1: prefix before URL
+ * - 2: full URL
+ * - 3: URL scheme
+ *
+ * @param array $matches Regex matches.
+ *
+ * @return string
+ */
+function gw_regex_url($matches)
+{
+    $scheme_pattern = '(http|https|ftp|news|aim|callto|ed2k)';
+    $is_chunk_url = 0;
+
+    $link_start = isset($matches[1]) ? (string)$matches[1] : '';
+    $link_html = isset($matches[2]) ? (string)$matches[2] : '';
+    $link_show = $link_html;
+    $link_end = '';
+
+    /* Move ending punctuation outside the link */
+    if (preg_match('/([\.,\?]|&#33;)$/', $link_html, $match)) {
+        $link_end = $match[1];
+        $link_html = preg_replace('/([\.,\?]|&#33;)$/', '', $link_html);
+        $link_show = preg_replace('/([\.,\?]|&#33;)$/', '', $link_show);
+    }
+
+    /* Do not parse closing BBCode-like tags as links */
+    if (preg_match('/\[<\/(html|quote|code|sql)/i', $link_html)) {
+        return $link_start . $link_html . $link_end;
+    }
+
+    /* Normalize brackets and ampersands in href */
+    $link_html = str_replace('&amp;', '&', $link_html);
+    $link_html = str_replace('[', '%5B', $link_html);
+    $link_html = str_replace(']', '%5D', $link_html);
+    $link_html = str_replace('&', '&amp;', $link_html);
+
+    /* Block javascript pseudo-protocol */
+    $link_html = preg_replace('/javascript:/i', 'java script&#58; ', $link_html);
+
+    /* Add default scheme if it is missing */
+    if (!preg_match('/^' . $scheme_pattern . ':\/\//i', $link_html)) {
+        $link_html = 'http://' . $link_html;
+    }
+
+    /* Normalize visible URL text */
+    $link_show = str_replace('&amp;', '&', $link_show);
+    $link_show = str_replace('&', '&amp;', $link_show);
+    $link_show = preg_replace('/javascript:/i', 'javascript&#58; ', $link_show);
+
+    /* Used for title attribute */
+    $stripped_url = preg_replace(
+        '/^' . $scheme_pattern . ':\/\/(\S+)$/i',
+        '\\2',
+        $link_show
+    );
+
+    if (strlen($stripped_url) > 40) {
+        $is_chunk_url = 1;
+    }
+
+    if (!preg_match('/^' . $scheme_pattern . ':\/\//i', $link_show)) {
+        $is_chunk_url = 1;
+    }
+
+    $link_text = $link_show;
+
+    /* Shorten long URLs */
+    if ($is_chunk_url) {
+        $uri_type = preg_replace(
+            '/^' . $scheme_pattern . ':\/\/(\S+)$/i',
+            '\\1',
+            $link_show
+        );
+        $link_text = $uri_type . '://' . substr($stripped_url, 0, 25) . '&#8230;' . substr($stripped_url, -15);
+    }
+
+    /* Minimal attribute-safe filtering */
+    $link_html = str_replace(['"', '\'', '<', '>'], ['%22', '%27', '', ''], $link_html);
+    $link_title = htmlspecialchars(rtrim($stripped_url, '/'), ENT_QUOTES, 'UTF-8');
+
+    return $link_start
+        . '<a class="ext" href="' . $link_html . '" onclick="window.open(this.href);return false" title="' . $link_title . '">'
+        . $link_text
+        . '</a>'
+        . $link_end;
 }
 
 /* Automatically parse URLs */
-function gw_regex_url($url)
+function gw_regex_url2($url)
 {
 	$is_skip = 0;
 	$url['end'] = '';
@@ -632,7 +737,6 @@ function gw_text_wildcars($t = '', $mode = 'none')
 	return $t;
 }
 
-
 /**
  * Generates random string. Better characters' strength,
  * two groups of illegal symbols excluded.
@@ -694,7 +798,6 @@ function array_merge_clobber($a1, $a2)
     return $arNew;
 }
 
-
 /**
  * Inserts value into array between keys.
  * Note: Works with the first key only if multidimensional array.
@@ -747,7 +850,6 @@ function gw_array2str($ar, $delimeter = "\n")
 	return implode($delimeter, $s);
 }
 
-
 /**
  * Returns key from array by value
  *
@@ -764,6 +866,7 @@ function gw_array_value($ar, $str)
 	}
 	return $str;
 } //
+
 /**
  * Exclude arrays. Target subtracts from Source.
  *
@@ -794,6 +897,7 @@ function unhtmlentities($t)
 	$to =   array(' ',      '&',     '"',      '<',     '>',   '',     '',        '&eth;', '&thorn;');
 	return str_replace($from, $to, $t);
 }
+
 /**
  *
  */
@@ -803,6 +907,7 @@ function gw_fix_tagnames($t)
 	$to =   array('<br />', '<em>', '</em>', '<strong>', '</strong>', '<span class="strike">', '</span>', '<span class="underline">', '</span>', '<div style="text-align:center">', '</div>');
 	return str_replace($from, $to, $t);
 }
+
 /**
  * Splits the text into keywords.
  *
@@ -888,6 +993,7 @@ function text2keywords_crc($t, $mn = 1, $mx = 25, $e = 'UTF-8')
 	}
 	return $ar;
 }
+
 /**
  * Prepares text for a TERM field
  */
@@ -897,6 +1003,7 @@ function text_normalize($t)
 	global $oCase;
 	return $oCase->nc($oCase->rm_($t));
 }
+
 /**
  *
  */
@@ -932,6 +1039,7 @@ function gw_html_block_small($title = '', $content = '', $classN = 0, $alignT = 
 	$oTpl->parse();
 	return $oTpl->output();
 }
+
 /**
  * Returns date string in defined dateformat
  *
@@ -973,6 +1081,7 @@ function dateExtract($d, $fmt = "%d %M %Y %H:%i:%s")
 	$fmt = str_replace( "%s",  substr($d,12,2), $fmt );
 	return $fmt;
 }
+
 /**
  * Returns date string in defined dateformat
  *
@@ -1016,6 +1125,7 @@ function date_extract_int($d, $fmt = "%d %M %Y %H:%i:%s")
 	$fmt = str_replace( "%s",  $ss, $fmt );
 	return $fmt;
 }
+
 /**
  * Converts & into &amp; and encrypts url parameters
  *
@@ -1051,71 +1161,88 @@ function append_url($url, $vars = array())
 	$url = str_replace("&", "&amp;", $url);
 	return $url;
 }
-## --------------------------------------------------------
-## HTML-library
-## (C) 2000-2003 Dmitry Shilnikov
-/* 5 Aug 2012 - Use $oHtml to build attributes */
-function htmlFormsSelect($arData, $default, $formname = 'select', $class = 'input', $style = '', $dir = 'ltr')
-{
-	global $oFunc, $sys, $oHtml;
-	
-	$ar_attr_select = array( );
-	
-	if ( strlen( $class ) ) {
-		$ar_attr_select['class'] = $class;
-	}
-	if ( strlen( $style ) ) {
-		$ar_attr_select['style'] = $style;
-	}
-	if ( strlen( $dir ) ) {
-		$ar_attr_select['dir'] = $dir;
-	}
-	if ( strlen( $formname ) ) {
-		$ar_attr_select['name'] = $formname;
-	}
 
-	$str = '<select' . $oHtml->paramValue( $ar_attr_select ) . '>';
-	
-	for ( reset( $arData ); list($k, $v) = each( $arData ); )
-	{
-		$ar_attr_option = array( );
-		
-		/* 8 Oct 2010: Decode quotes to calculate the correct string length */
-		$v = htmlspecialchars_decode( $v, ENT_QUOTES );
-		$v_src = $v;
-		
-		/* Cut long names in order to proper display */
-		/* trim() is used to solve problems when function parameters comes 
-		 * from MySQL and database is not updated to the current MySQL version */
-		if ( mb_strlen( trim( $v ) ) > $sys['max_char_combobox'] )
-		{
-			$ar_attr_option['title'] = htmlspecialchars( $v_src );
-			$v = mb_substr( $v, 0, $sys['max_char_combobox'] ) . '…';
-		}
-		
-		$ar_attr_option['value'] = ( string ) $k;
-		
-		/* SELECTED */
-		$ar_attr_option['selected'] = $k == $default ? 'selected' : '';
+/**
+ * Build HTML select element.
+ *
+ * @param array  $ar_data   Option list as value => label.
+ * @param mixed  $default   Selected option value.
+ * @param string $form_name Select name attribute.
+ * @param string $css_class CSS class for select.
+ * @param string $style     Inline style for select.
+ * @param string $dir       Text direction.
+ *
+ * @return string
+ */
+function gw_html_forms_select($ar_data, $default, $form_name = 'select', $css_class = 'input', $style = '', $dir = 'ltr') {
+    global $sys, $oHtml;
 
-		$str .= PHP_EOL . '<option' . $oHtml->paramValue( $ar_attr_option ) . '>';
-		
-		if ( preg_match( "/abbrlang/", $formname ) || preg_match( "/trnslang/", $formname ) )
-		{
-			$str .= $k;
-		}
-		else
-		{
-			$str .= ( $v );
-		}
+    $ar_attr_select    = [];
+    $html              = '';
+    $max_char_combobox = isset($sys['max_char_combobox']) ? (int)$sys['max_char_combobox'] : 0;
+    $is_lang_key_mode  = false;
+    $ar_data           = is_array($ar_data) ? $ar_data : [];
 
-		$str .= '</option>';
-	}
-	$str .= '</select>';				
-	return $str;
+    if ($css_class !== '') {
+        $ar_attr_select['class'] = $css_class;
+    }
+
+    if ($style !== '') {
+        $ar_attr_select['style'] = $style;
+    }
+
+    if ($dir !== '') {
+        $ar_attr_select['dir'] = $dir;
+    }
+
+    if ($form_name !== '') {
+        $ar_attr_select['name'] = $form_name;
+    }
+
+    if ((strpos($form_name, 'abbrlang') !== false) || (strpos($form_name, 'trnslang') !== false)) {
+        $is_lang_key_mode = true;
+    }
+
+    $html .= '<select' . $oHtml->paramValue($ar_attr_select) . '>';
+
+    foreach ($ar_data as $option_value => $option_label) {
+        $ar_attr_option = [];
+
+        /* Decode quotes to calculate the correct string length */
+        $option_label     = htmlspecialchars_decode($option_label, ENT_QUOTES);
+        $option_label_src = $option_label;
+
+        /*
+         * Cut long names for proper display.
+         * trim() is used to handle values loaded from legacy MySQL data.
+         */
+        if (($max_char_combobox > 0) && (mb_strlen(trim($option_label), 'UTF-8') > $max_char_combobox)) {
+            $ar_attr_option['title'] = htmlspecialchars($option_label_src, ENT_QUOTES, 'UTF-8');
+            $option_label            = mb_substr($option_label, 0, $max_char_combobox, 'UTF-8') . '…';
+        }
+
+        $ar_attr_option['value'] = $option_value;
+
+        if ($option_value == $default) {
+            $ar_attr_option['selected'] = 'selected';
+        }
+
+        $html .= PHP_EOL . '<option' . $oHtml->paramValue($ar_attr_option) . '>';
+
+        if ($is_lang_key_mode) {
+            $html .= htmlspecialchars($option_value, ENT_QUOTES, 'UTF-8');
+        } else {
+            $html .= htmlspecialchars($option_label, ENT_QUOTES, 'UTF-8');
+        }
+
+        $html .= '</option>';
+    }
+
+    $html .= '</select>';
+
+    return $html;
 }
-## HTML-library
-## --------------------------------------------------------
+
 /**
  * Outputs nice help window.
  */
@@ -1151,6 +1278,7 @@ function searchkeys($ar)
 	$str = implode(", ", $wordsA);
 	return $str;
 }
+
 /**
  * Optimizes HTML-code. Light version
  */
@@ -1191,6 +1319,7 @@ function gw_text_smooth($t, $is_debug = 0)
 #	$t = str_replace('//]]></script>', CRLF . '//]]></script>', $t);
 	return $t;
 }
+
 /**
  * Filter for HTML-code of a definition text
  */
@@ -1232,6 +1361,7 @@ function textcodetoform($t)
 	}
 	return $t;
 }
+
 /**
  * Validates HTML-form
  *
@@ -1377,6 +1507,3 @@ function htmlFormSelectDate($name, $val)
 	return $str;
 }
 
-
-/* end of file */
-?>

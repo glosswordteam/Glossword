@@ -134,7 +134,7 @@ function gw_dict_recount($vars)
 
 $arPost =& $this->gw_this['vars']['arPost'];
 
-$this->str .= getFormTitleNav($this->oL->m(1003));
+$this->str .= gw_get_form_title_nav($this->oL->m(1003));
 if ($this->gw_this['vars']['isConfirm'] == '1')
 {
 	$this->str .= gw_dict_recount($arPost);

@@ -162,7 +162,7 @@ if (!class_exists('gwtkDataBase')) {
                 }
                 if (count($this->query_array) < $this->max_queries_debug && defined("GW_DEBUG_SQL_QUERY") && class_exists('gw_timer') && GW_DEBUG_SQL_QUERY == 1) {
                     // faster than htmlspecialchars()
-                    $this->query_array[] = sprintf('<strong>%1.5f</strong> %s', $time_end, htmlspecialchars_ltgt($query));
+                    $this->query_array[] = sprintf('<strong>%1.5f</strong> %s', $time_end, gw_htmlspecialchars_ltgt($query));
                 }
                 $this->cnt_queries_debug++;
 
@@ -264,10 +264,10 @@ if (!class_exists('gwtkDataBase')) {
         public function haltmsg($msg)
         {
             echo '<div style="margin:3px 0;border:3px solid #EEE;font:10pt sans-serif;width:98%;overflow:hidden">' . '<dl>' . '<dt style="padding:0 1em;color:#C80"><strong>Database error</strong></dt>' . '<dd>' . substr(
-                    htmlspecialchars_ltgt($msg),
+                    gw_htmlspecialchars_ltgt($msg),
                     0,
                     1024
-                ) . '</dd>' . '</dl>' . ($this->errno ? '<dl><dt style="padding:0 1em;color:#C08"><strong>MySQL Error</strong></dt> <dd>' . $this->errno . ' (' . htmlspecialchars_ltgt($this->error ) . ')</dd></dl>' : '') . '</div>';
+                ) . '</dd>' . '</dl>' . ($this->errno ? '<dl><dt style="padding:0 1em;color:#C08"><strong>MySQL Error</strong></dt> <dd>' . $this->errno . ' (' . gw_htmlspecialchars_ltgt($this->error ) . ')</dd></dl>' : '') . '</div>';
         }
         ##
         ## ------------------------------------------
@@ -439,7 +439,6 @@ if (!class_exists('gwtkDataBase')) {
          * Executes query without cache
          *
          * @access  public
-         * @see     gw_fixslash();
          */
         public function sqlExec($q, $cache_prefix = '', $is_cache_def = 0)
         {

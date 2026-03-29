@@ -128,7 +128,7 @@ class gw_addon_vkbd_admin extends gw_addon
         }
 
         /* */
-        $strForm .= getFormTitleNav(
+        $strForm .= gw_get_form_title_nav(
             $this->oL->m('1137'),
             '<span style="float:right">' . $oForm->get_button('submit') . '</span>'
         );

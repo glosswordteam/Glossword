@@ -57,7 +57,7 @@ function getFormXml($vars, $runtime = 0, $arBroken = array(), $arReq = array())
 	$strForm .= '<table width="100%">';
 	$strForm .= '<tbody><tr><td style="vertical-align:top;width:50%">';
 
-			$strForm .= getFormTitleNav($oL->m('3_export'), '<span class="xr">'.FORMAT_NAME.'</span>');
+			$strForm .= gw_get_form_title_nav($oL->m('3_export'), '<span class="xr">'.FORMAT_NAME.'</span>');
 			$strForm .= '<table class="gw2TableFieldset" width="100%">';
 			$arTmp['id'] = 'arPost-t';
 			$strForm .= '<tr>'.
@@ -98,7 +98,7 @@ function getFormXml($vars, $runtime = 0, $arBroken = array(), $arReq = array())
 
 	$strForm .= '</td><td style="vertical-align:top;">';
 
-		$strForm .= getFormTitleNav($oL->m('dictdump_split'));
+		$strForm .= gw_get_form_title_nav($oL->m('dictdump_split'));
 		$strForm .= '<table cellspacing="3" cellpadding="0" border="0" width="100%" class="gw2TableFieldset">';
 		$strForm .= '<tbody><tr><td style="width:30%"></td><td style="width:70%"></td></tr>';
 		$arBoxId = array();
@@ -135,7 +135,7 @@ function getFormXml($vars, $runtime = 0, $arBroken = array(), $arReq = array())
 
 		$arBoxId = array();
 
-		$strForm .= getFormTitleNav($oL->m('1044'));
+		$strForm .= gw_get_form_title_nav($oL->m('1044'));
 
 		$strForm .= '<table cellspacing="3" cellpadding="0" border="0" width="100%" class="gw2TableFieldset">';
 		$strForm .= '<tbody><tr><td style="width:30%"></td><td style="width:70%"></td></tr>';

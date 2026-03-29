@@ -118,7 +118,7 @@ class gw_addon_feedback extends gw_addon
 				$str_hidden .= $oForm->field( 'hidden', GW_ID_DICT, $this->gw_this['vars'][GW_ID_DICT] );
 				$str_hidden .= $oForm->field( 'hidden', 't', $this->gw_this['vars']['t'] );
 				$str_hidden .= $oForm->field( 'hidden', 'arPost[subject]', $this->subject_report );
-				$str_hidden .= $oForm->field( 'hidden', 'arPost[term]', htmlspecialchars_ltgt( $arTerm['term'] ) );
+				$str_hidden .= $oForm->field('hidden', 'arPost[term]', gw_htmlspecialchars_ltgt($arTerm['term'] ) );
 				$str_form .= '<tr>' .
 						'<td class="td1">' . $this->oL->m( 'contact_name' ) . ':' . $ar_req_msg['name'] . '</td>' .
 						'<td class="td2">' . $ar_broken_msg['name'] . $oForm->field( 'input', 'name', textcodetoform( $vars['name'] ) ) . '</td>' .
@@ -312,9 +312,13 @@ class gw_addon_feedback extends gw_addon
 				$this->oL->getCustom( 'mail', $this->sys['locale_name'], 'join' );
 
 				$mail_body = '';
-				$vars['message'] = (htmlspecialchars_ltgt( $vars['message'] ));
-				/* Parse links */
-				$vars['message'] = preg_replace( "/(^|\[|\s)((http|https|news|ftp|aim|callto):\/\/\w+[^\s\[\\]]+)/ie", "gw_regex_url(array('html' => '\\2', 'show' => '\\2', 'st' => '\\1'))", $vars['message'] );
+				$vars['message'] = (gw_htmlspecialchars_ltgt($vars['message'] ));
+                /* Automatically parse URLs */
+                $vars['message'] = preg_replace_callback(
+                    '/(^|\[|\s)((http|https|news|ftp|aim|callto|ed2k):\/\/\w+[^\s\[\]\\\\]+)/i',
+                    'gw_regex_url',
+                    $vars['message']
+                );
 				$vars['message'] = nl2br( $vars['message'] );
 				$vars['name'] = ($vars['name']) ? $vars['name'] : 'Anonymous';
 				$vars['email'] = ($vars['email']) ? $vars['email'] : 'anonymous@' . $this->sys['server_host'];
@@ -324,20 +328,20 @@ class gw_addon_feedback extends gw_addon
 					$vars[$k] = mb_substr( $v, 0, $this->int_max_length );
 				}
 				/* Checking subject */
-				$vars['subject'] = htmlspecialchars_ltgt( strip_tags( $vars['subject'] ) );
+				$vars['subject'] = gw_htmlspecialchars_ltgt(strip_tags($vars['subject'] ) );
 				/* */
 				$mail_body .= $vars['message'];
 				/* Composite message */
 				if ( $vars['defn'] )
 				{
 					$mail_body .= '<br />' . $this->oL->m( 'dict' ) . ': ' . $this->oHtml->a( $this->sys['page_index'] . '?a=list&d=' . $this->gw_this['vars'][GW_ID_DICT], $this->arDictParam['title'] );
-					$vars['defn'] = nl2br( htmlspecialchars_ltgt( $vars['defn'] ) );
+					$vars['defn'] = nl2br(gw_htmlspecialchars_ltgt($vars['defn'] ) );
 				}
 				if ( $vars['term'] )
 				{
 					$arTerm = getTermParam( $this->gw_this['vars']['t'] );
 					$mail_body .= '<br />' . $this->oL->m( 'term' ) . ': ' . $this->oHtml->a( $this->sys['page_index'] . '?a=term&d=' . $this->gw_this['vars'][GW_ID_DICT] . '&t=' . $this->gw_this['vars']['t'], $arTerm['term'] );
-					$vars['term'] = nl2br( htmlspecialchars_ltgt( $vars['term'] ) );
+					$vars['term'] = nl2br(gw_htmlspecialchars_ltgt($vars['term'] ) );
 					if ( !$this->gw_this['vars']['t'] )
 					{
 						$mail_body .= '<br /><br />' . $vars['term'] . '<br />';
@@ -350,8 +354,8 @@ class gw_addon_feedback extends gw_addon
 				$mail_body .= '<br />' . $vars['defn'];
 				$mail_body .= '<br />';
 
-				$mail_subject = $vars['subject'] ? $vars['subject'] : htmlspecialchars_ltgt( $this->sys['site_name'] ) . ' ' . $this->oL->m( 'web_m_fb' );
-				$mail_to = $vars['email1'] ? htmlspecialchars_ltgt( $vars['email1'] ) : $this->sys['y_email'];
+				$mail_subject = $vars['subject'] ? $vars['subject'] : gw_htmlspecialchars_ltgt($this->sys['site_name'] ) . ' ' . $this->oL->m('web_m_fb' );
+				$mail_to = $vars['email1'] ? gw_htmlspecialchars_ltgt($vars['email1'] ) : $this->sys['y_email'];
 				$mail_body .= '<br /><div>' . $vars['name'] . '<br/> ' . $vars['email'];
 				$mail_body .= '</div><br /><div style="font-size:70%">' . REMOTE_IP;
 				$mail_body .= '<br />' . REMOTE_UA . '</div>';
@@ -364,12 +368,12 @@ class gw_addon_feedback extends gw_addon
 				 * Send mail: from_name, to_name
 				 */
 				$oMail->send(
-						htmlspecialchars_ltgt( $vars['name'] ),
-						htmlspecialchars_ltgt( $vars['email'] ),
+                    gw_htmlspecialchars_ltgt($vars['name'] ),
+                    gw_htmlspecialchars_ltgt($vars['email'] ),
 						$this->sys['site_name'],
 						$this->sys['site_email'],
 						$this->sys['mail_subject_prefix'] . ' ' . $mail_subject,
-						$oMail->create_message( $mail_subject, $mail_body ),
+                    $oMail->create_message( $mail_subject, $mail_body ),
 						$this->sys['is_debug_mail']
 				);
 

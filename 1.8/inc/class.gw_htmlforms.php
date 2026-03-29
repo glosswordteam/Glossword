@@ -354,7 +354,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 #				$this->setTag('textarea', 'onselect', 'storeCaret(this)');
 #				$this->setTag('textarea', 'onkeyup', 'storeCaret(this)');
 			}
-			$tmp['strform'] .= CRLF . getFormTitleNav($this->oL->m($fieldname).'&#160;'.($elK+1), $tmp['strHtmlTB']);
+			$tmp['strform'] .= CRLF . gw_get_form_title_nav($this->oL->m($fieldname).'&#160;'.($elK+1), $tmp['strHtmlTB']);
 			//
 			//
 			$tmp['strform'] .= '<table cellspacing="1" cellpadding="2" border="0" width="100%"><tbody>';

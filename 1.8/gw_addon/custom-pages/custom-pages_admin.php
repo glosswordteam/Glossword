@@ -81,7 +81,7 @@ class gw_addon_custom_pages_admin extends gw_addon
 		$fieldname = 'page';
 		$int_custom_pages = sizeof($vars['page']);
 
-		$str_form .= getFormTitleNav($this->oL->m('1061'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
+		$str_form .= gw_get_form_title_nav($this->oL->m('1061'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
 		for (; list($elK, $arV) = each($vars['page']);)
 		{
 			$tmp['strBtnRemove'] = '';
@@ -132,7 +132,7 @@ class gw_addon_custom_pages_admin extends gw_addon
 			$str_form .= '</fieldset>';
 		}
 
-		$str_form .= getFormTitleNav($this->oL->m('1137'), '');
+		$str_form .= gw_get_form_title_nav($this->oL->m('1137'), '');
 		$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 		$str_form .= '<table class="gw2TableFieldset" width="100%">';
 		$str_form .= '<thead><tr><td style="width:'.$v_td1_width.'"></td><td></td></tr></thead><tbody>';
@@ -234,7 +234,7 @@ class gw_addon_custom_pages_admin extends gw_addon
 		$oForm->Set('formwidth', '100%');
 		$oForm->Set('charset', $this->sys['internal_encoding']);
 		/* */
-		$str_form .= getFormTitleNav( $this->oL->m('3_export'), '<span style="float:right">'.$oForm->get_button('submit').'</span>' );
+		$str_form .= gw_get_form_title_nav($this->oL->m('3_export'), '<span style="float:right">'.$oForm->get_button('submit').'</span>' );
   
 		$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 		$str_form .= '<table class="gw2TableFieldset" width="100%">';
@@ -292,7 +292,7 @@ class gw_addon_custom_pages_admin extends gw_addon
 		$oForm->Set('charset', $this->sys['internal_encoding']);
 		if ($this->sys['is_upload']) { $oForm->Set('enctype', 'multipart/form-data'); }
 		/* */
-		$str_form .= getFormTitleNav($this->oL->m('3_import'), '<strong class="xw">'.$this->gw_this['vars']['tid'].'</strong>');
+		$str_form .= gw_get_form_title_nav($this->oL->m('3_import'), '<strong class="xw">'. $this->gw_this['vars']['tid'].'</strong>');
 		$str_form .= '<table class="gw2TableFieldset gray" width="100%">';
 		$str_form .= '<tbody>';
 		$str_form .= '<tr><td style="width:1%"></td><td></td></tr><tbody>';
@@ -311,7 +311,7 @@ class gw_addon_custom_pages_admin extends gw_addon
 					'<td class="td2"><textarea '.
 					' onfocus="if(typeof(document.layers)==\'undefined\'||typeof(ts)==\'undefined\'){ts=1;this.form.elements[\'arPost[\'+\'xml\'+\']\'].select();}"'.
 					' style="width:100%;font:85% verdana,arial,sans-serif"'.
-					' name="arPost[xml]" id="arPost_xml_" dir="ltr" cols="45" rows="10">' . htmlspecialchars_ltgt($vars['xml']) . '</textarea>'.
+					' name="arPost[xml]" id="arPost_xml_" dir="ltr" cols="45" rows="10">' . gw_htmlspecialchars_ltgt($vars['xml']) . '</textarea>'.
 					'</td>'.
 					'</tr>';
 		/* Allows to upload a file */

@@ -103,7 +103,7 @@ class gw_addon_visual_themes_admin extends gw_addon
             }
         }
         /* */
-        $str_form .= getFormTitleNav(
+        $str_form .= gw_get_form_title_nav(
             $this->oL->m('1136'),
             '<strong class="xw">' . $this->gw_this['vars']['tid'] . '</strong>'
         );
@@ -123,7 +123,7 @@ class gw_addon_visual_themes_admin extends gw_addon
                 '<td class="td2">' . $oForm->field(
                     'input',
                     'arPost[' . $arV['settings_key'] . '][new]',
-                    htmlspecialchars_ltgt($arV['settings_key'])
+                    gw_htmlspecialchars_ltgt($arV['settings_key'])
                 ) . '</td>' .
                 '</tr>';
             if ($arV['settings_key'] == $this->gw_this['vars']['w2']) {
@@ -194,7 +194,7 @@ function switch2edit(id)
 </script>
 ';
         /* */
-        $str_form .= getFormTitleNav(
+        $str_form .= gw_get_form_title_nav(
             $this->cur_template,
             '<strong class="xw">' . $this->gw_this['vars']['tid'] . '</strong>'
         );
@@ -238,7 +238,7 @@ function switch2edit(id)
                         '<td style="width:75%" class="' . $v_class_2 . '">' . $oForm->field(
                             'checkbox',
                             'arPost[' . $arV['settings_key'] . ']',
-                            htmlspecialchars_ltgt(
+                            gw_htmlspecialchars_ltgt(
                                 $arV['settings_value']
                             )
                         ) . $bg_ctrl . '</td>' .
@@ -250,7 +250,7 @@ function switch2edit(id)
                         '<td style="width:75%" class="' . $v_class_2 . '">' . $oForm->field(
                             'input',
                             'arPost[' . $arV['settings_key'] . ']',
-                            htmlspecialchars_ltgt(
+                            gw_htmlspecialchars_ltgt(
                                 $arV['settings_value']
                             )
                         ) . $bg_ctrl . '</td>' .
@@ -347,7 +347,7 @@ function switch2edit(id)
         $oForm->Set('formwidth', '100%');
         $oForm->Set('charset', $this->sys['internal_encoding']);
         /* */
-        $str_form .= getFormTitleNav(
+        $str_form .= gw_get_form_title_nav(
             $this->oL->m('3_export'),
             '<strong class="xw">' . $this->gw_this['vars']['tid'] . '</strong>'
         );
@@ -414,7 +414,7 @@ function switch2edit(id)
             $oForm->Set('enctype', 'multipart/form-data');
         }
         /* */
-        $str_form .= getFormTitleNav(
+        $str_form .= gw_get_form_title_nav(
             $this->oL->m('3_import'),
             '<span style="float:right">' . $oForm->get_button('submit') . '</span>'
         );
@@ -429,7 +429,7 @@ function switch2edit(id)
             '<td class="td2"><textarea ' .
             ' onfocus="if(typeof(document.layers)==\'undefined\'||typeof(ts)==\'undefined\'){ts=1;this.form.elements[\'arPost[\'+\'xml\'+\']\'].select();}"' .
             ' style="width:100%;font:85% verdana,arial,sans-serif"' .
-            ' name="arPost[xml]" id="arPost_xml_" dir="ltr" cols="45" rows="10">' . htmlspecialchars_ltgt(
+            ' name="arPost[xml]" id="arPost_xml_" dir="ltr" cols="45" rows="10">' . gw_htmlspecialchars_ltgt(
                 $vars['xml']
             ) . '</textarea>' .
             '</td>' .

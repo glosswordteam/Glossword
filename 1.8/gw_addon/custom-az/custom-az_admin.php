@@ -48,20 +48,15 @@ class gw_addon_custom_az_admin extends gw_addon
         }
         foreach ($ar_sql as $ar_v) {
             $profile_title = $ar_v['profile_name'];
+            // Highlight selected profile
             if ((int)$ar_v['id_profile'] === (int)$this->gw_this['vars'][GW_TARGET_ID]) {
                 $profile_title = '<strong>' . $ar_v['profile_name'] . '</strong>';
             }
-
+            $str_status = $ar_v['is_active'] ? '' : ' <span class="badge badge-secondary"> ' . $this->oL->m('not_published') . '</span>';
             $this->ar_profiles_browse[$ar_v['id_profile']] = $this->oHtml->a(
-                $this->oUrlBuilder->build_admin_url(
-                    'browse',
-                    $this->component,
-                    [
-                        GW_TARGET_ID => $ar_v['id_profile'],
-                    ]
-                ),
+                $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->component, [GW_TARGET_ID => $ar_v['id_profile']]),
                 $profile_title
-            );
+            ) . $str_status;
 
             $this->ar_profiles[$ar_v['id_profile']] = $ar_v['profile_name'];
         }
@@ -69,7 +64,7 @@ class gw_addon_custom_az_admin extends gw_addon
 
     public function _get_nav()
     {
-        unset($this->gw_this['ar_actions_list'][$this->component]['browse']);
+        unset($this->gw_this['ar_actions_list'][$this->component][GW_A_BROWSE]);
         return '<div class="actions-secondary">' .
             implode(' ', $this->gw_this['ar_actions_list'][$this->component]) .
             '</div>';
@@ -143,7 +138,7 @@ class gw_addon_custom_az_admin extends gw_addon
             $ar_broken_msg['profile_name'] = '';
         }
 
-        $str_form .= getFormTitleNav(
+        $str_form .= gw_get_form_title_nav(
             $this->oL->m('1137'),
             '<span style="float:right">' . $o_form->get_button('submit') . '</span>'
         );
@@ -223,12 +218,12 @@ class gw_addon_custom_az_admin extends gw_addon
         }
         /* */
         if ($this->gw_this['vars']['tid'] && isset($this->ar_profiles[$this->gw_this['vars']['tid']])) {
-            $str_form .= getFormTitleNav(
+            $str_form .= gw_get_form_title_nav(
                 $this->ar_profiles[$this->gw_this['vars']['tid']],
                 '<span style="float:right">' . $oForm->get_button('submit') . '</span>'
             );
         } else {
-            $str_form .= getFormTitleNav(
+            $str_form .= gw_get_form_title_nav(
                 $this->oL->m('3_profile'),
                 '<span style="float:right">' . $oForm->get_button('submit') . '</span>'
             );
@@ -312,7 +307,7 @@ class gw_addon_custom_az_admin extends gw_addon
             }
         }
         /* */
-        $str_form .= getFormTitleNav(
+        $str_form .= gw_get_form_title_nav(
             $this->ar_profile['profile_name'],
             '<span style="float:right">' . $oForm->get_button('submit') . '</span>'
         );

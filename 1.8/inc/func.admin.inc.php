@@ -417,7 +417,7 @@ function gw_admin_menu($a, $t)
  * @see htmlspecialchars2()
  */
 function htmlspecialchars3($arQuery) {
-    $arQuery = array_map('htmlspecialchars_ltgt', $arQuery);
+    $arQuery = array_map('gw_htmlspecialchars_ltgt', $arQuery);
     $arQuery = array_map('gw_highlight_sql', $arQuery);
 
     return '<ul class="gwsql"><li>' . implode(';</li><li>', $arQuery) . ';</li></ul>';

@@ -117,7 +117,7 @@ $tmp['arPhpVer'] = explode('.', PHP_VERSION);
 define('PHP_VERSION_INT', intval(sprintf('%d%02d%02d', $tmp['arPhpVer'][0], $tmp['arPhpVer'][1], $tmp['arPhpVer'][2])));
 
 /* ------------------------------------------------------- */
-define('REMOTE_IP', gwGetRemoteIp());
+define('REMOTE_IP', gw_get_remote_ip());
 $HTTP_REF = getenv('HTTP_REFERER');
 
 /* ------------------------------------------------------- */

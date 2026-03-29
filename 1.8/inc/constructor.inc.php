@@ -1107,7 +1107,7 @@ if ( sizeof( $gw_this['vars']['ar_languages'] ) >= 1 )
 	$gw_this['select_lang'] = '<div class="box-themes">';
 	$gw_this['select_lang'] .= '<form action="' . GW_REQUEST_URI . '" method="post">';
 	$gw_this['select_lang'] .= '<table cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td style="width:99%">';
-	$gw_this['select_lang'] .= htmlFormsSelect( $gw_this['vars']['ar_languages'], $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc'], GW_LANG_I, 'xt', 'width:100%', $oL->languagelist( '1' ) );
+	$gw_this['select_lang'] .= gw_html_forms_select($gw_this['vars']['ar_languages'], $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc'], GW_LANG_I, 'xt', 'width:100%', $oL->languagelist('1' ) );
 	$gw_this['select_lang'] .= '</td><td style="width:1%"><input id="ok-il" style="width:3em" name="is[save_il]" type="submit" class="submitok" value="' . $oL->m( '1212' ) . '" />';
 	$gw_this['select_lang'] .= '</td></tr></tbody></table></form>';
 	$gw_this['select_lang'] .= '</div>';
@@ -1138,7 +1138,7 @@ if ( sizeof( $gw_this['ar_themes_select'] ) > 1 )
 	$gw_this['select_themes'] = '<div class="box-themes">';
 	$gw_this['select_themes'] .= '<form action="' . GW_REQUEST_URI . '" method="post">';
 	$gw_this['select_themes'] .= '<table cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td style="width:99%">';
-	$gw_this['select_themes'] .= htmlFormsSelect( $gw_this['ar_themes_select'], $gw_this['vars']['visualtheme'], 'visualtheme', 'xt', 'width:100%', $oL->languagelist( '1' ) );
+	$gw_this['select_themes'] .= gw_html_forms_select($gw_this['ar_themes_select'], $gw_this['vars']['visualtheme'], 'visualtheme', 'xt', 'width:100%', $oL->languagelist('1' ) );
 	$gw_this['select_themes'] .= '</td><td style="width:1%"><input id="ok-visualtheme" style="width:3em" type="submit" name="is[save_visualtheme]" class="submitok" value="' . $oL->m( '1212' ) . '" />';
 	$gw_this['select_themes'] .= '</td></tr></tbody></table></form>';
 	$gw_this['select_themes'] .= '</div>';

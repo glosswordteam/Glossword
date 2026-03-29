@@ -124,7 +124,7 @@ class gw_addon_terms_admin extends gw_addon
 		$oForm->Set('formwidth', '100%');
 		$oForm->Set('charset', $this->sys['internal_encoding']);
 		/* */
-		$str_form .= getFormTitleNav($this->oL->m('3_export'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
+		$str_form .= gw_get_form_title_nav($this->oL->m('3_export'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
 
 		$str_form .= '<table class="gw2TableFieldset" width="100%"><tbody><tr><td style="vertical-align:top">';
 
@@ -231,13 +231,13 @@ class gw_addon_terms_admin extends gw_addon
 		{
 			$tmp['intFormHeight'] = 8;
 			$str_form .= $oForm->field('hidden', GW_ACTION, GW_A_ADD);
-			$str_form .= getFormTitleNav($this->oL->m('term'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
+			$str_form .= gw_get_form_title_nav($this->oL->m('term'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
 		}
 		else
 		{
 			$str_form .= $oForm->field('hidden', 'arPre[date_created]', $vars['date_created']);
 			$str_form .= $oForm->field('hidden', GW_ACTION, GW_A_EDIT);
-			$str_form .= getFormTitleNav(
+			$str_form .= gw_get_form_title_nav(
 				$this->oL->m('term'),
 				($vars['is_active'] == 3 ? '' : '<span style="float:right">'.
 					$oForm->get_button('submit', 2).
@@ -284,7 +284,7 @@ function switch2edit(id)
 		$str_form .= '</tbody></table>';
 
 		/* 1.6.3 */
-		$str_form .= getFormTitleNav( $this->oL->m('options') );
+		$str_form .= gw_get_form_title_nav($this->oL->m('options') );
 		$tmp['after_post'] = $this->oSess->user_get('after_post_term');
 		if (!$tmp['after_post'])
 		{

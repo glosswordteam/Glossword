@@ -375,7 +375,7 @@ function getDictSrch($language = '', $x = 1, $y = 99, $qStrOrder = '', $is_form_
 	$oTpl->AddVal( 'v:q_rnd', $strRandValue );
 	if ($is_form_only)
 	{
-		return htmlFormsSelect($arDictMap, $id_dict, 'd', 'input',  'width:100%', 'ltr');
+		return gw_html_forms_select($arDictMap, $id_dict, 'd', 'input', 'width:100%', 'ltr');
 	}
 }
 

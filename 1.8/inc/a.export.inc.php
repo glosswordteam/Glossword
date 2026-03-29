@@ -124,7 +124,7 @@ function getFormExport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 	$strForm .= '<table cellspacing="0" cellpadding="2" border="0" width="100%">';
 	$strForm .= '<tbody><tr><td class="td1" style="vertical-align:top">';
 
-		$strForm .= getFormTitleNav($oL->m('timeframe'), '');
+		$strForm .= gw_get_form_title_nav($oL->m('timeframe'), '');
 
 		$strForm .= '<table class="gw2TableFieldset" width="100%">';
 		$strForm .= '<tbody><tr>';
@@ -154,7 +154,7 @@ function getFormExport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 
 	$strForm .= '</td><td style="vertical-align:top;width:30%">';
 		// Select format
-		$strForm .= getFormTitleNav($oL->m('select_format'), '');
+		$strForm .= gw_get_form_title_nav($oL->m('select_format'), '');
 
 		$strForm .= '<table class="gw2TableFieldset" width="100%">';
 		reset($vars['arFmt']);

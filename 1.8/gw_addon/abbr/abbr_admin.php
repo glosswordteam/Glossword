@@ -99,7 +99,7 @@ class gw_addon_abbr_admin extends gw_addon
 			if (isset($ar_broken[$k])) { $ar_broken_msg[$k] = '<span class="red"><b>' . $this->oL->m('reason_9') . '</b></span><br />'; }
 		}
 		/* */
-		$str_form .= getFormTitleNav($this->oL->m('1137'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
+		$str_form .= gw_get_form_title_nav($this->oL->m('1137'), '<span style="float:right">'.$oForm->get_button('submit').'</span>');
 
 		$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 		$str_form .= '<table class="gw2TableFieldset" width="100%">';
