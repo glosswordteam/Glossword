@@ -25,8 +25,6 @@ class gw_addon_menumanager_admin extends gw_addon
 	function __construct($str)
 	{
 		$this->init();
-#		$this->oL->setHomeDir($this->sys['path_locale']);
-#		$this->oL->getCustom('addon_'.$this->addon_name, $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc'], 'join');
 	}
 	/* */
 	function _get_nav()

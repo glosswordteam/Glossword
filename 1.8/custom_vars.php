@@ -60,7 +60,7 @@ $sys['path_index_full'] = $sys['server_proto'].$sys['server_host'].$sys['server_
 // To load custom language names for dictionary elements,
 // see `locale/../d_language_custom.php'.
 /* ------------------------------------------------------- */
-# $oL->getCustom('l_custom', $gw_this['vars'][GW_LANG_I].'-utf8', 'join');
+# $oL->applyCustomPhrases('l_custom', $gw_this['vars'][GW_LANG_I].'-utf8', 'join');
 
 // --------------------------------------------------------
 // Load Add-ons

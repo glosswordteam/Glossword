@@ -311,23 +311,9 @@ function gw_admin_menu($a, $t)
 {
 	global $arDictParam, $sys, $gw_this, $ar_theme, $arPageNumbers;
 	global $oL, $oSess, $oHtml, $oDb, $oSqlQ, $oUrlBuilder;
-	/* Read globals */
-    $ar_perms = $oSess->ar_permissions;
-    foreach ($ar_perms as $permission => $is) {
-        if (!$is) {
-            unset($ar_perms[$permission]);
-        }
-    }
-	/* */
-	$ar_sql_like = 'cmm.req_permission_map LIKE "%:'.implode(':%" OR cmm.req_permission_map LIKE "%:', array_keys($ar_perms) ).':%"';
-	/* */
-	$arSql = $oDb->sqlRun($oSqlQ->getQ('get-components-actions', $ar_sql_like, '1=1', ' AND cm.is_active = "1" '));
-	$arMenu = array();
-	/* Re-arrange array */
-    foreach ($arSql as $k1 => $arV) {
-        $arMenu[$arV['id_component_name']][] = $arV;
-        unset($arSql[$k1]);
-    }
+
+    $arMenu = gw_admin_get_menu_items();
+
 	$gw_this['ar_actions_list'] = array();
 	/* Javascript collapsible objects */
 	$ar_js_ids = array();
@@ -344,7 +330,7 @@ function gw_admin_menu($a, $t)
     foreach ($arMenu as $id_component => $arV)
 	{
 		/* for each component */
-        $oL->getCustom('addon_' . $id_component, $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc'], 'join');
+        $oL->applyCustomPhrases('addon_' . $id_component, $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
 		/* background color */
 		$int_menu_el % 2 ? ($bgcolor = $ar_theme['color_2']) : ($bgcolor = $ar_theme['color_1']);
 
@@ -727,3 +713,46 @@ function gw_tmp_clear($prefix = 'st')
     return $str;
 }
 
+
+/**
+ * Get admin menu items available for current user permissions.
+ *
+ * The method reads active permissions from session, builds SQL condition
+ * for component map permissions and groups fetched rows by component name.
+ *
+ * @return array
+ */
+function gw_admin_get_menu_items()
+{
+    global $oSess, $oDb, $oSqlQ;
+
+    $ar_result      = [];
+    $ar_permissions = [];
+
+    foreach ((array)$oSess->ar_permissions as $permission_name => $is_allowed) {
+        if ($is_allowed) {
+            $ar_permissions[] = gw_text_sql($permission_name);
+        }
+    }
+
+    if (empty($ar_permissions)) {
+        return $ar_result;
+    }
+
+    $ar_sql_like = [];
+    foreach ($ar_permissions as $permission_name) {
+        $ar_sql_like[] = 'cmm.req_permission_map LIKE "%:' . $permission_name . ':%"';
+    }
+
+    $sql_permissions = implode(' OR ', $ar_sql_like);
+
+    $ar_sql = $oDb->sqlRun(
+        $oSqlQ->getQ('get-components-actions', $sql_permissions, '1=1', ' AND cm.is_active = "1" ')
+    );
+
+    foreach ($ar_sql as $ar_row) {
+        $ar_result[$ar_row['id_component_name']][] = $ar_row;
+    }
+
+    return $ar_result;
+}

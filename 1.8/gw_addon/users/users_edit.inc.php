@@ -297,7 +297,7 @@ else {
 		/* 1.8.10: clear previously assigned settings */
 #		$ar_user['user_settings'] = array();
 		/* Import previously assigned settings */
-		$arPost = array_merge_clobber($arSql, $arPost);
+		$arPost = gw_array_merge_clobber($arSql, $arPost);
 
 		/* Assigned dictionaries */
 		$arPost['user_settings']['dictionaries'] = isset($arPost['dictionaries']) ? $arPost['dictionaries'] : array();

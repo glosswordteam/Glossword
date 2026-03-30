@@ -62,7 +62,7 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
         if ($is_specialchars) {
             /* Keep specials */
             $str_term_filtered = $oCase->nc($str_term_filtered);
-            $str_term_filtered = gw_text_wildcars($str_term_filtered);
+            $str_term_filtered = gw_text_wildcards($str_term_filtered);
             $arKeywordsT = text2keywords($oCase->rm_($str_term_filtered), 1);
         } else {
             /* Remove specials */
@@ -140,7 +140,7 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
     }
     /* */
     if (!isset($str_term_filtered)) {
-        $str_term_filtered = gw_text_wildcars($str_term_filtered);
+        $str_term_filtered = gw_text_wildcards($str_term_filtered);
         $str_term_filtered = text_normalize($str_term_filtered);
     }
     /* 21 jan 2006: new `date_created' for new terms */
@@ -282,7 +282,7 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
                 /* Fix wildcars, 1.6.1 */
                 $tmpStr = str_replace('<![CDATA[', '', $tmpStr);
                 $tmpStr = str_replace(']]>', '', $tmpStr);
-                $tmpStr = gw_text_wildcars($tmpStr);
+                $tmpStr = gw_text_wildcards($tmpStr);
                 /* */
 #				prn_r( $fV  );
                 $arKeywords[$fK] = text2keywords(
@@ -1058,6 +1058,7 @@ function gw_sql_update(array $sqlNames, $tableName, $where)
 function gw_db_legacy_chars()
 {
     return [
+        '\\' => '\\\\',
         '%' => '\\%',
         '_' => '\\_',
     ];
@@ -1147,6 +1148,47 @@ function gw_sql_escape_like($value)
 function gw_text_sql($value)
 {
     return gw_db_legacy_encode($value);
+}
+
+/**
+ * Convert user wildcard pattern to SQL LIKE pattern.
+ *
+ * Supported wildcards:
+ * - "*" => "%"
+ * - "?" => "_"
+ *
+ * Existing SQL LIKE special characters are escaped first.
+ *
+ * @param string $value
+ *
+ * @return string
+ */
+function gw_text_sql_like($value)
+{
+    $value = (string) $value;
+
+    /*
+     * Temporary placeholders for user wildcards.
+     * They are restored after SQL escaping.
+     */
+    $token_many = "\x01";
+    $token_one = "\x02";
+
+    $value = str_replace(
+        ['*', '?'],
+        [$token_many, $token_one],
+        $value
+    );
+
+    $value = gw_text_sql($value);
+
+    $value = str_replace(
+        [$token_many, $token_one],
+        ['%', '_'],
+        $value
+    );
+
+    return $value;
 }
 
 /**

@@ -1,8 +1,8 @@
 <?php
 /**
  *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ *  Â© 2008 Glossword.biz team
+ *  Â© 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -181,7 +181,7 @@ function getFormCsv($vars, $runtime = 0, $arBroken = array(), $arReq = array())
 global $oL, $gw_this, $oSess, $oDb, $oSqlQ, $oHtml, $sys, $arFields;
 $arReq = array('fmt');
 // Language
-$oL->getCustom('export_csv', $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'], 'join');
+$oL->applyCustomPhrases('export_csv', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
 // --------------------------------------------------------
 // split per lines
 $is_split   = isset($arPost['is_split']) ? $arPost['is_split'] : 100;
@@ -327,7 +327,7 @@ else
 				$arCSV[$incr_term][5] = $arV['term_uri']; /* Hard-coded, see constants.inc.php */
 				/* */
 				$str_xml = '<term>'.$arV['term'].'</term>';
-				$arPre = array_merge_clobber($arPre, gw_Xml2Array($str_xml.$arV['defn']));
+				$arPre = gw_array_merge_clobber($arPre, gw_Xml2Array($str_xml. $arV['defn']));
 				for (reset($arFields); list($fK, $fV) = each($arFields);)
 				{
 					if ($arPost['td_mode'] == 't')

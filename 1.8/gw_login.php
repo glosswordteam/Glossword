@@ -127,9 +127,9 @@ $oL = new gwtk;
 $oL->setHomeDir($sys['path_locale']);
 $oL->setLocale($gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
 $gw_this['vars']['ar_languages'] = $oL->getLanguages();
-$oL->getCustom('admin', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc'], 'join');
-$oL->getCustom('err', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc'], 'join');
-$oL->getCustom('mail', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc'], 'join');
+$oL->applyCustomPhrases('admin', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
+$oL->applyCustomPhrases('err', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
+$oL->applyCustomPhrases('mail', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
 /* Redirect URL */
 $url_admin = $sys['server_proto'] . $sys['server_host'] . $sys['page_admin'];
 #print $url_admin;
@@ -282,7 +282,7 @@ if ($gw_this['vars']['k']) {
         $oDb->sqlExec($sql);
 
         /* Create a new password */
-        $str_password = kMakeUid('', 8);
+        $str_password = gw_make_uid('', 8);
         $sql = gw_sql_update(['password' => md5($str_password)], $oSess->db_table_users, 'id_user = "' . $arSql['id_user'] . '"');
         $oDb->sqlExec($sql);
 
@@ -370,7 +370,7 @@ if ($gw_this['vars']['post'] == '') {
                 $sql .= 'WHERE `id_user` = "' . $arSql['id_user'] . '" ';
                 $oDb->sqlExec($sql);
                 /* Create new activation key */
-                $int_act_key = kMakeUid('', 9, 3);
+                $int_act_key = gw_make_uid('', 9, 3);
                 $sql = gw_sql_insert(['id_user' => $arSql['id_user'], 'auth_key' => $int_act_key, 'date_created' => $sys['time_now_gmt_unix']], $sys['tbl_prefix'] . 'auth_restore');
                 $oDb->sqlExec($sql);
 

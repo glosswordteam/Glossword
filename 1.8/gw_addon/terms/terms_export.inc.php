@@ -67,7 +67,7 @@ if (!$this->gw_this['vars']['id'])
 
 global $arDictParam, $oSess;
 /* Language */
-$this->oL->getCustom('export', $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc'], 'join');
+$this->oL->applyCustomPhrases('export', $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc']);
 
 $arPost =& $this->gw_this['vars']['arPost'];
 

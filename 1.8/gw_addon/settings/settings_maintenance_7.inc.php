@@ -29,7 +29,7 @@ function gw_get_html_code()
 		$arDictMap[$arV['id']] = strip_tags($arV['title']);
 	}
 	asort($arDictMap);
-	$arDictMap = array_merge_clobber(array(0 => $oL->m('srch_all')), $arDictMap);
+	$arDictMap = gw_array_merge_clobber(array(0 => $oL->m('srch_all')), $arDictMap);
 
 	$str1 = $oFunc->file_get_contents($sys['path_tpl'].'/common/search_form_1.html');
 	$str1 .= '<form id="w" name="w"><textarea onfocus="if(typeof(document.layers)==\'undefined\'||typeof(ts)==\'undefined\'){ts=1;this.form.elements[\'search_form_default\'].select();}" style="border:1px solid #BCC8E2;overflow:auto;width:97%;color:#777;background:#FFF;font:70% verdana,arial,sans-serif" id="search_form_default" cols="70" rows="10">'.

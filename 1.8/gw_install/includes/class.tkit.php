@@ -130,7 +130,7 @@ class tkit
                 $this->f[$filename] = true;
             }
 
-            $this->a = array_merge_clobber($this->a, $a);
+            $this->a = gw_array_merge_clobber($this->a, $a);
         }
         /* */
         return;
@@ -194,7 +194,7 @@ if (!function_exists('array_merge_clobber')) {
 
         foreach ($a2 as $key => $val) {
             if (is_array($val) && isset($arNew[$key]) && is_array($arNew[$key])) {
-                $arNew[$key] = array_merge_clobber($arNew[$key], $val);
+                $arNew[$key] = gw_array_merge_clobber($arNew[$key], $val);
             } else {
                 $arNew[$key] = $val;
             }

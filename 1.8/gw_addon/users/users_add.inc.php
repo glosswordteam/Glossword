@@ -33,7 +33,7 @@ if ($this->gw_this['vars']['post'] == '')
 	$is_first = 1;
 	$arSql['pass_new'] = '';
 	$arSql['pass_confirm'] = '';
-	$arSql['login'] = kMakeUid('user-', 13, 1);
+	$arSql['login'] = gw_make_uid('user-', 13, 1);
 	$arSql['user_email'] = '';
 	$arSql['user_fname'] = '';
 	$arSql['user_sname'] = '';
@@ -182,7 +182,7 @@ else
 		/* */
 		if ($arPost['is_send_notice'])
 		{
-			$this->oL->getCustom('mail', $this->sys['locale_name'], 'join');
+			$this->oL->applyCustomPhrases('mail', $this->sys['locale_name'], 'join');
 
 			/* Start new messenger */
 			$oMail = new tkit_mail('mail_feedback');

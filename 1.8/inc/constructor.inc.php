@@ -17,9 +17,9 @@ if ( !defined( 'IN_GW' ) )
 /**
  *  General page constructor.
  */
-$tmp['str_defn'] = '';
-$gw_this['ar_breadcrumb'] = array ( );
-$oTpl->tmp['d'] = array ( );
+$tmp['str_defn']          = '';
+$gw_this['ar_breadcrumb'] = [];
+$oTpl->tmp['d']           = [];
 // --------------------------------------------------------
 // because this is a basic constructor for the whole site,
 // we need to separate templates between dictionary and website
@@ -55,16 +55,16 @@ if ( $gw_this['vars']['layout'] != '' ) // settings for all dictionary pages
 		{
 			$oTpl->addVal( 'url:dict_name', $arDictParam['title'] );
 			/* Authors */
-			if ( $arDictParam['is_show_authors'] )
-			{
-				$arSql = $oDb->sqlRun( $oSqlQ->getQ( 'get-users-by-dict_id', $arDictParam['id'] ), 'dict' );
-				$ar_authors = array ( );
-				for (; list($k, $arV) = each( $arSql ); )
-				{
-					$ar_authors[] = $oHtml->a( $sys['page_index'] . '?' . GW_ACTION . '=' . GW_A_PROFILE . '&t=view&id=' . $arV['id_user'], $arV['user_name'] );
-				}
-				$oTpl->addVal( 'v:dict_editors', sprintf( '<span class="gray">%s:</span> %s', $oL->m( '1112' ), implode( ', ', $ar_authors ) ) );
-			}
+            if ($arDictParam['is_show_authors']) {
+                $oTpl->addVal(
+                    'v:dict_editors',
+                    sprintf(
+                        '<span class="gray">%s:</span> %s',
+                        $oL->m('1112'),
+                        gw_get_dict_authors($arDictParam['id'])
+                    )
+                );
+            }
 		}
 		else
 		{
@@ -77,8 +77,10 @@ if ( $gw_this['vars']['layout'] != '' ) // settings for all dictionary pages
 		$intSumPages = @ceil( $arDictParam['int_terms'] / $arDictParam['page_limit'] );
 		/* ceil() could return 0, we need 1. */
 		$intSumPages = (!$intSumPages ? 1 : $intSumPages);
-		$oTpl->addVal( 'v:browse_pages', $oHtml->a( $sys['page_index'] . '?a=' . GW_A_LIST . '&' . GW_ID_DICT . '=' . $arDictParam['uri'] . '&p=1',
-						$oFunc->number_format( $intSumPages, 0, $oL->languagelist( '4' ) ) . ' (' . $oL->m( '3_browse' ) . ')' )
+		$oTpl->addVal( 'v:browse_pages', $oHtml->a(
+                        $sys['page_index'] . '?a=' . GW_A_LIST . '&' . GW_ID_DICT . '=' . $arDictParam['uri'] . '&p=1',
+						$oFunc->number_format( $intSumPages, 0, $oL->languagelist( '4' ) ) . ' (' . $oL->m( '3_browse' ) . ')'
+            )
 		);
 		// letters 0-Z
 		/* show or hide letters toolbar */
@@ -142,11 +144,15 @@ $oTpl->addVal( 'url:site_name', $oHtml->a( $sys['page_index'], strip_tags( $sys[
 
 /* Append URL for integration */
 $tmp['input_url_append'] = '';
-for ( reset( $sys['ar_url_append'] ); list($k, $v) = each( $sys['ar_url_append'] ); )
-{
-	$tmp['input_url_append'] .= '<input type="hidden" name="' . $k . '" value="' . $v . '" />';
+foreach ($sys['ar_url_append'] as $key => $value) {
+    $tmp['input_url_append'] .= '<input type="hidden" name="'
+        . htmlspecialchars((string)$key, ENT_QUOTES, 'UTF-8')
+        . '" value="'
+        . htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8')
+        . '" />';
 }
-$oTpl->addVal( 'v:input_url_append', $tmp['input_url_append'] );
+
+$oTpl->addVal('v:input_url_append', $tmp['input_url_append']);
 
 /* Load addons */
 $gw_this['vars'][GW_TARGET] = preg_replace('/[^a-z0-9_\-]/', '', strtolower($gw_this['vars'][GW_TARGET]));
@@ -177,11 +183,13 @@ switch ( $gw_this['vars']['layout'] )
             $oTpl->addVal('v:nav_pages', '');
 
             $oTpl->addVal('block:page_content', gw_get_dict_terms($arDictParam['tablename'], $arDictParam['uri']));
-            /* current section */
+            /* Current section */
             $gw_this['ar_breadcrumb'][0] = $oHtml->a(
-                $sys['page_index'] .
-                '?' . GW_ACTION . '=index' .
-                '&' . GW_ID_DICT . '=' . $arDictParam['uri'],
+                $oUrlBuilder->build_index_url(
+                    'index',
+                    null,
+                    [GW_ID_DICT => $arDictParam['uri']]
+                ),
                 strip_tags($arDictParam['title'])
             );
             $gw_this['ar_breadcrumb'][1] = $oL->m('1058');
@@ -234,12 +242,15 @@ switch ( $gw_this['vars']['layout'] )
 		break;
 	case GW_A_LIST:
 		{
-			/* Build the list of terms for preview */
-			$gw_this['ar_breadcrumb'][0] = $oHtml->a( $sys['page_index'] .
-							'?' . GW_ACTION . '=index' .
-							'&' . GW_ID_DICT . '=' . $arDictParam['uri'],
-							strip_tags( $arDictParam['title'] )
-			);
+            /* Build the list of terms for preview */
+            $gw_this['ar_breadcrumb'][0] = $oHtml->a(
+                $oUrlBuilder->build_index_url(
+                    'index',
+                    null,
+                    [GW_ID_DICT => $arDictParam['uri']]
+                ),
+                strip_tags($arDictParam['title'])
+            );
 
 			if ( ($gw_this['vars']['w1'] != '') && ($gw_this['vars']['w2'] == '') )
 			{
@@ -281,17 +292,34 @@ switch ( $gw_this['vars']['layout'] )
 			{
 				$gw_this['arTitle'][] = sprintf( $oL->m( '1282' ), $arDictParam['title'] );
 				/* By page */
-				$listA = getDictWordList( $gw_this['vars']['w1'], $gw_this['vars']['w1'], $gw_this['vars']['w3'], $gw_this['vars'][GW_ID_DICT], $gw_this['vars']['p'], 1, $arDictParam['is_show_full'] );
-				if ( $p > 1 )
-				{
-					$gw_this['arTitle'][] = sprintf( $oL->m( 'str_page_of_page' ), $oFunc->number_format( $gw_this['vars']['p'], 0, $oL->languagelist( '4' ) ), $oFunc->number_format( $listA[3], 0, $oL->languagelist( '4' ) ) );
-					$gw_this['ar_breadcrumb'][] = $oHtml->a( $sys['page_index'] .
-									'?' . GW_ACTION . '=' . GW_A_LIST .
-									'&' . GW_ID_DICT . '=' . $arDictParam['uri'] .
-									'&' . GW_TARGET . '=' . GW_T_DICT .
-									'&p=' . $gw_this['vars']['p'],
-									$gw_this['vars']['p'] );
-				}
+                $listA = getDictWordList(
+                    $gw_this['vars']['w1'],
+                    $gw_this['vars']['w1'],
+                    $gw_this['vars']['w3'],
+                    $gw_this['vars'][GW_ID_DICT],
+                    $gw_this['vars']['p'],
+                    1,
+                    $arDictParam['is_show_full']
+                );
+                if ($p > 1) {
+                    $gw_this['arTitle'][] = sprintf(
+                        $oL->m('str_page_of_page'),
+                        $oFunc->number_format(
+                            $gw_this['vars']['p'],
+                            0,
+                            $oL->languagelist('4')
+                        ),
+                        $oFunc->number_format($listA[3], 0, $oL->languagelist('4'))
+                    );
+                    $gw_this['ar_breadcrumb'][] = $oHtml->a(
+                        $oUrlBuilder->build_index_url(
+                            GW_A_LIST,
+                            GW_T_DICT,
+                            [GW_ID_DICT => $arDictParam['uri'], 'p' => (int)$gw_this['vars']['p'],]
+                        ),
+                        $gw_this['vars']['p']
+                    );
+                }
 			}
 			$sys['total'] = $listA[1];
 			$intSumPages = $listA[3];
@@ -866,20 +894,17 @@ if ( !isset( $ar_theme['str_nav_class'] ) )
 }
 
 $arNavBarBottom = $arNavBarTop = array ( );
-
 /* Get the list of custom pages */
 $arSql = $oDb->sqlRun( $oSqlQ->getQ( 'get-pages-list' ), 'page' );
 
 $arSql2 = array ( );
 /* re-arrange the list of pages */
-for (; list($k, $arV) = each( $arSql ); )
-{
-	$arSql2[sprintf( "%05d", $arV['int_sort'] ) . sprintf( "%03d", $arV['id_page'] )][$arV['id_lang']] = $arV;
+foreach ($arSql as $arV) {
+    $arSql2[sprintf("%05d", $arV['int_sort']) . sprintf("%03d", $arV['id_page'])][$arV['id_lang']] = $arV;
 }
 $arSql = array ( );
 /* Foreach custom page */
-for (; list($k, $arV) = each( $arSql2 ); )
-{
+foreach ($arSql2 as $arV) {
 	$oHtml->unsetTag( 'a' );
 	$cur_id_lang = $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc'];
 	if ( isset( $arV[$cur_id_lang] ) )
@@ -1145,41 +1170,34 @@ if ( sizeof( $gw_this['ar_themes_select'] ) > 1 )
 	$oTpl->addVal( 'v:select_visualtheme', $gw_this['select_themes'] );
 }
 $oTpl->addVal( 'l:visual_theme', $oL->m( 'visual_theme' ) );
-
-$oTpl->addVal( 'v:select_dict', getDictSrch( '', 1, 99, '', 1, $arDictParam['id'] ) );
-$oTpl->addVal( 'v:breadcrumb', implode( $sys['txt_sep_breadcrump'], $gw_this['ar_breadcrumb'] ) );
-$oTpl->addVal( 'v:html_title', strip_tags( implode( $sys['txt_sep_htmltitle'], $gw_this['arTitle'] ) ) );
-$oTpl->addVal( 'v:meta_keywords', strip_tags( searchkeys( array_merge( $k, $kw ) ) ) );
-$oTpl->addVal( 'v:meta_description', trim( strip_tags( $metaDescr ) ) );
+$oTpl->addVal('v:select_dict', getDictSrch('', 1, 99, '', 1, $arDictParam['id']));
+$oTpl->addVal('v:breadcrumb', implode($sys['txt_sep_breadcrump'], $gw_this['ar_breadcrumb']));
+$oTpl->addVal('v:html_title', strip_tags(implode($sys['txt_sep_htmltitle'], $gw_this['arTitle'])));
+$oTpl->addVal('v:meta_keywords', strip_tags(gw_searchkeys(array_merge($k, $kw))));
+$oTpl->addVal('v:meta_description', trim(strip_tags($metaDescr)));
 ## Keywords section
 ## --------------------------------------------------------
 
 /* Add previously defined template variables */
-for ( reset( $arTplVars['srch'] ); list($k, $v) = each( $arTplVars['srch'] ); )
-{
-	$oTpl->AddVal( $k, $v );
+foreach ($arTplVars['srch'] as $key => $value) {
+    $oTpl->AddVal($key, $value);
 }
 
-$oTpl->set_tpl( $gw_this['id_tpl_page'] );
+$oTpl->set_tpl($gw_this['id_tpl_page']);
+
 /* Parse dynamic blocks */
-for ( reset( $oTpl->tmp['d'] ); list($id_dynamic, $arV) = each( $oTpl->tmp['d'] ); )
-{
-	if ( is_array( $arV ) )
-	{
-		for ( reset( $arV ); list($k2, $v2) = each( $arV ); )
-		{
-			for ( reset( $v2 ); list($k, $v) = each( $v2 ); )
-			{
-				$oTpl->assign( array ( $k => $v ) );
-			}
-			$oTpl->parseDynamic( $id_dynamic );
-		}
-	}
-	else
-	{
-		$oTpl->parseDynamic( $id_dynamic );
-	}
-	unset( $oTpl->tmp['d'][$id_dynamic] );
+foreach ($oTpl->tmp['d'] as $id_dynamic => $dynamic_data) {
+    if (is_array($dynamic_data)) {
+        foreach ($dynamic_data as $row_data) {
+            if (is_array($row_data)) {
+                $oTpl->assign($row_data);
+            }
+
+            $oTpl->parseDynamic($id_dynamic);
+        }
+    } else {
+        $oTpl->parseDynamic($id_dynamic);
+    }
+
+    unset($oTpl->tmp['d'][$id_dynamic]);
 }
-/* end of file */
-?>

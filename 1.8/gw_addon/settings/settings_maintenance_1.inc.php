@@ -69,7 +69,7 @@ else
 		$str_mail_body .= '</xml>';
 		$str_mail_body = gw_htmlspecialchars_ltgt($str_mail_body);
 
-		$this->oL->getCustom('mail', $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc'], 'join');
+		$this->oL->applyCustomPhrases('mail', $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc']);
 
 		/* Start new messenger */
 		$oMail = new tkit_mail('mail_feedback');

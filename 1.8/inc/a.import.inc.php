@@ -368,7 +368,7 @@ function gw_import_xml()
 					$qT['is_complete'] = intval($oDom->get_attribute('is_complete', $v2['tag'], $v2));
 #prn_r( $qT );
 					$str_term_filtered = $oCase->nc($str_term_filtered);
-					$str_term_filtered = gw_text_wildcars($str_term_filtered);
+					$str_term_filtered = gw_text_wildcards($str_term_filtered);
 					$ar_keywords[1] = text2keywords($oCase->rm_($str_term_filtered), $arDictParam['min_srch_length'], 25);
 
 					if ($gw_this['vars']['arPost']['is_check_exist'])

@@ -307,9 +307,8 @@ class gw_addon_feedback extends gw_addon
 			/* */
 			if ( !$is_post_error )
 			{
-#				$this->oL->getCustom('mail', $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc'], 'join');
 				/* Feedback messages should be in the same language as the system */
-				$this->oL->getCustom( 'mail', $this->sys['locale_name'], 'join' );
+				$this->oL->applyCustomPhrases( 'mail', $this->sys['locale_name']);
 
 				$mail_body = '';
 				$vars['message'] = (gw_htmlspecialchars_ltgt($vars['message'] ));

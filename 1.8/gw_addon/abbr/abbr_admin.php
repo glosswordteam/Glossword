@@ -13,7 +13,7 @@ class gw_addon_abbr_admin extends gw_addon
 	{
 		$this->init();
 		$this->oL->setHomeDir($this->sys['path_locale']);
-		$this->oL->getCustom('addon_'.$this->addon_name, $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc'], 'join');
+		$this->oL->applyCustomPhrases('addon_'.$this->addon_name, $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc']);
 		$this->ar_groups = array(
 			'1' => $this->oL->m('speech'),
 			'2' => $this->oL->m('science'),
@@ -512,5 +512,3 @@ $oAbbrAdm = new gw_addon_abbr_admin;
 $oAbbrAdm->alpha();
 /* Do not load old components */
 $pathAction = '';
-/* end of file */
-?>

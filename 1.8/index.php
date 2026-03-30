@@ -433,14 +433,14 @@ $oL->setHomeDir($sys['path_locale']);
 $oL->setLocale($gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc']);
 $gw_this['vars']['ar_languages'] = $oL->getLanguages();
 /* Language files */
-$oL->getCustom('actions', $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'], 'join');
-$oL->getCustom('err',     $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'], 'join');
-$oL->getCustom('options', $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'], 'join');
-$oL->getCustom('status',  $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'], 'join');
-$oL->getCustom('tdb',     $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'], 'join');
-$oL->getCustom('tht',     $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'], 'join');
-$oL->getCustom('tol',     $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'], 'join');
-$oL->getCustom('custom',  $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'], 'join');
+$oL->applyCustomPhrases('actions', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
+$oL->applyCustomPhrases('err', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
+$oL->applyCustomPhrases('options', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
+$oL->applyCustomPhrases('status', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
+$oL->applyCustomPhrases('tdb', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
+$oL->applyCustomPhrases('tht', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
+$oL->applyCustomPhrases('tol', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
+$oL->applyCustomPhrases('custom', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
 /* Uppercase / lowercase */
 $oCase = new gwv_casemap(array(1,2,3,4,5,6,7,8), array(1));
 $oCase->set_replace_sp(array('--'=>' ', '-' => ' ','[['=>'[',']]'=>']'));

@@ -92,10 +92,13 @@ class gwUrlBuilder
      */
     public function build_index_url($action, $target, array $params = [])
     {
-        $baseParams = [
+        $base_params = [
             GW_ACTION => $action,
-            GW_TARGET => $target,
         ];
+
+        if ($target !== null) {
+            $base_params[GW_TARGET] = $target;
+        }
 
         return $this->_build_url(
             $this->get_page_index(),

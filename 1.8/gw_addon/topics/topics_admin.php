@@ -25,14 +25,10 @@ class gw_addon_topic_admin extends gw_addon
 	{
 		$this->init();
 		/* */
-#		$this->oL->setHomeDir($this->sys['path_locale']);
-#		$this->oL->getCustom('addon_'.$this->component, $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc'], 'join');
 	}
 	/* */
 	function _get_nav()
 	{
-#		$this->oL->setHomeDir($this->sys['path_locale']);
-#		$this->oL->getCustom('addon_'.$this->component, $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc'], 'join');
 		return '<div class="actions-secondary">'.
 			implode(' ', $this->gw_this['ar_actions_list'][$this->component]).
 			'</div>';

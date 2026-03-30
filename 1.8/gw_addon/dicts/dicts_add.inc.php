@@ -30,7 +30,7 @@ if ( $this->gw_this['vars']['post'] == '' )
 {
 	$tid = 0; // global value for topic list
 	$vars['title'] = $vars['description'] = $vars['announce'] = "";
-	$vars['tablename'] = strtolower( $this->sys['tbl_prefix'] . 'dict_' . kMakeUid( 'x', 8 ) );
+	$vars['tablename'] = strtolower( $this->sys['tbl_prefix'] . 'dict_' . gw_make_uid('x', 8 ) );
 	$vars['id_topic'] = $this->gw_this['vars']['tid'];
 	$vars['lang'] = 0;
 	$vars['visualtheme'] = 0;

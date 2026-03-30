@@ -354,7 +354,7 @@ function getDictSrch($language = '', $x = 1, $y = 99, $qStrOrder = '', $is_form_
 		asort($arDictMap);
 		if ($is_form_only && GW_IS_BROWSE_WEB)
 		{
-			$arDictMap = array_merge_clobber(array(0 => $oL->m('srch_all')), $arDictMap);
+			$arDictMap = gw_array_merge_clobber(array(0 => $oL->m('srch_all')), $arDictMap);
 		}
 	}
 	else
@@ -445,6 +445,9 @@ function getDictList($language = '', $dict_nmax = 5, $x = 1, $y = 99, $qStrOrder
 function getCatalogTitle($ar, $arDictMap, $p = 0, $depth = 1, $dict_nmax, $runtime = 0)
 {
 	global $curDateMk, $curDate, $oL, $sys, $oFunc, $oHtml, $gw_this, $ar_theme;
+
+
+    return '';
 
 	$str = '';
 	$runtime++;
@@ -629,96 +632,127 @@ function gw_create_tree_topics($id = 0)
 	$arSqlc = gw_rearrange_to_locale($arSqlc, 'id_topic');
 	return gw_rearrange_to_tree($arSqlc, $id, 'id_topic');
 }
+
 /* */
 function gw_create_tree_custom_pages($id = 0)
 {
-	global $oSqlQ, $oDb;
-	/* Disable caching for admin mode */
-	if (GW_IS_BROWSE_ADMIN)
-	{
-		$arSqlc = $oDb->sqlExec($oSqlQ->getQ('get-custompages-list'));
-	}
-	elseif (GW_IS_BROWSE_WEB)
-	{
-		$arSqlc = $oDb->sqlRun($oSqlQ->getQ('get-custompages-list', 'AND cp.is_active = "1"'), 'st');
-	}
-	/* Create the list of topics */
-	$arSqlc = gw_rearrange_to_locale($arSqlc, 'id_page');
-	return gw_rearrange_to_tree($arSqlc, $id, 'id_page');
+    global $oSqlQ, $oDb;
+    /* Disable caching for admin mode */
+    if (GW_IS_BROWSE_ADMIN) {
+        $arSqlc = $oDb->sqlExec($oSqlQ->getQ('get-custompages-list'));
+    } elseif (GW_IS_BROWSE_WEB) {
+        $arSqlc = $oDb->sqlRun($oSqlQ->getQ('get-custompages-list', 'AND cp.is_active = "1"'), 'st');
+    }
+    /* Create the list of topics */
+    $arSqlc = gw_rearrange_to_locale($arSqlc, 'id_page');
+    return gw_rearrange_to_tree($arSqlc, $id, 'id_page');
 }
 
 
-/* */
-function gw_rearrange_to_tree($arSql, $id = 0, $id_name = 'id_page')
+/**
+ * Rearrange flat rows into a tree structure.
+ *
+ * The second argument is kept for backward compatibility and is not used.
+ *
+ * @param array $ar_sql
+ * @param int $unused_id
+ * @param string $id_name
+ *
+ * @return array
+ */
+function gw_rearrange_to_tree($ar_sql, $unused_id = 0, $id_name = 'id_page')
 {
-	$arStr = array(array());
-	$arStr2 = array();
-	for (reset($arSql); list($arK, $arV) = each($arSql);)
-	{
-		list($int_sort, $id) = sscanf($arV[$id_name], "%05d%03d");
-		$arV['id'] = $arV[$id_name] = $id;
-		$i = $arV['id'];
-		$p = $arV['p'];
-		$arStr2[$i] = $arV;
-		$arStr[$p]['ch'][$i] = $i;
-		$arStr[$p]['max'] = $i;
-		if (!isset($arStr[$p]['max'])) $arStr[$p]['max'] = $i;
-		if (!isset($arStr[$p]['min'])) $arStr[$p]['min'] = $i;
-	}
-	/* Merge */
-	while (is_array($arStr2) && list($key, $val) = each($arStr2) )
-	{
-		if (isset($arStr[$key]))
-		{
-			while (is_array($val) && list($k2, $v2) = each($val) )
-			{
-				$arStr[$key][$k2] = $v2;
-			}
-		}
-		else
-		{
-			$arStr[$key] = $arStr2[$key];
-		}
-	}
-	return $arStr;
-}
-/* */
-function gw_rearrange_to_locale($arSql, $id_name = 'id_page')
-{
-	global $oSess, $gw_this, $sys;
-	$arSql2 = array();
-	$arSql3 = array();
-	/* re-arrange */
-	for (; list($k, $arV) = each($arSql);)
-	{
-		$arV[$id_name] = sprintf("%05d", $arV['int_sort']).sprintf("%03d", $arV[$id_name]);
-		$arSql2[$arV[$id_name]][$arV['id_lang']] = $arV;
-	}
-	$arSql = array();
-	$cnt = 0;
-	$int_size = sizeof($arSql2);
-	for (; list($k, $arV) = each($arSql2);)
-	{
-		$cur_id_lang = $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'];
-		if (isset($arV[$cur_id_lang]))
-		{
-			$arV = $arV[$cur_id_lang];
-		}
-		elseif (isset($arV[$gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc']]))
-		{
-			$arV = $arV[$gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc']];
-		}
-		else
-		{
-			$ar_keys = array_keys($arV);
-			$arV = $arV[$ar_keys[0]];
-		}
-		$arSql3[$arV[$id_name]] = $arV;
-	}
-	$arSql2 = array();
-	return $arSql3;
+    $ar_tree       = [[]];
+    $ar_rows_by_id = [];
+
+    foreach ($ar_sql as $ar_v) {
+        $parsed    = sscanf((string)$ar_v[$id_name], '%05d%03d');
+        $node_id   = isset($parsed[1]) ? (int)$parsed[1] : (int)$ar_v[$id_name];
+        $parent_id = isset($ar_v['p']) ? (int)$ar_v['p'] : 0;
+
+        $ar_v['id']     = $node_id;
+        $ar_v[$id_name] = $node_id;
+
+        $ar_rows_by_id[$node_id] = $ar_v;
+
+        if (!isset($ar_tree[$parent_id]) || !is_array($ar_tree[$parent_id])) {
+            $ar_tree[$parent_id] = [];
+        }
+
+        if (!isset($ar_tree[$parent_id]['ch']) || !is_array($ar_tree[$parent_id]['ch'])) {
+            $ar_tree[$parent_id]['ch'] = [];
+        }
+
+        $ar_tree[$parent_id]['ch'][$node_id] = $node_id;
+
+        if (!isset($ar_tree[$parent_id]['min']) || $node_id < $ar_tree[$parent_id]['min']) {
+            $ar_tree[$parent_id]['min'] = $node_id;
+        }
+
+        if (!isset($ar_tree[$parent_id]['max']) || $node_id > $ar_tree[$parent_id]['max']) {
+            $ar_tree[$parent_id]['max'] = $node_id;
+        }
+    }
+
+    /* Merge row data into tree nodes */
+    foreach ($ar_rows_by_id as $node_id => $ar_v) {
+        if (isset($ar_tree[$node_id]) && is_array($ar_tree[$node_id])) {
+            foreach ($ar_v as $key => $value) {
+                $ar_tree[$node_id][$key] = $value;
+            }
+        } else {
+            $ar_tree[$node_id] = $ar_v;
+        }
+    }
+
+    return $ar_tree;
 }
 
+
+
+/**
+ * Rearrange localized rows and select one row per entity for the current locale.
+ *
+ * Rows are grouped by a composite key based on sort order and entity ID.
+ * For each group the current locale row is selected when available,
+ * otherwise the first available locale row is used.
+ *
+ * @param array $ar_sql
+ * @param string $id_name
+ *
+ * @return array
+ */
+function gw_rearrange_to_locale($ar_sql, $id_name = 'id_page')
+{
+    global $gw_this;
+
+    $ar_grouped = [];
+    $ar_result = [];
+
+    foreach ($ar_sql as $ar_v) {
+        $entity_id = isset($ar_v[$id_name]) ? (int) $ar_v[$id_name] : 0;
+        $composite_id = sprintf('%05d', $ar_v['int_sort']) . sprintf('%05d', $entity_id);
+        $ar_v[$id_name] = $composite_id;
+
+        $ar_grouped[$composite_id][$ar_v['id_lang']] = $ar_v;
+    }
+
+    $current_lang = $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc'];
+
+    foreach ($ar_grouped as $ar_locales) {
+        if (isset($ar_locales[$current_lang])) {
+            $ar_selected = $ar_locales[$current_lang];
+        } else {
+            $ar_keys = array_keys($ar_locales);
+            $first_key = reset($ar_keys);
+            $ar_selected = $ar_locales[$first_key];
+        }
+
+        $ar_result[$ar_selected[$id_name]] = $ar_selected;
+    }
+
+    return $ar_result;
+}
 
 
 /**
@@ -741,6 +775,8 @@ function ctlgGetTopicsRow($ar = array(), $startId = 0, $cntRow = 1)
 	global $arImgTread, $arTxtTread, $cntRow, $tid, $arParents, $a, $t, $sys, $ar_theme, $gw_this;
 	global $oSess, $oHtml, $oL, $oFunc, $topic_mode;
 
+    return '';
+
 	/* Using $sys variable instead of global variable */
 	if (isset($sys['topic_mode']))
 	{
@@ -750,7 +786,6 @@ function ctlgGetTopicsRow($ar = array(), $startId = 0, $cntRow = 1)
 	{
 		$tid = $gw_this['vars']['id_topic'];
 	}
-
 
 	if (empty($arTxtTread))
 	{
@@ -1171,7 +1206,7 @@ function gw_get_thread_pages($ar = array(), $startId = 0, $cntRow = 1)
 			{
 				$k = key($ar[$startId]['ch']);
 				$cntRow++;
-				$strT .= gw_get_thread_pages($ar, $k);
+				#$strT .= gw_get_thread_pages($ar, $k);
 				next($ar[$startId]['ch']);
 			}
 		}

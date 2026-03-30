@@ -483,7 +483,7 @@ if ($this->gw_this['vars']['post'] == '')
 		$arParsed['is_active'] = $arTermParam['is_active'];
 
 		/* Convert XML data into structured array */
-		$arParsed = array_merge_clobber($arParsed, gw_Xml2Array($arTermParam['defn']));
+		$arParsed = gw_array_merge_clobber($arParsed, gw_Xml2Array($arTermParam['defn']));
 		/* */
 		$oDom = new gw_domxml;
 		$oDom->setCustomArray($arParsed);

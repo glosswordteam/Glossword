@@ -175,7 +175,7 @@ function getFormXml($vars, $runtime = 0, $arBroken = array(), $arReq = array())
 global $oL, $gw_this, $oSess, $oDb, $oSqlQ, $oHtml, $sys;
 $arReq = array('fmt');
 /* Language */
-$oL->getCustom('export_xml', $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'], 'join');
+$oL->applyCustomPhrases('export_xml', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
 /* -------------------------------------------------------- */
 /* split per lines */
 $is_split   = isset($arPost['is_split']) ? $arPost['is_split'] : 100;

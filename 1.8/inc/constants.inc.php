@@ -86,6 +86,7 @@ const GW_A_PROFILE     = 'profile';
 const GW_A_REGISTER    = 'register';
 const GW_A_UPDATE      = 'update';
 const GW_A_CONTENTS    = 'contents';
+const GW_A_VIEW        = 'view';
 
 // --------------------------------------------------------
 // Target URL parameters

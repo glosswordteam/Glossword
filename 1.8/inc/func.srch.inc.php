@@ -18,28 +18,41 @@ if ( !defined( 'IN_GW' ) )
 
 
 /**
- * Load the list of stopwords based on dictionary settings
+ * Load stop words list according to dictionary settings.
  *
- * @param    array  $arDictParam Dictionary parameters
- * @return   array  Array with stopwords (if any)
+ * @param array $dict_params Dictionary parameters.
+ *
+ * @return array
  */
-function gw_get_stopwords ( $arDictParam )
+function gw_get_stopwords($dict_params)
 {
-	global $oL;
-	$a_stopwords = array ( );
-	if ( !isset( $arDictParam['is_filter_stopwords'] ) )
-	{
-		return $a_stopwords;
-	}
-	if ( $arDictParam['is_filter_stopwords'] && is_array( $arDictParam['ar_filter_stopwords'] ) )
-	{
-		for ( reset( $arDictParam['ar_filter_stopwords'] ); list($locale_id, $vS) = each( $arDictParam['ar_filter_stopwords'] ); )
-		{
-			$a_stopwords = array_merge( $a_stopwords, array_flip( $oL->getCustom( 'stop_words', $locale_id, 'return' ) ) );
-		}
-		$a_stopwords = array_keys( $a_stopwords );
-	}
-	return $a_stopwords;
+    global $oL;
+
+    $stopwords = [];
+
+    if (empty($dict_params['is_filter_stopwords'])) {
+        return $stopwords;
+    }
+
+    if (empty($dict_params['ar_filter_stopwords']) || !is_array($dict_params['ar_filter_stopwords'])) {
+        return $stopwords;
+    }
+
+    foreach ($dict_params['ar_filter_stopwords'] as $locale_id => $is_enabled) {
+        if (!$is_enabled) {
+            continue;
+        }
+
+        $locale_stopwords = $oL->fetchCustomPhrases('stop_words', $locale_id);
+
+        if (!is_array($locale_stopwords) || empty($locale_stopwords)) {
+            continue;
+        }
+
+        $stopwords += array_flip($locale_stopwords);
+    }
+
+    return array_keys($stopwords);
 }
 
 
@@ -253,8 +266,6 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 		if ( $a_search_params['adv'] == 'all'
 				|| $a_search_params['adv'] == 'phrase' )
 		{
-			/* Allows wildcard search */
-			$a_keywords = gw_text_wildcars( $a_keywords, 'sql' );
 
 			/* List all terms from one dictionary, for admin only */
 			if ( str_replace( '*', '', $q ) == '' )
@@ -293,39 +304,37 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 			}
 			else /* usual search */
 			{
-				for ( reset( $arDict_Ids ); list($kk, $id_dict) = each( $arDict_Ids ); )
-				{
+                foreach ($ar_dict_ids as $id_dict) {
 					/* Go for each word */
-					for ( reset( $a_keywords ); list($k, $v) = each( $a_keywords ); )
-					{
-						/* 11 April 2008: Enable like fulltext seach for Chinese, Japanese and Korean characters */
-						if ( preg_match( '/[\x{3040}-\x{312F}|\x{3400}-\x{9FFF}|\x{AC00}-\x{D7AF}]/u', $v, $ar_matches ) )
-						{
-							$v = '%' . $v . '%';
-						}
+                    foreach ($a_keywords as $keyword) {
+
+                        $keyword = (string) $keyword;
+                        $sql_like = gw_text_sql_like($keyword);
+
+                        /* 11 April 2008: Enable LIKE fulltext search for Chinese, Japanese and Korean characters */
+                        if (preg_match('/[\x{3040}-\x{312F}|\x{3400}-\x{9FFF}|\x{AC00}-\x{D7AF}]/u', $keyword)) {
+                            $sql_like = '%' . $sql_like . '%';
+                        }
+
 						/* 18 July 2007: Enable auto-asterisks for Chinese characters */
 						/* 06 May 2008: Enable auto-asterisks for Japanese and Korean characters */
-						if ( mb_strlen( $v, $sys['internal_encoding'] ) == 1 && function_exists( 'mb_encode_numericentity' ) )
-						{
-							$v_numeric = $v;
-							/* Hiragana, Katakana, Bopomofo */
-							$v_numeric = mb_encode_numericentity( $v_numeric, array ( 0x3040, 0x312F, 0, 0xFFFF ), 'UTF-8' );
-							/* CJK */
-							$v_numeric = mb_encode_numericentity( $v_numeric, array ( 0x3400, 0x9FFF, 0, 0xFFFF ), 'UTF-8' );
-							/* Hangul */
-							$v_numeric = mb_encode_numericentity( $v_numeric, array ( 0xAC00, 0xD7AF, 0, 0xFFFF ), 'UTF-8' );
-							$v_numeric = intval( str_replace( '&#', '', str_replace( ';', '', $v_numeric ) ) );
-							if ( ($v_numeric >= 0x3040 && $v_numeric <= 0x312F)
-									|| ($v_numeric >= 0x3400 && $v_numeric <= 0x9FFF)
-									|| ($v_numeric >= 0xAC00 && $v_numeric <= 0xD7AF)
-							)
-							{
-								$v = '%' . $v . '%';
-							}
-						}
+                        if (mb_strlen($keyword, 'UTF-8') == 1 && function_exists('mb_encode_numericentity')) {
+                            $keyword_numeric = $keyword;
+                            $keyword_numeric = mb_encode_numericentity($keyword_numeric, [0x3040, 0x312F, 0, 0xFFFF], 'UTF-8');
+                            $keyword_numeric = mb_encode_numericentity($keyword_numeric, [0x3400, 0x9FFF, 0, 0xFFFF], 'UTF-8');
+                            $keyword_numeric = mb_encode_numericentity($keyword_numeric, [0xAC00, 0xD7AF, 0, 0xFFFF], 'UTF-8');
+                            $keyword_numeric = (int) str_replace(['&#', ';'], '', $keyword_numeric);
+
+                            if (($keyword_numeric >= 0x3040 && $keyword_numeric <= 0x312F)
+                                || ($keyword_numeric >= 0x3400 && $keyword_numeric <= 0x9FFF)
+                                || ($keyword_numeric >= 0xAC00 && $keyword_numeric <= 0xD7AF)
+                            ) {
+                                $sql_like = '%' . $sql_like . '%';
+                            }
+                        }
 						/* */
-						$sql_word_srch = "k.word_text LIKE '" . $v . "'";
-						$sql_table_match = ', `' . $tmp['arDictParam'][$id_dict]['tablename'] . '` as t';
+                        $sql_word_srch = "k.word_text LIKE '" . $sql_like . "' ESCAPE '\\\\'";
+                        $sql_table_match = ', `' . $tmp['arDictParam'][$id_dict]['tablename'] . '` as t';
 						/* 1.8.7: Exclude removed terms */
 						$sql_term_match .= ' AND t.is_active != "3" ';
 
@@ -347,58 +356,52 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 						$i_cnt = 0;
 
 						/* SEF mode */
-						switch ( $sys['pages_link_mode'] )
-						{
-							case GW_PAGE_LINK_NAME:
-								$term_field = 'term';
-								break;
-							case GW_PAGE_LINK_URI:
-								$term_field = 'term_uri';
-								break;
-							default:
-								$term_field = 'term_id';
-								break;
-						}
+                        switch ($sys['pages_link_mode']) {
+                            case GW_PAGE_LINK_NAME:
+                                $term_field = 'term';
+                                break;
+                            case GW_PAGE_LINK_URI:
+                                $term_field = 'term_uri';
+                                break;
+                            default:
+                                $term_field = 'term_id';
+                                break;
+                        }
 #						prn_r( $arSql );
 						/* $arSql has always at least one item in array */
-						while ( $i_cnt < $i_max_search_results && list( $sqlK, $sqlV ) = each( $arSql ) )
-						{
-							/* Term */
-							if ( isset( $sqlV['term'] ) )
-							{
-#								$id_term_redirect = ($sqlV[$term_field] == '') ? $sqlV['term'] : $sqlV[$term_field];
-							}
-							else
-							{
-								/* Search in all dictionaries */
-								$id_term_redirect = $sqlV['term_id'];
-								$term_field = 'term_id';
-							}
-							if ( $a_search_params['adv'] == 'phrase' )
-							{
-								/* We can select keywords from database or create new */
-								$a_keywordsTerm = text2keywords( text_normalize( $sqlV['term'] ), 1, 25, $sys['internal_encoding'] );
-#								$sql = $oSqlQ->getQ('srch-keyword-by-term',  implode(',', $arDict_Ids), $sql_term_match, $sqlV['term_id'] );
-								sort( $a_keywordsTerm );
-								if ( implode( '', $a_keywordsTerm ) == implode( '', $a_keywords ) )
-								{
-									$tmp['a_results_temp'][$sqlV['dict_id']][$sqlV['term_id']][] = $sqlV[$term_field];
-									$i_cnt++;
-									$id_term_redirect = ($sqlV[$term_field] == '') ? $sqlV['term'] : $sqlV[$term_field];
-								}
-								else
-								{
-									continue;
-								}
-							}
-							else
-							{
-								$tmp['a_results_temp'][$sqlV['dict_id']][$sqlV['term_id']][] = $sqlV[$term_field];
-								$i_cnt++;
-							}
-						}
-						$arSql = array ( );
-					}
+                        foreach ($ar_sql as $sql_key => $sql_value) {
+                            if ($i_cnt >= $i_max_search_results) {
+                                break;
+                            }
+
+                            /* Term */
+                            if (isset($sql_value['term'])) {
+                                #       $id_term_redirect = ($sql_value[$term_field] == '') ? $sql_value['term'] : $sql_value[$term_field];
+                            } else {
+                                /* Search in all dictionaries */
+                                $id_term_redirect = $sql_value['term_id'];
+                                $term_field = 'term_id';
+                            }
+
+                            if ($a_search_params['adv'] == 'phrase') {
+                                /* We can select keywords from database or create new */
+                                $a_keywords_term = text2keywords(text_normalize($sql_value['term']), 1, 25);
+                                sort($a_keywords_term);
+
+                                if (implode('', $a_keywords_term) == implode('', $a_keywords)) {
+                                    $tmp['a_results_temp'][(int) $sql_value['dict_id']][(int) $sql_value['term_id']][] = $sql_value[$term_field];
+                                    $i_cnt++;
+                                    $id_term_redirect = ($sql_value[$term_field] == '') ? $sql_value['term'] : $sql_value[$term_field];
+                                } else {
+                                    continue;
+                                }
+                            } else {
+                                $tmp['a_results_temp'][(int) $sql_value['dict_id']][(int) $sql_value['term_id']][] = $sql_value[$term_field];
+                                $i_cnt++;
+                            }
+                        } // forarch
+                        $arSql = [];
+                    }
 				}
 #prn_r( $tmp );
 #exit;

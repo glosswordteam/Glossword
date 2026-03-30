@@ -34,7 +34,7 @@ class gw_addon_custom_az_admin extends gw_addon
         $this->init();
 
 
-        // Prepare the list context profiles
+        // Prepare the list of context profiles
         $sql = $this->oSqlQ->getQ('get-custom_az-profiles-adm');
         if (!$sql) {
             $this->oDb->haltmsg('Query storage error');

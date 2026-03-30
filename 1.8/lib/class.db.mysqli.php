@@ -80,7 +80,7 @@ if (!class_exists('gwtkDataBase')) {
                 global $oCh;
                 $oCh = new gwtkCache;
                 $oCh->setPath($dir);
-                $this->is_cache = 1;
+                $this->is_cache      = 1;
                 $oCh->cache_lifetime = $this->cache_lifetime;
             }
         }
@@ -108,20 +108,26 @@ if (!class_exists('gwtkDataBase')) {
             }
             /* */
             if (!$this->conn_id) {
-                $b_debug_time = (defined("GW_DEBUG_SQL_TIME") && class_exists('gw_timer') && GW_DEBUG_SQL_TIME == 1);
+                $b_debug_time   = (defined("GW_DEBUG_SQL_TIME") && class_exists('gw_timer') && GW_DEBUG_SQL_TIME == 1);
                 $this->database = trim(str_replace('`', '', $this->database));
                 if ($b_debug_time) {
                     $t = new gw_timer('q');
                 }
                 if (!$this->conn_id = mysqli_connect($this->host, $this->user, $this->password)) {
-                    $halt_result = $this->halt('Could not connect to the database ' . $this->user . '@' . $this->host, $this->on_error_default);
+                    $halt_result = $this->halt(
+                        'Could not connect to the database ' . $this->user . '@' . $this->host,
+                        $this->on_error_default
+                    );
                     if (!$halt_result) {
                         return false;
                     }
                 }
                 if (!mysqli_select_db($this->conn_id, $this->database)) {
                     mysqli_close($this->conn_id);
-                    $halt_result = $this->halt('Could not select database (' . $this->database . ').', $this->on_error_default);
+                    $halt_result = $this->halt(
+                        'Could not select database (' . $this->database . ').',
+                        $this->on_error_default
+                    );
                     if (!$halt_result) {
                         return false;
                     }
@@ -142,7 +148,7 @@ if (!class_exists('gwtkDataBase')) {
         {
             if ($query != '') {
                 $b_debug_time = (defined("GW_DEBUG_SQL_TIME") && class_exists('gw_timer') && GW_DEBUG_SQL_TIME == 1);
-                $time_end = 0;
+                $time_end     = 0;
                 if (!$this->connect()) {
                     return false;
                 }
@@ -157,12 +163,18 @@ if (!class_exists('gwtkDataBase')) {
                     die;
                 }
                 if ($b_debug_time) {
-                    $time_end = $t->end();
+                    $time_end         = $t->end();
                     $this->query_time += $time_end;
                 }
-                if (count($this->query_array) < $this->max_queries_debug && defined("GW_DEBUG_SQL_QUERY") && class_exists('gw_timer') && GW_DEBUG_SQL_QUERY == 1) {
+                if (count($this->query_array) < $this->max_queries_debug && defined(
+                        "GW_DEBUG_SQL_QUERY"
+                    ) && class_exists('gw_timer') && GW_DEBUG_SQL_QUERY == 1) {
                     // faster than htmlspecialchars()
-                    $this->query_array[] = sprintf('<strong>%1.5f</strong> %s', $time_end, gw_htmlspecialchars_ltgt($query));
+                    $this->query_array[] = sprintf(
+                        '<strong>%1.5f</strong> %s',
+                        $time_end,
+                        gw_htmlspecialchars_ltgt($query)
+                    );
                 }
                 $this->cnt_queries_debug++;
 
@@ -198,7 +210,7 @@ if (!class_exists('gwtkDataBase')) {
             }
 
             $this->record = mysqli_fetch_assoc($this->result_id);
-            $this->row += 1;
+            $this->row    += 1;
 
             if (is_array($this->record)) {
                 $this->record = gw_db_legacy_decode($this->record);
@@ -267,7 +279,9 @@ if (!class_exists('gwtkDataBase')) {
                     gw_htmlspecialchars_ltgt($msg),
                     0,
                     1024
-                ) . '</dd>' . '</dl>' . ($this->errno ? '<dl><dt style="padding:0 1em;color:#C08"><strong>MySQL Error</strong></dt> <dd>' . $this->errno . ' (' . gw_htmlspecialchars_ltgt($this->error ) . ')</dd></dl>' : '') . '</div>';
+                ) . '</dd>' . '</dl>' . ($this->errno ? '<dl><dt style="padding:0 1em;color:#C08"><strong>MySQL Error</strong></dt> <dd>' . $this->errno . ' (' . gw_htmlspecialchars_ltgt(
+                        $this->error
+                    ) . ')</dd></dl>' : '') . '</div>';
         }
         ##
         ## ------------------------------------------
@@ -343,7 +357,7 @@ if (!class_exists('gwtkDataBase')) {
             $this->database = trim(str_replace('`', '', $this->database));
             if ($this->conn_id) {
                 $db_list = mysqli_query($this->conn_id, 'SHOW DATABASES');
-                $ar = [];
+                $ar      = [];
                 while ($row = mysqli_fetch_array($db_list)) {
                     $ar[$row['Database']] = $row['Database'];
                 }
@@ -365,8 +379,8 @@ if (!class_exists('gwtkDataBase')) {
         public function table_names($table_name = '')
         {
             $this->database = trim(str_replace('`', '', $this->database));
-            $sql = 'SHOW TABLES FROM `' . $this->database . '`';
-            $ar = [];
+            $sql            = 'SHOW TABLES FROM `' . $this->database . '`';
+            $ar             = [];
             if ($table_name != '') {
                 $sql = 'SHOW TABLES FROM `' . $this->database . '` LIKE "' . $table_name . '"';
             }
@@ -405,7 +419,7 @@ if (!class_exists('gwtkDataBase')) {
          * Not safe for concurrent writes.
          *
          * @param string $table_name Table name
-         * @param string $field      Field name (default: 'id')
+         * @param string $field Field name (default: 'id')
          * @return int Next ID value (MAX(field) + 1), or 1 if table is empty
          */
         public function NextId($table_name, $field = 'id')
@@ -447,14 +461,14 @@ if (!class_exists('gwtkDataBase')) {
             $this->result_id = $this->query($q);
 
             if (!$this->result_id) {
-                return $is_select ? array() : false;
+                return $is_select ? [] : false;
             }
 
             if (!$is_select) {
                 return true;
             }
 
-            $rows = array();
+            $rows = [];
 
             while ($this->next_record()) {
                 $rows[] = $this->record;
@@ -525,12 +539,12 @@ if (!class_exists('gwtkDataBase')) {
 
         private function _isSelectQuery($q)
         {
-            return (bool) preg_match('/^\s*SELECT\b/i', $q);
+            return (bool)preg_match('/^\s*SELECT\b/i', $q);
         }
 
         private function _isExecQuery($q)
         {
-            return (bool) preg_match('/^\s*(DELETE|UPDATE|DROP|CREATE|ALTER|INSERT|REPLACE)\b/i', $q);
+            return (bool)preg_match('/^\s*(DELETE|UPDATE|DROP|CREATE|ALTER|INSERT|REPLACE)\b/i', $q);
         }
 
     } // end of class

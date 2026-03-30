@@ -345,7 +345,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 			/* enable HTML-editor events */
 			if ($this->arDictParam['is_htmled'] == 1)
 			{
-				$this->oL->getCustom('html_editor', $gw_this['vars']['locale_name'], 'join');
+				$this->oL->applyCustomPhrases('html_editor', $gw_this['vars']['locale_name']);
 				$tmp['strHtmlTB'] = $this->html_editor_make_toolbar($elK, $tmp['strBtnRemove'], $tmp['strBtnAdd']);
 				include($this->Gsys['path_include'].'/edcode.js.php');
 #				$this->setTag('textarea', 'onfocus', 'toolbar_on(\''.$elK.'\')');

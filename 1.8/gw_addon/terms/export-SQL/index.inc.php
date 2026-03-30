@@ -1,8 +1,8 @@
 <?php
 /**
  *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ *  Â© 2008 Glossword.biz team
+ *  Â© 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -200,7 +200,7 @@ $arReq = array('fmt');
 // --------------------------------------------------------
 global $oL, $gw_this, $oSess, $oDb, $oSqlQ, $oHtml, $sys;
 // Language
-$oL->getCustom('export_sql', $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'], 'join');
+$oL->applyCustomPhrases('export_sql', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
 // --------------------------------------------------------
 // split per lines
 $is_split       = isset($arPost['is_split']) ? $arPost['is_split'] : 100;

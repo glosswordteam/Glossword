@@ -1,7 +1,9 @@
 <?php
+
 /**
- * Glossword - glossary compiler (http://glossword.info/)
- * © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -9,125 +11,147 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
-if (!defined('IN_GW'))
-{
-	die('<!-- $Id: custom-pages_add.inc.php 372 2008-03-27 05:18:49Z yrtimd $ -->');
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
 }
 /* Included from $oAddonAdm->alpha(); */
 
-
-/* */
 $this->str .= $this->_get_nav();
 
+$ar_pre = isset($this->gw_this['vars']['arPre']) ? $this->gw_this['vars']['arPre'] : null;
 
-$arPre =& $this->gw_this['vars']['arPre'];
-$arParsed['ar'] =& $this->ar;
-$ar_req_fields = array();
+$ar_parsed       = [];
+$ar_parsed['ar'] = &$this->ar;
+$ar_req_fields   = [];
 
-if ($this->gw_this['vars']['post'] == '')
-{
-	/* set default values */
-	$cnt = 0;
-	for (; list($id_lang, $arV) = each($this->gw_this['vars']['ar_languages']);)
-	{
-		$arParsed['page'][$cnt]['id_page_phrase'] = '';
-		$arParsed['page'][$cnt]['page_title'] = '';
-		$arParsed['page'][$cnt]['page_descr'] = '';
-		$arParsed['page'][$cnt]['page_content'] = '';
-		$arParsed['page'][$cnt]['page_keywords'] = '';
-		$arParsed['page'][$cnt]['id_lang'] = $id_lang;
-		$cnt++;
-	}
-	$arParsed['is_active'] = 1;
-	$arParsed['id_parent'] = 0;
-	$arParsed['page_icon'] = '';
-	$arParsed['page_uri'] = 'page-'. time();
-	$arParsed['page_php_1'] = '';
-	$arParsed['page_php_2'] = '';
-	$is_first = 1;
-	/* additional actions */
-	if (is_array($arPre))
-	{
-		$is_first = 0;
-		$arParsed = gw_ParsePre($arParsed, $arPre);
-	}
-	$arBroken = array();
-	$this->str .= $this->get_form($arParsed, $is_first, 0, $ar_req_fields);
+if ($this->gw_this['vars']['post'] == '') {
+    /* Set default values */
+    $cnt = 0;
 
-	/* Editing tips */
-	$arHelpMap = array(
-			'dict_name'  => 'tip028',
-			'announce' => 'tip029',
-			'1058'  => 'tip030',
-			'keywords'  => 'tip007',
-			'1073'  => 'tip031',
-			'1059'  => 'tip032'
-	);
-	$strHelp = '';
-	$strHelp .= '<dl>';
-	for (; list($k, $v) = each($arHelpMap);)
-	{
-		$strHelp .= '<dt><strong>' . $this->oL->m($k) . '</strong></dt>';
-		$strHelp .= '<dd>' . $this->oL->m($v) . '</dd>';
-	}
-	$strHelp .= '</dl>';
-	$this->str .= '<br />'.kTbHelp($this->oL->m('2_tip'), $strHelp);
+    foreach ($this->gw_this['vars']['ar_languages'] as $id_lang => $ar_v) {
+        $ar_parsed['page'][$cnt] = [
+            'id_page_phrase' => 0,
+            'page_title'     => '',
+            'page_descr'     => '',
+            'page_content'   => '',
+            'page_keywords'  => '',
+            'id_lang'        => $id_lang,
+        ];
+        $cnt++;
+    }
+
+    $ar_parsed['is_active']  = 1;
+    $ar_parsed['id_parent']  = 0;
+    $ar_parsed['page_icon']  = '';
+    $ar_parsed['page_uri']   = 'page-' . (int)time();
+    $ar_parsed['page_php_1'] = '';
+    $ar_parsed['page_php_2'] = '';
+
+    $is_first = 1;
+
+    /* Additional actions */
+    if (is_array($ar_pre)) {
+        $is_first  = 0;
+        $ar_parsed = gw_ParsePre($ar_parsed, $ar_pre);
+    }
+
+    $this->str .= $this->get_form($ar_parsed, $is_first, 0, $ar_req_fields);
+
+    /* Editing tips */
+    $ar_help_map = [
+        'dict_name' => 'tip028',
+        'announce'  => 'tip029',
+        '1058'      => 'tip030',
+        'keywords'  => 'tip007',
+        '1073'      => 'tip031',
+        '1059'      => 'tip032',
+    ];
+
+    $str_help = '<dl>';
+    foreach ($ar_help_map as $key => $value) {
+        $str_help .= '<dt><strong>' . $this->oL->m($key) . '</strong></dt>';
+        $str_help .= '<dd>' . $this->oL->m($value) . '</dd>';
+    }
+    $str_help .= '</dl>';
+
+    $this->str .= '<br />' . kTbHelp($this->oL->m('2_tip'), $str_help);
+} else {
+    if (!is_array($ar_pre)) {
+        $ar_pre = [];
+    }
+
+    $ar_queries         = [];
+    $table_pages        = gw_get_tbl_name('pages');
+    $table_pages_phrase = gw_get_tbl_name('pages_phrase');
+
+    /* Fix on/off options */
+    $ar_pre['is_active'] = isset($ar_pre['is_active']) ? (int)$ar_pre['is_active'] : 0;
+    $ar_pre['id_parent'] = isset($ar_pre['id_parent']) ? (int)$ar_pre['id_parent'] : 0;
+
+    $id_page             = $this->oDb->NextId($table_pages, 'id_page');
+    $id_page_phrase_base = $this->oDb->NextId($table_pages_phrase, 'id_page_phrase');
+
+    $page_uri = isset($ar_pre['page_uri']) ? trim((string)$ar_pre['page_uri']) : '';
+    if ($page_uri === '') {
+        $page_uri = 'page-' . $this->sys['time_now_gmt_unix'];
+    }
+
+    $q_page = [
+        'id_page'       => $id_page,
+        'id_parent'     => $ar_pre['id_parent'],
+        'is_active'     => ($ar_pre['is_active'] ? 1 : 0),
+        'page_icon'     => isset($ar_pre['page_icon']) ? (string)$ar_pre['page_icon'] : '',
+        'page_uri'      => $page_uri,
+        'id_user'       => $this->oSess->id_user,
+        'page_php_1'    => isset($ar_pre['page_php_1']) ? (string)$ar_pre['page_php_1'] : '',
+        'page_php_2'    => isset($ar_pre['page_php_2']) ? (string)$ar_pre['page_php_2'] : '',
+        'date_modified' => $this->sys['time_now_gmt_unix'],
+        'date_created'  => $this->sys['time_now_gmt_unix'],
+    ];
+
+    if (isset($ar_pre['page']) && is_array($ar_pre['page'])) {
+        foreach ($ar_pre['page'] as $page_offset => $ar_v) {
+            $id_page_phrase = 0;
+            if (isset($ar_v['id_page_phrase']) && (int)$ar_v['id_page_phrase'] > 0) {
+                $id_page_phrase = (int)$ar_v['id_page_phrase'];
+            } else {
+                $id_page_phrase = $id_page_phrase_base + (int)$page_offset;
+            }
+
+            $q_page_phrase = [
+                'id_page_phrase' => $id_page_phrase,
+                'id_page'        => $id_page,
+                'page_title'     => isset($ar_v['page_title']) ? $ar_v['page_title'] : '',
+                'page_descr'     => isset($ar_v['page_descr']) ? $ar_v['page_descr'] : '',
+                'page_content'   => isset($ar_v['page_content']) ? $ar_v['page_content'] : '',
+                'page_keywords'  => isset($ar_v['page_keywords']) ? $ar_v['page_keywords'] : '',
+                'id_lang'        => isset($ar_v['id_lang']) ? $ar_v['id_lang'] : '',
+            ];
+
+            $ar_queries[] = gw_sql_insert(
+                $q_page_phrase,
+                $table_pages_phrase,
+                'id_page_phrase = ' . $id_page_phrase
+            );
+        }
+    }
+
+    $sql = gw_sql_insert($q_page, $table_pages, 'id_page = ' . $id_page);
+
+    if ($this->sys['isDebugQ']) {
+        $ar_queries[] = $sql;
+    } else {
+        /* Insert main page now */
+        $this->oDb->sqlExec($sql);
+    }
+
+    $redirect_url = $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, GW_T_CUSTOMPAGE);
+
+    $this->str .= postQuery(
+        $ar_queries,
+        $redirect_url,
+        $this->sys['isDebugQ'],
+        $this->sys['isPause']
+    );
 }
-else
-{
-#$this->sys['isDebugQ'] = 1;
-	$arQ = array();
-	/* Fix on/off options */
-	$arIsV = array('is_active');
-	for (; list($k, $v) = each($arIsV);)
-	{
-		$arPre[$v]  = isset($arPre[$v]) ? $arPre[$v] : 0;
-	}
-	$q1 = $q2 = array();
-	$id_page_phrase = $this->oDb->MaxId($this->sys['tbl_prefix'].'pages_phrase', 'id_page_phrase');
-	$q1['id_page'] = $q2['id_page'] = $this->oDb->MaxId($this->sys['tbl_prefix'].'pages', 'id_page');
-	$q1['id_parent'] =& $arPre['id_parent'];
-	$q1['is_active'] =& $arPre['is_active'];
-	$q1['page_icon'] =& $arPre['page_icon'];
-	$q1['page_uri'] =& $arPre['page_uri'];
-	$q1['id_user'] = $this->oSess->id_user;
-	$q1['page_php_1'] =& $arPre['page_php_1'];
-	$q1['page_php_2'] =& $arPre['page_php_2'];
-	$q1['date_modified'] = $q1['date_created'] = $this->sys['time_now_gmt_unix'];
-	/* */
-	for (; list($elK, $arV) = each($arPre['page']);)
-	{
-		$q2['page_title'] = $arV['page_title'];
-		$q2['page_descr'] = $arV['page_descr'];
-		$q2['page_content'] = $arV['page_content'];
-		$q2['page_keywords'] = $arV['page_keywords'];
-		$q2['id_lang'] = $arV['id_lang'];
-		$q2['id_page_phrase'] = ($arV['id_page_phrase'] == '') ? $id_page_phrase + $elK : $arV['id_page_phrase'];
-		$arQ[] = gw_sql_insert($q2, $this->sys['tbl_prefix'].'pages_phrase', 'id_page_phrase = "'. $arV['id_page_phrase'] .'"');
-	}
-	$sql = gw_sql_insert($q1, $this->sys['tbl_prefix'].'pages', 'id_page = "' . $this->gw_this['vars']['tid'] .'"');
-	if ($this->sys['isDebugQ'])
-	{
-		$arQ[] = $sql;
-	}
-	else
-	{
-		/* Insert now */
-		$this->oDb->sqlExec($sql);
-	}
-	/* Sorting subpages */
-#	$sql = sprintf('SELECT `id_page` FROM `%s` WHERE `id_parent` = "%d" ORDER BY int_sort ASC', $this->sys['tbl_prefix'].'pages', $q1['id_parent']);
-#	$arSql = $this->oDb->sqlExec($sql);
-#	$i = 10;
-#	for (; list($arK, $arV) = each($arSql);)
-#	{
-#		$arQ[] = 'UPDATE `' . $this->sys['tbl_prefix'].'pages`' . '
-#					SET `int_sort` = ' . $i . '
-#					WHERE `id_page` = ' . $arV['id_page'];
-#			$i += 10;
-#		}
-	$this->str .= postQuery($arQ, 'a=' . GW_A_BROWSE . '&'.GW_TARGET.'='.$this->gw_this['vars'][GW_TARGET], $this->sys['isDebugQ'], 0);
-}
 
-
-?>

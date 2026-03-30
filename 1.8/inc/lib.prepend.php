@@ -25,7 +25,7 @@ if (!defined('IN_GW'))
 @ini_set('register_globals', 0);
 @ini_set('set_magic_quotes_gpc', 0);
 @ini_set('set_magic_quotes_runtime', 0);
-@ini_set('mbstring.internal_encoding', $sys['internal_encoding']);
+@ini_set('mbstring.internal_encoding', 'UTF-8');
 
 /* Prefix for constants */
 $sys['prefix_c'] = 'GW_';

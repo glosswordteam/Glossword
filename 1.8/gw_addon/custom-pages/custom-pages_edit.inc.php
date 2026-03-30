@@ -1,7 +1,9 @@
 <?php
+
 /**
- * Glossword - glossary compiler (http://glossword.info/)
- * © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -9,235 +11,253 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
-if (!defined('IN_GW'))
-{
-	die('<!-- $Id: custom-pages_edit.inc.php 544 2008-08-14 20:47:29Z glossword_team $ -->');
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
 }
 /* Included from $oAddonAdm->alpha(); */
 
-
+$table_pages        = gw_get_tbl_name('pages');
+$table_pages_phrase = gw_get_tbl_name('pages_phrase');
+$page_id            = $this->gw_this['vars'][GW_TARGET_ID];
+$mode               = $this->gw_this['vars']['mode'];
 
 /* Check permission to edit the page */
-$arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-custompages-adm', $this->gw_this['vars']['tid']));
-$arParsed = isset($arSql[0]) ? $arSql[0] : array();
+$ar_sql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-custompages-adm', $page_id));
+$ar_parsed = isset($ar_sql[0]) ? $ar_sql[0] : [];
+
 /* No such page */
-if (empty($arParsed))
-{
-	$this->gw_this['vars']['tid'] = '';
+if (empty($ar_parsed)) {
+    $page_id = 0;
 }
 
-$arQ = array();
+$ar_queries = [];
 
 /* Page ID is not defined */
-if (!$this->gw_this['vars']['tid'])
-{
-	/* Change heading */
-	$this->sys['id_current_status'] = $this->oL->m($this->ar_component['cname']).': '.$this->oL->m('3_browse');
-	$this->gw_this['vars'][GW_ACTION] = 'browse';
-	$this->sys['path_component_action'] = $this->sys['path_addon'].'/'.$this->gw_this['vars'][GW_TARGET].'/'.$this->gw_this['vars'][GW_TARGET] . '_' . $this->gw_this['vars'][GW_ACTION].'.inc.php';
-	include_once( $this->sys['path_component_action'] );
-	return;
+if (!$page_id) {
+    /* Change heading */
+    $this->sys['id_current_status'] = $this->oL->m($this->ar_component['cname']) . ': ' . $this->oL->m('3_browse');
+    $this->gw_this['vars'][GW_ACTION] = GW_A_BROWSE;
+    $this->sys['path_component_action'] = $this->sys['path_addon']
+        . '/'
+        . $this->gw_this['vars'][GW_TARGET]
+        . '/'
+        . $this->gw_this['vars'][GW_TARGET]
+        . '_'
+        . $this->gw_this['vars'][GW_ACTION]
+        . '.inc.php';
+
+    include_once($this->sys['path_component_action']);
+
+    return;
 }
 
-#$this->sys['isDebugQ'] = 1;
+// Check permissions
+$page_owner_id = isset($ar_parsed['id_user']) ? (int) $ar_parsed['id_user'] : 0;
+$session_user_id = (int) $this->oSess->id_user;
 
+$can_edit_all = $this->oSess->is('is-cpages');
+$can_edit_own = $this->oSess->is('is-cpages-own') && ($page_owner_id === $session_user_id);
 
-$is_allow_edit = ($this->oSess->is('is-cpages') ? 1 : ($this->oSess->is('is-cpages-own') && ($arParsed['id_user'] == $this->oSess->id_user)) ? 1 : 0);
-if (!$is_allow_edit)
-{
-	$this->str .= '<p class="xu">'.$this->oL->m('reason_13').'</p>';
-	return;
-}
+$is_allow_edit = ($can_edit_all || $can_edit_own) ? 1 : 0;
 
-/* Sorting */
-/* Up or Down */
-if ($this->gw_this['vars']['mode'] == 'up' || $this->gw_this['vars']['mode'] == 'dn')
-{
-	$score = ($this->gw_this['vars']['mode'] == 'up') ? "- 15" : "+ 15";
-	$sql = sprintf('UPDATE `'.$this->sys['tbl_prefix'].'pages` SET `int_sort` = (int_sort %s) WHERE `id_page` = "%d"', $score, $this->gw_this['vars']['tid']);
-	$this->oDb->sqlExec($sql);
-	$sql = sprintf('SELECT `id_page` FROM `'.$this->sys['tbl_prefix'].'pages` WHERE id_parent = "%d" ORDER BY int_sort ASC', $this->ar[$this->gw_this['vars']['tid']]['p']);
-	$arSql = $this->oDb->sqlExec($sql);
-	$i = 10;
-	for (; list($arK, $arV) = each($arSql);)
-	{
-		$arQ[] = 'UPDATE `'.$this->sys['tbl_prefix'].'pages`
-						 SET `int_sort` = ' . $i . '
-						 WHERE `id_page` = "' . $arV['id_page'].'"';
-		$i += 10;
-	}
-	postQuery($arQ, 'a=' . GW_A_BROWSE . '&'.GW_TARGET.'='.$this->gw_this['vars'][GW_TARGET], $this->sys['isDebugQ'], 0);
-	return;
-}
-elseif ($this->gw_this['vars']['mode'] == 'reset')
-{
-	$i = 10;
-	$arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-custompages_id-by-p', $this->ar[$this->gw_this['vars']['tid']]['p']));
-	for (; list($arK, $arV) = each($arSql);)
-	{
-		$arQ[] = sprintf('UPDATE `'.$this->sys['tbl_prefix'].'pages`
-						SET `int_sort` = "%d"
-						WHERE `id_page` = "%d"',
-						$i, $arV['id_page']
-				);
-		$i += 10;
-	}
-	postQuery($arQ, GW_ACTION.'=' . GW_A_BROWSE . '&'.GW_TARGET.'='.$this->gw_this['vars'][GW_TARGET], $this->sys['isDebugQ'], 0);
-	return;
-}
-elseif ($this->gw_this['vars']['mode'] == 'off')
-{
-	$arKeys = gw_ctlg_get_tree($this->ar, $this->gw_this['vars']['tid']);
-	$this->oDb->sqlExec('UPDATE `'.$this->sys['tbl_prefix'].'pages`
-						SET `is_active` = "0"
-						WHERE `id_page` IN ('.implode(',', $arKeys).')' );
-	postQuery($arQ, GW_ACTION.'=' . GW_A_BROWSE . '&'.GW_TARGET.'='.$this->gw_this['vars'][GW_TARGET], $this->sys['isDebugQ'], 0);
-	return;
-}
-elseif ($this->gw_this['vars']['mode'] == 'on')
-{
-	$arKeys = gw_ctlg_get_tree($this->ar, $this->gw_this['vars']['tid']);
-	$this->oDb->sqlExec('UPDATE `'.$this->sys['tbl_prefix'].'pages`
-						SET `is_active` = "1"
-						WHERE `id_page` IN ('.implode(',', $arKeys).')' );
-	postQuery($arQ, GW_ACTION.'=' . GW_A_BROWSE . '&'.GW_TARGET.'='.$this->gw_this['vars'][GW_TARGET], $this->sys['isDebugQ'], 0);
-	return;
+if (!$is_allow_edit) {
+    $this->str .= '<p class="xu">' . $this->oL->m('reason_13') . '</p>';
+    return;
 }
 
-/* */
+switch ($mode) {
+    case 'up':
+    case 'dn':
+        if ($this->_move_page($page_id, $mode)) {
+            return;
+        }
+        break;
+
+    case 'reset':
+        if ($this->_reset_page_sort_by_page($page_id)) {
+            return;
+        }
+        break;
+
+    case 'off':
+    case 'on':
+        if ($this->_set_page_tree_active($page_id, $mode)) {
+            return;
+        }
+        break;
+}
+
+
+/* Navigation */
 $this->str .= $this->_get_nav();
 
 /* Editing */
-$ar_req_fields = array();
-
+$ar_req_fields = [];
 
 /* Not submitted */
-if ($this->gw_this['vars']['post'] == '')
-{
-	/* Default settings */
-	$arSql2 = $this->oDb->sqlExec($this->oSqlQ->getQ('get-custompages-lang-adm', $this->gw_this['vars']['tid']));
-	$arParsed['page'] =& $arSql2;
-	$arParsed['ar'] =& $this->ar;
-	/* Removing */
-	if ($this->gw_this['vars']['remove'])
-	{
-		$str_pagename = $this->gw_this['vars']['tid'];
-		foreach($arParsed['page'] as $arPage)
-		{
-			if ($arPage['id_lang'] == $this->gw_this['vars']['locale_name'])
-			{
-				$str_pagename = '<div>'.htmlspecialchars($arPage['page_title']).'</div>';
-				$str_pagename .= '<div>'.htmlspecialchars($arPage['page_descr']).'</div>';
-			}
-		}
-		/* Change heading */
-		$this->sys['id_current_status'] = $this->oL->m($this->ar_component['cname']).
-			': '. $this->oL->m('3_remove');
+if ($this->gw_this['vars']['post'] == '') {
+    /* Default settings */
+    $ar_sql2 = $this->oDb->sqlExec($this->oSqlQ->getQ('get-custompages-lang-adm', $page_id));
+    $ar_parsed['page'] = $ar_sql2;
+    $ar_parsed['ar'] = $this->ar;
 
-		$msg = $str_pagename;
+    /* Removing */
+    if (!empty($this->gw_this['vars']['remove'])) {
+        $str_pagename = (string) $page_id;
 
-		$oFormConfirm = new gwConfirmWindow;
-		$oFormConfirm->action = $this->sys['page_admin'];
-		$oFormConfirm->submitok = $this->oL->m('3_remove');
-		$oFormConfirm->submitcancel = $this->oL->m('3_cancel');
-		$oFormConfirm->formbgcolor = $this->ar_theme['color_2'];
-		$oFormConfirm->formbordercolor = $this->ar_theme['color_4'];
-		$oFormConfirm->formbordercolorL = $this->ar_theme['color_1'];
-		$oFormConfirm->setQuestion('<p class="xr"><strong class="red">' . $this->oL->m('9_remove') .
-								'</strong></p><p class="xt"><span class="gray">'. $this->oL->m('3_remove').
-								': </span>'.$msg.'</p>');
-		$oFormConfirm->tAlign = 'center';
-		$oFormConfirm->formwidth = '400';
-		$oFormConfirm->setField('hidden', 'tid', $this->gw_this['vars']['tid']);
-		$oFormConfirm->setField('hidden', 'w1', $this->gw_this['vars']['w1']);
-		$oFormConfirm->setField('hidden', 'w2', $this->gw_this['vars']['w2']);
-		$oFormConfirm->setField('hidden', GW_ACTION, GW_A_REMOVE);
-		$oFormConfirm->setField('hidden', GW_TARGET, $this->gw_this['vars'][GW_TARGET]);
-		$oFormConfirm->setField('hidden', $this->oSess->sid, $this->oSess->id_sess);
-		$this->str .= $oFormConfirm->Form();
-		return;
-	}
-	$arPre =& $this->gw_this['vars']['arPre'];
-	$is_first = 1;
-	if (is_array($arPre))
-	{
-		$is_first = 0;
-		$arParsed = gw_ParsePre($arParsed, $arPre);
-	}
-	/* Not submitted */
-	$this->str .= $this->get_form($arParsed, $is_first, 0, $ar_req_fields);
+        foreach ($ar_parsed['page'] as $ar_page) {
+            if (!isset($ar_page['id_lang']) || $ar_page['id_lang'] != $this->gw_this['vars']['locale_name']) {
+                continue;
+            }
 
+            $str_pagename = '<div>'
+                . htmlspecialchars((string) $ar_page['page_title'], ENT_QUOTES, 'UTF-8')
+                . '</div>';
+            $str_pagename .= '<div>'
+                . htmlspecialchars((string) $ar_page['page_descr'], ENT_QUOTES, 'UTF-8')
+                . '</div>';
+        }
 
-	/* Editing tips */
-	$arHelpMap = array(
-			'dict_name'  => 'tip028',
-			'announce' => 'tip029',
-			'1058'  => 'tip030',
-			'keywords'  => 'tip007',
-			'1073'  => 'tip031',
-			'1059'  => 'tip032'
-	);
-	$strHelp = '';
-	$strHelp .= '<dl>';
-	for (; list($k, $v) = each($arHelpMap);)
-	{
-		$strHelp .= '<dt><strong>' . $this->oL->m($k) . '</strong></dt>';
-		$strHelp .= '<dd>' . $this->oL->m($v) . '</dd>';
-	}
-	$strHelp .= '</dl>';
-	$this->str .= '<br />'.kTbHelp($this->oL->m('2_tip'), $strHelp);
+        /* Change heading */
+        $this->sys['id_current_status'] = $this->oL->m($this->ar_component['cname'])
+            . ': '
+            . $this->oL->m('3_remove');
 
+        $o_form_confirm = new gwConfirmWindow();
+        $o_form_confirm->action = $this->sys['page_admin'];
+        $o_form_confirm->submitok = $this->oL->m('3_remove');
+        $o_form_confirm->submitcancel = $this->oL->m('3_cancel');
+        $o_form_confirm->formbgcolor = $this->ar_theme['color_2'];
+        $o_form_confirm->formbordercolor = $this->ar_theme['color_4'];
+        $o_form_confirm->formbordercolorL = $this->ar_theme['color_1'];
+        $o_form_confirm->setQuestion(
+            '<p class="xr"><strong class="red">' . $this->oL->m('9_remove')
+            . '</strong></p><p class="xt"><span class="gray">' . $this->oL->m('3_remove')
+            . ': </span>' . $str_pagename . '</p>'
+        );
+        $o_form_confirm->tAlign = 'center';
+        $o_form_confirm->formwidth = '400';
+        $o_form_confirm->setField('hidden', 'tid', $page_id);
+        $o_form_confirm->setField('hidden', 'w1', isset($this->gw_this['vars']['w1']) ? $this->gw_this['vars']['w1'] : '');
+        $o_form_confirm->setField('hidden', 'w2', isset($this->gw_this['vars']['w2']) ? $this->gw_this['vars']['w2'] : '');
+        $o_form_confirm->setField('hidden', GW_ACTION, GW_A_REMOVE);
+        $o_form_confirm->setField('hidden', GW_TARGET, $this->gw_this['vars'][GW_TARGET]);
+        $o_form_confirm->setField('hidden', $this->oSess->sid, $this->oSess->id_sess);
+
+        $this->str .= $o_form_confirm->Form();
+
+        return;
+    }
+
+    $ar_pre = isset($this->gw_this['vars']['arPre']) ? $this->gw_this['vars']['arPre'] : null;
+    $is_first = 1;
+
+    if (is_array($ar_pre)) {
+        $is_first = 0;
+        $ar_parsed = gw_ParsePre($ar_parsed, $ar_pre);
+    }
+
+    $this->str .= $this->get_form($ar_parsed, $is_first, 0, $ar_req_fields);
+
+    /* Editing tips */
+    $ar_help_map = [
+        'dict_name' => 'tip028',
+        'announce' => 'tip029',
+        '1058' => 'tip030',
+        'keywords' => 'tip007',
+        '1073' => 'tip031',
+        '1059' => 'tip032',
+    ];
+
+    $str_help = '<dl>';
+    foreach ($ar_help_map as $key => $value) {
+        $str_help .= '<dt><strong>' . $this->oL->m($key) . '</strong></dt>';
+        $str_help .= '<dd>' . $this->oL->m($value) . '</dd>';
+    }
+    $str_help .= '</dl>';
+
+    $this->str .= '<br />' . kTbHelp($this->oL->m('2_tip'), $str_help);
+} else {
+    $ar_pre = $this->gw_this['vars']['arPre'];
+
+    /* Fix on/off options */
+    $ar_pre['is_active'] = isset($ar_pre['is_active']) ? (int) $ar_pre['is_active'] : 0;
+    $ar_pre['id_parent'] = isset($ar_pre['id_parent']) ? (int) $ar_pre['id_parent'] : 0;
+
+    $page_uri = isset($ar_pre['page_uri']) ? trim((string) $ar_pre['page_uri']) : '';
+    if ($page_uri === '') {
+        $page_uri = 'page-' . (int) $this->sys['time_now_gmt_unix'];
+    }
+
+    $q_page = [
+        'id_parent' => $ar_pre['id_parent'],
+        'is_active' => ($ar_pre['is_active'] ? 1 : 0),
+        'page_icon' => isset($ar_pre['page_icon']) ? (string) $ar_pre['page_icon'] : '',
+        'page_php_1' => isset($ar_pre['page_php_1']) ? (string) $ar_pre['page_php_1'] : '',
+        'page_php_2' => isset($ar_pre['page_php_2']) ? (string) $ar_pre['page_php_2'] : '',
+        'page_uri' => $page_uri,
+        'id_user' => $this->oSess->id_user,
+        'date_modified' => $this->sys['time_now_gmt_unix'],
+    ];
+
+    /* Set is_active for subpages */
+    if (isset($this->ar[$page_id]['ch'])) {
+        $ar_keys = gw_ctlg_get_tree($this->ar, $page_id);
+
+        if (is_array($ar_keys)) {
+            foreach ($ar_keys as $page_id) {
+                $page_id = (int) $page_id;
+                if ($page_id <= 0) {
+                    continue;
+                }
+
+                $ar_queries[] = 'UPDATE `' . $table_pages . '`
+                    SET `is_active` = ' . (int) $q_page['is_active'] . '
+                    WHERE `id_parent` = ' . $page_id;
+            }
+        }
+    }
+
+    $ar_queries[] = 'DELETE FROM `' . $table_pages_phrase . '` WHERE `id_page` = ' . $page_id;
+
+    $id_page_phrase_base = (int) $this->oDb->MaxId($table_pages_phrase, 'id_page_phrase');
+
+    if (isset($ar_pre['page']) && is_array($ar_pre['page'])) {
+        foreach ($ar_pre['page'] as $page_offset => $ar_v) {
+            $page_title = isset($ar_v['page_title']) ? gw_fix_input_to_db($ar_v['page_title']) : '';
+            $page_descr = isset($ar_v['page_descr']) ? gw_fix_input_to_db($ar_v['page_descr']) : '';
+            $page_content = isset($ar_v['page_content']) ? gw_fix_input_to_db($ar_v['page_content']) : '';
+
+            if (isset($ar_v['id_page_phrase']) && (int) $ar_v['id_page_phrase'] > 0) {
+                $id_page_phrase = (int) $ar_v['id_page_phrase'];
+            } else {
+                $id_page_phrase = $id_page_phrase_base + (int) $page_offset;
+            }
+
+            $q_page_phrase = [
+                'id_page_phrase' => $id_page_phrase,
+                'id_page' => $page_id,
+                'page_title' => $page_title,
+                'page_descr' => $page_descr,
+                'page_content' => $page_content,
+                'page_keywords' => isset($ar_v['page_keywords']) ? (string) $ar_v['page_keywords'] : '',
+                'id_lang' => isset($ar_v['id_lang']) ? (string) $ar_v['id_lang'] : '',
+            ];
+
+            $ar_queries[] = gw_sql_insert(
+                $q_page_phrase,
+                $table_pages_phrase,
+                'id_page_phrase = ' . $id_page_phrase
+            );
+        }
+    }
+
+    $ar_queries[] = gw_sql_update($q_page, $table_pages, 'id_page = ' . $page_id);
+
+    $this->str .= postQuery(
+        $ar_queries,
+        $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->gw_this['vars'][GW_TARGET], ['note_afterpost' => $this->oL->m('1332')]),
+        $this->sys['isDebugQ'],
+        $this->sys['isPause']
+    );
 }
-else
-{
-	/* */
-	$arPre =& $this->gw_this['vars']['arPre'];
-	/* Enter debug mode */
-#$this->sys['isDebugQ'] = 1;
-	/* Fix on/off options */
-	$arIsV = array('is_active');
-	for (; list($k, $v) = each($arIsV);)
-	{
-		$arPre[$v]  = isset($arPre[$v]) ? $arPre[$v] : 0;
-	}
-	$q1 = $q2 = array();
-	$q1['id_parent'] = $arPre['id_parent'];
-	$q1['is_active'] = $arPre['is_active'];
-	$q1['page_icon'] = $arPre['page_icon'];
-	$q1['page_php_1'] = $arPre['page_php_1'];
-	$q1['page_php_2'] = $arPre['page_php_2'];
-	$q1['page_uri'] = $arPre['page_uri'];
-	$q1['id_user'] = $this->oSess->id_user;
-	$q1['date_modified'] = $this->sys['time_now_gmt_unix'];
-	/* Set ‘is_active' for subpages */
-	if (isset($this->ar[$this->gw_this['vars']['tid']]['ch']))
-	{
-		$arKeys = gw_ctlg_get_tree($this->ar, $this->gw_this['vars']['tid']);
-		while (is_array($arKeys) && list($k, $v) = each($arKeys))
-		{
-			$arQ[] = 'UPDATE `'.$this->sys['tbl_prefix'].'pages` SET `is_active` = "'.$q1['is_active'].'" WHERE id_parent = "' . $v . '"';
-		}
-	}
-	/* */
-	$arQ[] = 'DELETE FROM `'.$this->sys['tbl_prefix'].'pages_phrase` WHERE `id_page` = "'. $this->gw_this['vars']['tid'] .'"';
-	$id_page_phrase = $this->oDb->MaxId($this->sys['tbl_prefix'].'pages_phrase', 'id_page_phrase');
-	for (; list($elK, $arV) = each( $arPre['page']);)
-	{
-		$arV['page_title'] = gw_fix_input_to_db($arV['page_title']);
-		$arV['page_descr'] = gw_fix_input_to_db($arV['page_descr']);
-		$arV['page_content'] = gw_fix_input_to_db($arV['page_content']);
-		$q2['page_title'] = $arV['page_title'];
-		$q2['page_descr'] = $arV['page_descr'];
-		$q2['page_content'] = $arV['page_content'];
-		$q2['page_keywords'] = $arV['page_keywords'];
-		$q2['id_lang'] = $arV['id_lang'];
-		$q2['id_page_phrase'] = ($arV['id_page_phrase'] == '') ? $id_page_phrase+$elK : $arV['id_page_phrase'];
-		$q2['id_page'] = $this->gw_this['vars']['tid'];
-		$arQ[] = gw_sql_insert($q2, $this->sys['tbl_prefix'].'pages_phrase', '`id_page_phrase` = "' . $arV['id_page_phrase'] .'"');
-	}
-	$arQ[] = gw_sql_update($q1, $this->sys['tbl_prefix'].'pages', '`id_page` = "'. $this->gw_this['vars']['tid'] .'"');
-	$this->str .= postQuery($arQ, 'a=' . GW_A_BROWSE .'&'. GW_TARGET .'='. $this->gw_this['vars'][GW_TARGET].'&note_afterpost='.$this->oL->m('1332'), $this->sys['isDebugQ'], 0);
-}
-
-
-?>

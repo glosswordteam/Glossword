@@ -192,7 +192,7 @@ function getFormExport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 }
 // --------------------------------------------------------
 // Language
-$oL->getCustom('export', $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'], 'join');
+$oL->applyCustomPhrases('export', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
 // --------------------------------------------------------
 // Prepare variables
 if ($arPost == '') { $arPost = array(); }

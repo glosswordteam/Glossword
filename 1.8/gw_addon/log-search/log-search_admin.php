@@ -1,78 +1,108 @@
 <?php
+
 /**
- *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * Â© 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * Â© 2002-2008 Dmitry N. Shilnikov
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
-if (!defined('IN_GW'))
-{
-	die('<!-- $Id: log_search_admin.php,v 1.2 2006/10/06 12:06:09 yrtimd Exp $ -->');
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
 }
 /* */
 class gw_addon_log_search_admin extends gw_addon
 {
-	var $addon_name = 'log-search';
-	var $int_found;
-	var $int_pages;
+    public $addon_name = 'log-search';
+    public $int_found;
+    public $int_pages;
+
 	/* Autoexec */
-	function gw_addon_log_search_admin()
+	public function __construct()
 	{
 		$this->init();
-		$this->oL->getCustom('export', $this->oSess->user_get('locale_name'), 'join');
+		$this->oL->applyCustomPhrases('export', $this->oSess->user_get('locale_name'));
 		$this->oL->setHomeDir($this->sys['path_locale']);
-		$this->oL->getCustom('addon_'.$this->addon_name, $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc'], 'join');
+		$this->oL->applyCustomPhrases('addon_'.$this->addon_name, $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc']);
 	}
-	/* */
-	function get_menu_period()
+    /**
+     * Build period menu HTML.
+     *
+     * @return string
+     */
+    protected function _get_menu_period()
 	{
-		/* the list of time periods */
-		return '<div class="actions-secondary"><span>'.$this->oL->m('period').':</span> '.
-			$this->oHtml->a($this->sys['page_admin'].'?'. GW_ACTION.'='.GW_A_BROWSE.'&'. GW_TARGET.'='.$this->addon_name.'&'.
-#					'id='.$this->gw_this['vars']['id'].'&'.
-					'uid='.($this->sys['max_days_searchlog']*24).'&'.
-					'p=1', $this->oL->m('3_all_time')
-				).' '.
-			$this->oHtml->a($this->sys['page_admin'].'?'. GW_ACTION.'='.GW_A_BROWSE.'&'. GW_TARGET.'='.$this->addon_name.'&'.
-#					'id='.$this->gw_this['vars']['id'].'&'.
-					'uid=720&'.
-					'p=1', $this->oL->m('month')
-				).' '.
-			$this->oHtml->a($this->sys['page_admin'].'?'.GW_ACTION.'='.GW_A_BROWSE.'&'.GW_TARGET.'='.$this->addon_name.'&'.
-#					'id='.$this->gw_this['vars']['id'].'&'.
-					'uid=168&'.
-					'p=1', $this->oL->m('week')
-				).' '.
-			$this->oHtml->a($this->sys['page_admin'].'?'.GW_ACTION.'='.GW_A_BROWSE.'&'.GW_TARGET.'='.$this->addon_name.'&'.
-#					'id='.$this->gw_this['vars']['id'].'&'.
-					'uid=24&'.
-					'p=1', $this->oL->m('24_hours')
-				).'</div>';
+        $links = [];
+
+        // All time
+        $links[] = $this->oHtml->a(
+            $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->addon_name, ['uid' => (int) $this->sys['max_days_searchlog'] * 24, 'p' => 1]),
+            $this->oL->m('3_all_time')
+        );
+
+        // Last month
+        $links[] = $this->oHtml->a(
+            $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->addon_name, ['uid' => 720, 'p' => 1]),
+            $this->oL->m('month')
+        );
+
+        // Last week
+        $links[] = $this->oHtml->a(
+            $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->addon_name, ['uid' => 168, 'p' => 1]),
+            $this->oL->m('week')
+        );
+
+        // Last 24 hours
+        $links[] = $this->oHtml->a(
+            $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->addon_name, ['uid' => 24, 'p' => 1]),
+            $this->oL->m('24_hours')
+        );
+
+        return '<div class="actions-secondary">'
+            . '<span>' . $this->oL->m('period') . ':</span> '
+            . implode(' ', $links)
+            . '</div>';
 	}
-	/* */
-	function get_menu_reports()
+
+    /**
+     * Build reports menu HTML.
+     *
+     * @return string
+     */
+    protected function _get_menu_reports()
 	{
-		return '<div class="actions-secondary"><span>'.$this->oL->m('web_stat').':</span> '.
-			$this->oHtml->a($this->sys['page_admin'].'?'. GW_ACTION.'='.GW_A_BROWSE.'&'. GW_TARGET.'='.$this->addon_name.'&'.
-					'p=1', $this->oL->m('3_profile').' 1'
-				).' '.
-		$this->oHtml->a($this->sys['page_admin'].'?'. GW_ACTION.'='.GW_A_BROWSE.'&'. GW_TARGET.'='.$this->addon_name.'&'.
-					'&w1=rp03&'.
-					'p=1', $this->oL->m('3_profile').' 2'
-				).' '.
-		$this->oHtml->a($this->sys['page_admin'].'?'. GW_ACTION.'='.GW_A_BROWSE.'&'. GW_TARGET.'='.$this->addon_name.'&'.
-					'&w1=rp04&'.
-					'p=1', $this->oL->m('3_profile').' 3'
-				).
-		'</div>';
+        $links = [];
+
+        // Profile 1
+        $links[] = $this->oHtml->a(
+            $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->addon_name, ['p' => 1]),
+            $this->oL->m('3_profile') . ' 1'
+        );
+
+        // Profile 2
+        $links[] = $this->oHtml->a(
+            $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->addon_name, ['w1' => 'rp03', 'p' => 1]),
+            $this->oL->m('3_profile') . ' 2'
+        );
+
+        // Profile 3
+        $links[] = $this->oHtml->a(
+            $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->addon_name, ['w1' => 'rp04', 'p' => 1]),
+            $this->oL->m('3_profile') . ' 3'
+        );
+
+        return '<div class="actions-secondary">'
+            . '<span>' . $this->oL->m('web_stat') . ':</span> '
+            . implode(' ', $links)
+            . '</div>';
 	}
+
 	/* */
-	function browse()
+    public function browse()
 	{
 		if (in_array(strtolower('_'.$this->gw_this['vars']['w1']), get_class_methods($this)))
 		{
@@ -100,9 +130,12 @@ class gw_addon_log_search_admin extends gw_addon
 		$this->_print_report($arSql);
 	}
 	/* */
-	function clean()
+    public function clean()
 	{
-		$str_question = '<p class="xr red"><b>' . $this->oL->m('9_remove') .'</b></p>';
+        global $strR;
+        $ar_query = [];
+
+        $str_question = '<p class="xr red"><b>' . $this->oL->m('9_remove') .'</b></p>';
 		if (!$this->gw_this['vars']['isConfirm']) /* if not confirmed */
 		{
 			/* Search queries log */
@@ -129,14 +162,18 @@ class gw_addon_log_search_admin extends gw_addon
 		else
 		{
 #			$this->sys['isDebugQ'] = 1;
-			$arQ[] = sprintf('TRUNCATE TABLE %s', $this->sys['tbl_prefix'].'stat_search');
-			$this->str .= postQuery($arQ, 'a=' . GW_A_BROWSE . '&'.GW_TARGET.'=' . $this->addon_name, $this->sys['isDebugQ'], 0);
+            $ar_query[] = sprintf('TRUNCATE TABLE %s', $this->sys['tbl_prefix'].'stat_search');
+            $this->str .= postQuery(
+                $ar_query,
+                $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->addon_name, ['note_afterpost' => $this->oL->m('2_success')]),
+                $this->sys['isDebugQ'],
+                $this->sys['isPause']
+            );
 		}
-		global $strR;
 		$strR .= $this->str;
 	}
 	/* */
-	function _rp01()
+    protected function _rp01()
 	{
 		$sql_where = sprintf(' sr.q = "%s"', gw_text_sql($this->gw_this['vars']['q']));
 		$sql_group_by = ' GROUP BY sr.date_created';
@@ -153,7 +190,7 @@ class gw_addon_log_search_admin extends gw_addon
 		$this->_print_report($arSql);
 	}
 	/* */
-	function _rp02()
+    protected function _rp02()
 	{
 		$sql_where = sprintf(' sr.id_dict = "%d"',
 			$this->gw_this['vars']['id']
@@ -173,7 +210,7 @@ class gw_addon_log_search_admin extends gw_addon
 	}
 
 	/* 1.8.8: The most wanted but not found */
-	function _rp03()
+    protected function _rp03()
 	{
 		/* Count */
 		$arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('cnt-rp03'), $this->addon_name);
@@ -217,7 +254,7 @@ class gw_addon_log_search_admin extends gw_addon
 		}
 
 		$cnt_row = 1;
-		while (list($k, $arV) = each($arSql))
+        foreach ($arSql as $arV)
 		{
 			$bgcolor = $cnt_row % 2 ? $this->ar_theme['color_1'] : $this->ar_theme['color_2'];
 			$num_class = ($arV['found'] == 0) ? ' red' : '';
@@ -240,10 +277,10 @@ class gw_addon_log_search_admin extends gw_addon
 		$strR .= '</tbody></table>';
 
 		/* 1.8.8: More reports */
-		$strR .= $this->get_menu_reports();
+		$strR .= $this->_get_menu_reports();
     }
 	/* 1.8.8: The most wanted and found */
-	function _rp04()
+    protected function _rp04()
 	{
 		/* Count */
 		$arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('cnt-rp04'), $this->addon_name);
@@ -287,7 +324,7 @@ class gw_addon_log_search_admin extends gw_addon
 		}
 		
 		$cnt_row = 1;
-		while (list($k, $arV) = each($arSql))
+        foreach ($arSql as $arV)
 		{
 			$bgcolor = $cnt_row % 2 ? $this->ar_theme['color_1'] : $this->ar_theme['color_2'];
 			$num_class = ($arV['found'] == 0) ? ' red' : '';
@@ -310,10 +347,10 @@ class gw_addon_log_search_admin extends gw_addon
 		$strR .= '</tbody></table>';
 
 		/* 1.8.8: More reports */
-		$strR .= $this->get_menu_reports();
+		$strR .= $this->_get_menu_reports();
     }
 	/* */
-	function _print_report($arSql)
+    protected function _print_report($arSql)
 	{
 		global $strR;
 		$str_pages = getNavToolbar($this->int_pages, $this->gw_this['vars']['p'],
@@ -327,7 +364,7 @@ class gw_addon_log_search_admin extends gw_addon
 	
 		$strR .= '<table cellspacing="1" cellpadding="0" border="0" width="100%"><tbody>';
 		$strR .= '<tr><td class="xt gray" style="text-align:'.$this->sys['css_align_right'].'">'. $str_pages.'</td></tr>';
-		$strR .= '<tr><td>'. $this->get_menu_period().'</td></tr>';
+		$strR .= '<tr><td>'. $this->_get_menu_period().'</td></tr>';
 		$strR .= '</tbody></table>';
 		
 		$strR .= '<table class="tbl-browse" cellspacing="1" cellpadding="0" border="0" width="100%">';
@@ -349,7 +386,7 @@ class gw_addon_log_search_admin extends gw_addon
 		}
 		
 		$cnt_row = 1;
-		while (list($k, $arV) = each($arSql))
+        foreach ($arSql as $arV)
 		{
 			$bgcolor = $cnt_row % 2 ? $this->ar_theme['color_1'] : $this->ar_theme['color_2'];
 			$num_class = ($arV['found'] == 0) ? ' red' : '';
@@ -392,10 +429,10 @@ class gw_addon_log_search_admin extends gw_addon
 		}
 
 		/* 1.8.8: More reports */
-		$strR .= $this->get_menu_reports();
+		$strR .= $this->_get_menu_reports();
 	}
 	/* */
-	function alpha()
+    public function alpha()
 	{
 		global $strR;
 		if (is_array($this->gw_this['vars']['arControl']))
@@ -407,13 +444,11 @@ class gw_addon_log_search_admin extends gw_addon
 
 		/* check for permissions */
 		$ar_perms = $this->oSess->ar_permissions;
-		foreach ($ar_perms AS $permission => $is)
-		{
-			if (!$is)
-			{
-				unset($ar_perms[$permission]);
-			}
-		}
+        foreach ($ar_perms as $permission => $is) {
+            if (!$is) {
+                unset($ar_perms[$permission]);
+            }
+        }
 		$ar_sql_like2 = 'cmm.req_permission_map LIKE "%:'.implode(':%" OR cmm.req_permission_map LIKE "%:', array_keys($ar_perms) ).':%"';
 		$arSql = $this->oDb->sqlRun($this->oSqlQ->getQ('get-component-action-perm',
 		$ar_sql_like2,
@@ -445,5 +480,3 @@ $oAddonAdm = new gw_addon_log_search_admin;
 $oAddonAdm->alpha();
 /* Do not load old components */
 $pathAction = '';
-/* end of file */
-?>

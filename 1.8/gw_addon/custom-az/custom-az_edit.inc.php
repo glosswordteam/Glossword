@@ -28,10 +28,7 @@ $ar_sorted     = [];
 $ar_req_fields = ['profile_name'];
 
 /* Load letters for sorting/update actions */
-$ar_az    = $this->oDb->sqlExec(
-    $this->oSqlQ->getQ('get-custom_az-adm', $tid),
-    $this->component
-);
+$ar_az    = $this->oDb->sqlExec($this->oSqlQ->getQ('get-custom_az-adm', $tid), $this->component);
 $ar_az    = is_array($ar_az) ? $ar_az : [];
 $max_sort = (count($ar_az) + 1) * 10;
 
@@ -154,17 +151,14 @@ if (!empty($ar_query)) {
     $redirect_url = $this->oUrlBuilder->build_admin_url(
         GW_A_BROWSE,
         $this->component,
-        [
-            GW_TARGET_ID => $tid,
-            'w1'         => $selected_letter_id,
-        ]
+        [GW_TARGET_ID => $tid, 'w1' => $selected_letter_id]
     );
 
     $this->str .= postQuery(
         $ar_query,
         $redirect_url,
-        (int)$this->sys['isDebugQ'],
-        0
+        $this->sys['isDebugQ'],
+        $this->sys['isPause']
     );
 
     return;

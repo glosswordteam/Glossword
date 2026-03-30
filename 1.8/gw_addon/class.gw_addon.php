@@ -35,37 +35,86 @@ if (!defined('IS_CLASS_ADDON')) {
     class gw_addon
     {
 
+        /** @var gw_session */
+        public $oSess;
+
+        /** @var gw_database */
+        public $oDb;
+
+        /** @var gw_sql_query */
+        public $oSqlQ;
+
+        /** @var gw_language */
+        public $oL;
+
+        /** @var gw_html */
+        public $oHtml;
+
+        /** @var gw_functions */
+        public $oFunc;
+
+        /** @var gw_template */
+        public $oTpl;
+
+        /** @var gw_case */
+        public $oCase;
+
+        /** @var array */
+        public $sys = [];
+
+        /** @var array */
+        public $gw_this = [];
+
+        /** @var array */
+        public $ar_theme = [];
+
+        /** @var array */
+        public $arDictParam = [];
+
+        /** @var gw_url_builder */
+        public $oUrlBuilder;
+
         public $str;
         public $cfg;
 
-        // General usage
+        /**
+         * Initialize full addon dependencies.
+         *
+         * @return void
+         */
         public function init()
         {
             global $oSess, $oDb, $oSqlQ, $oL, $oHtml, $oFunc, $oTpl, $oCase, $sys, $gw_this, $ar_theme, $arDictParam, $oUrlBuilder;
-            $this->oSess =& $oSess;
-            $this->oFunc =& $oFunc;
-            $this->oDb =& $oDb;
-            $this->oSqlQ =& $oSqlQ;
-            $this->oCase =& $oCase;
-            $this->oL =& $oL;
-            $this->oTpl =& $oTpl;
-            $this->oHtml =& $oHtml;
-            $this->gw_this =& $gw_this;
-            $this->sys =& $sys;
-            $this->ar_theme =& $ar_theme;
+
+            $this->oSess       =& $oSess;
+            $this->oFunc       =& $oFunc;
+            $this->oDb         =& $oDb;
+            $this->oSqlQ       =& $oSqlQ;
+            $this->oCase       =& $oCase;
+            $this->oL          =& $oL;
+            $this->oTpl        =& $oTpl;
+            $this->oHtml       =& $oHtml;
+            $this->gw_this     =& $gw_this;
+            $this->sys         =& $sys;
+            $this->ar_theme    =& $ar_theme;
             $this->arDictParam =& $arDictParam;
             $this->oUrlBuilder =& $oUrlBuilder;
         }
 
-        // Maintenance tasks
+        /**
+         * Initialize minimal addon dependencies for API mode.
+         *
+         * @return void
+         */
         public function init_m()
         {
-            global $oDb, $oSqlQ, $oFunc, $sys, $gw_this, $arDictParam;
-            $this->oFunc =& $oFunc;
-            $this->oDb =& $oDb;
-            $this->oSqlQ =& $oSqlQ;
-            $this->gw_this =& $gw_this;
-            $this->sys =& $sys;
+            global $oDb, $oSqlQ, $oFunc, $sys, $gw_this, $arDictParam, $oUrlBuilder;
+
+            $this->oFunc       =& $oFunc;
+            $this->oDb         =& $oDb;
+            $this->oSqlQ       =& $oSqlQ;
+            $this->gw_this     =& $gw_this;
+            $this->sys         =& $sys;
             $this->arDictParam =& $arDictParam;
             $this->oUrlBuilder =& $oUrlBuilder;
         }

@@ -167,7 +167,7 @@ function gw_sql2defnpreview($arSql)
 			'is_complete' => $arV['is_complete']
 		);
 		/* */
-		$arPre = array_merge_clobber($arPre, gw_Xml2Array('<term>'.$arV['term'].'</term>'.$arV['defn']));
+		$arPre = gw_array_merge_clobber($arPre, gw_Xml2Array('<term>'. $arV['term'].'</term>'. $arV['defn']));
 #prn_r( $arPre );
 		for (reset($arFields); list($fK, $fV) = each($arFields);)
 		{

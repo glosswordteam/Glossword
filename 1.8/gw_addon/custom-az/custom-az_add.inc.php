@@ -42,15 +42,7 @@ if ($this->gw_this['vars']['post'] == '') {
 
     $this->str .= $this->get_form_custom_az($ar_post, 0, 0, $ar_req_fields);
 } else {
-    $ar_post = isset($this->gw_this['vars']['arPost']) && is_array($this->gw_this['vars']['arPost'])
-        ? $this->gw_this['vars']['arPost']
-        : [];
-
-    /* Normalize posted values */
-    $ar_post['profile_name'] = isset($ar_post['profile_name'])
-        ? trim((string)$ar_post['profile_name'])
-        : '';
-    $ar_post['is_active']    = isset($ar_post['is_active']) ? 1 : 0;
+    $ar_post = $this->gw_this['vars']['arPost'];
 
     /* Validate posted values */
     $ar_broken = validatePostWalk($ar_post, $ar_req_fields);
@@ -67,9 +59,7 @@ if ($this->gw_this['vars']['post'] == '') {
         $redirect_url = $this->oUrlBuilder->build_admin_url(
             GW_A_BROWSE,
             $this->component,
-            [
-                GW_TARGET_ID => (int)$ar_insert['id_profile'],
-            ]
+            [GW_TARGET_ID => (int)$ar_insert['id_profile']]
         );
 
         $this->str .= postQuery(
@@ -95,4 +85,3 @@ if ($this->gw_this['vars']['post'] == '') {
 
 $this->str .= '</td></tr></tbody></table>';
 
-?>

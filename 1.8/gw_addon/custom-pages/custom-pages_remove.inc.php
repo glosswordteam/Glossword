@@ -24,7 +24,7 @@ if (!$this->gw_this['vars']['isConfirm']) {
     return;
 }
 
-$page_id = (int) $this->gw_this['vars']['tid'];
+$page_id = (int) $this->gw_this['vars'][GW_TARGET_ID];
 
 /* Enable debug mode */
 # $this->sys['isDebugQ'] = 1;
@@ -62,18 +62,10 @@ if (empty($ar_keys)) {
 $sql_ids = implode(', ', $ar_keys);
 
 /* Remove pages */
-$ar_query[] = 'DELETE FROM `'
-    . $this->sys['tbl_prefix']
-    . 'pages` WHERE `id_page` IN ('
-    . $sql_ids
-    . ')';
+$ar_query[] = 'DELETE FROM `' . gw_get_tbl_name('pages') . '` WHERE `id_page` IN (' . $sql_ids . ')';
 
 /* Remove page phrases */
-$ar_query[] = 'DELETE FROM `'
-    . $this->sys['tbl_prefix']
-    . 'pages_phrase` WHERE `id_page` IN ('
-    . $sql_ids
-    . ')';
+$ar_query[] = 'DELETE FROM `' . gw_get_tbl_name('pages_phrase') . '` WHERE `id_page` IN (' . $sql_ids . ')';
 
 /* Redirect */
 $this->str .= postQuery(

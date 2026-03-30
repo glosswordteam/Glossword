@@ -1,16 +1,17 @@
 <?php
+
 /**
  * Glossword - glossary compiler (http://glossword.biz/)
- * © 2008-2021 Glossword.biz team <team at glossword dot biz>
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
  * © 2002-2008 Dmitry N. Shilnikov
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
-if ( ! defined('IN_GW')) {
+if (!defined('IN_GW')) {
     die('<!-- Not in App -->');
 }
 /**
@@ -21,50 +22,75 @@ if ( ! defined('IN_GW')) {
  *     CRLF
  * 2 Apr 2008: added nesting level
  */
-if ( ! class_exists('gw_register_globals')) {
-
+if (!class_exists('gw_register_globals')) {
     class gw_register_globals
     {
         public $max_nesting_level = 10;
 
-        public function register($ar = array())
+        /**
+         * Register incoming request values by field names.
+         *
+         * Priority:
+         * 1. POST
+         * 2. GET
+         * 3. COOKIE
+         * 4. Default empty value
+         *
+         * Uploaded files are stored in _files.
+         * Cookie values are stored in _cookie.
+         *
+         * @param array $ar Field names to register.
+         *
+         * @return array
+         */
+        public function register($ar = [])
         {
-            if ( ! is_array($ar)) {
-                return array();
-            }
             global $sys;
-            global $_GET, $_POST, $_FILES, $_COOKIE;
-            $tmp           = array();
-            $tmp['_files'] = $tmp['_cookie'] = array();
-            foreach ($ar as $k => $v) {
-                if (isset($_POST[$v]) && ($_POST[$v] != '')) {
-                    /* get values from _POST */
-                    $tmp[$v]        = $_POST[$v];
-                    $tmp['_method'] = 'post';
-                } elseif (isset($_GET[$v]) && ($_GET[$v] != '')) {
-                    /* get values from _GET */
-                    $tmp[$v] = $_GET[$v];
-                } elseif (isset($_COOKIE[$v . $sys['token']]) && ($_COOKIE[$v . $sys['token']] != '')
-                ) {
-                    /* get values from _COOKIE */
-                    $tmp['_cookie'][$v] = urldecode($_COOKIE[$v . $sys['token']]);
+
+            $tmp          = [
+                '_files'  => [],
+                '_cookie' => [],
+            ];
+            $cookie_token = isset($sys['token']) ? (string)$sys['token'] : '';
+
+            if (!is_array($ar)) {
+                return $tmp;
+            }
+
+            foreach ($ar as $field_name) {
+                $field_name = (string)$field_name;
+
+                if (isset($_POST[$field_name]) && ($_POST[$field_name] !== '')) {
+                    /* Get value from POST */
+                    $tmp[$field_name] = $_POST[$field_name];
+                    $tmp['_method']   = 'post';
+                } elseif (isset($_GET[$field_name]) && ($_GET[$field_name] !== '')) {
+                    /* Get value from GET */
+                    $tmp[$field_name] = $_GET[$field_name];
+                } elseif (isset($_COOKIE[$field_name . $cookie_token]) && ($_COOKIE[$field_name . $cookie_token] !== '')) {
+                    /* Get value from COOKIE */
+                    $tmp['_cookie'][$field_name] = urldecode($_COOKIE[$field_name . $cookie_token]);
                 } else {
-                    /* default */
-                    $tmp[$v] = '';
+                    /* Default value */
+                    $tmp[$field_name] = '';
                 }
-                /* filter incoming */
-                if (isset($tmp['_cookie'][$v])) {
-                    $tmp['_cookie'][$v] = $this->fix_newline($tmp['_cookie'][$v]);
-                    $tmp['_cookie'][$v] = $this->fix_slash($tmp['_cookie'][$v]);
+
+                /* Filter incoming value */
+                if (isset($tmp['_cookie'][$field_name])) {
+                    $tmp['_cookie'][$field_name] = $this->fix_newline($tmp['_cookie'][$field_name]);
+                    $tmp['_cookie'][$field_name] = $this->fix_slash($tmp['_cookie'][$field_name]);
                 } else {
-                    $tmp[$v] = $this->fix_newline($tmp[$v]);
-                    $tmp[$v] = $this->fix_slash($tmp[$v]);
+                    $tmp[$field_name] = $this->fix_newline($tmp[$field_name]);
+                    $tmp[$field_name] = $this->fix_slash($tmp[$field_name]);
                 }
-                /* */
-                if (isset($_FILES[$v]) && ($_FILES[$v] != '')) {
-                    /* get values from FILES */
-                    $tmp['_files'][$v]         = $_FILES[$v];
-                    $tmp['_files'][$v]['name'] = $this->fix_slash($tmp['_files'][$v]['name']);
+
+                if (isset($_FILES[$field_name]) && is_array($_FILES[$field_name]) && !empty($_FILES[$field_name])) {
+                    /* Get uploaded file data */
+                    $tmp['_files'][$field_name] = $_FILES[$field_name];
+
+                    if (isset($tmp['_files'][$field_name]['name'])) {
+                        $tmp['_files'][$field_name]['name'] = $this->fix_slash($tmp['_files'][$field_name]['name']);
+                    }
                 }
             }
 
@@ -86,7 +112,7 @@ if ( ! class_exists('gw_register_globals')) {
                     }
                 }
             } else {
-                return strtr($v, array("\r\n" => PHP_EOL, "\n" => PHP_EOL, "\r" => PHP_EOL));
+                return trim(strtr($v, ["\r\n" => PHP_EOL, "\n" => PHP_EOL, "\r" => PHP_EOL]));
             }
 
             return $v;
