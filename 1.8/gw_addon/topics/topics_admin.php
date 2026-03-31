@@ -298,7 +298,7 @@ class gw_addon_topic_admin extends gw_addon
 				$this->str .= '<li><span class="gray">';
 				$this->str .= $this->oHtml->a($filename, $filename) . '</span>&#8230; ';
 				$isWrite = $this->oFunc->file_put_contents($filename, $xml, $mode);
-				$this->str .= ( $isWrite ?  'ok (' . $this->oFunc->number_format(strlen($xml), 0, $this->oL->languagelist('4')) . ' ' . $this->oL->m('bytes') . ')' : $this->oL->m('error') ) . '</li>';
+				$this->str .= ( $isWrite ?  'ok (' . $this->oFunc->number_format(strlen($xml), 0, $this->oL->languagelist(LOCALE_LANG_RULES)) . ' ' . $this->oL->m('bytes') . ')' : $this->oL->m('error') ) . '</li>';
 				$this->str .= '</ul>';
 			}
 		}

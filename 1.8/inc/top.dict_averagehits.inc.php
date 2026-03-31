@@ -76,10 +76,10 @@ foreach ($arSql as $arV) {
     $strData .= '<td>' . $cnt . '</td>';
     $strData .= '<td>' . $oHtml->a($sys['page_index'] . '?a=list&p=1&d=' . $arV['id'], $arV['title']) . '</td>';
     $strData .= '<td style="text-align:' . $sys['css_align_right'] . '">'
-        . $oFunc->number_format($arV['hits_avg'], 0, $oL->languagelist('4'))
+        . $oFunc->number_format($arV['hits_avg'], 0, $oL->languagelist(LOCALE_LANG_RULES))
         . '</td>';
     $strData .= '<td style="text-align:' . $sys['css_align_right'] . '">'
-        . $oFunc->number_format($arV['hits'], 0, $oL->languagelist('4'))
+        . $oFunc->number_format($arV['hits'], 0, $oL->languagelist(LOCALE_LANG_RULES))
         . '</td>';
     $strData .= '</tr>';
 
@@ -92,10 +92,10 @@ $strData .= '<tr class="xt" style="background:' . $ar_theme['color_3'] . '">';
 $strData .= '<td></td>';
 $strData .= '<td>' . $oHtml->a($sys['page_index'], '<b>' . $oL->m('catalog') . '&#160;&gt;</b>') . '</td>';
 $strData .= '<td style="text-align:' . $sys['css_align_right'] . '">'
-    . $oFunc->number_format($sumAvg, 0, $oL->languagelist('4'))
+    . $oFunc->number_format($sumAvg, 0, $oL->languagelist(LOCALE_LANG_RULES))
     . '</td>';
 $strData .= '<td style="text-align:' . $sys['css_align_right'] . '">'
-    . $oFunc->number_format($sumHits, 0, $oL->languagelist('4'))
+    . $oFunc->number_format($sumHits, 0, $oL->languagelist(LOCALE_LANG_RULES))
     . '</td>';
 $strData .= '</tr>';
 ?>

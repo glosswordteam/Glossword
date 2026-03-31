@@ -30,8 +30,8 @@ function gw_get_sql_cache()
 
 	$arTableInfo = $oDb->table_info($sys['tbl_prefix'].'search_results');
 	$int_size = ($arTableInfo['Data_length'] > 1) ? $arTableInfo['Data_length']+$arTableInfo['Index_length'] : 0;
-	$arStatus[] = array($oL->m('1020'), $oFunc->number_format($int_size, 0, $oL->languagelist('4')));
-	$arStatus[] = array($oL->m('1021'), $oFunc->number_format($arTableInfo['Rows'], 0, $oL->languagelist('4')));
+	$arStatus[] = array($oL->m('1020'), $oFunc->number_format($int_size, 0, $oL->languagelist(LOCALE_LANG_RULES)));
+	$arStatus[] = array($oL->m('1021'), $oFunc->number_format($arTableInfo['Rows'], 0, $oL->languagelist(LOCALE_LANG_RULES)));
 
 	/* Link to confirm */
 	if (($int_size > 1) && ($gw_this['vars']['isConfirm'] != 2))
@@ -50,8 +50,8 @@ function gw_get_file_cache()
 
 	$ar_tree = gw_parse_tree($sys['path_cache_sql'], ($gw_this['vars']['is'] == 1) ? 1 : 0);
 	$arStatus = $ar_tree['names'];
-	$arStatus[] = array($oL->m('1022'), $oFunc->number_format($ar_tree['bytes'], 0, $oL->languagelist('4')));
-	$arStatus[] = array($oL->m('1021'), $oFunc->number_format($ar_tree['files'], 0, $oL->languagelist('4')));
+	$arStatus[] = array($oL->m('1022'), $oFunc->number_format($ar_tree['bytes'], 0, $oL->languagelist(LOCALE_LANG_RULES)));
+	$arStatus[] = array($oL->m('1021'), $oFunc->number_format($ar_tree['files'], 0, $oL->languagelist(LOCALE_LANG_RULES)));
 	/* Link to confirm */
 	if (($ar_tree['bytes'] > 1) && ($gw_this['vars']['isConfirm'] != '1'))
 	{

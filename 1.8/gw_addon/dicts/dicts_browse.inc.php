@@ -180,7 +180,7 @@ while (is_array($arAlltopics) && list($kp, $tp) = each ($arAlltopics))
 			$this->str .= '<td class="actions-third" style="width:20%;text-align:'.$this->sys['css_align_right'].'">';
 			if ($arV['int_terms'])
 			{
-				$this->str .= $this->oHtml->a($this->sys['page_admin'].'?'.GW_ACTION.'='.GW_A_SEARCH.'&id='.$arV['id'].'&q=*&srch[in]=103&t=dicts', '<span class="green">'.$this->oFunc->number_format($arV['int_terms'], 0, $this->oL->languagelist('4')).'</span>', $this->oL->m('1320'));
+				$this->str .= $this->oHtml->a($this->sys['page_admin'].'?'.GW_ACTION.'='.GW_A_SEARCH.'&id='.$arV['id'].'&q=*&srch[in]=103&t=dicts', '<span class="green">'.$this->oFunc->number_format($arV['int_terms'], 0, $this->oL->languagelist(LOCALE_LANG_RULES)).'</span>', $this->oL->m('1320'));
 			}
 			else
 			{
@@ -189,7 +189,7 @@ while (is_array($arAlltopics) && list($kp, $tp) = each ($arAlltopics))
 			$this->str .= ' / ';
 			if ($arV['int_terms_total']-$arV['int_terms'])
 			{
-				$this->str .= $this->oHtml->a($this->sys['page_admin'].'?'.GW_ACTION.'='.GW_A_SEARCH.'&id='.$arV['id'].'&q=*&srch[in]=100&t=dicts', '<span class="red">'.$this->oFunc->number_format($arV['int_terms_total']-$arV['int_terms'], 0, $this->oL->languagelist('4')).'</span>', $this->oL->m('srch_7'));
+				$this->str .= $this->oHtml->a($this->sys['page_admin'].'?'.GW_ACTION.'='.GW_A_SEARCH.'&id='.$arV['id'].'&q=*&srch[in]=100&t=dicts', '<span class="red">'.$this->oFunc->number_format($arV['int_terms_total']-$arV['int_terms'], 0, $this->oL->languagelist(LOCALE_LANG_RULES)).'</span>', $this->oL->m('srch_7'));
 			}
 			else
 			{
@@ -198,7 +198,7 @@ while (is_array($arAlltopics) && list($kp, $tp) = each ($arAlltopics))
 			$this->str .= ' / ';
 			if ($arV['int_terms_total'])
 			{
-				$this->str .= $this->oHtml->a($this->sys['page_admin'].'?'.GW_ACTION.'='.GW_A_SEARCH.'&id='.$arV['id'].'&q=*&srch[in]=1&t=dicts', $this->oFunc->number_format($arV['int_terms_total'], 0, $this->oL->languagelist('4')), $this->oL->m('total'));
+				$this->str .= $this->oHtml->a($this->sys['page_admin'].'?'.GW_ACTION.'='.GW_A_SEARCH.'&id='.$arV['id'].'&q=*&srch[in]=1&t=dicts', $this->oFunc->number_format($arV['int_terms_total'], 0, $this->oL->languagelist(LOCALE_LANG_RULES)), $this->oL->m('total'));
 			}
 			else
 			{

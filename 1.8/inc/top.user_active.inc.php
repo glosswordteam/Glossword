@@ -60,7 +60,7 @@ foreach ($arSql as $arV) {
             $arV['user_name']
         ) . '</td>';
     $strData .= '<td>';
-    $strData .= $oFunc->number_format($arV['int_items'], 0, $oL->languagelist('4'));
+    $strData .= $oFunc->number_format($arV['int_items'], 0, $oL->languagelist(LOCALE_LANG_RULES));
     $strData .= '</td>';
     $strData .= '</tr>';
 }

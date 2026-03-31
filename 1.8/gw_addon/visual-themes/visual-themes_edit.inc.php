@@ -260,10 +260,10 @@ else
 		$this->str .= '<ul class="xt">';
 		$this->str .= '<li><span class="gray">';
 		$this->str .= $path_css . '/style.css' . '</span>&#8230; ';
-		$this->str .= ( $isWrite ? 'ok (' . $this->oFunc->number_format( strlen( $vars['css_style'] ), 0, $this->oL->languagelist( '4' ) ) . " " . $this->oL->m( 'bytes' ) . ')' : $this->oL->m( 'error' ) ) . '</li>';
+		$this->str .= ( $isWrite ? 'ok (' . $this->oFunc->number_format(strlen( $vars['css_style'] ), 0, $this->oL->languagelist(LOCALE_LANG_RULES)) . " " . $this->oL->m( 'bytes' ) . ')' : $this->oL->m( 'error' ) ) . '</li>';
 		$this->str .= '<li><span class="gray">';
 		$this->str .= $path_css . '/style_print.css' . '</span>&#8230; ';
-		$this->str .= ( $isWrite ? 'ok (' . $this->oFunc->number_format( strlen( $vars['css_print'] ), 0, $this->oL->languagelist( '4' ) ) . " " . $this->oL->m( 'bytes' ) . ')' : $this->oL->m( 'error' ) ) . '</li>';
+		$this->str .= ( $isWrite ? 'ok (' . $this->oFunc->number_format(strlen( $vars['css_print'] ), 0, $this->oL->languagelist(LOCALE_LANG_RULES)) . " " . $this->oL->m( 'bytes' ) . ')' : $this->oL->m( 'error' ) ) . '</li>';
 		$this->str .= '</ol>';
 	}
 	else

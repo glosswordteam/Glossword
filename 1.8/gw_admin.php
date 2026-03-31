@@ -283,15 +283,15 @@ include_once($sys['path_addon'].'/multilingual_vars.php');
 include_once($sys['path_addon'].'/fields_extension.php');
 
 // Apply variables for HTML-templates
-$oTpl->addVal( 'v:language',       $oL->languagelist("0") );
-$oTpl->addVal( 'v:text_direction', $oL->languagelist("1") );
-$oTpl->addVal( 'v:charset',        $oL->languagelist("2") );
+$oTpl->addVal( 'v:language',       $oL->languagelist(LOCALE_LANG_CODE) );
+$oTpl->addVal( 'v:text_direction', $oL->languagelist(LOCALE_LANG_DIRECTION) );
+$oTpl->addVal( 'v:charset',        $oL->languagelist(LOCALE_LANG_ENCODING) );
 /* 11 december 2002, r-t-l with l-t-r */
 $sys['css_align_right'] = 'right';
 $sys['css_align_left'] = 'left';
 $sys['css_dir_numbers'] = 'rtl';
 $sys['css_dir_text'] = 'ltr';
-if ($oL->languagelist('1') == 'rtl')
+if ($oL->languagelist(LOCALE_LANG_DIRECTION) == 'rtl')
 {
 	$sys['css_dir_text'] = 'rtl';
 	$sys['css_dir_numbers'] = 'ltr';
@@ -525,7 +525,10 @@ if ($gw_this['vars']['d'])
 	$strDictDetails .= '<td style="width:23%" class="actions-third"><div class="gray xt">' . $oL->m('termsamount') . ':</div>';
 	if ($arDictParam['int_terms'])
 	{
-		$strDictDetails .= $oHtml->a($sys['page_admin'].'?'.GW_ACTION.'='.GW_A_SEARCH.'&id='.$arDictParam['id'].'&q=*&srch[in]=103&t=dicts', '<span class="green">'.$oFunc->number_format($arDictParam['int_terms'], 0, $oL->languagelist('4')).'</span>', $oL->m('1320'));
+		$strDictDetails .= $oHtml->a(
+            $sys['page_admin'].'?'.GW_ACTION.'='.GW_A_SEARCH.'&id='.$arDictParam['id'].'&q=*&srch[in]=103&t=dicts',
+            '<span class="green">'.$oFunc->number_format($arDictParam['int_terms'], 0, $oL->languagelist(LOCALE_LANG_RULES)).'</span>', $oL->m('1320')
+        );
 	}
 	else
 	{
@@ -534,7 +537,10 @@ if ($gw_this['vars']['d'])
 	$strDictDetails .= ' / ';
 	if ($arDictParam['int_terms_total']-$arDictParam['int_terms'])
 	{
-		$strDictDetails .= $oHtml->a($sys['page_admin'].'?'.GW_ACTION.'='.GW_A_SEARCH.'&id='.$arDictParam['id'].'&q=*&srch[in]=100&t=dicts', '<span class="red">'.$oFunc->number_format($arDictParam['int_terms_total']-$arDictParam['int_terms'], 0, $oL->languagelist('4')).'</span>', $oL->m('srch_7'));
+		$strDictDetails .= $oHtml->a(
+            $sys['page_admin'].'?'.GW_ACTION.'='.GW_A_SEARCH.'&id='.$arDictParam['id'].'&q=*&srch[in]=100&t=dicts',
+            '<span class="red">'.$oFunc->number_format($arDictParam['int_terms_total']-$arDictParam['int_terms'], 0, $oL->languagelist(LOCALE_LANG_RULES)).'</span>', $oL->m('srch_7')
+        );
 	}
 	else
 	{
@@ -543,7 +549,10 @@ if ($gw_this['vars']['d'])
 	$strDictDetails .= ' / ';
 	if ($arDictParam['int_terms_total'])
 	{
-		$strDictDetails .= $oHtml->a($sys['page_admin'].'?'.GW_ACTION.'='.GW_A_SEARCH.'&id='.$arDictParam['id'].'&q=*&srch[in]=1&t=dicts', $oFunc->number_format($arDictParam['int_terms_total'], 0, $oL->languagelist('4')), $oL->m('total'));
+		$strDictDetails .= $oHtml->a(
+            $sys['page_admin'].'?'.GW_ACTION.'='.GW_A_SEARCH.'&id='.$arDictParam['id'].'&q=*&srch[in]=1&t=dicts',
+            $oFunc->number_format($arDictParam['int_terms_total'], 0, $oL->languagelist(LOCALE_LANG_RULES)), $oL->m('total')
+        );
 	}
 	else
 	{
@@ -552,7 +561,7 @@ if ($gw_this['vars']['d'])
 	$strDictDetails .= '</td>';
 	$strDictDetails .= '<td class="actions-third" style="width:7%"><div class="gray xt">' . $oL->m('status') . ':</div>'. $str_is . '</td>';
 	$strDictDetails .= '<td style="width:19%"><div class="gray xt">' . $oL->m('lang') . ':</div><div class="xu">'.  ($arDictParam['lang'] ? $languagelist[$arDictParam['lang']] : $languagelist[$sys['locale_name']] ) . '</div></td>';
-	$strDictDetails .= '<td style="width:10%"><div class="gray xt">' . $oL->m('size') . ', '.$oL->m('kb').':</div><div class="xu">'. $oFunc->number_format($arDictParam["int_bytes"]/1024, 1, $oL->languagelist('4')) . '</div></td>';
+	$strDictDetails .= '<td style="width:10%"><div class="gray xt">' . $oL->m('size') . ', '.$oL->m('kb').':</div><div class="xu">'. $oFunc->number_format($arDictParam["int_bytes"]/1024, 1, $oL->languagelist(LOCALE_LANG_RULES)) . '</div></td>';
 	$strDictDetails .= '</tr>';
 	$strDictDetails .= '</tbody></table>';
 #	$oHtml->setTag('a', 'style', '');
@@ -856,7 +865,7 @@ if (GW_DEBUG)
 	include($sys['path_include'] . '/page.footer.php');
 }
 /* The last header */
-$oHdr->add('Content-Type: '.$sys['content_type'].'; charset='.$oL->languagelist('2'));
+$oHdr->add('Content-Type: '.$sys['content_type'].'; charset='.$oL->languagelist(LOCALE_LANG_ENCODING));
 $oHdr->output();
 
 $oTpl->addVal( 'TOMAIN', $strToMain );

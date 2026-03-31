@@ -44,7 +44,7 @@ function gw_dict_browse_for_select(array $ar_dict_param)
         . '</div>'
         . $oL->m(1364) . ': <strong>' . $dict_id . '</strong> &#8226; '
         . $oL->m('termsamount') . ': <strong>'
-        . $oFunc->number_format($terms_amount, 0, $oL->languagelist('4'))
+        . $oFunc->number_format($terms_amount, 0, $oL->languagelist(LOCALE_LANG_RULES))
         . '</strong>';
 }
 

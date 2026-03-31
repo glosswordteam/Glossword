@@ -167,10 +167,10 @@ class gw_addon_settings_admin extends gw_addon
 					'<td class="'.$v_class_2.'"><label for="arPost_is_list_announce_">' . $this->oL->m('1066') . '</label></td>'.
 					'</tr>';
 
-		$oForm->setTag('input', 'class', 'input');
-		$oForm->setTag('input', 'size', '11');
-		$oForm->setTag('input', 'maxlength', '22');
-		$oForm->setTag('input', 'dir', $this->oL->languagelist('1') );
+        $oForm->setTag('input', 'class', 'input');
+        $oForm->setTag('input', 'size', '11');
+        $oForm->setTag('input', 'maxlength', '22');
+        $oForm->setTag('input', 'dir', $this->oL->languagelist(LOCALE_LANG_DIRECTION));
 
 		$str_form .= '<tr>'.
 					'<td class="'.$v_class_1.'">' . $arBrokenMsg['txt_sep_breadcrump'] . $oForm->field('input', 'arPost[txt_sep_breadcrump]', textcodetoform($vars['txt_sep_breadcrump'])) . '</td>'.

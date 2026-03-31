@@ -141,7 +141,7 @@ class gw_addon_log_search_admin extends gw_addon
 			/* Search queries log */
 			$arTableInfo = $this->oDb->table_info($this->sys['tbl_prefix'].'stat_search');
 			$int_size = ($arTableInfo['Data_length'] > 1) ? $arTableInfo['Data_length']+$arTableInfo['Index_length'] : 0;
-			$str_question .= '<p class="xt">'.$this->oL->m('log_search').', '.$this->oL->m('bytes').': '. $this->oFunc->number_format($int_size, 0, $this->oL->languagelist('4')).'</p>';
+			$str_question .= '<p class="xt">'.$this->oL->m('log_search').', '.$this->oL->m('bytes').': '. $this->oFunc->number_format($int_size, 0, $this->oL->languagelist(LOCALE_LANG_RULES)).'</p>';
 
 			/* Not confirmed */
 			$oConfirm = new gwConfirmWindow;
@@ -423,7 +423,7 @@ class gw_addon_log_search_admin extends gw_addon
 		if (!empty($arSql))
 		{
 			$strR .= '<table cellspacing="1" cellpadding="4" border="0" width="100%"><tbody><tr class="xt gray">';
-			$strR .= '<td>' . $this->oL->m('srch_matches') .': <strong>'. $this->oFunc->number_format($this->int_found, 0, $this->oL->languagelist('4')) . '</strong></td>';
+			$strR .= '<td>' . $this->oL->m('srch_matches') .': <strong>'. $this->oFunc->number_format($this->int_found, 0, $this->oL->languagelist(LOCALE_LANG_RULES)) . '</strong></td>';
 			$strR .= '<td style="width:70%;text-align:'.$this->sys['css_align_right'].'">'. $str_pages.'</td>';
 			$strR .= '</tr></tbody></table>';
 		}

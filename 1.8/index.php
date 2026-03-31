@@ -613,7 +613,7 @@ if ($sys['is_use_xhtml'] && !$sys['is_debug_output'])
 }
 $oTpl->addVal( 'v:content_type', $sys['content_type'] );
 /* Last header */
-$oHdr->add('Content-Type: '.$sys['content_type'].'; charset='.$oL->languagelist('2'));
+$oHdr->add('Content-Type: '.$sys['content_type'].'; charset='.$oL->languagelist(LOCALE_LANG_ENCODING));
 #$oHdr->add('Content-Type: '.$sys['content_type'].'; charset='.$sys['internal_encoding']);
 /* ------------------------------------------------------- */
 /* Debug information */

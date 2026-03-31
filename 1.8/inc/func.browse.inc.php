@@ -399,7 +399,7 @@ function gw_sql2defnpreview($arSql)
 			$arA[$k]['defn'] = $oFunc->mb_wordwrap_first($arA[$k]['defn'], $sys['int_max_char_defn'], $sys['txt_magic_splitter'], 0);
 #			$arA[$k]['defn'] = $arA[$k]['defn'];
 			$int_s = mb_strpos($arA[$k]['defn'], $sys['txt_magic_splitter']);
-			$arA[$k]['kb'] = $oFunc->number_format($arV[1]['int_bytes'] / 1024, 1, $oL->languagelist('4')) .'&#160;'. $oL->m('kb');
+			$arA[$k]['kb'] = $oFunc->number_format($arV[1]['int_bytes'] / 1024, 1, $oL->languagelist(LOCALE_LANG_RULES)) .'&#160;'. $oL->m('kb');
 			/* $sys['txt_magic_splitter'] is not found */
 			if ($int_s === false)
 			{

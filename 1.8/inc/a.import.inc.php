@@ -1258,7 +1258,7 @@ function getFormImport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 			$oForm->setTag('file', 'dir', 'ltr');
 			$strForm .= '<tr>'.
 						'<td class="td1">'.'&#160;'.'</td>'.
-						'<td class="td2">' . $oL->m(1132) . ', '.$oL->m('mb').': <strong>'.$oFunc->number_format($sys['max_upload_size'], 0, $oL->languagelist('4')).'</strong><br />' . $oForm->field('file', 'file_location', '') . '</td>'.
+						'<td class="td2">' . $oL->m(1132) . ', '.$oL->m('mb').': <strong>'.$oFunc->number_format($sys['max_upload_size'], 0, $oL->languagelist(LOCALE_LANG_RULES)).'</strong><br />' . $oForm->field('file', 'file_location', '') . '</td>'.
 						'</tr>';
 		}
 		if (function_exists('xslt_create'))
@@ -1299,7 +1299,7 @@ function getFormImport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 			$oForm->setTag('file', 'dir', 'ltr');
 			$strForm .= '<tr>'.
 						'<td class="'.$v_class_1.'">&#160;</td>'.
-						'<td class="'.$v_class_2.'">' . $oL->m(1132) . ', '.$oL->m('mb').': <strong>'.$oFunc->number_format($sys['max_upload_size'], 0, $oL->languagelist('4')).'</strong><br />' . $oForm->field('file', 'file_location', '') . '</td>'.
+						'<td class="'.$v_class_2.'">' . $oL->m(1132) . ', '.$oL->m('mb').': <strong>'.$oFunc->number_format($sys['max_upload_size'], 0, $oL->languagelist(LOCALE_LANG_RULES)).'</strong><br />' . $oForm->field('file', 'file_location', '') . '</td>'.
 						'</tr>';
 		}
 		$oForm->setTag('input', 'class', '');
@@ -1578,13 +1578,13 @@ switch ($gw_this['vars']['arPost'][GW_ACTION])
 		/* Show time usage */
 		$this->str .= '<table cellpadding="2" cellspacing="1" width="100%" border="0"><tbody>';
 		/* Max execution time */
-		$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].'">'.$oL->m(1365).', '.$oL->m(1368).':</td><td><strong>' . $this->oFunc->number_format($arPost['max_execution_time'], 0, $this->oL->languagelist('4')) . '</strong></td></tr>';
+		$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].'">'.$oL->m(1365).', '.$oL->m(1368).':</td><td><strong>' . $this->oFunc->number_format($arPost['max_execution_time'], 0, $this->oL->languagelist(LOCALE_LANG_RULES)) . '</strong></td></tr>';
 		/* Memory spend */
-		$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].'">'.$oL->m(1366).', '.$oL->m('kb').':</td><td><strong>' . $this->oFunc->number_format($sys['memory_spend']/1024, 0, $this->oL->languagelist('4')) . '</strong></td></tr>';
+		$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].'">'.$oL->m(1366).', '.$oL->m('kb').':</td><td><strong>' . $this->oFunc->number_format($sys['memory_spend']/1024, 0, $this->oL->languagelist(LOCALE_LANG_RULES)) . '</strong></td></tr>';
 		/* Time spend, this step */
 		$sys['time_spend'] = $oTimer->end('import');
 		$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].';width:50%">'.$oL->m(1367).', '.$oL->m(1368).':</td>';
-		$this->str .= '<td style="width:50%"><strong>' . $this->oFunc->number_format($sys['time_spend'], 2, $this->oL->languagelist('4')) . '</strong></td></tr>';
+		$this->str .= '<td style="width:50%"><strong>' . $this->oFunc->number_format($sys['time_spend'], 2, $this->oL->languagelist(LOCALE_LANG_RULES)) . '</strong></td></tr>';
 		/* Time spend, all steps in total */
 		if (!isset($gw_this['vars']['date_start']))
 		{
@@ -1596,11 +1596,11 @@ switch ($gw_this['vars']['arPost'][GW_ACTION])
 		{
 			$this->str .= '<tr class="xt"><td colspan="2">&#160;</td></tr>';
 			$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].'">'.$oL->m(1321).':</td><td><strong>' . $file_location['name'] . '</strong></td></tr>';
-			$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].'">'.$oL->m('size').', '.$oL->m('bytes').':</td><td><strong>'.$this->oFunc->number_format($file_location['size'], 0, $oL->languagelist('4')).'</strong></td></tr>';
+			$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].'">'.$oL->m('size').', '.$oL->m('bytes').':</td><td><strong>'.$this->oFunc->number_format($file_location['size'], 0, $oL->languagelist(LOCALE_LANG_RULES)).'</strong></td></tr>';
 		}
 		$this->str .= '<tr class="xt"><td colspan="2">&#160;</td></tr>';
 		/* The number of added terms */
-		$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].'">'.$oL->m('termsamount').':</td><td><strong>'.$this->oFunc->number_format($this->gw_this['vars']['int_items_added'], 0, $oL->languagelist('4')).'</strong></td></tr>';
+		$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].'">'.$oL->m('termsamount').':</td><td><strong>'.$this->oFunc->number_format($this->gw_this['vars']['int_items_added'], 0, $oL->languagelist(LOCALE_LANG_RULES)).'</strong></td></tr>';
 
 		/* redirect to... */
 		$str_url = gw_after_redirect_url($gw_this['vars']['arPost']['after']);
@@ -1624,12 +1624,14 @@ switch ($gw_this['vars']['arPost'][GW_ACTION])
 			/* Redirect URL */
 			$str_url = 'a=import&arPost[format]='.$gw_this['vars']['arPost']['format'].'&arPost[after]='.GW_AFTER_TERM_GW_A_IMPORT.'&'.GW_TARGET.'='.GW_T_TERMS.'&id='.$this->gw_this['vars']['id'].'&post=1&arPost[id_session]='.$this->gw_this['vars']['id_session'];
 			$this->oTpl->addVal( 'v:meta_refresh', gethtml_metarefresh($this->sys['page_admin'].'?'.$str_url, $this->sys['time_refresh']) );
-			$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].'">'. sprintf("%s+:</td><td><strong>%s</strong></td></tr>", $oL->m('termsamount'), $this->oFunc->number_format($gw_this['vars']['int_items_left'], 0, $oL->languagelist('4')) );
+			$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].'">'. sprintf("%s+:</td><td><strong>%s</strong></td></tr>", $oL->m('termsamount'), $this->oFunc->number_format($gw_this['vars']['int_items_left'], 0, $oL->languagelist(LOCALE_LANG_RULES)) );
 		}
 		/* The number of total terms */
-		$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].'">'.$oL->m('total').':</td><td><strong>'.$this->oFunc->number_format($this->gw_this['vars']['int_items_total'], 0, $oL->languagelist('4')).'</strong></td></tr>';
+		$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].'">'
+            .$oL->m('total').':</td><td><strong>'.$this->oFunc->number_format($this->gw_this['vars']['int_items_total'], 0, $oL->languagelist(LOCALE_LANG_RULES)).'</strong></td></tr>';
 		/* Terms per second */
-		$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].'">'. sprintf("%s, %s:</td><td><strong>%s</strong></td></tr>", $oL->m('1149'), $oL->m('1150'), $this->oFunc->number_format($gw_this['vars']['int_items_added']/$oTimer->end('import'), 1, $this->oL->languagelist('4')) );
+		$this->str .= '<tr class="xt"><td style="text-align:'.$sys['css_align_right'].'">'
+            . sprintf("%s, %s:</td><td><strong>%s</strong></td></tr>", $oL->m('1149'), $oL->m('1150'), $this->oFunc->number_format($gw_this['vars']['int_items_added']/$oTimer->end('import'), 1, $this->oL->languagelist(LOCALE_LANG_RULES)) );
 		$this->str .= '</tbody></table>';
 
 		$this->str .= '<ul class="gwsql">';

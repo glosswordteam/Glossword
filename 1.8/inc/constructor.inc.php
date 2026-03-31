@@ -70,16 +70,16 @@ if ( $gw_this['vars']['layout'] != '' ) // settings for all dictionary pages
 		{
 			$oTpl->addVal( 'url:dict_name', $oHtml->a( $sys['page_index'] . '?a=index&d=' . $arDictParam['uri'], $arDictParam['title'] ) );
 		}
-		$oTpl->addVal( 'v:dict_name', $arDictParam['title'] );
-		$oTpl->addVal( 'v:dict_descr', $arDictParam['description'] );
-		$oTpl->addVal( 'v:dict_terms', $oFunc->number_format( $arDictParam['int_terms'], 0, $oL->languagelist( '4' ) ) );
+        $oTpl->addVal('v:dict_name', $arDictParam['title']);
+        $oTpl->addVal('v:dict_descr', $arDictParam['description']);
+        $oTpl->addVal('v:dict_terms', $oFunc->number_format($arDictParam['int_terms'], 0, $oL->languagelist(LOCALE_LANG_RULES)));
 		/* The number of pages */
 		$intSumPages = @ceil( $arDictParam['int_terms'] / $arDictParam['page_limit'] );
 		/* ceil() could return 0, we need 1. */
 		$intSumPages = (!$intSumPages ? 1 : $intSumPages);
-		$oTpl->addVal( 'v:browse_pages', $oHtml->a(
-                        $sys['page_index'] . '?a=' . GW_A_LIST . '&' . GW_ID_DICT . '=' . $arDictParam['uri'] . '&p=1',
-						$oFunc->number_format( $intSumPages, 0, $oL->languagelist( '4' ) ) . ' (' . $oL->m( '3_browse' ) . ')'
+        $oTpl->addVal('v:browse_pages', $oHtml->a(
+                $sys['page_index'] . '?a=' . GW_A_LIST . '&' . GW_ID_DICT . '=' . $arDictParam['uri'] . '&p=1',
+                $oFunc->number_format($intSumPages, 0, $oL->languagelist(LOCALE_LANG_RULES)) . ' (' . $oL->m('3_browse') . ')'
             )
 		);
 		// letters 0-Z
@@ -123,15 +123,15 @@ if ( $gw_this['vars']['layout'] != '' ) // settings for all dictionary pages
 } // end of dictionary pages
 
 // Language settings, from Translation Kit
-$oTpl->addVal( 'v:language', $oL->languagelist( "0" ) );
-$oTpl->addVal( 'v:text_direction', $oL->languagelist( "1" ) );
-$oTpl->addVal( 'v:charset', $oL->languagelist( "2" ) );
+$oTpl->addVal('v:language', $oL->languagelist(LOCALE_LANG_CODE));
+$oTpl->addVal('v:text_direction', $oL->languagelist(LOCALE_LANG_DIRECTION));
+$oTpl->addVal('v:charset', $oL->languagelist(LOCALE_LANG_ENCODING));
 
 // 11 december 2002, r-t-l with l-t-r
 $sys['css_align_right'] = 'right';
 $sys['css_align_left'] = 'left';
 $sys['css_dir_numbers'] = 'rtl';
-if ( $oL->languagelist( '1' ) == 'rtl' )
+if ( $oL->languagelist(LOCALE_LANG_DIRECTION) == 'rtl' )
 {
 	$sys['css_dir_numbers'] = 'ltr';
 	$sys['css_align_right'] = 'left';
@@ -307,9 +307,9 @@ switch ( $gw_this['vars']['layout'] )
                         $oFunc->number_format(
                             $gw_this['vars']['p'],
                             0,
-                            $oL->languagelist('4')
+                            $oL->languagelist(LOCALE_LANG_RULES)
                         ),
-                        $oFunc->number_format($listA[3], 0, $oL->languagelist('4'))
+                        $oFunc->number_format($listA[3], 0, $oL->languagelist(LOCALE_LANG_RULES))
                     );
                     $gw_this['ar_breadcrumb'][] = $oHtml->a(
                         $oUrlBuilder->build_index_url(
@@ -841,8 +841,8 @@ switch ( $gw_this['vars']['layout'] )
 			$arStatCommon = gw_get_dict_stats();
 			$oTpl->addVal( 'block:stats', gw_html_block_small( $oL->m( 'web_stat' ),
 							'<span class="gray">' . (date_extract_int( $arStatCommon['date'], "%d" ) / 1) . date_extract_int( $arStatCommon['date'], (" %FL %Y" ) ) . '</span>'
-							. '<br />' . $oL->m( 'stat_dict' ) . ': ' . $oFunc->number_format( $arStatCommon['num'], 0, $oL->languagelist( '4' ) )
-							. '<br />' . $oL->m( 'stat_defn' ) . ': ' . $oFunc->number_format( $arStatCommon['sum'], 0, $oL->languagelist( '4' ) ), 'xt' )
+							. '<br />' . $oL->m( 'stat_dict' ) . ': ' . $oFunc->number_format($arStatCommon['num'], 0, $oL->languagelist(LOCALE_LANG_RULES))
+							. '<br />' . $oL->m( 'stat_defn' ) . ': ' . $oFunc->number_format($arStatCommon['sum'], 0, $oL->languagelist(LOCALE_LANG_RULES)), 'xt' )
 			);
 			## ------------------------------------------------
 			## Last updated dictionaries
@@ -1132,7 +1132,7 @@ if ( sizeof( $gw_this['vars']['ar_languages'] ) >= 1 )
 	$gw_this['select_lang'] = '<div class="box-themes">';
 	$gw_this['select_lang'] .= '<form action="' . GW_REQUEST_URI . '" method="post">';
 	$gw_this['select_lang'] .= '<table cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td style="width:99%">';
-	$gw_this['select_lang'] .= gw_html_forms_select($gw_this['vars']['ar_languages'], $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc'], GW_LANG_I, 'xt', 'width:100%', $oL->languagelist('1' ) );
+	$gw_this['select_lang'] .= gw_html_forms_select($gw_this['vars']['ar_languages'], $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc'], GW_LANG_I, 'xt', 'width:100%', $oL->languagelist(LOCALE_LANG_DIRECTION));
 	$gw_this['select_lang'] .= '</td><td style="width:1%"><input id="ok-il" style="width:3em" name="is[save_il]" type="submit" class="submitok" value="' . $oL->m( '1212' ) . '" />';
 	$gw_this['select_lang'] .= '</td></tr></tbody></table></form>';
 	$gw_this['select_lang'] .= '</div>';
@@ -1163,7 +1163,7 @@ if ( sizeof( $gw_this['ar_themes_select'] ) > 1 )
 	$gw_this['select_themes'] = '<div class="box-themes">';
 	$gw_this['select_themes'] .= '<form action="' . GW_REQUEST_URI . '" method="post">';
 	$gw_this['select_themes'] .= '<table cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td style="width:99%">';
-	$gw_this['select_themes'] .= gw_html_forms_select($gw_this['ar_themes_select'], $gw_this['vars']['visualtheme'], 'visualtheme', 'xt', 'width:100%', $oL->languagelist('1' ) );
+	$gw_this['select_themes'] .= gw_html_forms_select($gw_this['ar_themes_select'], $gw_this['vars']['visualtheme'], 'visualtheme', 'xt', 'width:100%', $oL->languagelist(LOCALE_LANG_DIRECTION));
 	$gw_this['select_themes'] .= '</td><td style="width:1%"><input id="ok-visualtheme" style="width:3em" type="submit" name="is[save_visualtheme]" class="submitok" value="' . $oL->m( '1212' ) . '" />';
 	$gw_this['select_themes'] .= '</td></tr></tbody></table></form>';
 	$gw_this['select_themes'] .= '</div>';

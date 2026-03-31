@@ -140,9 +140,9 @@ $oTpl = new $sys['class_tpl'];
 $oTpl->init('gw_admin');
 $oTpl->is_tpl_show_names = $sys['is_tpl_show_names'];
 $oTpl->addVal('v:path_tpl', $sys['server_dir'] . '/' . $sys['path_tpl'] . '/common');
-$oTpl->addVal('v:language', $oL->languagelist("0"));
-$oTpl->addVal('v:text_direction', $oL->languagelist("1"));
-$oTpl->addVal('v:charset', $oL->languagelist("2"));
+$oTpl->addVal('v:language', $oL->languagelist(LOCALE_LANG_CODE));
+$oTpl->addVal('v:text_direction', $oL->languagelist(LOCALE_LANG_DIRECTION));
+$oTpl->addVal('v:charset', $oL->languagelist(LOCALE_LANG_ENCODING));
 $oTpl->addVal('v:top_right', $oL->m('securenote'));
 $oTpl->addVal('href:home', $sys['server_dir'] . '/index.php');
 $oTpl->addVal('url:title_page', $oHtml->a($sys['page_index'], $oL->m('3_tomain')));
@@ -160,7 +160,7 @@ $oTpl->addVal('v:copyright', $sys['str_branding']);
 
 $sys['css_align_right'] = 'right';
 $sys['css_align_left'] = 'left';
-if ($oL->languagelist('1') == 'rtl') {
+if ($oL->languagelist(LOCALE_LANG_DIRECTION) == 'rtl') {
     $sys['css_align_right'] = 'left';
     $sys['css_align_left'] = 'right';
 }
@@ -204,7 +204,7 @@ function gw_login_form($ar_vars, $ar_broken = [], $ar_req = [])
 
     /* Mark fields as "REQUIRED" and make error messages */
     $ar_req = array_flip($ar_req);
-    while (is_array($ar_vars) && list($k, $v) = each($ar_vars)) {
+    foreach ($ar_vars as $k => $v) {
         $ar_req_m[$k] = isset($ar_req[$k]) ? '&#160;<span class="red"><strong>*</strong></span>' : '';
         $ar_broken_m[$k] = isset($ar_broken[$k]) ? ' <span class="red"><strong>' . $oL->m('reason_9') . '</strong></span>' : '';
     }
@@ -488,7 +488,7 @@ $oHdr->add('Expires: ' . date("D, d M Y H:i:s", $sys['time_now_gmt_unix']) . ' G
 $oHdr->add('Last-Modified: ' . date("D, d M Y H:i:s", $sys['time_now_gmt_unix']) . ' GMT');
 $oHdr->add('Cache-Control: no-cache, must-revalidate');
 $oHdr->add('Pragma: no-cache');
-$oHdr->add('Content-Type: ' . $sys['content_type'] . '; charset=' . $oL->languagelist('2'));
+$oHdr->add('Content-Type: ' . $sys['content_type'] . '; charset=' . $oL->languagelist(LOCALE_LANG_ENCODING));
 $oHdr->output();
 
 print $oTpl->output();

@@ -59,7 +59,7 @@ function gw_get_html_code()
         $oL->m('3_srch_submit').' <a onclick="window.open(this.href);return false" href="'.$sys['server_proto'].$sys['server_host'].$sys['page_index'].'">'.$sys['site_name'].'</a>',
         '<a onclick="window.open(this.href);return false" href="'.$sys['server_proto'].$sys['server_host'].$sys['page_index'].'">'.$sys['site_name'].'</a>',
         $oL->m('3_srch_submit'),
-        gw_html_forms_select($arDictMap, 0, "d", '', 'width:16em', $oL->languagelist("1"))
+        gw_html_forms_select($arDictMap, 0, "d", '', 'width:16em', LOCALE_LANG_DIRECTION)
 	);
 	$str = str_replace($ar_vars_1, $ar_vars_2, $str);
 	$str = preg_replace("/(\r\n|\r|\n|\t)/s", '', $str);

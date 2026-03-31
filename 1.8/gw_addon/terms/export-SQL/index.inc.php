@@ -305,7 +305,7 @@ else
 				$strQ .= gw_sql_replace($arV, gw_get_tbl_name('dict'), 0) . ';';
 			}
 			$isWrite = $this->oFunc->file_put_contents( $filename, $strQ, $mode);
-			$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist('4')) . " " . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
+			$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist(LOCALE_LANG_RULES)) . " " . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
 		}
 		/* 15 july 2003: Export dictionary statistics */
 		if ($vars['is_dictstats'])
@@ -325,7 +325,7 @@ else
 				$strQ .= gw_sql_replace($arV, $sys['tbl_prefix'] . 'stat_dict', 0) . ';';
 			}
 			$isWrite = $this->oFunc->file_put_contents( $filename, $strQ, $mode);
-			$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist('4')) . " " . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
+			$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist(LOCALE_LANG_RULES)) . " " . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
 		}
 		/* Export structure */
 		if (($arPost['sd_mode'] == 'sd') || ($arPost['sd_mode'] == 's'))
@@ -343,7 +343,7 @@ else
 			}
 			$strQ .= $oSqlQ->getQ('create-dict', $arDictParam['tablename']) . ';';
 			$isWrite = $this->oFunc->file_put_contents( $filename, $strQ, $mode);
-			$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist('4')) . " " . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
+			$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist(LOCALE_LANG_RULES)) . " " . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
 		}
 		/* Export data */
 		if (($arPost['sd_mode'] == 'sd') || ($arPost['sd_mode'] == 'd'))
@@ -400,7 +400,7 @@ else
 				}
 				$strQ .= CRLF . '# <!-- end of ' . $filename . ' -->';
 				$isWrite = $this->oFunc->file_put_contents( $filename, $strQ, $mode);
-				$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist('4')) . " " . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
+				$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist(LOCALE_LANG_RULES)) . " " . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
 
 				/* 21 Aug 2007: Export `user to term` mapping */
 				$strQ = '';
@@ -424,7 +424,7 @@ else
 					$strQ .= gw_sql_replace($arV, $sys['tbl_prefix'] . 'map_user_to_term', 0) . ';';
 				}
 				$isWrite = $this->oFunc->file_put_contents( $filename, $strQ, $mode);
-				$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist('4')) . " " . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
+				$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist(LOCALE_LANG_RULES)) . " " . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
 			}
 		}
 		if ($vars['is_keywords'])
@@ -494,7 +494,7 @@ else
 				$this->str .= '<li>';
 				$this->str .= $oHtml->a($filename, $filename) . '&#8230; ';
 				$isWrite = $this->oFunc->file_put_contents( $filename, $strQ, $mode);
-				$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist('4')) . " " . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
+				$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist(LOCALE_LANG_RULES)) . " " . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
 				$tt = new gw_timer('sql_exp');
 
 				/* File name for wordlist */
@@ -537,7 +537,7 @@ else
 				$this->str .= '<li>';
 				$this->str .= $oHtml->a($filename, $filename) . '&#8230; ';
 				$isWrite = $this->oFunc->file_put_contents( $filename, $strQ, $mode);
-				$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist('4')) . ' ' . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
+				$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist(LOCALE_LANG_RULES)) . ' ' . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
 			} // for each file
 		} // is_keywords
 		$this->str .= '</ul>';

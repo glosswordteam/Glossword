@@ -267,9 +267,12 @@ function getDictWordList($w1, $w2, $w3, $id_dict, $p, $is_descr = true, $is_full
 		$oTpl->tmp['d']['list_item'][$k1]['v:css_align_right'] = $sys['css_align_right'];
 		$oTpl->tmp['d']['list_item'][$k1]['v:css_align_left'] = $sys['css_align_left'];
 	}
-	$oTpl->addVal( 'v:terms_on_page', $oFunc->number_format($strA[1], 0, $oL->languagelist('4')) );
+	$oTpl->addVal( 'v:terms_on_page', $oFunc->number_format($strA[1], 0, $oL->languagelist(LOCALE_LANG_RULES)) );
 	$oTpl->addVal( 'l:terms_on_page', $oL->m('str_on_page') );
-	$oTpl->addVal( 'v:page_of_page',  sprintf($oL->m('str_page_of_page'), $oFunc->number_format($p, 0, $oL->languagelist('4')), $oFunc->number_format($strA[3], 0, $oL->languagelist('4'))) );
+	$oTpl->addVal( 'v:page_of_page',  sprintf(
+        $oL->m('str_page_of_page'),
+        $oFunc->number_format($p, 0, $oL->languagelist(LOCALE_LANG_RULES)), $oFunc->number_format($strA[3], 0, $oL->languagelist(LOCALE_LANG_RULES)))
+    );
 
 	global $gw_this;
 	if (GW_IS_BROWSE_WEB && $ar_theme['columns'] > 1)
@@ -530,7 +533,7 @@ function getCatalogTitle($ar, $arDictMap, $p = 0, $depth = 1, $dict_nmax, $runti
 									$v2['title']);
 							if ($sys['is_list_numbers'])
 							{
-								$str .= '&#32;(' . $oFunc->number_format($v2['int_terms'], 0, $oL->languagelist('4')) . ')';
+								$str .= '&#32;(' . $oFunc->number_format($v2['int_terms'], 0, $oL->languagelist(LOCALE_LANG_RULES)) . ')';
 							}
 							/* mark as foreign language */
 							if ($v2['lang'] != $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'])
@@ -1157,7 +1160,7 @@ function gw_get_thread_pages($ar = array(), $startId = 0, $cntRow = 1)
 					if ($ar[$startId]['int_items'] > 0)
 					{
 						$str .= $oHtml->a( $page_index . '?'.GW_ACTION.'='.GW_A_BROWSE.'&'.GW_TARGET.'='.GW_T_DICTS.'&w1='.$ar[$startId]['id'], 
-								$oFunc->number_format($ar[$startId]['int_items'], 0, $oL->languagelist('4')) 
+								$oFunc->number_format($ar[$startId]['int_items'], 0, $oL->languagelist(LOCALE_LANG_RULES))
 								);
 					}
 					else

@@ -61,7 +61,7 @@ function gw_dict_list_cnt($vars)
 					'<td>' .
 					$oForm->field('checkbox', 'arPost[dictionaries]['. $arDictParam['id'] . ']', $is_assigned) .
 					'</td><td>'.
-					$oFunc->number_format($arDictParam['int_terms'], 0, $oL->languagelist('4')).
+					$oFunc->number_format($arDictParam['int_terms'], 0, $oL->languagelist(LOCALE_LANG_RULES)).
 					'</td><td class="td2 actions-third">'.
 					$str_external_link .
 					'<label for="arPost_dictionaries_' . $arDictParam['id'] . '_">'.

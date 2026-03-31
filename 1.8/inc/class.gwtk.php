@@ -23,6 +23,13 @@
 if (!defined('IN_GW')) {
     die('<!-- Not in App -->');
 }
+
+const LOCALE_LANG_CODE      = 0;
+const LOCALE_LANG_DIRECTION = 1;
+const LOCALE_LANG_ENCODING  = 2;
+const LOCALE_LANG_NAME      = 3;
+const LOCALE_LANG_RULES     = 4;
+
 /* ------------------------------------------------------ */
 if (!defined('IS_CLASS_GWTK')) {
     define('IS_CLASS_GWTK', 1);
@@ -334,7 +341,6 @@ if (!defined('IS_CLASS_GWTK')) {
                 'pt-br-utf8'     => 'a:5:{i:0;s:5:"pt-br";i:1;s:3:"ltr";i:2;s:5:"UTF-8";i:3;s:20:"Brazilian Portuguese";i:4;a:3:{s:19:"thousands_separator";s:1:",";s:17:"decimal_separator";s:1:".";s:14:"part_separator";s:1:" ";}}',
                 'ro-utf8'        => 'a:5:{i:0;s:2:"ro";i:1;s:3:"ltr";i:2;s:5:"UTF-8";i:3;s:19:"Romanian - Română";i:4;a:3:{s:19:"thousands_separator";s:1:",";s:17:"decimal_separator";s:1:".";s:14:"part_separator";s:2:". ";}}',
                 'ru-utf8'        => 'a:5:{i:0;s:2:"ru";i:1;s:3:"ltr";i:2;s:5:"UTF-8";i:3;s:24:"Russian - Русский";i:4;a:3:{s:19:"thousands_separator";s:1:" ";s:17:"decimal_separator";s:1:",";s:14:"part_separator";s:2:". ";}}',
-                'ru-windows1251' => 'a:5:{i:0;s:2:"ru";i:1;s:3:"ltr";i:2;s:12:"windows-1251";i:3;s:16:"Russian - cp1251";i:4;a:3:{s:19:"thousands_separator";s:1:" ";s:17:"decimal_separator";s:1:",";s:14:"part_separator";s:2:". ";}}',
                 'rw-utf8'        => 'a:5:{i:0;s:2:"rw";i:1;s:3:"ltr";i:2;s:5:"UTF-8";i:3;s:20:"Rwanda - Kinyarwanda";i:4;a:3:{s:19:"thousands_separator";s:1:".";s:17:"decimal_separator";s:1:",";s:14:"part_separator";s:2:". ";}}',
                 'sk-utf8'        => 'a:5:{i:0;s:2:"sk";i:1;s:3:"ltr";i:2;s:5:"UTF-8";i:3;s:18:"Slovak - Slovensky";i:4;a:3:{s:19:"thousands_separator";s:1:".";s:17:"decimal_separator";s:1:",";s:14:"part_separator";s:2:". ";}}',
                 'sl-utf8'        => 'a:5:{i:0;s:2:"sl";i:1;s:3:"ltr";i:2;s:5:"UTF-8";i:3;s:9:"Slovenian";i:4;a:3:{s:19:"thousands_separator";s:1:".";s:17:"decimal_separator";s:1:",";s:14:"part_separator";s:2:". ";}}',
@@ -350,8 +356,6 @@ if (!defined('IS_CLASS_GWTK')) {
                 'zh-utf8'        => 'a:5:{i:0;s:2:"zh";i:1;s:3:"ltr";i:2;s:5:"UTF-8";i:3;s:35:"Chinese Simplified - 中文(简体)";i:4;a:3:{s:19:"thousands_separator";s:1:".";s:17:"decimal_separator";s:1:",";s:14:"part_separator";s:2:". ";}}',
                 'zh-tw-utf8'     => 'a:5:{i:0;s:5:"zh-tw";i:1;s:3:"ltr";i:2;s:5:"UTF-8";i:3;s:36:"Chinese Traditional - 中文(繁体)";i:4;a:3:{s:19:"thousands_separator";s:1:".";s:17:"decimal_separator";s:1:",";s:14:"part_separator";s:2:". ";}}',
             ];
-            #
-            # $ar = array( '', 'ltr', 'UTF-8', '', array('thousands_separator' => ',', 'decimal_separator' => '.', 'part_separator' => '. ') );
 
             if ($param !== '') {
                 if (!isset($a[$this->_pathLocale])) {
@@ -364,18 +368,17 @@ if (!defined('IS_CLASS_GWTK')) {
                     return false;
                 }
 
-                return isset($locale_settings[$param]) ? $locale_settings[$param] : false;
+                return $locale_settings[$param];
             }
 
             $result = [];
 
             foreach ($a as $locale_name => $locale_serialized) {
-                if (preg_match('/i:3;s:\d+:"([^"]*)";/', $locale_serialized, $matches)) {
-                    $result[$locale_name] = $matches[1];
-                } else {
-                    $result[$locale_name] = $locale_name;
-                }
+                $locale_settings = unserialize($locale_serialized);
+                $result[$locale_name] = $locale_settings[3];
             }
+
+            return $result;
 
         }
     } /* end of class */

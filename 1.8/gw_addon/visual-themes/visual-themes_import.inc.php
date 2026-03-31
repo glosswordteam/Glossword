@@ -115,7 +115,7 @@ else
 					$this->str .= '<li><span class="gray">';
 					$this->str .= $this->oHtml->a($filename, $filename) . '</span>&#8230; ';
 					$isWrite = $this->oFunc->file_put_contents($filename, $file_contents, 'w');
-					$this->str .= ( $isWrite ?  'ok (' . $this->oFunc->number_format(strlen($file_contents), 0, $this->oL->languagelist('4')) . ' ' . $this->oL->m('bytes') . ')' : $this->oL->m('error') ) . '</li>';
+					$this->str .= ( $isWrite ?  'ok (' . $this->oFunc->number_format(strlen($file_contents), 0, $this->oL->languagelist(LOCALE_LANG_RULES)) . ' ' . $this->oL->m('bytes') . ')' : $this->oL->m('error') ) . '</li>';
 				}
 			}
 		}

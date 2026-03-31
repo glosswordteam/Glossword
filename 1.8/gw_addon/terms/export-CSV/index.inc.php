@@ -471,7 +471,7 @@ else
 				}
 			}
 			$isWrite = $this->oFunc->file_put_contents( $filename, $strQ, $mode);
-			$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist('4')) . " " . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
+			$this->str .= ( $isWrite ?  '<span class="green">OK</span> (' . $this->oFunc->number_format(strlen($strQ), 0, $oL->languagelist(LOCALE_LANG_RULES)) . " " . $oL->m('bytes') . ')' : $oL->m('error') ) . '</li>';
 		}
 		$this->str .= '</ul>';
 		$oHtml->unsetTag('a');

@@ -175,7 +175,7 @@ class gw_render extends gw_htmlforms
 			if ($tmp['size'])
 			{
 				$tmp['strhtml'] .= '<span class="gw-attach"><a href="'.$this->sys['server_dir'].'/'.$this->sys['path_temporary'].'/a/'.$tmp['str'];
-				$tmp['strhtml'] .= '" title="'.$this->oFunc->number_format($tmp['size'], 0, $this->oL->languagelist('4')).' '.$this->oL->m('bytes').'">'.$this->oL->m('audio').'</a> ';
+				$tmp['strhtml'] .= '" title="'.$this->oFunc->number_format($tmp['size'], 0, $this->oL->languagelist(LOCALE_LANG_RULES)).' '.$this->oL->m('bytes').'">'.$this->oL->m('audio').'</a> ';
 				$tmp['strhtml'] .= '</span>';
 			}
 			$tmp['str'] = '';

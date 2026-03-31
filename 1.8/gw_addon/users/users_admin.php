@@ -204,7 +204,7 @@ class gw_addon_users_admin extends gw_addon
 						'</tr>';
 			$str_form .= '<tr>'.
 						'<td class="'.$v_class_1.'">' . $this->oL->m('termsamount') . ':</td>'.
-						'<td class="disabled">' . $this->oFunc->number_format($vars['int_items'], 0, $this->oL->languagelist('4')) . '</td>'.
+						'<td class="disabled">' . $this->oFunc->number_format($vars['int_items'], 0, $this->oL->languagelist(LOCALE_LANG_RULES)) . '</td>'.
 						'</tr>';
 			$str_form .= '<tr>';
 			$str_form .= '<td class="'.$v_class_1.'">' . $oForm->field('checkbox', 'arPost[is_active]', $vars['is_active']) . '</td>';
