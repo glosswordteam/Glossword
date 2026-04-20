@@ -1,7 +1,7 @@
 <?php
 /* Database settings for Glossword */
-define('GW_DB_HOST', 'localhost');
-define('GW_DB_DATABASE', 'glossword');
+define('GW_DB_HOST', 'mysql');
+define('GW_DB_DATABASE', 'glossword18');
 define('GW_DB_USER', 'root');
 define('GW_DB_PASSWORD', 'root');
 $sys['tbl_prefix'] = 'gw_';
@@ -9,7 +9,7 @@ $sys['db_type'] = 'mysqli';
 /* Path names for Glossword */
 $sys['server_proto'] = 'http://';
 $sys['server_host'] = '127.0.0.1';
-$sys['server_dir'] = '/glossword/1.8';
+$sys['server_dir'] = '';
 /* Path to sources */
 $sys['file_login'] = 'gw_login.php';
 $sys['file_admin'] = 'gw_admin.php';

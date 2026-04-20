@@ -164,7 +164,7 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 	}
 	for ( reset( $arDict_Ids ); list($k, $dictK) = each( $arDict_Ids ); )
 	{
-		$tmp['arDictParam'][$dictK] = getDictParam( $dictK );
+		$tmp['arDictParam'][$dictK] = gw_get_dict_param($dictK );
 	}
 	$a_stopwords = array ( );
 	$tmp['intKeywords'] = sizeof( $a_keywords );
@@ -409,7 +409,7 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 				for ( reset( $tmp['a_results_temp'] ); list($dictK, $resultsV) = each( $tmp['a_results_temp'] ); )
 				{
 					/* Get stopwords per dictionary */
-					$a_current_dict_params = getDictParam( $dictK );
+					$a_current_dict_params = gw_get_dict_param($dictK );
 					$a_stopwords = gw_get_stopwords( $a_current_dict_params );
 					$a_keywordsD = gw_array_exclude( $a_keywords, $a_stopwords );
 					$tmp['intKeywords'] = sizeof( $a_keywordsD );
@@ -511,7 +511,7 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 				foreach ( $tmp['a_results_temp'] as $id_dict_results => $a_results )
 				{
 					/* Get stopwords per dictionary */
-					$a_current_dict_params = getDictParam( $id_dict_results );
+					$a_current_dict_params = gw_get_dict_param($id_dict_results );
 					$a_stopwords = gw_get_stopwords( $a_current_dict_params );
 					$a_keywords_diff = gw_array_exclude( $a_keywords, $a_stopwords );
 
@@ -661,7 +661,7 @@ function gw_search_results ( $id_srch, $p, $id_dict = 0 )
 	/* Go for each dictionary */
 	for ( reset( $arSql['results'] ); list($dictK, $id_terms) = each( $arSql['results'] ); )
 	{
-		$tmp['arDictParam'][$dictK] = getDictParam( $dictK );
+		$tmp['arDictParam'][$dictK] = gw_get_dict_param($dictK );
 		if ( $cnt_dict == 1 )
 		{
 			/* Selected first dictionary from search results. Used in navigation for search results.
@@ -848,7 +848,7 @@ function gw_search_results ( $id_srch, $p, $id_dict = 0 )
 	/* For each re-formated results */
 	for ( reset( $arA ); list($k1, $v1) = each( $arA ); )
 	{
-		$arDictParam = getDictParam( $v1['d_id'] );
+		$arDictParam = gw_get_dict_param($v1['d_id'] );
 
 		/* Collect data for template */
 		$oTpl->tmp['d']['search_item'][$k1]['v:term_number'] = (($p - 1) * $arDictParam['page_limit_search']) + $k1 + 1;

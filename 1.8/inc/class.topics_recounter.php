@@ -56,14 +56,6 @@ class gw_topics_recounter
     }
 
     /**
-     * PHP 4 style constructor for backward compatibility.
-     */
-    public function gw_topics_recounter()
-    {
-        $this->__construct();
-    }
-
-    /**
      * Recount topic item totals.
      *
      * @return void

@@ -13,7 +13,7 @@ class gw_addon_recount_user extends gw_addon
 {
 	var $addon_name = 'recount_user';
 	/* Autoexec */
-	function gw_addon_recount_user()
+	function __construct()
 	{
 		$this->init_m();
 	}

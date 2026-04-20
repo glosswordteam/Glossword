@@ -398,7 +398,6 @@ function gw_flash_get($key)
     return $message;
 }
 
-
 /**
  * Detect current request protocol (http / https).
  *
@@ -423,8 +422,6 @@ function gw_get_protocol()
 
     return 'http://';
 }
-
-
 
 /**
  * Return system settings as key-value array.
@@ -511,3 +508,35 @@ function gw_get_stop_words_locales()
     }
     return $result;
 }
+
+/**
+ * Recursively merge arrays and overwrite existing values by key.
+ *
+ * Numeric keys are preserved and are not reindexed.
+ * If both values are arrays, they are merged recursively.
+ * Otherwise, the value from the second array overwrites the first one.
+ *
+ * @param array $array_1
+ * @param array $array_2
+ *
+ * @return array|bool
+ */
+function gw_array_merge_clobber($array_1, $array_2)
+{
+    if (!is_array($array_1) || !is_array($array_2)) {
+        return false;
+    }
+
+    $result = $array_1;
+
+    foreach ($array_2 as $key => $value) {
+        if (isset($result[$key]) && is_array($result[$key]) && is_array($value)) {
+            $result[$key] = gw_array_merge_clobber($result[$key], $value);
+        } else {
+            $result[$key] = $value;
+        }
+    }
+
+    return $result;
+}
+

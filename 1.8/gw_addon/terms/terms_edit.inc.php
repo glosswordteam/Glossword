@@ -48,7 +48,7 @@ if (isset($this->gw_this['vars']['arPost']['is_all']))
 	}
 	elseif (isset($this->gw_this['vars']['arPost']['selected_term_move']))
 	{
-		$arDictParamSource = getDictParam($this->gw_this['vars']['arPost']['id_source']);
+		$arDictParamSource = gw_get_dict_param($this->gw_this['vars']['arPost']['id_source']);
 		/* Move all terms */
 		/*
 			1. Add term to Target dictionary
@@ -135,7 +135,7 @@ elseif (isset($this->gw_this['vars']['arPost']['ar_id']))
 	elseif (isset($this->gw_this['vars']['arPost']['selected_term_move']))
 	{
 		/* Check for permission */
-		$arDictParamSource = getDictParam($this->gw_this['vars']['arPost']['id_source']);
+		$arDictParamSource = gw_get_dict_param($this->gw_this['vars']['arPost']['id_source']);
 		/* Move term */
 		/*
 			1. Add term to Target dictionary

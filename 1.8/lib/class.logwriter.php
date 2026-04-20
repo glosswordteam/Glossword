@@ -23,7 +23,7 @@ class gw_logwriter
 	var $str_delim = ' ';
 	var $str_endline = "\n";
 	/* */
-	function gw_logwriter($path_logdir = 'logs')
+	function __construct($path_logdir = 'logs')
 	{
 		$this->path_logdir = $path_logdir;
 	}

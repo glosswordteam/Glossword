@@ -10,7 +10,7 @@
 class gw_user_agent 
 {
 	var $remote_ua;
-	function gw_user_agent()
+	function __construct()
 	{
 		global $sys;
 		$this->remote_ua = trim(substr(getenv('HTTP_USER_AGENT'), 0, 255));

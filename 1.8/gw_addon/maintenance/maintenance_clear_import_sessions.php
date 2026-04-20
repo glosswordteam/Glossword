@@ -23,7 +23,7 @@ class gw_addon_clear_import_sessions extends gw_addon
 {
 	var $addon_name = 'clear_import_sessions';
 	/* Autoexec */
-	function gw_addon_clear_import_sessions()
+	function __construct()
 	{
 		$this->init_m();
 	}

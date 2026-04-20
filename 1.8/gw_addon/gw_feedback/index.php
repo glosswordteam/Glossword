@@ -27,9 +27,7 @@ class gw_addon_feedback extends gw_addon
 	var $str;
 	var $html_title;
 	/* Autoexec */
-
-
-	function gw_addon_feedback ()
+	function __construct()
 	{
 		$this->init();
 	}

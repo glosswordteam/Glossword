@@ -40,7 +40,7 @@ services:
       - default
 
   phpmyadmin:
-    image: phpmyadmin:latest
+    image: phpmyadmin:5
     container_name: glossword-phpmyadmin
     restart: unless-stopped
     environment:
@@ -50,9 +50,12 @@ services:
       PMA_USER: glossword
       PMA_PASSWORD: glossword
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     ports:
       - "8182:80"
+    volumes:
+      - ./docker/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
     networks:
       - default
       - web

@@ -48,7 +48,7 @@ function gw_dict_list_cnt($vars)
 	/* Per each dictionary */
 	for (reset($gw_this['ar_dict_list']); list($id_dict, $arDictParam) = each($gw_this['ar_dict_list']);)
 	{
-		$arDictParam = getDictParam($id_dict);
+		$arDictParam = gw_get_dict_param($id_dict);
 		$ar_dict_ids[] = $arDictParam['id'];
 		$is_assigned = 0;
 		/* $vars['dictionaries'] is flipped */
@@ -108,7 +108,7 @@ function gw_dict_recount($vars)
 	{
 		$arQ = array();
 		global $arDictParam;
-		$arDictParam = getDictParam($id_dict);
+		$arDictParam = gw_get_dict_param($id_dict);
 		if (!isset($arDictParam['tablename']))
 		{
 			continue;

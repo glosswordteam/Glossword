@@ -115,7 +115,7 @@ if (!class_exists('gwtkDataBase')) {
                 }
                 if (!$this->conn_id = mysqli_connect($this->host, $this->user, $this->password)) {
                     $halt_result = $this->halt(
-                        'Could not connect to the database ' . $this->user . '@' . $this->host,
+                        'Could not connect to the database `' . $this->database. '` ' . $this->user . '@' . $this->host,
                         $this->on_error_default
                     );
                     if (!$halt_result) {

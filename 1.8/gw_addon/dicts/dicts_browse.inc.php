@@ -1,18 +1,18 @@
 <?php
+
 /**
- *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
-if (!defined('IN_GW'))
-{
-	die('<!-- $Id: dicts_browse.inc.php 496 2008-06-14 06:42:53Z glossword_team $ -->');
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
 }
 /* Included from $oAddonAdm->alpha(); */
 
@@ -34,9 +34,8 @@ $ar_allowed_dicts = $this->oSess->user_get('dictionaries');
 global $arTopicIDs, $arId;
 $arDictMap = array();
 $strGroupBy = 'tpname';
-for (reset($arSql); list($arK, $arV) = each($arSql);)
-{
-	$arDictMap[$arV['id_topic']][$arK] = $arV;
+foreach ($arSql as $ar_k => $ar_v) {
+    $arDictMap[$ar_v['id_topic']][$ar_k] = $ar_v;
 }
 /* Select the first topic by default */
 if ( !$this->gw_this['vars']['w1'] )
@@ -69,21 +68,27 @@ if (isset($ar[0]['ch'])) // Root branch ->
 		{
 			$tmp['int_subparent_total'] = sizeof($ar[$k]['ch']);
 			$cnt_sub = 0; // count subtopics
-			while (is_array($ar[$k]['ch']) && list($k2, $v2) = each($ar[$k]['ch']))
-			{
-				if (($cnt_sub < $dict_nmax) || ($dict_nmax == 0))
-				{
-					// read a few subtopics...
-					$ar[$k2]['title'] = ($this->gw_this['vars']['w1'] == $k2) ? '<strong>'.$ar[$k2]['title'].'</strong>' : $ar[$k2]['title'];
-					$arVar[$cnt]['tp_subparent'][$cnt_sub]['non:tp_subparent'] = $this->oHtml->a(($this->sys['page_admin'] . '?'.GW_ACTION.'='.GW_A_BROWSE. '&t='. GW_T_DICTS. '&w1='.$ar[$k2]['id']), $ar[$k2]['title']);
-					$arVar[$cnt]['tp_subparent'][$cnt_sub]['txt_sep_subparent'] = ', ';
-				}
-				else // ...then exit from while()
-				{
-					continue;
-				}
-				$cnt_sub++;
-			} // end with childs
+            if (is_array($ar[$k]['ch'])) {
+                foreach ($ar[$k]['ch'] as $k2 => $v2) {
+                    if (($cnt_sub >= $dict_nmax) && ($dict_nmax != 0)) {
+                        // Stop when the subtopic limit is reached.
+                        break;
+                    }
+
+                    // Read a few subtopics...
+                    $ar[$k2]['title'] = ($this->gw_this['vars']['w1'] == $k2)
+                        ? '<strong>' . $ar[$k2]['title'] . '</strong>'
+                        : $ar[$k2]['title'];
+
+                    $arVar[$cnt]['tp_subparent'][$cnt_sub]['non:tp_subparent'] = $this->oHtml->a(
+                        $this->sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_BROWSE . '&t=' . GW_T_DICTS . '&w1=' . $ar[$k2]['id'],
+                        $ar[$k2]['title']
+                    );
+                    $arVar[$cnt]['tp_subparent'][$cnt_sub]['txt_sep_subparent'] = ', ';
+
+                    $cnt_sub++;
+                }
+            }
 			if ($cnt_sub == $tmp['int_subparent_total'])
 			{
 				$arVar[$cnt]['tp_subparent'][$cnt_sub-1]['txt_sep_subparent'] = '';
@@ -91,15 +96,18 @@ if (isset($ar[0]['ch'])) // Root branch ->
 		} // end of subtopics
 		// now count the number of dictionairies in each topic
 		$arId = array();
-		$arTreeId = gw_ctlg_get_tree($ar, $k);
-		$arTreeId[$k] = $k;
-		while (is_array($arTreeId) && list($kn, $vn) = each($arTreeId))
-		{
-			if (isset($arDictMap[$kn]))
-			{
-				$cnt_dict += sizeof( $arDictMap[$kn] );
-			}
-		}
+
+        // Now count the number of dictionaries in each topic.
+        $ar_tree_ids = gw_ctlg_get_tree($ar, $k);
+        $ar_tree_ids[$k] = $k;
+
+        if (is_array($ar_tree_ids)) {
+            foreach (array_keys($ar_tree_ids) as $kn) {
+                if (isset($arDictMap[$kn])) {
+                    $cnt_dict += sizeof($arDictMap[$kn]);
+                }
+            }
+        }
 		/* 1.8.7: include all topics */
 		$arVar[$cnt]['non:int_tp_parent_cnt'] = 0;
 		$arVar[$cnt]['non:tp_parent'] = $ar[$k]['title'];
@@ -130,14 +138,13 @@ $oCells->tPadding = 2;
 $oCells->tAttrClass = 'tbl-browse';
 $this->str .= $oCells->output();
 /* */
-$arAlltopics = array();
-$arId = array();
-if ($this->gw_this['vars']['w1'] )
-{
-	$arAlltopics = gw_ctlg_get_tree( $ar, $this->gw_this['vars']['w1'] );
+$arAlltopics = [];
+$arId        = [];
+if ($this->gw_this['vars']['w1']) {
+    $arAlltopics = gw_ctlg_get_tree($ar, $this->gw_this['vars']['w1']);
 }
-while (is_array($arAlltopics) && list($kp, $tp) = each ($arAlltopics))
-{
+
+foreach ($arAlltopics as $kp => $tp) {
 	/* Topic selected */
 	if (isset($arDictMap[$tp]) && is_array($arDictMap[$tp]))
 	{
@@ -236,14 +243,15 @@ unset($ar);
 unset($arDictMap);
 
 
-if ($this->gw_this['vars']['tid'] == '')
-{
-	/* Last updated dictionaries */
-	$this->str .= '<br />';
-	$this->str .= gw_html_block_small(
-			$this->oL->m('r_dict_updated'),
+if ($this->gw_this['vars']['tid'] == '') {
+    /* Last updated dictionaries */
+    $this->str .= '<br />';
+    $this->str .= gw_html_block_small(
+        $this->oL->m('r_dict_updated'),
         gw_get_top10('DICT_UPDATED', $this->sys['max_dict_top'], 1),
-			0, 0);
+        0,
+        0
+    );
 }
 
 

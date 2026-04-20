@@ -223,7 +223,7 @@ switch ( $gw_this['vars']['layout'] )
             $gw_this['vars']['p'] = 0;
             $oTpl->addVal(
                 'v:nav_pages',
-                getNavToolbar(
+                gw_get_pagination(
                     $intSumPages,
                     $gw_this['vars']['p'],
                     $sys['page_index'] . '?' . GW_ACTION . '=' . GW_A_LIST . '&d=' . $arDictParam['uri'] . '&p='
@@ -341,7 +341,7 @@ switch ( $gw_this['vars']['layout'] )
 			}
 			if ( $intSumPages > 1 )
 			{
-				$oTpl->addVal( 'v:nav_pages', getNavToolbar( $intSumPages, $gw_this['vars']['p'], $sys['page_index'] . '?' . GW_ACTION . '=' . $gw_this['vars']['layout'] . '&strict=' . $strict . '&d=' . $gw_this['vars'][GW_ID_DICT] . '&w1=' . urlencode( $w1 ) . '&w2=' . urlencode( $w2 ) . '&w3=' . urlencode( $w3 ) . '&p=' ) );
+				$oTpl->addVal('v:nav_pages', gw_get_pagination($intSumPages, $gw_this['vars']['p'], $sys['page_index'] . '?' . GW_ACTION . '=' . $gw_this['vars']['layout'] . '&strict=' . $strict . '&d=' . $gw_this['vars'][GW_ID_DICT] . '&w1=' . urlencode($w1 ) . '&w2=' . urlencode($w2 ) . '&w3=' . urlencode($w3 ) . '&p=' ) );
 			}
 			$gw_this['id_tpl_page'] = GW_TPL_TERM_LIST;
 		}
@@ -397,17 +397,14 @@ switch ( $gw_this['vars']['layout'] )
 					)
 			);
 			// -------------------------------------------------
-			// Process automatic functions
-			if ( !empty( $gw_this['vars']['funcnames'][GW_T_TERM] ) )
-			{
-				for (; list($k, $v) = each( $gw_this['vars']['funcnames'][GW_T_TERM] ); )
-				{
-					if ( function_exists( $v ) )
-					{
-						$v();
-					}
-				}
-			}
+            // Process automatic functions.
+            if (!empty($gw_this['vars']['funcnames'][GW_T_TERM])) {
+                foreach ($gw_this['vars']['funcnames'][GW_T_TERM] as $func_name) {
+                    if (function_exists($func_name)) {
+                        $func_name();
+                    }
+                }
+            }
 			// -------------------------------------------------
 			$tmp['cssTrClass'] = 'xt';
 			$tmp['xref'] = $sys['page_index'] . '?' . GW_ACTION . '=' . GW_A_SEARCH . '&amp;srch[adv]=phrase&amp;d=' . $arDictParam['id'] . '&amp;srch[by]=d&amp;srch[in]=1&amp;q=';
@@ -437,13 +434,17 @@ switch ( $gw_this['vars']['layout'] )
 			$oRender->Set( 'ar_theme', $ar_theme );
 			//
 			$tmp['str_defn'] = $oRender->array_to_html( $arPre );
-			/* Process text filters */
-			while ( !$sys['is_debug_output']
-			&& is_array( $sys['filters_defn'] )
-			&& list($k, $v) = each( $sys['filters_defn'] ) )
-			{
-				$tmp['str_defn'] = $v( $tmp['str_defn'] );
-			}
+            /* Process text filters */
+            if (
+                !$sys['is_debug_output']
+                && is_array($sys['filters_defn'])
+            ) {
+                foreach ($sys['filters_defn'] as $filter_func) {
+                    if (is_callable($filter_func)) {
+                        $tmp['str_defn'] = $filter_func($tmp['str_defn']);
+                    }
+                }
+            }
 			// -------------------------------------------------
 			/* $tag_stress_rule */
 			$ar_pairs_src = explode( "|", $oRender->tag_stress_rule );
@@ -740,8 +741,8 @@ switch ( $gw_this['vars']['layout'] )
 			if ( $intSumPages > 1 ) // enable page navigation
 			{
 				$oTpl->addVal( 'l:pages', $oL->m( 'L_pages' ) . ':' );
-				$oTpl->addVal( 'v:nav_pages',
-						getNavToolbar( $intSumPages, $gw_this['vars']['p'], $sys['page_index'] . '?' . GW_ACTION . '=' . $gw_this['vars'][GW_ACTION] . '&id_srch=' . $id_srch . '&d=' . $arDictParam['id'] . '&visualtheme=' . $gw_this['vars']['visualtheme'] . '&p=' )
+				$oTpl->addVal('v:nav_pages',
+                              gw_get_pagination($intSumPages, $gw_this['vars']['p'], $sys['page_index'] . '?' . GW_ACTION . '=' . $gw_this['vars'][GW_ACTION] . '&id_srch=' . $id_srch . '&d=' . $arDictParam['id'] . '&visualtheme=' . $gw_this['vars']['visualtheme'] . '&p=' )
 				);
 			}
 			/* */

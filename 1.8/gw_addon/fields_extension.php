@@ -23,7 +23,7 @@ class gw_fields_extension
 {
 	var $curElementId = '';
 
-	function gw_fields_extension($field_type)
+	function __construct($field_type)
 	{
 
 	}

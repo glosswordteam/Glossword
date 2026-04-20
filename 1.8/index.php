@@ -196,7 +196,7 @@ $arDictParam = array('is_leech' => 0, 'id' => 0);
 if ($gw_this['vars'][GW_ID_DICT])
 {
 	/* Get dictionary settings */
-	$arDictParam = getDictParam($gw_this['vars'][GW_ID_DICT]);
+	$arDictParam = gw_get_dict_param($gw_this['vars'][GW_ID_DICT]);
 	/* Wrong dictionary ID number found, redirect */
 	if (empty($arDictParam) && !$gw_this['vars']['q'])
 	{
@@ -219,7 +219,7 @@ if ($gw_this['vars'][GW_TARGET]
 		parse_str($udecoded, $ar_u);
 		$gw_this['vars'][GW_ID_DICT] = $ar_u['d'];
 		$gw_this['vars']['t'] = $ar_u['t'];
-		$arDictParam = getDictParam($gw_this['vars'][GW_ID_DICT]);
+		$arDictParam = gw_get_dict_param($gw_this['vars'][GW_ID_DICT]);
 	}
 	else
 	{
@@ -263,7 +263,7 @@ if (!$gw_this['vars'][GW_ID_DICT] && ($gw_this['vars'][GW_ACTION] == ''))
 {
 	for (reset($gw_this['ar_dict_list']); list($kDict, $vDict) = each($gw_this['ar_dict_list']);)
 	{
-		$arDictParam = getDictParam($vDict['dict_uri']);
+		$arDictParam = gw_get_dict_param($vDict['dict_uri']);
 		if (isset($arDictParam['is_dict_as_index']) && $arDictParam['is_dict_as_index'])
 		{
 			$gw_this['vars'][GW_ID_DICT] = $arDictParam['uri'];

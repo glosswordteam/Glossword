@@ -1,0 +1,3 @@
+<?php
+
+$cfg['ProtectBinary'] = false;

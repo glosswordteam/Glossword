@@ -96,7 +96,7 @@ class tkit_mail
 	var $tpl_name;
 	var $h_mailer = 'Glossword';
 	/* Autoexec */
-	function tkit_mail($tpl_name)
+	function __construct($tpl_name)
 	{
 		global $oFunc, $oL, $sys;
 		$this->oFunc =& $oFunc;

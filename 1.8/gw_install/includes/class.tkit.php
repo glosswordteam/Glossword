@@ -1,14 +1,23 @@
 <?php
 
 /**
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ */
+
+/**
  * Translation Kit
- * © 2002-2008 Dmitry N. Shilnikov <team at glossword dot biz>
  * File-based version.
  *
  * Requires:
  *      array_merge_clobber()
- *
- * @version $Id: class.tkit.php 3 2008-06-21 07:22:47Z glossword_team $
  */
 class tkit
 {
@@ -183,23 +192,3 @@ class tkit
     }
 }
 
-if (!function_exists('array_merge_clobber')) {
-    function array_merge_clobber($a1, $a2)
-    {
-        if (!is_array($a1) || !is_array($a2)) {
-            return false;
-        }
-
-        $arNew = $a1;
-
-        foreach ($a2 as $key => $val) {
-            if (is_array($val) && isset($arNew[$key]) && is_array($arNew[$key])) {
-                $arNew[$key] = gw_array_merge_clobber($arNew[$key], $val);
-            } else {
-                $arNew[$key] = $val;
-            }
-        }
-
-        return $arNew;
-    }
-}

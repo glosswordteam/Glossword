@@ -1,8 +1,5 @@
 <?php
 /**
- *  $Id$
- */
-/**
  *  Glossword - glossary compiler (http://glossword.info/)
  *  © 2002-2007 Dmitry N. Shilnikov <dev at glossword dot info>
  *

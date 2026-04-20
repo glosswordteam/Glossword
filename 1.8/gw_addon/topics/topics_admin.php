@@ -1,8 +1,8 @@
 <?php
 /**
  *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ *  Â© 2008 Glossword.biz team
+ *  Â© 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ if (!defined('IN_GW'))
 class gw_addon_topic_admin extends gw_addon
 {
 	/* Autoexec */
-	function gw_addon_topic_admin()
+	function __construct()
 	{
 		$this->init();
 		/* */

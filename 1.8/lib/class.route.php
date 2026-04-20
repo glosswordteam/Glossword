@@ -72,14 +72,14 @@ class gwUrlBuilder
      */
     public function build_admin_url($action, $target, array $params = [])
     {
-        $baseParams = [
+        $base_params = [
             GW_ACTION => $action,
             GW_TARGET => $target,
         ];
 
         return $this->_build_url(
             $this->get_page_admin(),
-            $baseParams + $params
+            $base_params + $params
         );
     }
 
@@ -102,7 +102,7 @@ class gwUrlBuilder
 
         return $this->_build_url(
             $this->get_page_index(),
-            $baseParams + $params
+            $base_params + (array) $params
         );
     }
 

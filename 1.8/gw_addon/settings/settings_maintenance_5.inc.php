@@ -94,7 +94,7 @@ function gw_dict_merge($vars)
 {
 	global $gw_this, $oDb, $oL, $sys;
 	$str = '<div class="xu">';
-	$arDictParam_target = getDictParam($vars['id_target']);
+	$arDictParam_target = gw_get_dict_param($vars['id_target']);
 	$id_term = $oDb->NextId($arDictParam_target['tablename'], 'id');
 	$int_terms = 0;
 	for (reset($vars['id_source']); list($k, $id_dict) = each($vars['id_source']);)
@@ -109,7 +109,7 @@ function gw_dict_merge($vars)
 		{
 			continue;
 		}
-		$arDictParam = getDictParam($id_dict);
+		$arDictParam = gw_get_dict_param($id_dict);
 		$str .= '<br />'.$arDictParam['title'].'...';
 		$sql = 'SELECT * FROM `'.$arDictParam['tablename'].'`';
 		$arSql = $oDb->sqlExec($sql);

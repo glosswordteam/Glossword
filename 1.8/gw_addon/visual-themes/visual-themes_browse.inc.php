@@ -36,7 +36,7 @@ $sql_limit = $this->oDb->prn_limit( $int_found, $this->gw_this['vars']['p'], $th
 /* The list of visual themes */
 $arSql = $this->oDb->sqlExec( $this->oSqlQ->getQ( 'get-themes-adm', $sql_limit ), $this->component );
 
-$str_pages = getNavToolbar( $int_pages, $this->gw_this['vars']['p'],
+$str_pages = gw_get_pagination($int_pages, $this->gw_this['vars']['p'],
 				$this->sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_BROWSE . '&' . GW_TARGET . '=' . $this->component . '&' . 'p='
 );
 /* */

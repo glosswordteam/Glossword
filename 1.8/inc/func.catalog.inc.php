@@ -976,7 +976,7 @@ function ctlgGetTopicsRow($ar = array(), $startId = 0, $cntRow = 1)
  * @param array $visited Internal list of processed node IDs.
  * @return array
  */
-function gw_ctlg_get_tree(array $tree, $node_id, array &$result = [], array &$visited = [])
+function gw_ctlg_get_tree(array $tree, $node_id, array $result = [], array &$visited = [])
 {
     $node_id = (int) $node_id;
 
@@ -993,7 +993,7 @@ function gw_ctlg_get_tree(array $tree, $node_id, array &$result = [], array &$vi
 
     foreach ($tree[$node_id]['ch'] as $child_id => $child_value) {
         $child_id = (int) $child_id;
-        gw_ctlg_get_tree($tree, $child_id, $result, $visited);
+        $result = gw_ctlg_get_tree($tree, $child_id, $result, $visited);
     }
 
     return $result;

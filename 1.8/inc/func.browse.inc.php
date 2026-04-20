@@ -1,18 +1,18 @@
 <?php
+
 /**
- *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
-if (!defined('IN_GW'))
-{
-	die('<!-- $Id: func.browse.inc.php 551 2008-08-17 17:34:05Z glossword_team $ -->');
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
 }
 /**
  *  Math, SQL, HTML functions for browsing dictionary.
@@ -142,13 +142,12 @@ function gw_sql2defnpreview($arSql)
 	}
 # @header("Content-Type: text/html; charset=utf-8");
 	$arDuplicates = array(array());
-	for (; list($k, $arV) = each($arSql);)
-	{
+
+    foreach ($arSql as $k => $arV) {
 		$incr_term = $k;
 		$arPre = array();
 		/* Init. */
-		for (reset($arFields); list($fK, $fV) = each($arFields);)
-		{
+        foreach ($arFields as $fK => $fV) {
 			$arPreview[$incr_term][0][$fK] = '';
 			$arDictParam['is_'.$fV[0]] = 1;
 		}
@@ -168,153 +167,138 @@ function gw_sql2defnpreview($arSql)
 		);
 		/* */
 		$arPre = gw_array_merge_clobber($arPre, gw_Xml2Array('<term>'. $arV['term'].'</term>'. $arV['defn']));
-#prn_r( $arPre );
-		for (reset($arFields); list($fK, $fV) = each($arFields);)
-		{
-			if (!isset($arPre[$fV[0]])){ continue; }
-			$tmpStr = $oDom->get_content( $arPre[$fV[0]] );
-			if (trim($tmpStr) == '' || $tmpStr == '<![CDATA[]]>' ){ continue; }
-			if (!$arDictParam['is_'.$fV[0]]){ continue; }
-			switch ($fV[0])
-			{
-				case 'trsp':
-					for (reset($arPre[$fV[0]]); list($kfV, $vfV) = each($arPre[$fV[0]]);)
-					{
-						$ar_vvfV = array();
-						for (reset($vfV); list($kkfV, $vvfV) = each($vfV);)
-						{
-							$ar_vvfV[] = $vvfV['value'];
-						}
-						if ($kfV == 0)
-						{
-							$arPreview[$incr_term][$kfV][$fK] .= '['.gw_text_parse_preview( implode('; ', $ar_vvfV) ).']';
-						}
-						else
-						{
-							$arDuplicates[$incr_term][$kfV][$fK][] = '['.gw_text_parse_preview( implode('; ', $ar_vvfV) ).']';
-						}
-						if (isset($arDuplicates[$incr_term][$kfV][$fK]))
-						{
-							$arDuplicates[$incr_term][$kfV][$fK] = implode('', $arDuplicates[$incr_term][$kfV][$fK]);
-						}
-					}
-				break;
-				case 'defn':
-					$tmpf = array();
-					for (reset($arPre[$fV[0]]); list($kfV, $vfV) = each($arPre[$fV[0]]);)
-					{
-						if ($kfV == 0)
-						{
-							$arPreview[$incr_term][$kfV][$fK] .= gw_text_parse_preview( $vfV['value'] );
-						}
-						else
-						{
-							$arDuplicates[$incr_term][$kfV][$fK] = gw_text_parse_preview( $vfV['value'] );
-						}
-					}
-				break;
-				case 'abbr':
-				case 'trns':
-					for (reset($arPre[$fV[0]]); list($kfV, $vfV) = each($arPre[$fV[0]]);)
-					{
-						$ar_vvfV = array();
-						for (reset($vfV); list($kkfV, $vvfV) = each($vfV);)
-						{
-							if ($vvfV['value'] == '' || $vvfV['value'] == '<![CDATA[]]>')
-							{
-								continue;
-							}
-							$ar_vvfV[] = $vvfV['value'];
-						}
-						if ($kfV == 0)
-						{
-							if (empty($ar_vvfV))
-							{
-								$arPreview[$incr_term][$kfV][$fK] = '';
-							}
-							else
-							{
-								$arPreview[$incr_term][$kfV][$fK] = $ar_theme['prepend_abbr_preview'].gw_text_parse_preview( implode($ar_theme['split_abbr_preview'], $ar_vvfV) ). $ar_theme['append_abbr_preview'];
-							}
-						}
-						else
-						{
-							if (empty($ar_vvfV))
-							{
-								$arDuplicates[$incr_term][$kfV][$fK] = '';
-							}
-							else
-							{
-								$arDuplicates[$incr_term][$kfV][$fK] = $ar_theme['prepend_abbr_preview'].gw_text_parse_preview ( implode($ar_theme['split_abbr_preview'], $ar_vvfV) ). $ar_theme['append_abbr_preview'];
-							}
-						}
-					}
-				break;
-				case 'see':
-				case 'syn':
-				case 'antonym':
-					for (reset($arPre[$fV[0]]); list($kfV, $vfV) = each($arPre[$fV[0]]);)
-					{
-						$ar_vvfV = array();
-						for (reset($vfV); list($kkfV, $vvfV) = each($vfV);)
-						{
-							$ar_vvfV[] = $vvfV['value'];
-						}
-						if ($kfV == 0)
-						{
-							$arPreview[$incr_term][$kfV][$fK] = $oL->m($fV[0]).': ' . gw_text_parse_preview( implode(', ', $ar_vvfV) );
-						}
-						else
-						{
-							$arDuplicates[$incr_term][$kfV][] = gw_text_parse_preview(implode(', ', $ar_vvfV));
-						}
-					}
-				break;
-				case 'usg':
-				case 'src':
-				case 'phone':
-				case 'address':
-					for (reset($arPre[$fV[0]]); list($kfV, $vfV) = each($arPre[$fV[0]]);)
-					{
-						$ar_vvfV = array();
-						for (reset($vfV); list($kkfV, $vvfV) = each($vfV);)
-						{
-							$ar_vvfV[] = $vvfV['value'];
-						}
-						if ($kfV == 0)
-						{
-							$arPreview[$incr_term][$kfV][$fK] .= ' ='.gw_text_parse_preview( implode('; ', $ar_vvfV) );
-						}
-						else
-						{
-							if (!isset($arDuplicates[$incr_term][$kfV][$fK]))
-							{
-								$arDuplicates[$incr_term][$kfV][$fK] = array();
-							}
-							if (is_string($arDuplicates[$incr_term][$kfV][$fK]))
-							{
-								$arDuplicates[$incr_term][$kfV][$fK] = array($arDuplicates[$incr_term][$kfV][$fK]);
-							}
-							$arDuplicates[$incr_term][$kfV][$fK][] = gw_text_parse_preview( implode('; ', $ar_vvfV) );
-						}
-						if (isset($arDuplicates[$incr_term][$kfV][$fK]))
-						{
-							$arDuplicates[$incr_term][$kfV][$fK] = gw_text_parse_preview(implode(' ', $arDuplicates[$incr_term][$kfV][$fK]));
-						}
-					}
-				default:
-				break;
-			}
-		} /* end of $arFields */
-		unset($arSql[$k]);
+
+        foreach ($arFields as $field_index => $field_config) {
+            $field_name = $field_config[0];
+
+            if (!isset($arPre[$field_name])) {
+                continue;
+            }
+
+            $tmp_str = $oDom->get_content($arPre[$field_name]);
+            if (trim($tmp_str) == '' || $tmp_str == '<![CDATA[]]>') {
+                continue;
+            }
+
+            if (!$arDictParam['is_' . $field_name]) {
+                continue;
+            }
+
+            switch ($field_name) {
+                case 'trsp':
+                    foreach ($arPre[$field_name] as $preview_index => $preview_group) {
+                        $preview_values = gw_collect_nested_preview_values($preview_group);
+                        $preview_text = '[' . gw_text_parse_preview(implode('; ', $preview_values)) . ']';
+
+                        if ($preview_index == 0) {
+                            $arPreview[$incr_term][$preview_index][$field_index] .= $preview_text;
+                        } else {
+                            if (!isset($arDuplicates[$incr_term][$preview_index][$field_index])) {
+                                $arDuplicates[$incr_term][$preview_index][$field_index] = '';
+                            }
+
+                            $arDuplicates[$incr_term][$preview_index][$field_index] .= $preview_text;
+                        }
+                    }
+                    break;
+
+                case 'defn':
+                    foreach ($arPre[$field_name] as $preview_index => $preview_item) {
+                        $preview_text = gw_text_parse_preview($preview_item['value']);
+
+                        if ($preview_index == 0) {
+                            $arPreview[$incr_term][$preview_index][$field_index] .= $preview_text;
+                        } else {
+                            $arDuplicates[$incr_term][$preview_index][$field_index] = $preview_text;
+                        }
+                    }
+                    break;
+
+                case 'abbr':
+
+                    foreach ($arPre[$field_name] as $preview_index => $preview_group) {
+                        $preview_values = gw_collect_nested_preview_values($preview_group, true);
+                        $preview_text = gw_build_abbr_preview_text($preview_values, $ar_theme);
+
+                        if ($preview_index == 0) {
+                            $arPreview[$incr_term][$preview_index][$field_index] = $preview_text;
+                        } else {
+                            $arDuplicates[$incr_term][$preview_index][$field_index] = $preview_text;
+                        }
+                    }
+                    break;
+                case 'trns':
+                    foreach ($arPre[$field_name] as $preview_index => $preview_group) {
+                        $preview_values = gw_collect_trns_preview_values($preview_group);
+                        $preview_text = gw_build_abbr_preview_text($preview_values, $ar_theme);
+
+                        if ($preview_index == 0) {
+                            $arPreview[$incr_term][$preview_index][$field_index] = $preview_text;
+                        } else {
+                            $arDuplicates[$incr_term][$preview_index][$field_index] = $preview_text;
+                        }
+                    }
+                    break;
+
+                case 'see':
+                case 'syn':
+                case 'antonym':
+                    foreach ($arPre[$field_name] as $preview_index => $preview_group) {
+                        $preview_values = gw_collect_nested_preview_values($preview_group);
+                        $preview_text = gw_text_parse_preview(implode(', ', $preview_values));
+
+                        if ($preview_index == 0) {
+                            $arPreview[$incr_term][$preview_index][$field_index] = $oL->m($field_name) . ': ' . $preview_text;
+                        } else {
+                            // Keep legacy structure without field index key.
+                            $arDuplicates[$incr_term][$preview_index][] = $preview_text;
+                        }
+                    }
+                    break;
+
+                case 'usg':
+                case 'src':
+                case 'phone':
+                case 'address':
+                    $duplicate_parts = [];
+
+                    foreach ($arPre[$field_name] as $preview_index => $preview_group) {
+                        $preview_values = gw_collect_nested_preview_values($preview_group);
+                        $preview_text = gw_text_parse_preview(implode('; ', $preview_values));
+
+                        if ($preview_index == 0) {
+                            $arPreview[$incr_term][$preview_index][$field_index] .= ' =' . $preview_text;
+                        } else {
+                            if (!isset($duplicate_parts[$preview_index])) {
+                                $duplicate_parts[$preview_index] = [];
+                            }
+
+                            $duplicate_parts[$preview_index][] = $preview_text;
+                        }
+                    }
+
+                    foreach ($duplicate_parts as $preview_index => $preview_texts) {
+                        $arDuplicates[$incr_term][$preview_index][$field_index] = gw_text_parse_preview(
+                            implode(' ', $preview_texts)
+                        );
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        unset($arSql[$k]);
 	} /* end of $arSql */
 	unset($arPre);
+
 #prn_r( $arPreview );
 #prn_r( $arDuplicates );
+
 	$arA = array(array());
 	$int_timer = 0;
-	for (reset($arPreview); list($k, $arV) = each($arPreview);)
-	{
+    foreach ($arPreview as $k => $arV) {
 		$str_incomplete = $arV[1]['is_complete'] ? '' : '?&#160;';
 
 		$arA[$k]['term'] = $arV[1]['term'];
@@ -438,6 +422,84 @@ function gw_sql2defnpreview($arSql)
 		unset($arPreview[$k]);
 	}
 	return $arA;
+}
+
+/**
+ * Collect preview values for translation field with language ids.
+ *
+ * @param array $preview_group
+ *
+ * @return array
+ */
+function gw_collect_trns_preview_values(array $preview_group)
+{
+    $preview_values = [];
+
+    foreach ($preview_group as $preview_item) {
+        $preview_value = isset($preview_item['value']) ? $preview_item['value'] : '';
+        $lang_id = isset($preview_item['attributes']['lang']) ? $preview_item['attributes']['lang'] : '';
+
+        if ($preview_value == '' || $preview_value == '<![CDATA[]]>') {
+            continue;
+        }
+
+        if ($lang_id !== '') {
+            $preview_values[] = $lang_id . '  ' . $preview_value;
+        } else {
+            $preview_values[] = $preview_value;
+        }
+    }
+
+    return $preview_values;
+}
+
+
+
+/**
+ * Collect values from a nested preview group.
+ *
+ * @param array $preview_group
+ * @param bool $skip_empty_values
+ *
+ * @return array
+ */
+function gw_collect_nested_preview_values(array $preview_group, $skip_empty_values = false)
+{
+    $preview_values = [];
+
+    foreach ($preview_group as $preview_item) {
+        $preview_value = isset($preview_item['value']) ? $preview_item['value'] : '';
+
+        if ($skip_empty_values && ($preview_value == '' || $preview_value == '<![CDATA[]]>')) {
+            continue;
+        }
+
+        $preview_values[] = $preview_value;
+    }
+
+    return $preview_values;
+}
+
+
+/**
+ * Build preview text for abbreviation-like fields.
+ *
+ * @param array $preview_values
+ * @param array $ar_theme
+ *
+ * @return string
+ */
+function gw_build_abbr_preview_text(array $preview_values, array $ar_theme)
+{
+    if (empty($preview_values)) {
+        return '';
+    }
+
+    return $ar_theme['prepend_abbr_preview']
+        . gw_text_parse_preview(
+            implode($ar_theme['split_abbr_preview'], $preview_values)
+        )
+        . $ar_theme['append_abbr_preview'];
 }
 
 
@@ -634,7 +696,6 @@ function gw_custom_page($id_page)
 	$gw_this['ar_pages'] = $arSqlc;
 }
 
-
 /**
  * Render top list block.
  *
@@ -807,7 +868,7 @@ function gw_get_dict_stats()
  * @param string $url URL pattern without page number suffix
  * @return string HTML code ready to use in layout
  */
-function getNavToolbar($pageTotal, $pageCurrent = 1, $url)
+function gw_get_pagination($pageTotal, $pageCurrent = 1, $url)
 {
     global $sys, $oHtml, $ar_theme;
 
@@ -902,7 +963,6 @@ function getNavToolbar($pageTotal, $pageCurrent = 1, $url)
     return implode($separator, $pages);
 }
 
-
 /**
  * Returns dictionary parameters such as title, description,
  * number of terms and SQL table name.
@@ -910,7 +970,7 @@ function getNavToolbar($pageTotal, $pageCurrent = 1, $url)
  * @param int|string $dictId Dictionary ID, title or URI depending on link mode
  * @return array|false Dictionary parameters or FALSE if not found
  */
-function getDictParam($dictId)
+function gw_get_dict_param($dictId)
 {
     global $gw_this, $sys, $oDb, $oSqlQ;
 
@@ -977,13 +1037,12 @@ function getDictParam($dictId)
     return false;
 }
 
-
 /**
  * Get a random term from a random dictionary
  * 
  * @return  array   array with term and dictionary
  */
-function getTermRandom()
+function get_get_term_random()
 {
 	global $gw_this, $oDb, $oSqlQ;
 	$arDictParam = $gw_this['ar_dict_list'][mt_rand(0, sizeof($gw_this['ar_dict_list'])-1)];
@@ -999,7 +1058,7 @@ function getTermRandom()
  *
  * @return array
  */
-function getTermParamInit()
+function gw_get_term_param_default()
 {
     return [
         'is_active' => '0',
@@ -1022,7 +1081,7 @@ function getTermParamInit()
  *
  * @return string
  */
-function getTermUriField()
+function gw_get_term_uri_field()
 {
     global $sys;
 
@@ -1044,7 +1103,7 @@ function getTermUriField()
  * @param string|int $termId
  * @return string
  */
-function getTermParamSqlById($termId)
+function gw_get_term_sql_by_id($termId)
 {
     global $gw_this, $arDictParam, $oSqlQ, $sys;
 
@@ -1091,26 +1150,26 @@ function getTermParamSqlById($termId)
  * @param string|int $termId
  * @return array
  */
-function getTermParamById($termId)
+function gw_get_term_by_id($termId)
 {
     global $gw_this, $oDb;
 
-    $defaultTerm = getTermParamInit();
-    $sql = getTermParamSqlById($termId);
+    $default_term = gw_get_term_param_default();
+    $sql = gw_get_term_sql_by_id($termId);
 
     $rows = $oDb->sqlExec($sql, sprintf('%05d', $gw_this['vars'][GW_ID_DICT]), 0);
 
     if (!isset($rows[0])) {
-        return $defaultTerm;
+        return $default_term;
     }
 
-    $term = $rows[0];
+    $result = $rows[0];
 
     // Temporary cleanup
-    $term['defn'] = str_replace('<![CDATA[', '', $term['defn']);
-    $term['defn'] = str_replace(']]>', '', $term['defn']);
+    $result['defn'] = str_replace('<![CDATA[', '', $result['defn']);
+    $result['defn'] = str_replace(']]>', '', $result['defn']);
 
-    return $term;
+    return $result;
 }
 
 /**
@@ -1157,7 +1216,6 @@ function gw_redirect_canonical_term_url($requested_id, $term, $term_uri_field)
     }
 }
 
-
 /**
  * Builds SQL query to search term by normalized name.
  *
@@ -1188,7 +1246,6 @@ function getTermParamSqlByName($wordSearchSql)
         $wordSearchSql
     );
 }
-
 
 /**
  * Selects best matched term from search results.
@@ -1230,14 +1287,13 @@ function findMatchedTermByName($rows, $name, $keywordsTarget)
     return $found;
 }
 
-
 /**
  * Search term by name.
  *
  * @param string $name
  * @return array
  */
-function getTermParamByName($name)
+function gw_get_term_by_name($name)
 {
     global $gw_this, $oDb;
 
@@ -1259,7 +1315,7 @@ function getTermParamByName($name)
  * @param string|int $termId
  * @return array
  */
-function finalizeTermParam($term, $termId)
+function gw_apply_uri_for_term_param($term, $termId)
 {
     global $sys;
 
@@ -1280,7 +1336,6 @@ function finalizeTermParam($term, $termId)
     return $term;
 }
 
-
 /**
  * Returns term parameters by term ID or by term name.
  *
@@ -1290,31 +1345,28 @@ function finalizeTermParam($term, $termId)
  */
 function getTermParam($tid = '', $name = '')
 {
-    $found = getTermParamInit();
-    $termUriField = getTermUriField();
+    $result = gw_get_term_param_default();
+    $field_name  = gw_get_term_uri_field();
 
     if ($tid) {
-        $found = getTermParamById($tid);
-        gw_redirect_canonical_term_url($tid, $found, $termUriField);
+        $result = gw_get_term_by_id($tid);
+        gw_redirect_canonical_term_url($tid, $result, $field_name);
     } elseif ($name !== '') {
-        $foundByName = getTermParamByName($name);
+        $result_by_name = gw_get_term_by_name($name);
 
-        if (!empty($foundByName)) {
-            $found = $foundByName;
+        if (!empty($result_by_name)) {
+            $result = $result_by_name;
         }
     }
 
-    $found = finalizeTermParam($found, $tid);
+    $result = gw_apply_uri_for_term_param($result, $tid);
 
-    if (empty($found)) {
-        $found = getTermParamInit();
+    if (empty($result)) {
+        $result = gw_get_term_param_default();
     }
 
-    return $found;
+    return $result;
 }
-
-
-
 
 /**
  * Get term parameters by term ID or by term name.

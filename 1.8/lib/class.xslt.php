@@ -24,7 +24,7 @@ class gw_xslt {
 	var $encoding       = 'UTF-8';
 	var $method         = "xml";
 	   
-	function gw_xslt()
+	function __construct()
 	{
 		global $oL;
 		$this->is_xslt_create = function_exists('xslt_create');

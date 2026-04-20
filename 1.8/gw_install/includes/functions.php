@@ -1,79 +1,21 @@
 <?php
 
+/**
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ */
+
 if (!defined('IS_CLASS_GW2_FUNCTIONS')) {
     define('IS_CLASS_GW2_FUNCTIONS', 1);
 
-    /**
-     * Replacement for print_r()
-     *
-     * @param string $a Any string, object, or array.
-     * @param string $c Additional marker for better visual display. Try "__FILE__"
-     */
-    function prn_r($a, $c = '')
-    {
-        if (is_array($a)) {
-            ksort($a);
-            $a = gw_htmlspecialchars_ltgt($a);
-        } elseif (is_object($a) || is_string($a)) {
-            $a = gw_htmlspecialchars_ltgt($a);
-        }
-        /* Set font size in pixels because function can be called from various places */
-        print '<pre style="text-align:left;color:#000;background:#FFF;font: 14px/16px Consolas,\'Courier New\',monospace">';
-        if ($c) {
-            print '===&gt; <strong>' . $c . "</strong>\n";
-        }
-        /* Placing the output into buffer */
-        ob_start();
-        print_r($a);
-        $b = ob_get_clean();
-        /* compress indents */
-        $b = preg_replace("/(^)?(    )([\(|\)|\[])?/", "  \\3", $b);
-        /* highlight Array and Object */
-        $b = str_replace('] => Array', '] => <span style="color:#080">Array</span>', $b);
-        $b = str_replace('] => Object', '] => <span style="color:#080">Object</span>', $b);
-        /* highlight numeric positive and negative keys */
-        $b = preg_replace("/\[(-)?(\d+)\] =>/", '<span style="color:#888">&#91;<span style="color:#00C">\\1\\2</span>] =></span>', $b);
-        $b = preg_replace("/\[(.*)\] =>/", '<span style="color:#888">&#91;<span style="color:#C50">\\1</span>] =></span>', $b);
-        print $b;
-        if ($c) {
-            print '&lt;===';
-        }
-        print '</pre>';
-    }
-
-
-    /**
-     * Merges arrays and clobber any existing key/value pairs
-     * Keeps numeric keys, they will be not renumbered.
-     *
-     * @param array $a1 First array
-     * @param array $a2 Second array
-     * @return  array   Merged arrays
-     */
-    if (!function_exists('array_merge_clobber')) {
-        function array_merge_clobber($a1, $a2)
-        {
-            if (!is_array($a1) || !is_array($a2)) {
-                return false;
-            }
-
-            $arNew = $a1;
-
-            foreach ($a2 as $key => $val) {
-                if (is_array($val) && isset($arNew[$key]) && is_array($arNew[$key])) {
-                    $arNew[$key] = gw_array_merge_clobber($arNew[$key], $val);
-                } else {
-                    $arNew[$key] = $val;
-                }
-            }
-
-            return $arNew;
-        }
-    }
-
-
     /* */
-
     class tkit_functions
     {
 

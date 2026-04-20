@@ -92,7 +92,7 @@ foreach ($arSql as $arV) {
     $arDs = [];
 
     if ($arV['id_dict']) {
-        $arDs = getDictParam($arV['id_dict']);
+        $arDs = gw_get_dict_param($arV['id_dict']);
 
         switch ($sys['pages_link_mode']) {
             case GW_PAGE_LINK_NAME:

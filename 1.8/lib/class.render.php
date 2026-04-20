@@ -71,7 +71,7 @@ class gw_render extends gw_htmlforms
 					   'make_html_usg'  => 1, 'make_html_src'  => 1, 'make_html_address' => 1, 'make_html_phone'  => 1
 					  );
 	/* Autoexec */
-	function gw_render()
+	function __construct()
 	{
 		global $oSess, $oDb, $oSqlQ, $oL, $oHtml, $oFunc, $oTpl;
 		global $sys, $gw_this, $ar_theme;
@@ -444,8 +444,7 @@ class gw_render extends gw_htmlforms
 		}
 		/* Color by default */
 		$ar_abbr_groups = array('' => 1);
-		while (list($k, $arV) = each($arSql))
-		{
+        foreach ($arSql as $arV) {
 			$id_abbr = sprintf('%03d', $arV['id_abbr']);
 			if ($arDictParam['is_abbr_long'])
 			{
@@ -468,9 +467,7 @@ class gw_render extends gw_htmlforms
 		/* */
 		$tmp['ar_compiled'] = array();
 		$i = 0;
-		reset($tmp['arEl']);
-		while (list($chK, $chV) = each($tmp['arEl']))
-		{
+        foreach ($tmp['arEl'] as $chK => $chV) {
 			$i++;
 			$tmp['str_title'] = $tmp['str_acronym'] = '';
 			$tmp['str'] = $this->objDom->get_content( $chV );

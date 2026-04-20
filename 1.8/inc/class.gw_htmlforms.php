@@ -35,7 +35,7 @@ class gw_htmlforms extends gwForms
 					   'make_usg'  => 1, 'make_src'  => 1, 'make_address' => 1, 'make_phone'  => 1
 					  );
 	// autostart
-	function gw_htmlforms()
+	function __construct()
 	{
 		// load trns
 		// load abbr
@@ -450,68 +450,91 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		$this->load_trns($gw_this['vars']['id']);
 	}
 	/* */
-	function load_trns($id_dict = 0)
-	{
-		global $gw_this, $oDb, $oSqlQ, $arDictParam;
-		$tmp['strform'] = '';
-		// do auto-fill
-		$tmp['arTmp'] = array();
-		$tmp['arTmp']['--'] = $this->oL->m('000');
-		/* */
-		$field_name = 'abbr_short';
-		if (GW_IS_BROWSE_ADMIN || $arDictParam['is_abbr_long'])
-		{
-			$field_name = 'abbr_long';
-		}
-		global $oSess;
-		/* The list of translations for the dictionary */
-		$arSql = $oDb->sqlRun($oSqlQ->getQ('get-abbr-list', $gw_this['vars']['locale_name'], 'AND a.id_group = "4" and a.id_dict = "'.$id_dict.'"'), 'st');
-		while (list($abrK, $abrV) = each($arSql))
-		{
-			$tmp['arTmp'][sprintf("%03d", $abrV['id_abbr'])] = $abrV[$field_name];
-		}
-		$tmp['arTmp']['-- '] = '------------';
-		/* The list of common translations  */
-		$arSql = $oDb->sqlRun($oSqlQ->getQ('get-abbr-list', $gw_this['vars']['locale_name'], 'AND a.id_group = "4" and a.id_dict = "0"'), 'st');
-		while (list($abrK, $abrV) = each($arSql))
-		{
-			$tmp['arTmp'][sprintf("%03d", $abrV['id_abbr'])] = $abrV[$field_name];
-		}
-		/* */
-		$this->Set('arTrns', $tmp['arTmp']);
-	}
-	/* */
-	function load_abbr($id_dict = 0)
-	{
-		global $gw_this, $oDb, $oSqlQ, $arDictParam;
-		$tmp['strform'] = '';
-		// do auto-fill
-		$tmp['arTmp']['--'] = $this->oL->m('000');
-		/* */
-		$field_name = 'abbr_short';
-		if (GW_IS_BROWSE_ADMIN || $arDictParam['is_abbr_long'])
-		{
-			$field_name = 'abbr_long';
-		}
-		/* The list of custom abbreviations for the dictionary */
-		/* The list of custom and common abbreviations */
+    function load_trns($id_dict = 0)
+    {
+        global $gw_this, $oDb, $oSqlQ, $arDictParam;
+        $tmp['strform'] = '';
+        // do auto-fill
+        $tmp['arTmp'] = [];
+        $tmp['arTmp']['--'] = $this->oL->m('000');
+        /* */
+        $field_name = 'abbr_short';
+        if (GW_IS_BROWSE_ADMIN || $arDictParam['is_abbr_long']) {
+            $field_name = 'abbr_long';
+        }
+        global $oSess;
+        /* The list of translations for the dictionary */
+        $arSql = $oDb->sqlRun(
+            $oSqlQ->getQ(
+                'get-abbr-list',
+                $gw_this['vars']['locale_name'],
+                'AND a.id_group = "4" and a.id_dict = "' . $id_dict . '"'
+            ),
+            'st'
+        );
+        foreach ($arSql as $abrV) {
+            $tmp['arTmp'][sprintf("%03d", $abrV['id_abbr'])] = $abrV[$field_name];
+        }
+        $tmp['arTmp']['-- '] = '------------';
+        /* The list of common translations  */
+        $arSql = $oDb->sqlRun(
+            $oSqlQ->getQ(
+                'get-abbr-list',
+                $gw_this['vars']['locale_name'],
+                'AND a.id_group = "4" and a.id_dict = "0"'
+            ),
+            'st'
+        );
+        foreach ($arSql as $abrV) {
+            $tmp['arTmp'][sprintf("%03d", $abrV['id_abbr'])] = $abrV[$field_name];
+        }
+        /* */
+        $this->Set('arTrns', $tmp['arTmp']);
+    }
+
+    /* */
+    function load_abbr($id_dict = 0)
+    {
+        global $gw_this, $oDb, $oSqlQ, $arDictParam;
+        $tmp['strform'] = '';
+        // do auto-fill
+        $tmp['arTmp']['--'] = $this->oL->m('000');
+        /* */
+        $field_name = 'abbr_short';
+        if (GW_IS_BROWSE_ADMIN || $arDictParam['is_abbr_long']) {
+            $field_name = 'abbr_long';
+        }
+        /* The list of custom abbreviations for the dictionary */
+        /* The list of custom and common abbreviations */
 #		$tmp['arTmp']['--  '] = '------------';
-		/* The list of abbreviations for the dictionary */
-		$arSql = $oDb->sqlRun($oSqlQ->getQ('get-abbr-list', $gw_this['vars']['locale_name'], 'AND a.id_group IN (1,2,3,5) and a.id_dict = "'.$id_dict.'"'), 'st');
-		while (list($abrK, $abrV) = each($arSql))
-		{
-			$tmp['arTmp'][sprintf("%03d", $abrV['id_abbr'])] = $abrV[$field_name];
-		}
-		$tmp['arTmp']['--   '] = '------------';
-		/* The list of abbreviations */
-		$arSql = $oDb->sqlRun($oSqlQ->getQ('get-abbr-list', $gw_this['vars']['locale_name'], 'AND a.id_group IN (1,2,3,5) and a.id_dict = "0"'), 'st');
-		while (list($abrK, $abrV) = each($arSql))
-		{
-			$tmp['arTmp'][sprintf("%03d", $abrV['id_abbr'])] = $abrV[$field_name];
-		}
-		/* */
-		$this->Set('arAbbr', $tmp['arTmp']);
-	}
+        /* The list of abbreviations for the dictionary */
+        $arSql = $oDb->sqlRun(
+            $oSqlQ->getQ(
+                'get-abbr-list',
+                $gw_this['vars']['locale_name'],
+                'AND a.id_group IN (1,2,3,5) and a.id_dict = "' . $id_dict . '"'
+            ),
+            'st'
+        );
+        foreach ($arSql as $abrV) {
+            $tmp['arTmp'][sprintf("%03d", $abrV['id_abbr'])] = $abrV[$field_name];
+        }
+        $tmp['arTmp']['--   '] = '------------';
+        /* The list of abbreviations */
+        $arSql = $oDb->sqlRun(
+            $oSqlQ->getQ(
+                'get-abbr-list',
+                $gw_this['vars']['locale_name'],
+                'AND a.id_group IN (1,2,3,5) and a.id_dict = "0"'
+            ),
+            'st'
+        );
+        foreach ($arSql as $abrV) {
+            $tmp['arTmp'][sprintf("%03d", $abrV['id_abbr'])] = $abrV[$field_name];
+        }
+        /* */
+        $this->Set('arAbbr', $tmp['arTmp']);
+    }
 	/* */
 	function make_trns($fieldname, $ar = array())
 	{

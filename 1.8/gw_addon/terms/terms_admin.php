@@ -23,7 +23,7 @@ class gw_addon_terms_admin extends gw_addon
 	/* Current component name */
 	var $component;
 	/* Autoexec */
-	function gw_addon_terms_admin()
+	function __construct()
 	{
 		$this->init();
 	}

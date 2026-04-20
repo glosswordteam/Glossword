@@ -223,7 +223,7 @@ class gw_addon_log_search_admin extends gw_addon
 		/* */
 		global $strR;
 
-		$str_pages = getNavToolbar($this->int_pages, $this->gw_this['vars']['p'],
+		$str_pages = gw_get_pagination($this->int_pages, $this->gw_this['vars']['p'],
 					$this->sys['page_admin'].'?'.GW_ACTION.'='.$this->gw_this['vars'][GW_ACTION].'&'.GW_TARGET.'='.$this->addon_name.'&'.
 					'q='.$this->gw_this['vars']['q'].'&'.
 					'w1='.$this->gw_this['vars']['w1'].'&'.
@@ -293,7 +293,7 @@ class gw_addon_log_search_admin extends gw_addon
 		/* */
 		global $strR;
 
-		$str_pages = getNavToolbar($this->int_pages, $this->gw_this['vars']['p'],
+		$str_pages = gw_get_pagination($this->int_pages, $this->gw_this['vars']['p'],
 					$this->sys['page_admin'].'?'.GW_ACTION.'='.$this->gw_this['vars'][GW_ACTION].'&'.GW_TARGET.'='.$this->addon_name.'&'.
 					'q='.$this->gw_this['vars']['q'].'&'.
 					'w1='.$this->gw_this['vars']['w1'].'&'.
@@ -353,7 +353,7 @@ class gw_addon_log_search_admin extends gw_addon
     protected function _print_report($arSql)
 	{
 		global $strR;
-		$str_pages = getNavToolbar($this->int_pages, $this->gw_this['vars']['p'],
+		$str_pages = gw_get_pagination($this->int_pages, $this->gw_this['vars']['p'],
 					$this->sys['page_admin'].'?'.GW_ACTION.'='.$this->gw_this['vars'][GW_ACTION].'&'.GW_TARGET.'='.$this->addon_name.'&'.
 					'q='.$this->gw_this['vars']['q'].'&'.
 					'w1='.$this->gw_this['vars']['w1'].'&'.
@@ -401,7 +401,7 @@ class gw_addon_log_search_admin extends gw_addon
 
 			if ($arV['id_dict'])
 			{
-				$arDictParam = getDictParam($arV['id_dict']);
+				$arDictParam = gw_get_dict_param($arV['id_dict']);
 			}
 			$strR .= $arV['id_dict']
 					? $this->oHtml->a(

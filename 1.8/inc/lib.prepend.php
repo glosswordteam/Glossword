@@ -1,19 +1,19 @@
 <?php
-if (!defined('IN_GW'))
-{
-	die('<!-- $Id: lib.prepend.php 84 2007-06-19 13:01:21Z yrtimd $ -->');
-}
+
 /**
- *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008-2012 Glossword.biz team <team at glossword dot biz>
- *  © 2002-2008 Dmitry N. Shilnikov
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * Â© 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * Â© 2002-2008 Dmitry N. Shilnikov
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+if (!defined('IN_GW')) {
+    die('<!-- Not in App  -->');
+}
 /**
  *  Configuration scheme:
  *  index -> config.inc -> lib.prepend, constants.inc -> custom
@@ -102,8 +102,7 @@ if (!isset($sys['server_dir']))
 		$sys['server_dir'] = str_replace('/gw_admin', '', $sys['server_dir']);
 	}
 }
-#print $sys['server_dir'];
-#exit;
+
 if (!isset($sys['server_url']))
 {
 	$sys['server_url'] = $sys['server_proto'].$sys['server_host'].$sys['server_dir'];

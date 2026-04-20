@@ -24,7 +24,7 @@ class gw_addon_clear_history_terms extends gw_addon
 {
 	var $addon_name = 'clear_history_terms';
 	/* Autoexec */
-	function gw_addon_clear_history_terms()
+	function __construct()
 	{
 		$this->init_m();
 	}

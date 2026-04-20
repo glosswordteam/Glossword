@@ -45,7 +45,9 @@ function gw_get_virtual_keyboard($id_profile = false, $id_dict = false)
     }
 
     if (!empty($ar_letters)) {
-        array_walk($ar_letters, create_function('&$v', '$v = trim( addslashes( $v ) );'));
+        array_walk($ar_letters, function (&$v) {
+            $v = trim(addslashes($v));
+        });
 
         /* "Virtual keyboard" button */
         $str .= '<a title="' . $oL->m('virtual_keyboard') . '" id="gwkbdcall" onclick="';
@@ -829,39 +831,6 @@ function gw_make_uid($prefix = '', $max_char = 8, $set = 0)
     for ($i = 0; $i < $random_len; $i++) {
         $char_index = mt_rand(0, $pool_len - 1);
         $result     .= $char_pool[$char_index];
-    }
-
-    return $result;
-}
-
-
-
-/**
- * Recursively merge arrays and overwrite existing values by key.
- *
- * Numeric keys are preserved and are not reindexed.
- * If both values are arrays, they are merged recursively.
- * Otherwise, the value from the second array overwrites the first one.
- *
- * @param array $array_1
- * @param array $array_2
- *
- * @return array|bool
- */
-function gw_array_merge_clobber($array_1, $array_2)
-{
-    if (!is_array($array_1) || !is_array($array_2)) {
-        return false;
-    }
-
-    $result = $array_1;
-
-    foreach ($array_2 as $key => $value) {
-        if (isset($result[$key]) && is_array($result[$key]) && is_array($value)) {
-            $result[$key] = gw_array_merge_clobber($result[$key], $value);
-        } else {
-            $result[$key] = $value;
-        }
     }
 
     return $result;
@@ -1656,4 +1625,6 @@ function htmlFormSelectDate($name, $val)
     }
     return $str;
 }
+
+
 

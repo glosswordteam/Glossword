@@ -471,7 +471,7 @@ $gw_this['vars']['funcnames'][GW_A_UPDATE . GW_T_DICT] = isset($gw_this['vars'][
 if ($gw_this['vars']['d'])
 {
 	// Get dictionary settings
-	$arDictParam = getDictParam($gw_this['vars']['d']);
+	$arDictParam = gw_get_dict_param($gw_this['vars']['d']);
 	// No any settings, return to the dictionary listing
 	if (empty($arDictParam))
 	{
@@ -625,8 +625,8 @@ if ($gw_this['vars'][GW_ACTION] == GW_A_SEARCH)
 	if ($intSumPages > 1)
 	{
 		$ar_theme['split_pagenumbers'] = ' &#8226; ';
-		$oTpl->addVal( 'v:nav_pages',
-				getNavToolbar($intSumPages, $gw_this['vars']['p'], $sys['page_admin'] . '?'.GW_ACTION.'='.GW_A_SEARCH.'&id_srch='.$id_srch.'&d='.$d.'&p=')
+		$oTpl->addVal('v:nav_pages',
+                      gw_get_pagination($intSumPages, $gw_this['vars']['p'], $sys['page_admin'] . '?'.GW_ACTION.'='.GW_A_SEARCH.'&id_srch='.$id_srch.'&d='.$d.'&p=')
 				);
 	}
 	if ($gw_this['arSrchResults']['found'] == 0) // nothing was found
