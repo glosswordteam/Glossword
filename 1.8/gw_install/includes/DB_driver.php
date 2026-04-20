@@ -46,7 +46,7 @@ class CI_DB_driver
     public $password;
     public $hostname;
     public $database;
-    public $dbdriver      = 'mysql';
+    public $dbdriver      = 'mysqli';
     public $dbprefix      = '';
     public $char_set      = 'utf8';
     public $dbcollat      = 'utf8_general_ci';

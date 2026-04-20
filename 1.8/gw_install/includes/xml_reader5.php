@@ -11,61 +11,118 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+
 /**
- *  XMLReader, PHP5.
- *  Converts XML-file into Array.
+ * XMLReader wrapper for PHP 5.
+ *
+ * Converts XML file into array.
  */
 class gw2_xmlreader5
 {
-	var $is_skip_root = 1;
-	function get($filename)
-	{
-		if (!file_exists($filename)){ return $filename; }
-		$o = new XMLReader();
-		$o->open( $filename );
-		/* Skip root node */
-		if ($this->is_skip_root)
-		{
-			$o->read();
-		}
-		/* */
-		return $this->xml2array($o);
-	}
-	/* */
-    public function xml2array($o)
+    /**
+     * Skip root XML element before parsing children.
+     *
+     * @var int
+     */
+    public $is_skip_root = 1;
+
+    /**
+     * Load XML from file and convert it to array.
+     *
+     * Returns false when file cannot be opened or parsed.
+     *
+     * @param string $filename
+     *
+     * @return mixed
+     */
+    public function get($filename)
     {
-        $ar = null;
+        if (!is_string($filename) || $filename === '') {
+            return false;
+        }
 
-        while ($o->read()) {
-            switch ($o->nodeType) {
+        if (!is_file($filename) || !is_readable($filename)) {
+            return false;
+        }
+
+        $xml_reader = new XMLReader();
+        $libxml_options = defined('LIBXML_NONET') ? LIBXML_NONET : 0;
+
+        if (!xmlreader_open($xml_reader, $filename, null, $libxml_options)) {
+            return false;
+        }
+
+        if ($this->is_skip_root) {
+            $xml_reader->read();
+        }
+
+        $result = $this->xml2array($xml_reader);
+        $xml_reader->close();
+
+        return $result;
+    }
+
+    /**
+     * Convert XMLReader node tree to array.
+     *
+     * @param XMLReader $xml_reader
+     *
+     * @return array|string|null
+     */
+    public function xml2array($xml_reader)
+    {
+        $result = null;
+
+        while ($xml_reader->read()) {
+            switch ($xml_reader->nodeType) {
                 case XMLReader::ELEMENT:
-                    $tag = $o->localName;
-                    $attributes = [];
+                    $tag_name = $xml_reader->localName;
+                    $attributes = $this->_read_attributes($xml_reader);
 
-                    if ($o->hasAttributes) {
-                        while ($o->moveToNextAttribute()) {
-                            $attributes[$o->name] = $o->value;
-                        }
-                        $o->moveToElement();
-                    }
-
-                    $ar[$tag][] = [
-                        'tag'        => $tag,
+                    $result[$tag_name][] = [
+                        'tag' => $tag_name,
                         'attributes' => $attributes,
-                        'value'      => $o->isEmptyElement ? '' : $this->xml2array($o),
+                        'value' => $xml_reader->isEmptyElement ? '' : $this->xml2array($xml_reader),
                     ];
                     break;
 
                 case XMLReader::TEXT:
                 case XMLReader::CDATA:
-                    $ar .= $o->value;
+                case XMLReader::SIGNIFICANT_WHITESPACE:
+                    $result .= $xml_reader->value;
                     break;
 
                 case XMLReader::END_ELEMENT:
-                    return $ar;
+                    return $result;
             }
         }
 
-        return $ar;
+        return $result;
+    }
+
+    /**
+     * Read attributes from current XML element.
+     *
+     * @param XMLReader $xml_reader
+     *
+     * @return array
+     */
+    private function _read_attributes($xml_reader)
+    {
+        $attributes = [];
+
+        if (!$xml_reader->hasAttributes) {
+            return $attributes;
+        }
+
+        if ($xml_reader->moveToFirstAttribute()) {
+            do {
+                $attributes[$xml_reader->name] = $xml_reader->value;
+            } while ($xml_reader->moveToNextAttribute());
+
+            $xml_reader->moveToElement();
+        }
+
+        return $attributes;
     }
 }

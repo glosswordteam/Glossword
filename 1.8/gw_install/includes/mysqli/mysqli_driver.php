@@ -260,13 +260,9 @@ class CI_DB_mysqli_driver extends CI_DB {
             }
             return $str;
         }
-        if ( function_exists( 'mysqli_real_escape_string' ) && is_resource( $this->conn_id ) )
+        if ( function_exists( 'mysqli_real_escape_string' ) && (is_object( $this->conn_id ) || is_resource( $this->conn_id )) )
         {
             return mysqli_real_escape_string( $this->conn_id, $str );
-        }
-        elseif ( function_exists( 'mysqli_escape_string' ) )
-        {
-            return mysqli_escape_string( $this->conn_id, $str );
         }
         else
         {

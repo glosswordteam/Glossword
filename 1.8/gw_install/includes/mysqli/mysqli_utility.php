@@ -140,21 +140,21 @@ class CI_DB_mysqli_utility extends CI_DB_utility {
 			// integer type.  We use this info to decide whether to
 			// surround the data with quotes or not
 			
-			$i = 0;
 			$field_str = '';
 			$is_int = array();
-			while ($field = mysqli_fetch_field($query->result_id))
+			for ($i = 0, $num_fields = mysqli_num_fields($query->result_id); $i < $num_fields; $i++)
 			{
+				$field = mysqli_fetch_field_direct($query->result_id, $i);
+
 				// Most versions of MySQL store timestamp as a string
-				$is_int[$i] = (in_array(
-										strtolower(mysqli_field_type($query->result_id, $i)),
-										array('tinyint', 'smallint', 'mediumint', 'int', 'bigint'), //, 'timestamp'), 
-										TRUE)
-										) ? TRUE : FALSE;
-										
+				$is_int[$i] = in_array(
+								$field->type,
+								array(MYSQLI_TYPE_TINY, MYSQLI_TYPE_SHORT, MYSQLI_TYPE_LONG, MYSQLI_TYPE_INT24, MYSQLI_TYPE_LONGLONG),
+								TRUE
+							);
+
 				// Create a string of field names
 				$field_str .= $field->name.', ';
-				$i++;
 			}
 			
 			// Trim off the end comma
