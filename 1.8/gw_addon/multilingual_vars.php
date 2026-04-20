@@ -30,7 +30,7 @@ function gw_addon_multilingual_vars_load($filename = '', $obj_tpl)
 	$oDomCode->parse();
 	// start parsing every translation unit, <tu>
 	$oEl = $oDomCode->get_elements_by_tagname('tu');
-	while (list($elK1, $elV1) = each($oEl))
+	foreach ($oEl as $elK1 => $elV1)
 	{
 		if ( isset($elV1['children']) && is_array($elV1['children']) )
 		{

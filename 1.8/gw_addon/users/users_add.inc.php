@@ -23,7 +23,7 @@ $ar_req_fields = array('login','pass_new','pass_confirm');
 
 /* correct unknown settings */
 $ar_user_settings = array('is_show_contact' => 1, 'locale_name' => $this->gw_this['vars']['locale_name'], 'visualtheme' => 'gw_brand', 'location' => '', 'avatar_img' => '', 'is_use_avatar' => 0, 'is_htmled' => '1', 'gmt_offset' => 0, 'date_format' => 'F j, Y, g:i a');
-for (; list($k, $v) = each($ar_user_settings);)
+foreach ($ar_user_settings as $k => $v)
 {
 	if (!isset($arSql['user_settings'][$k])) { $arSql['user_settings'][$k] = $v; }
 }
@@ -57,7 +57,7 @@ else
 
 	/* Fix on/off options */
 	$arIsV = array('is_show_contact','is_send_notice');
-	for (; list($k, $v) = each($arIsV);)
+	foreach ($arIsV as $k => $v)
 	{
 		$arPost[$v]  = isset($arPost[$v]) ? $arPost[$v] : 0;
 	}
@@ -77,7 +77,7 @@ else
 	if ($arPost['login'])
 	{
 		$arExistent = $this->oSess->auth_info('', $arPost['login']);
-		while (list($k, $arV) = each($arExistent))
+		foreach ($arExistent as $k => $arV)
 		{
 			if (isset($arV['id_user']) && ($arV['id_user'] != $id_user))
 			{
@@ -97,7 +97,7 @@ else
 	{
 		$arExistent = $this->oSess->auth_info('', '', $arPost['user_email']);
 
-		while (list($k, $arV) = each($arExistent))
+		foreach ($arExistent as $k => $arV)
 		{
 			if (isset($arV['id_user']))
 			{
@@ -249,7 +249,7 @@ else
 #prn_r( $arPost );
 
 		/* Assign dictionaries map */
-		for (; list($k, $v) = each($arPost['user_settings']['dictionaries']);)
+		foreach ($arPost['user_settings']['dictionaries'] as $k => $v)
 		{
 			$q2 = array();
 			$q2['user_id'] = $q1['id_user'];

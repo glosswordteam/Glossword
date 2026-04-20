@@ -69,7 +69,7 @@ class pch_template extends gwv_template
 		{
 			$arSql = $oDb->sqlRun($oSqlQ->getQ('get-theme-code-key', gw_text_sql($theme_name), gw_text_sql($id_group)), 'theme');
 		}
-		while (is_array($arSql) && list($k, $arV) = each($arSql))
+		foreach ((is_array($arSql) ? $arSql : array()) as $k => $arV)
 		{
 			$arBlockI = array();
 			$tkey = sprintf("%u", crc32($arV['settings_key']));
@@ -135,7 +135,7 @@ class pch_template extends gwv_template
 				$arCmd = array();
 				$arCmd[] = '<?xml';
 				$arRpl[] = '<?'.'php echo "<","?xml"; ?'.'>';
-				while (list($k, $cmd_src) = each($tmp['tpl_matches'][2]))
+				foreach ($tmp['tpl_matches'][2] as $k => $cmd_src)
 				{
 					$arCmd[] = $tmp['tpl_matches'][1][$k].$cmd_src.$tmp['tpl_matches'][3][$k];
 					$tmp['cmd'] = trim($cmd_src);

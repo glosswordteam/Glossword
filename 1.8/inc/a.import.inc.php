@@ -399,7 +399,7 @@ function gw_import_xml()
 						$arSql = $oDb->sqlExec($sql);
                         #prn_r( $arSql );
 						/* Compare founded values with imported values */
-						for (; list($arK, $arV) = each($arSql);)
+						foreach ($arSql as $arK => $arV)
 						{
 							/* Imported Term ID and an existent Term ID are the same */
 							if ($arV['id'] == $qT['id'])
@@ -452,7 +452,7 @@ function gw_import_xml()
 					/* 1.8.7 */
 					$ar_field_names = array('a','b','c','d','e','f');
 					preg_match_all("/./u", $str_term_src_uc, $ar_letters);
-					for (; list($cnt_letter, $letter) = each($ar_letters[0]);)
+					foreach ($ar_letters[0] as $cnt_letter => $letter)
 					{
 						if (isset($ar_field_names[$cnt_letter]))
 						{
@@ -1004,7 +1004,7 @@ function gw_import_csv()
 			}
 			$arSql = $oDb->sqlExec($sql);
 			/* Compare founded values with imported values */
-			for (; list($arK, $arV) = each($arSql);)
+			foreach ($arSql as $arK => $arV)
 			{
 				/* Imported Term ID and an existent Term ID are the same */
 				if ($arV['id'] == $qT['id'])
@@ -1060,7 +1060,7 @@ function gw_import_csv()
 		/* 0.000203 */
 		$ar_field_names = array('a','b','c','d','e','f');
 		preg_match_all("/./u", $str_term_src_uc, $ar_letters);
-		for (; list($cnt_letter, $letter) = each($ar_letters[0]);)
+		foreach ($ar_letters[0] as $cnt_letter => $letter)
 		{
 			if (isset($ar_field_names[$cnt_letter]))
 			{
@@ -1211,7 +1211,7 @@ function getFormImport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 	// reverse array keys <-- values;
 	$arReq = array_flip($arReq);
 	// mark fields as "REQUIRED" and make error messages
-	while (is_array($vars) && list($key, $val) = each($vars) )
+	foreach ((is_array($vars) ? $vars : array()) as $key => $val)
 	{
 		$arReqMsg[$key] = $arBrokenMsg[$key] = "";
 		if (isset($arReq[$key])) { $arReqMsg[$key] = '&#160;<span class="red"><strong>*</strong></span>'; }
@@ -1477,7 +1477,7 @@ switch ($gw_this['vars']['arPost'][GW_ACTION])
 
 		$strHelp = '';
 		$strHelp .= '<dl>';
-		for (; list($k, $v) = each($arHelpMap);)
+		foreach ($arHelpMap as $k => $v)
 		{
 			$strHelp .= '<dt><b>' . $oL->m($k) . '</b></dt>';
 			$strHelp .= '<dd>' . $oL->m($v) . '</dd>';
@@ -1520,7 +1520,7 @@ switch ($gw_this['vars']['arPost'][GW_ACTION])
 		/* Fix on/off options */
 		$arIsV = array('is_validate', 'is_overwrite', 'is_specialchars', 'is_whitespace',
 						'is_convert_esc', 'is_read_first', 'is_check_exist', 'is_active');
-		for (; list($k, $v) = each($arIsV);)
+		foreach ($arIsV as $k => $v)
 		{
 			$gw_this['vars']['arPost'][$v] = isset($gw_this['vars']['arPost'][$v]) ? $gw_this['vars']['arPost'][$v] : 0;
 		}

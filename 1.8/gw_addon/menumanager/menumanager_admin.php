@@ -65,7 +65,7 @@ class gw_addon_menumanager_admin extends gw_addon
 		$oForm->Set('isButtonSubmit', 1);
 		$ar_req = array_flip($ar_req);
 		/* mark fields as "Required" and display error message */
-		while (is_array($vars) && list($k, $v) = each($vars) )
+		foreach ((is_array($vars) ? $vars : array()) as $k => $v)
 		{
 			$ar_req_msg[$k] = $ar_broken_msg[$k] = '';
 			if (isset($ar_req[$k])) { $ar_req_msg[$k] = '&#160;<span class="red"><strong>*</strong></span>'; }
@@ -121,7 +121,7 @@ class gw_addon_menumanager_admin extends gw_addon
 				$arSql = $this->oDb->sqlRun($sql);
 				$ar_select_components = array();
 				$ar_select_cname_sys = array();
-				for (; list($k, $arV) = each($arSql);)
+				foreach ($arSql as $k => $arV)
 				{
 					$ar_select_components[$arV['id_component']] = $this->oL->m($arV['cname']);
 					$ar_select_cname_sys[$arV['id_component']] = $arV['id_component_name'];
@@ -159,7 +159,7 @@ class gw_addon_menumanager_admin extends gw_addon
 				$arSql = $this->oDb->sqlRun($sql);
 				$ar_select_actions = array();
 				$ar_select_aname_sys = array();
-				for (; list($k, $arV) = each($arSql);)
+				foreach ($arSql as $k => $arV)
 				{
 					$ar_select_actions[$arV['id_action']] = $this->oL->m($arV['aname']);
 					$ar_select_aname_sys[$arV['id_action']] = $arV['aname_sys'];
@@ -315,11 +315,11 @@ gw_menumanager_get_option(\'menu-item-name\', gw_getElementById(\'arPost_id_acti
 					'is-sys-mnt' => '1313',
 				)
 			);
-			for (; list($k, $arV) = each($ar_user_permissions);)
+			foreach ($ar_user_permissions as $k => $arV)
 			{
 				$str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
 				$str_form .= '<table class="gw2TableFieldset" width="100%"><tbody>';
-				for (; list($fieldname, $caption) = each($arV);)
+				foreach ($arV as $fieldname => $caption)
 				{
 					$str_checked = (isset($ar_perms_var[$fieldname]) ? 'checked="checked" ' : '');
 					$str_form .= '<tr>'.

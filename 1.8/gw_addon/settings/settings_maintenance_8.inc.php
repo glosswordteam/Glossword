@@ -70,7 +70,7 @@ function gw_export_sqltable($tablename)
 	$sql = 'SELECT '.$q_mysql.' * FROM `' . $tablename . '`';
 	$arSql = $oDb->sqlExec($sql);
 	/* */
-	for (; list($arK, $arV) = each($arSql);)
+	foreach ($arSql as $arK => $arV)
 	{
 		foreach ($arV as $kV => $vV)
 		{

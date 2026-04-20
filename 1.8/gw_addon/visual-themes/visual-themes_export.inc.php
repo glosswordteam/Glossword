@@ -37,7 +37,7 @@ if ($this->gw_this['vars']['post'] == '')
 	}
 	/* Fix on/off options */
 	$arIsV = array('is_binary', 'is_as_file');
-	for (; list($k, $v) = each($arIsV);)
+	foreach ($arIsV as $k => $v)
 	{
 		$arPost[$v]  = isset($arPost[$v]) ? $arPost[$v] : 0;
 	}
@@ -47,12 +47,12 @@ if ($this->gw_this['vars']['post'] == '')
 	/* Basic info */
 	$arSql = $this->oDb->sqlExec('SELECT * FROM `'.$this->sys['tbl_prefix'].'theme` WHERE `id_theme` = "'. gw_text_sql($this->gw_this['vars']['tid']) .'"');
 	$style_attr = '';
-	for (; list($k, $arV) = each($arSql);)
+	foreach ($arSql as $k => $arV)
 	{
 		unset($arV['is_active']);
 		$arV['version'] = $arV['v1'].'.'.$arV['v2'].'.'.$arV['v3'];
 		unset($arV['v1'], $arV['v2'], $arV['v3']);
-		for (; list($attrK, $attrV) = each($arV);)
+		foreach ($arV as $attrK => $attrV)
 		{
 			$style_attr .= CRLF.' '.$attrK.'="'.$attrV.'"';
 		}
@@ -63,12 +63,12 @@ if ($this->gw_this['vars']['post'] == '')
 	{
 		$arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-theme', gw_text_sql($this->gw_this['vars']['tid']), implode(',', array_keys($arPost['tpl_page']))) );
 		$ar_theme = array();
-		for (; list($arK, $arV) = each($arSql);)
+		foreach ($arSql as $arK => $arV)
 		{
 			$ar_theme[$arV['settings_key']] = $arV['settings_value'];
 		}
 		$xml .= CRLF . "\t". '<group id="settings">';
-		for (; list($settings_key, $settings_value) = each($ar_theme);)
+		foreach ($ar_theme as $settings_key => $settings_value)
 		{
 			$xml .= CRLF . "\t\t" . '<setting key="';
 			$xml .= $settings_key;
@@ -87,7 +87,7 @@ if ($this->gw_this['vars']['post'] == '')
 		if (!empty($ar_files))
 		{
 			$xml .= CRLF . "\t". '<group id="binary">';
-			for (; list($k, $v) = each($ar_files);)
+			foreach ($ar_files as $k => $v)
 			{
 				$xml .= CRLF . "\t\t" . '<setting key="';
 				$xml .= $v;

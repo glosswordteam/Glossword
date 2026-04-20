@@ -93,7 +93,7 @@ class gw_addon_visual_themes_admin extends gw_addon
         $oForm->Set('charset', $this->sys['internal_encoding']);
         $ar_req = array_flip($ar_req);
         /* mark fields as "Required" and display error message */
-        while (is_array($vars) && list($k, $v) = each($vars)) {
+        foreach ((is_array($vars) ? $vars : array()) as $k => $v) {
             $ar_req_msg[$k] = $ar_broken_msg[$k] = '';
             if (isset($ar_req[$k])) {
                 $ar_req_msg[$k] = '&#160;<span class="red"><strong>*</strong></span>';
@@ -173,7 +173,7 @@ class gw_addon_visual_themes_admin extends gw_addon
         $oForm->Set('charset', $this->sys['internal_encoding']);
         $ar_req = array_flip($ar_req);
         /* mark fields as "Required" and display error message */
-        while (is_array($vars) && list($k, $v) = each($vars)) {
+        foreach ((is_array($vars) ? $vars : array()) as $k => $v) {
             $ar_req_msg[$k] = $ar_broken_msg[$k] = '';
             if (isset($ar_req[$k])) {
                 $ar_req_msg[$k] = '&#160;<span class="red"><b>*</b></span>';
@@ -363,7 +363,7 @@ function switch2edit(id)
         $str_form .= '<table class="gray" cellspacing="1" cellpadding="0" border="0" width="100%">';
         $str_form .= '<tbody>';
         /* Per each page */
-        for (; list($k, $page) = each($vars['tpl_pages']);) {
+        foreach ($vars['tpl_pages'] as $k => $page) {
             $str_external_link = preg_replace("/>(.*?)<\/a>/u", '>&gt;&gt;&gt;</a>', $page) . ' ';
             $str_external_link = str_replace(
                 'a href',

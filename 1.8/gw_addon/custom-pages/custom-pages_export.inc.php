@@ -51,7 +51,7 @@ else
 	$xml .= '<glossword version="'.$this->sys['version'].'">';
 	/* */
 	$arSql = $this->oDb->sqlExec( $this->oSqlQ->getQ('get-records-date', $this->sys['tbl_prefix'].'pages', $vars['min'], $vars['max']) );
-	for (; list($k, $arV) = each($arSql);)
+	foreach ($arSql as $k => $arV)
 	{
 		$style_attr = '';
 		$id_page = $arV['id_page'];
@@ -68,14 +68,14 @@ else
 		/* get topic names */
 		$xml .= CRLF . "\t". '<entry>';
 		$arSql2 = $this->oDb->sqlExec($this->oSqlQ->getQ('get-custompages-lang-adm', $id_page));
-		for (; list($k2, $arV2) = each($arSql2);)
+		foreach ($arSql2 as $k2 => $arV2)
 		{
 			/* remove encoding name */
 			$arV2['id_lang'] = preg_replace("/-([a-z0-9])+$/", '', $arV2['id_lang']);
 			/* start topic names */
 			$xml .= CRLF . "\t\t". '<lang xml:lang="'.$arV2['id_lang'].'">';
 			unset($arV2['id_lang']);
-			for (; list($attrK, $attrV) = each($arV2);)
+			foreach ($arV2 as $attrK => $attrV)
 			{
 				$xml .= CRLF . "\t\t\t<". $attrK.'>';
 				$xml .= ($attrV == '') ? '' : '<![CDATA['.$attrV.']]>';

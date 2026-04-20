@@ -61,7 +61,7 @@ $this->str .= '<th style="width:39%">' . $this->oL->m( 'action' ) . '</th>';
 $this->str .= '<th style="width:5%">' . $this->oL->m( '1320' ) . '</th>';
 $this->str .= '</tr></thead><tbody>';
 $cnt_row = 1;
-while ( list($k, $arV) = each( $arSql ) )
+foreach ($arSql as $k => $arV)
 {
 	$bgcolor = $cnt_row % 2 ? $this->ar_theme['color_1'] : $this->ar_theme['color_2'];
 	$this->str .= CRLF . CRLF . '<tr id="theme-'.$arV['id_theme'].'" style="background:' . $bgcolor . '">';

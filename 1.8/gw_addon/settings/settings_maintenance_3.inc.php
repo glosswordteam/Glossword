@@ -104,7 +104,7 @@ function gw_dict_recount($vars)
 	$str = '';
 	$str .= '<ul class="xt">';
 	/* Per each dictionary */
-	for (; list($id_dict, $v) = each($vars['dictionaries']);)
+	foreach ($vars['dictionaries'] as $id_dict => $v)
 	{
 		$arQ = array();
 		global $arDictParam;
@@ -121,7 +121,7 @@ function gw_dict_recount($vars)
 		$arQ[] = 'ALTER TABLE `'. $arDictParam['tablename'] .'` PACK_KEYS=1 CHECKSUM=0 DELAY_KEY_WRITE=1';
 		$arQ[] = 'OPTIMIZE TABLE `'. $arDictParam['tablename'] .'`';
 		/* */
-		for (; list($sqlk, $sqlv) = each($arQ);)
+		foreach ($arQ as $sqlk => $sqlv)
 		{
 			$oDb->sqlExec($sqlv);
 		}

@@ -680,7 +680,7 @@ function text_highlight($t, $q, $encoding = 'UTF-8')
     $q        = str_replace("?", ' ', $q);
     $ar_words = explode(' ', $q);
 
-    for (; list($k, $v) = each($ar_words);) {
+    foreach ($ar_words as $k => $v) {
         if ($v == '') {
             continue;
         }
@@ -713,7 +713,7 @@ function text_highlight($t, $q, $encoding = 'UTF-8')
     }
     /* fix &#xn<span class="highlight">n</span>nn; */
     preg_match_all('/&(#)?([0-9a-z="<>\/ ]+);/u', $t, $ar);
-    for (; list($k, $v) = each($ar[0]);) {
+    foreach ($ar[0] as $k => $v) {
         $t = str_replace($v, strip_tags($v), $t);
     }
     $t = str_replace($strong_start, '<strong class="' . $classname . '">', $t);
@@ -730,7 +730,7 @@ function array_clear_key($ar, $key_value)
     if (!is_array($ar)) {
         return $ar;
     }
-    while (list($k, $v) = each($ar)) {
+    foreach ($ar as $k => $v) {
         if (is_array($v)) {
             $ar[$k] = array_clear_key($v, $key_value);
         } else {
@@ -1425,7 +1425,7 @@ function gw_text_smooth_defn($t, $is_debug = 0)
     /* preformatted text */
     /* (.*[^>]) */
     if (preg_match_all("/<pre(.*?)>(.*?)<\/pre>/s", $t, $pre)) {
-        for (; list ($k, $v) = each($pre[2]);) {
+        foreach ($pre[2] as $k => $v) {
             $pre[2][$k] = str_replace("\t", "&#160;&#160;&#160;", $pre[2][$k]);
             $pre[2][$k] = str_replace("  ", "&#160;&#160;", $pre[2][$k]);
             $pre[2][$k] = str_replace(CRLF, "<br />", $pre[2][$k]);

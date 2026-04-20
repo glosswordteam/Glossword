@@ -46,7 +46,7 @@ $bSuccess = true;
 
 /* correct unknown settings */
 $ar_user_settings = array('is_dst' => @date('I'), 'locale_name' => $this->gw_this['vars']['locale_name'], 'visualtheme' => 'gw_brand', 'location' => '', 'avatar_img' => '', 'is_use_avatar' => 0, 'is_htmled' => '1', 'gmt_offset' => 0, 'date_format' => 'F j, Y, g:i a');
-for (; list($k, $v) = each($ar_user_settings);)
+foreach ($ar_user_settings as $k => $v)
 {
 	if (!isset($arSql['user_settings'][$k])) { $arSql['user_settings'][$k] = $v; }
 }
@@ -104,7 +104,7 @@ else {
 
 	/* Fix on/off options */
 	$arIsV = array('is_show_contact','is_send_notice');
-	for (; list($k, $v) = each($arIsV);)
+	foreach ($arIsV as $k => $v)
 	{
 		$arPost[$v]  = isset($arPost[$v]) ? $arPost[$v] : 0;
 	}
@@ -118,7 +118,7 @@ else {
 	if (isset($arPost['login']))
 	{
 		$arExistent = $this->oSess->auth_info('', $arPost['login']);
-		while (list($k, $arV) = each($arExistent))
+		foreach ($arExistent as $k => $arV)
 		{
 			if (isset($arV['id_user']) && ($arV['id_user'] != $id_user))
 			{
@@ -135,7 +135,7 @@ else {
 	if (isset($arPost['user_email']) && $arPost['user_email'])
 	{
 		$arExistent = $this->oSess->auth_info('', '', $arPost['user_email']);
-		while (list($k, $arV) = each($arExistent))
+		foreach ($arExistent as $k => $arV)
 		{
 			if (isset($arV['id_user']) && ($arV['id_user'] != $id_user))
 			{
@@ -264,7 +264,7 @@ else {
 
 		/* Fix on/off options for user  */
 		$ar_user_settings_on_off = array('is_dst', 'is_use_avatar', 'is_htmled');
-		for (; list($k, $v) = each($ar_user_settings_on_off);)
+		foreach ($ar_user_settings_on_off as $k => $v)
 		{
 			if (!isset($arPost['user_settings'][$v])) { $arPost['user_settings'][$v] = 0; }
 		}

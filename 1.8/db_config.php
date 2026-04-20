@@ -8,7 +8,7 @@ $sys['tbl_prefix'] = 'gw_';
 $sys['db_type'] = 'mysqli';
 /* Path names for Glossword */
 $sys['server_proto'] = 'http://';
-$sys['server_host'] = '127.0.0.1';
+$sys['server_host'] = 'glossword.local';
 $sys['server_dir'] = '';
 /* Path to sources */
 $sys['file_login'] = 'gw_login.php';

@@ -50,7 +50,7 @@ if ( $this->gw_this['vars']['post'] == '' )
 	);
 	$strHelp = '';
 	$strHelp .= '<dl>';
-	for (; list($k, $v) = each( $arHelpMap ); )
+	foreach ($arHelpMap as $k => $v)
 	{
 		$strHelp .= '<dt><b>' . $this->oL->m( $k ) . '</b></dt>';
 		$strHelp .= '<dd>' . $this->oL->m( $v ) . '</dd>';
@@ -84,7 +84,7 @@ else
 		{
 			$arIsV[] = 'is_' . $v[0];
 		}
-		for (; list($k, $v) = each( $arIsV ); )
+		foreach ($arIsV as $k => $v)
 		{
 			$arPost[$v] = isset( $arPost[$v] ) ? $arPost[$v] : 0;
 		}

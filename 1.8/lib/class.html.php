@@ -288,7 +288,7 @@ class gw_html {
 		$url = '';
 		$arRule = explode('/', $str);
 		$arUrl = array();
-		while (list($k, $v) = each($arRule))
+		foreach ($arRule as $k => $v)
 		{
 			if (isset($arQ[$v]) )
 			{
@@ -318,7 +318,7 @@ class gw_html {
 		$arUrl = array();
 		if (sizeof($arRule2) > 1 )
 		{
-			while (list($k, $v) = each($arRule2))
+			foreach ($arRule2 as $k => $v)
 			{
 				$arQ[$v] = isset($arQ[$v]) ? $arQ[$v] : '';
 				$arUrl[] = urlencode($arQ[$v]);
@@ -341,7 +341,7 @@ class gw_html {
 	{
 		$url = '';
 		reset($arRule);
-		while (list($k, $v) = each($arRule))
+		foreach ($arRule as $k => $v)
 		{
 			if (($v != '') 
 				&& isset($arP[$k]) && ($arP[$k] != '') 
@@ -376,7 +376,7 @@ class gw_html {
 		$arRule2 = explode($str_split, end($arRule));
 		$arP2 = explode($str_split, str_replace($this->mod_rewrite_suffix, '', end($arP)));
 		$int_p = sizeof($arP2);
-		while (list($k, $v) = each($arRule2))
+		foreach ($arRule2 as $k => $v)
 		{
 			if (($v != '') && isset($arP2[$k]) 
 				&& ($arP2[$k] != '') 

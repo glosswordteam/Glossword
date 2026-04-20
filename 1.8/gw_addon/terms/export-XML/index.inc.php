@@ -43,7 +43,7 @@ function getFormXml($vars, $runtime = 0, $arBroken = array(), $arReq = array())
 	// reverse array keys <-- values;
 	$arReq = array_flip($arReq);
 	// mark fields as "REQUIRED" and make error messages
-	while(is_array($vars) && list($key, $val) = each($vars) )
+	foreach ((is_array($vars) ? $vars : array()) as $key => $val)
 	{
 		$arReqMsg[$key] = $arBrokenMsg[$key] = "";
 		if (isset($arReq[$key])) { $arReqMsg[$key] = ' <span style="color:#E30"><strong>*</strong></span>'; }
@@ -263,7 +263,7 @@ else
 				$strQ .= '<glossword version="'.$sys['version'].'">' . CRLF;
 			}
 			//
-			for(; list($k, $v) = each($arSql);)
+			foreach ($arSql as $k => $v)
 			{
 				$strQ .= '<line>';
 				if ((($arPost['td_mode'] == 'td') || ($arPost['td_mode'] == 't')) && ($v['term'] != ''))

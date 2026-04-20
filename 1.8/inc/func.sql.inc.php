@@ -106,7 +106,7 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
 #			prn_r($arSql, __LINE__ . '<br />' . $sql);
             $isTermNotMatched = 1; // `No term found' by default
 
-            for (; list($arK, $arV) = each($arSql);) // compare founded values (Q) with imported (T)
+            foreach ($arSql as $arK => $arV) // compare founded values (Q) with imported (T)
             {
                 $id_old = $arV['id']; // get ID for existent keywords.
                 if ($id_old == $qT['id']) {
@@ -179,7 +179,7 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
     /* Select custom rules for uppercasing */
     $sql = 'SELECT az_value, az_value_lc FROM `' . $sys['tbl_prefix'] . 'custom_az` WHERE `id_profile` = "' . $arDictParam['id_custom_az'] . '"';
     $arSqlAz = $oDb->sqlRun($sql, 'st');
-    for (; list($arK, $arV) = each($arSqlAz);) {
+    foreach ($arSqlAz as $arK => $arV) {
         $str_term_src = str_replace($arV['az_value_lc'], $arV['az_value'], $str_term_src);
     }
     /* Unicode uppercase */
@@ -210,7 +210,7 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
     /* */
     $ar_field_names = ['a', 'b', 'c', 'd', 'e', 'f'];
     preg_match_all("/./u", $qT['term_order'], $ar_letters);
-    for (; list($cnt_letter, $letter) = each($ar_letters[0]);) {
+    foreach ($ar_letters[0] as $cnt_letter => $letter) {
         if (isset($ar_field_names[$cnt_letter])) {
             $qT['term_' . $ar_field_names[$cnt_letter]] = text_str2ord($letter);
         }
@@ -326,7 +326,7 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
         // Turn on text parsers
         // -------------------------------------------------
         // Process automatic functions
-        for (; list($k, $v) = each($gw_this['vars']['funcnames'][GW_A_UPDATE . GW_T_TERM]);) {
+        foreach ($gw_this['vars']['funcnames'][GW_A_UPDATE . GW_T_TERM] as $k => $v) {
             if (function_exists($v)) {
                 $v();
             }

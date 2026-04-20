@@ -92,7 +92,7 @@ class gw_addon_terms_admin extends gw_addon
 	{
 		$arSql = $this->oDb->sqlExec( $this->oSqlQ->getQ('get-date-mm', $db_table) );
 		$strA = array('max' => time(), 'min' => 0);
-		for (; list($arK, $arV) = each($arSql);)
+		foreach ($arSql as $arK => $arV)
 		{
 			if (empty($arV['max']) && empty($arV['min']))
 			{

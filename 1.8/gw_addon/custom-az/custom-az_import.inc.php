@@ -111,7 +111,7 @@ else
 	$is_error_xml = 1;
 	$this->str .= '<ul class="xt">';
 	/* one loop */
-	for (; list($k1, $v1) = each($arXmlLine);)
+	foreach ($arXmlLine as $k1 => $v1)
 	{
 		$q2 = array();
 		if (!isset($v1['children'])) { continue; }

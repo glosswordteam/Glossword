@@ -207,7 +207,7 @@ class gw_addon_custom_az_admin extends gw_addon
 
         $ar_req = array_flip($ar_req);
         /* mark fields as "Required" and display error message */
-        while (is_array($vars) && list($k, $v) = each($vars)) {
+        foreach ((is_array($vars) ? $vars : array()) as $k => $v) {
             $ar_req_msg[$k] = $ar_broken_msg[$k] = '';
             if (isset($ar_req[$k])) {
                 $ar_req_msg[$k] = '&#160;<span class="red"><b>*</b></span>';
@@ -297,7 +297,7 @@ class gw_addon_custom_az_admin extends gw_addon
 
         $ar_req = array_flip($ar_req);
         /* mark fields as "Required" and display error message */
-        while (is_array($vars) && list($k, $v) = each($vars)) {
+        foreach ((is_array($vars) ? $vars : array()) as $k => $v) {
             $ar_req_msg[$k] = $ar_broken_msg[$k] = '';
             if (isset($ar_req[$k])) {
                 $ar_req_msg[$k] = '&#160;<span class="red"><strong>*</strong></span>';

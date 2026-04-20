@@ -70,7 +70,7 @@ class gw_user_agent
 			$a = array_merge($this->get_browsers_alias(), $this->get_se_alias());
 			$a = array_merge($a, $this->get_dm_alias());
 			$a = array_merge($a, array('mozilla'=>'Mozilla', 'libwww'=>'LibWWW'));
-			for (; list($k, $v) = each($ar);)
+			foreach ($ar as $k => $v)
 			{
 				if (preg_match( "/$v.?\/([\d\.]*)/i", $ua, $m ))
 				{
@@ -87,7 +87,7 @@ class gw_user_agent
 		if ($ua == '') { $ua = $this->remote_ua; }
 		$ar =& $this->get_os();
 		$ar_alias = $this->get_os_alias();
-		for (; list($k, $v) = each($ar);)
+		foreach ($ar as $k => $v)
 		{
 			if (preg_match( "/$v/i", $ua ))
 			{

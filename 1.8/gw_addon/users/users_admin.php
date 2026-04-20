@@ -462,7 +462,7 @@ document.forms[\'vbform\'][\'submit1\'].click();
 			$str_form .= '<table class="gw2TableFieldset" width="100%">';
 			$str_form .= '<thead><tr><td style="width:'.$v_td1_width.'"></td><td></td></tr></thead><tbody>';
 		}
-		for (; list($k, $arV) = each($ar_permissions_list);)
+		foreach ($ar_permissions_list as $k => $arV)
 		{
 			if (!$this->ar_state['is_profile'])
 			{
@@ -470,7 +470,7 @@ document.forms[\'vbform\'][\'submit1\'].click();
 				$str_form .= '<table class="gw2TableFieldset" width="100%">';
 				$str_form .= '<thead><tr><td style="width:'.$v_td1_width.'"></td><td></td></tr></thead><tbody>';
 			}
-			for (; list($fieldname, $caption) = each($arV);)
+			foreach ($arV as $fieldname => $caption)
 			{
 				$str_checked = ((isset($ar_permissions_user[strtoupper($fieldname)]) && $ar_permissions_user[strtoupper($fieldname)]) 
 					? 'checked="checked" ' 

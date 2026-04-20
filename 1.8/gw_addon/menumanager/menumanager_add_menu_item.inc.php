@@ -40,7 +40,7 @@ else
 	$arPost =& $this->gw_this['vars']['arPost'];
 	/* Fix on/off options */
 	$arIsV = array('is_active_map');
-	for (; list($k, $v) = each($arIsV);)
+	foreach ($arIsV as $k => $v)
 	{
 		$arPost[$v] = isset($arPost[$v]) ? $arPost[$v] : 0;
 	}

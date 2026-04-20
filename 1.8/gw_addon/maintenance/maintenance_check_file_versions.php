@@ -50,16 +50,13 @@ class gw_addon_check_file_versions extends gw_addon
         $ar_files = [];
 
         $ar_files[] = 'gw_addon/abbr/abbr_admin.php';
-        $ar_files[] = 'gw_addon/abbr/abbr-mysql323.php';
-        $ar_files[] = 'gw_addon/abbr/abbr-mysql410.php';
+        $ar_files[] = 'gw_addon/abbr/abbr-mysqli410.php';
         $ar_files[] = 'gw_addon/custom_az/custom_az_admin.php';
-        $ar_files[] = 'gw_addon/custom_az/custom_az-mysql323.php';
-        $ar_files[] = 'gw_addon/custom_az/custom_az-mysql410.php';
+        $ar_files[] = 'gw_addon/custom_az/custom_az-mysqli410.php';
         $ar_files[] = 'gw_addon/class.autolinks.php';
         $ar_files[] = 'gw_addon/class.gw_addon.php';
         $ar_files[] = 'gw_addon/custom_pages/custom_pages_admin.php';
-        $ar_files[] = 'gw_addon/custom_pages/custom_pages-mysql323.php';
-        $ar_files[] = 'gw_addon/custom_pages/custom_pages-mysql410.php';
+        $ar_files[] = 'gw_addon/custom_pages/custom_pages-mysqli410.php';
         $ar_files[] = 'gw_addon/fields_extension.php';
         $ar_files[] = 'gw_addon/gw_feedback/img/bg.png';
         $ar_files[] = 'gw_addon/gw_feedback/img/font1.png';
@@ -69,7 +66,7 @@ class gw_addon_check_file_versions extends gw_addon
         $ar_files[] = 'gw_addon/gw_feedback/index.php';
         $ar_files[] = 'gw_addon/gw_feedback/make_img.php';
         $ar_files[] = 'gw_addon/log-search/log-search_admin.php';
-        $ar_files[] = 'gw_addon/log-search/log-search-mysql410.php';
+        $ar_files[] = 'gw_addon/log-search/log-search-mysqli410.php';
         $ar_files[] = 'gw_addon/maintenance/maintenance_recount_dict.php';
         $ar_files[] = 'gw_addon/maintenance/maintenance_recount_user.php';
         $ar_files[] = 'gw_addon/maintenance/maintenance_check_file_versions.php';

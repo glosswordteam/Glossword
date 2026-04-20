@@ -532,7 +532,7 @@ function gw_custom_page($id_page)
 		break;
 	}
 	$arSql = $oDb->sqlRun($oSqlQ->getQ('get-custompages-lang', $sql_id_page), 'page');
-	for (; list($arK, $arV) = each($arSql);)
+	foreach ($arSql as $arK => $arV)
 	{
 		if ($arV['id_lang'] == $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'])
 		{
@@ -579,15 +579,16 @@ function gw_custom_page($id_page)
 			$href_page = $sys['page_index'].'?'.GW_ACTION.'='.'viewpage&'.'&id='.$arSql[0][$page_uri];
 			gwtk_header($sys['server_proto'].$sys['server_host'].$oHtml->url_normalize($href_page), $sys['is_delay_redirect'], __FILE__, __LINE__);
 		}
-		for (; list($arK, $arV) = each($arSql);)
+		foreach ($arSql as $arK => $arV)
 		{
 			$id_page_int = $arV['id_page'];
 			/* Process text filters */
-			while (!$sys['is_debug_output']
-					&& is_array($sys['filters_defn'])
-					&& list($k, $v) = each($sys['filters_defn']) )
+			if (!$sys['is_debug_output'] && is_array($sys['filters_defn']))
 			{
-				$arV['page_content'] = $v($arV['page_content']);
+				foreach ($sys['filters_defn'] as $k => $v)
+				{
+					$arV['page_content'] = $v($arV['page_content']);
+				}
 			}
 			/* Custom content */
 			$oTpl->addVal( 'block:page_content', $arV['page_content']);
@@ -610,7 +611,7 @@ function gw_custom_page($id_page)
 
 	/* The list of pages, 1 level up. */
 	$ar_parents = isset($arSqlc[$id_page_int]['p']) ? $arSqlc[$arSqlc[$id_page_int]['p']]['ch'] : array();
-	for (; list($page_k, $ar_page_v) = each($ar_parents);)
+	foreach ($ar_parents as $page_k => $ar_page_v)
 	{
 		if (($arSqlc[$page_k]['p'] == 0) && ($layout != 'title')) { continue; }
 		switch ($sys['pages_link_mode'])
@@ -642,7 +643,7 @@ function gw_custom_page($id_page)
 		$subpages_cnt = 0;
 		/* The list of subpages, current level. */
 		$ar_subpages = $arSqlc[$id_page_int]['ch'];
-		for (; list($page_k, $ar_page_v) = each($ar_subpages);)
+		foreach ($ar_subpages as $page_k => $ar_page_v)
 		{
 			switch ($sys['pages_link_mode'])
 			{
@@ -676,7 +677,7 @@ function gw_custom_page($id_page)
 		{
 			$oTplPage->addVal( 'v:path_img_www', $sys['dirname'] . '/'. $sys['path_www_images'] );
 		}
-		for (; list($k2, $v2) = each($arVarPage);)
+		foreach ($arVarPage as $k2 => $v2)
 		{
 			foreach ($v2 as $k => $v)
 			{
@@ -688,7 +689,7 @@ function gw_custom_page($id_page)
 		$arTpl['subpages_dl'] = $oTplPage->output();
 		$arTpl['subpages_cnt'] = $subpages_cnt;
 	}
-	for (; list($k, $v) = each($arTpl);)
+	foreach ($arTpl as $k => $v)
 	{
 		$oTpl->addVal($k, $v);
 	}

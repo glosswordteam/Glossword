@@ -38,7 +38,7 @@ function gw_get_dict_terms($dict_tablename, $id_dict)
 	$ar0z = getLettersArray($arDictParam['id']);
 
 	/* For each letter */
-	for (; list($letter, $azv) = each($ar0z);)
+	foreach ($ar0z as $letter => $azv)
 	{
 		$str .= '<h5>'. $oHtml->a($sys['page_index'].
 					'?'.GW_ACTION.'='.GW_A_LIST.
@@ -48,7 +48,7 @@ function gw_get_dict_terms($dict_tablename, $id_dict)
 		$sql = $oSqlQ->getQ('get-az-terms', $dict_tablename, $letter, $sys['time_now_db'], $arDictParam['az_sql'], $sys['max_terms_in_index']);
 		$arSql = $oDb->sqlExec($sql);
 		$ar_terms = array();
-		for (; list($arK, $arV) = each($arSql);)
+		foreach ($arSql as $arK => $arV)
 		{
 			switch ($sys['pages_link_mode'])
 			{
@@ -158,7 +158,7 @@ function getDictWordList($w1, $w2, $w3, $id_dict, $p, $is_descr = true, $is_full
 		$oRender->Set('arFields', $arFields );
 		$oRender->load_abbr_trns();
 
-		for (; list($arK, $arV) = each($arSql);)
+		foreach ($arSql as $arK => $arV)
 		{
 			$arA[$arK]['defn'] = $arA[$arK]['term'] = '';
 			// Render HTML page, 25 apr 2003
@@ -179,12 +179,13 @@ function getDictWordList($w1, $w2, $w3, $id_dict, $p, $is_descr = true, $is_full
 			//
 			$tmp['str_defn'] = $oRender->array_to_html($arPre);
 			/* Process text filters */
-			while (!$sys['is_debug_output']
-					&& is_array($sys['filters_defn'])
-					&& list($k, $v) = each($sys['filters_defn']) )
-			{
-				$tmp['str_defn'] = $v($tmp['str_defn']);
-			}
+				if (!$sys['is_debug_output'] && is_array($sys['filters_defn']))
+				{
+					foreach ($sys['filters_defn'] as $k => $v)
+					{
+						$tmp['str_defn'] = $v($tmp['str_defn']);
+					}
+				}
 			//
 			$arA[$arK]['term'] =& $arV['term'];
 			$arA[$arK]['defn'] = $tmp['str_defn'];
@@ -466,7 +467,7 @@ function getCatalogTitle($ar, $arDictMap, $p = 0, $depth = 1, $dict_nmax, $runti
 		$tpcs_nmax = $dict_nmax;
 		//
 		$str .= CRLF . '<dl class="catalog">';
-		while (is_array($ar[$p]['ch']) && list($k, $v) = each($ar[$p]['ch'])) // (Root or Topic) -> Topic
+		foreach ((is_array($ar[$p]['ch']) ? $ar[$p]['ch'] : array()) as $k => $v) // (Root or Topic) -> Topic
 		{
 			/* Reserved for dictionary parameters */
 #			prn_r( $k );
@@ -501,7 +502,7 @@ function getCatalogTitle($ar, $arDictMap, $p = 0, $depth = 1, $dict_nmax, $runti
 				{
 					$cntDict = 0;
 					$str .= CRLF . '<dl>';
-					while (is_array($arDictMap[$k]) && list($k2, $v2) = each($arDictMap[$k]))
+					foreach ((is_array($arDictMap[$k]) ? $arDictMap[$k] : array()) as $k2 => $v2)
 					{
 						$strMark = '';
 						$idcolor = '#999';

@@ -198,7 +198,7 @@ if ( $this->gw_this['vars']['post'] == '' )
 		$arSql = $this->gw_this['ar_themes'][$this->gw_this['vars']['tid']];
 		$arT = array ( );
 		$i = 0;
-		for (; list($arK, $arV) = each( $arSql ); )
+		foreach ($arSql as $arK => $arV)
 		{
 			$arT[$i]['settings_key'] = $arK;
 			$arT[$i]['settings_value'] = $arV;

@@ -129,7 +129,7 @@ else
 						'is_show_term_suggest', 'is_show_term_report', 'is_show_page_refresh', 'is_show_page_send',
 						'is_show_add_to_favorites', 'is_show_add_to_search', 'is_show_printversion'
 	);
-	for (; list($k, $v) = each($arOnOff);)
+	foreach ($arOnOff as $k => $v)
 	{
 		$arPost[$v]  = isset($arPost[$v]) ? $arPost[$v] : 0;
 	}

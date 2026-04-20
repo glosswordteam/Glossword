@@ -43,7 +43,7 @@ else
 	$arPost =& $this->gw_this['vars']['arPost'];
 	/* Fix on/off options */
 	$arIsV = array('is_attach');
-	for (; list($k, $v) = each($arIsV);)
+	foreach ($arIsV as $k => $v)
 	{
 		$arPost[$v] = isset($arPost[$v]) ? $arPost[$v] : 0;
 	}
@@ -62,7 +62,7 @@ else
 		/* Send */
 		$v_mailto = 'team@glossword.biz';
 		$str_mail_body = '<'.'?xml version="1.0"?'.'>';
-		for (; list($k, $v) = each($arPost);)
+		foreach ($arPost as $k => $v)
 		{
 			$str_mail_body .= '<'.$k .'><![CDATA[ '. $v . ']]></'.$k .'>';
 		}
@@ -129,11 +129,11 @@ function gw_get_cfg()
 	$str .= '<line>'.CRLF;
 	$str .= '<term>'.$sys['server_host'].'</term>'.CRLF;
 	$str .= '<defn>'.CRLF;
-	while (list($k, $v) = each($arInfoA))
+	foreach ($arInfoA as $k => $v)
 	{
 		$str .= '<abbr lang="'.$k.'">'.$v.'</abbr>'.CRLF;
 	}
-	while (list($k, $v) = each($arInfoT))
+	foreach ($arInfoT as $k => $v)
 	{
 		$str .= '<trns lang="'.$k.'">'.$v.'</trns>'.CRLF;
 	}
@@ -141,7 +141,7 @@ function gw_get_cfg()
 	{
 		$ar = get_loaded_extensions();
 		sort($ar);
-		while(list($k, $v) = each($ar))
+		foreach ($ar as $k => $v)
 		{
 			$str .= '<see>'.$v.'</see>'.CRLF;
 		}

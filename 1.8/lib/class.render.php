@@ -139,7 +139,7 @@ class gw_render extends gw_htmlforms
 		$tmp['ar_compiled'] = array();
 		$i = 0;
 		//
-		while (list($elK, $elV) = each($tmp['arEl']))
+		foreach ($tmp['arEl'] as $elK => $elV)
 		{
 			if ($elV['value'] != '')
 			{
@@ -166,7 +166,7 @@ class gw_render extends gw_htmlforms
 			$tmp['arEl'][0] = array('value' => '', 'attributes' => array('size' => 0));
 		}
 		//
-		while (list($chK, $chV) = each($tmp['arEl']))
+		foreach ($tmp['arEl'] as $chK => $chV)
 		{
 			//
 			$tmp['size'] = isset($chV['attributes']['size']) ? $chV['attributes']['size'] : 0;
@@ -192,7 +192,7 @@ class gw_render extends gw_htmlforms
 			$tmp['arEl'][0] = array('value' => '', 'attributes' => array('size' => 0));
 		}
 		/* */
-		while (list($chK, $chV) = each($tmp['arEl']))
+		foreach ($tmp['arEl'] as $chK => $chV)
 		{
 			//
 			$tmp['size'] = isset($chV['attributes']['size']) ? $chV['attributes']['size'] : 0;
@@ -216,7 +216,7 @@ class gw_render extends gw_htmlforms
 		$tmp['strxml'] = '';
 
 		// for each definition
-		while (list($elK, $elV) = each($this->arEl[$fieldname]))
+		foreach ($this->arEl[$fieldname] as $elK => $elV)
 		{
 			// get definition content
 			$tmp['strxml'] .= '<defn>';
@@ -278,7 +278,7 @@ class gw_render extends gw_htmlforms
 			$this->arEl[$fieldname][0] = array('value' => '');
 		}
 		//
-		while (list($elK, $elV) = each($this->arEl[$fieldname]))
+		foreach ($this->arEl[$fieldname] as $elK => $elV)
 		{
 			// get definition contents
 			$arTmp['elK'] = $elK;
@@ -341,7 +341,7 @@ class gw_render extends gw_htmlforms
 			$id_term = ($this->arDictParam['is_show_full']) ? $this->Gtmp['tid'] : $gw_this['vars']['id_term'];
 			$arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-users-by-term_id', $id_term));
 			$ar_authors = array();
-			for (; list($k, $arV) = each($arSql);)
+			foreach ($arSql as $k => $arV)
 			{
 				$ar_authors[] = $this->oHtml->a($this->sys['page_index'].'?'.GW_ACTION.'='.GW_A_PROFILE.'&t=view&id='.$arV['id_user'], $arV['user_name']);
 			}
@@ -364,7 +364,7 @@ class gw_render extends gw_htmlforms
 			$tmp['arEl'][0] = array('value' => '', 'attributes' => array('lang' => '--'));
 		}
 		//
-		while (list($chK, $chV) = each($tmp['arEl']))
+		foreach ($tmp['arEl'] as $chK => $chV)
 		{
 			//
 			$tmp['attributes'] = $this->objDom->get_attribute('lang', '', $chV);
@@ -395,7 +395,7 @@ class gw_render extends gw_htmlforms
 			$tmp['arEl'][0] = array('value' => '', 'attributes' => array('lang' => '--'));
 		}
 		//
-		while (list($chK, $chV) = each($tmp['arEl']))
+		foreach ($tmp['arEl'] as $chK => $chV)
 		{
 			//
 			$tmp['attributes'] = $this->objDom->get_attribute('lang', '', $chV);
@@ -429,7 +429,7 @@ class gw_render extends gw_htmlforms
 
 		$tmp['attributes'] = array();
 		/* Collect lang codes */
-		while (list($chK, $chV) = each($tmp['arEl']))
+		foreach ($tmp['arEl'] as $chK => $chV)
 		{
 			$tmp['attributes'][$chK] = $this->objDom->get_attribute('lang', '', $chV);
 		}
@@ -560,7 +560,7 @@ class gw_render extends gw_htmlforms
 			$tmp['arEl'][0] = array('value' => '', 'attributes' => array('link' => ''));
 		}
 		//
-		while (list($elK, $elV) = each($tmp['arEl']))
+		foreach ($tmp['arEl'] as $elK => $elV)
 		{
 			/* */
 			$elV['value'] = gw_fix_input_to_db($elV['value']);
@@ -570,7 +570,7 @@ class gw_render extends gw_htmlforms
 				$tmp['isLink'] = 1;
 			}
 			$elV = explode(CRLF, $elV['value']);
-			while (list($k, $v) = each($elV))
+			foreach ($elV as $k => $v)
 			{
 				$tmp['str_text'] = '';
 				/* */
@@ -626,7 +626,7 @@ class gw_render extends gw_htmlforms
 		$tmp['ar_compiled'] = array();
 		$i = 0;
 		//
-		while (list($elK, $elV) = each($tmp['arEl']))
+		foreach ($tmp['arEl'] as $elK => $elV)
 		{
 			$tmp['is_link'] = isset($elV['attributes']['is_link']) ? 1 : 0;
 			$tmp['str_text'] = isset($elV['attributes']['text']) ? $elV['attributes']['text'] : '';
@@ -663,11 +663,11 @@ class gw_render extends gw_htmlforms
 		//
 		$this->unsetTag('textarea'); // reset settings for <textarea>
 		//
-		while (list($elK, $elV) = each($tmp['arEl']))
+		foreach ($tmp['arEl'] as $elK => $elV)
 		{
 			$elV['value'] = gw_fix_input_to_db($elV['value']);
 			$elV = explode(CRLF, $elV['value']);
-			while (list($k, $v) = each($elV))
+			foreach ($elV as $k => $v)
 			{
 				if ($v != '')
 				{
@@ -691,10 +691,10 @@ class gw_render extends gw_htmlforms
 		if (!empty($tmp['arEl']))
 		{
 			$tmp['str'] .= '<div class="gw'.$fieldname.'"><span class="gray">' . $this->oL->m($tag) . ':</span>&#032; ';
-			while (list($elK, $elV) = each($tmp['arEl']))
+			foreach ($tmp['arEl'] as $elK => $elV)
 			{
 				$elV = explode(CRLF, $elV['value']);
-				while (list($k, $v) = each($elV))
+				foreach ($elV as $k => $v)
 				{
 					if ($v != '')
 					{
@@ -719,7 +719,7 @@ class gw_render extends gw_htmlforms
 			if (isset($elV['value']) && (intval($ar['elK']) == intval($elK)))
 			{
 				$elV = explode(CRLF, $elV['value']);
-				while (list($k, $v) = each($elV))
+				foreach ($elV as $k => $v)
 				{
 					if ($v != '')
 					{
@@ -729,7 +729,7 @@ class gw_render extends gw_htmlforms
 			}
 			elseif (intval($ar['elK']) == intval($elK)) /* multiarray */
 			{
-				while (list($k, $v) = each($elV))
+				foreach ($elV as $k => $v)
 				{
 					$tmp['str'] .= '<'.$tag.'><![CDATA[';
 					$tmp['str'] .= $v['value'];
@@ -763,7 +763,7 @@ class gw_render extends gw_htmlforms
 				if (isset($elV['value']) && (intval($ar['elK']) == intval($elK)))
 				{
 					$elV = explode(CRLF, $elV['value']);
-					while (list($k, $v) = each($elV))
+					foreach ($elV as $k => $v)
 					{
 						if ($v != '')
 						{
@@ -775,7 +775,7 @@ class gw_render extends gw_htmlforms
 				{
 					$tmp['str'] .= '&#160;'; // IE: required for correct rendering <li>
 					$tmp['str'] .= '<div class="gw'.$fieldname.'" title="'.$this->oL->m($tag).'">';
-					while (list($k, $v) = each($elV))
+					foreach ($elV as $k => $v)
 					{
 						$tmp['ar_compiled'][$i] = $v['value'];
 						$i++;
@@ -869,14 +869,14 @@ class gw_render extends gw_htmlforms
 		/* Additional tags in whole definition */
 		$tagsA = array('xref');
 		$tagsAttrA = array('link');
-		for (;list($kt, $vt) = each($tagsA);)
+		foreach ($tagsA as $kt => $vt)
 		{
-			for (;list($ka, $va) = each($tagsAttrA);)
+			foreach ($tagsAttrA as $ka => $va)
 			{
 				preg_match_all("/<$vt( $va=\"(.*?)\")*\>([^<]*?)\<\/$vt\>/", $strHtml, $strTmpA);
 				if ( isset($strTmpA[0]) )
 				{
-					for (;list($kd, $vd) = each($strTmpA[0]);)
+					foreach ($strTmpA[0] as $kd => $vd)
 					{
 						$urlXref = GW_IS_BROWSE_WEB ? $oHtml->url_normalize($this->Gtmp['xref'] .  urlencode(gw_text_parse_href($strTmpA[2][$kd]))) : chmGetFilename(strip_tags($strTmpA[2][$kd]));
 						$tagXref = '<a class="href-see" href="' . $urlXref . '">' . $this->ar_theme['txt_linkmarker'] . $strTmpA[3][$kd] . '</a>';

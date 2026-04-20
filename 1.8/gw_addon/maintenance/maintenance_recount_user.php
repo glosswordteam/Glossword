@@ -26,11 +26,11 @@ class gw_addon_recount_user extends gw_addon
 		';
 		$arSql = $this->oDb->sqlExec($sql);
 		$arQ = array();
-		while (list($k, $arV) = each($arSql))
+		foreach ($arSql as $k => $arV)
 		{
 			$arQ[] = gw_sql_update(array('int_items' => $arV['n']), gw_get_tbl_name('users'), "id_user = '".$arV['user_id']."'");
 		}
-		for (; list($sqlk, $sqlv) = each($arQ);)
+		foreach ($arQ as $sqlk => $sqlv)
 		{
 			$this->oDb->sqlExec($sqlv);
 		}

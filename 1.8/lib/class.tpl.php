@@ -63,6 +63,8 @@ class gwv_template
 	var $arChilds = array();
 	var $arNamespaces = array();
 	var $curLevel = 0;
+	var $arBlockPos = array();
+	var $varsRun = array();
 	/* */
 	var $ua_number = false;
 
@@ -149,7 +151,7 @@ class gwv_template
 	/* $ar - the list of files */
 	function define($ar = array())
 	{
-		while (is_array($ar) && list($tplName, $filename) = each($ar))
+		foreach ((is_array($ar) ? $ar : array()) as $tplName => $filename)
 		{
 			$tplName = sprintf("%u", crc32($filename));
 			if (isset($this->pairsC[$tplName]))
@@ -220,7 +222,7 @@ class gwv_template
 				$arCmd[] = '<?xml';
 				$arRpl[] = '<?php echo "<","?xml"; ?>'; // parameter works faster that concatenation
 				/* */
-				while (list($k, $cmd_src) = each($tmp['tpl_matches'][2]))
+				foreach ($tmp['tpl_matches'][2] as $k => $cmd_src)
 				{
 					/* put command name into array */
 					/* $tmp['tpl_matches'][1] and $tmp['tpl_matches'][3] are open/close tags */
@@ -395,9 +397,31 @@ class gwv_template
 		{
 			$this->arBlockC[] = $dynName;
 		}
-		if (!(list($k, $this->varsRun[$dynName]) = @each($this->arBlockV[$dynName])) ||
-			$this->varsRun[$dynName] == 'end')
+
+		if (!isset($this->arBlockV[$dynName]) || !is_array($this->arBlockV[$dynName]))
 		{
+			array_pop($this->arBlockC);
+			return false;
+		}
+
+		if (!isset($this->arBlockPos[$dynName]))
+		{
+			$this->arBlockPos[$dynName] = 0;
+		}
+
+		if (!array_key_exists($this->arBlockPos[$dynName], $this->arBlockV[$dynName]))
+		{
+			unset($this->arBlockPos[$dynName]);
+			array_pop($this->arBlockC);
+			return false;
+		}
+
+		$this->varsRun[$dynName] = $this->arBlockV[$dynName][$this->arBlockPos[$dynName]];
+		$this->arBlockPos[$dynName]++;
+
+		if ($this->varsRun[$dynName] == 'end')
+		{
+			unset($this->arBlockPos[$dynName]);
 			array_pop($this->arBlockC);
 			return false;
 		}
@@ -454,11 +478,12 @@ class gwv_template
 	function gw_text_replace_vars($t = '', $ar = array(), $is_keep = 0)
 	{
 		$arCmd = array();
+		$arRpl = array();
 		/* Search for template tags */
 		$preg = "/({)([ A-Za-z0-9:\/\-_]+)(})/i";
 		if (preg_match_all($preg, $t, $tmp['tpl_matches']))
 		{
-			while (list($k, $cmd_src) = each($tmp['tpl_matches'][2]))
+			foreach ($tmp['tpl_matches'][2] as $k => $cmd_src)
 			{
 				$arCmd[$k] = $tmp['tpl_matches'][1][$k].$cmd_src.$tmp['tpl_matches'][3][$k];
 				$tmp['cmd'] = trim($cmd_src);
@@ -498,6 +523,8 @@ class gwv_template_cmd extends gwv_template
 		$this->arBlockI = array();
 		$this->arChilds = array();
 		$this->arNamespaces = array();
+		$this->arBlockPos = array();
+		$this->varsRun = array();
 		$this->curLevel = 0;
 	}
 	/* */

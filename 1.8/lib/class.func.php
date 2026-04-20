@@ -296,7 +296,7 @@ class gw_functions
         $str_temp = '';
         $cnt_char = 0;
         preg_match_all("/./u", $str . ' ', $ar_letters);
-        for (; list($k, $v) = each($ar_letters[0]);) {
+        foreach ($ar_letters[0] as $k => $v) {
 #prn_r( $v .' '.$cnt_char );
             if ($cnt_char < $len) {
                 $str_temp .= $v;
@@ -337,7 +337,7 @@ class gw_functions
         $str_temp = '';
         $cur_length = 0;
         $ar_words = explode(' ', $str . ' ', 100);
-        for (; list($k, $v) = each($ar_words);) {
+        foreach ($ar_words as $k => $v) {
             $cur_length += mb_strlen(' ' . $v);
             if ($cur_length >= $len) {
                 return $str_temp . $d;
@@ -348,7 +348,7 @@ class gw_functions
         /*
          too expensive
         preg_match_all("/./u", $str.' ', $ar_letters);
-        for (; list($k, $v) = each($ar_letters[0]);)
+        foreach ($ar_letters[0] as $k => $v)
         {
             if ( $k == ($len * (sizeof($arr) + 1) + $int_char) )
             {
@@ -588,7 +588,7 @@ class gw_functions
      * @param mixed $value Value to check
      * @return bool TRUE if value is a non-negative integer, FALSE otherwise
      */
-    public function is_num($v)
+    public function is_num($value)
     {
         return filter_var($value, FILTER_VALIDATE_INT) !== false && $value >= 0;
     }

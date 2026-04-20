@@ -486,7 +486,7 @@ if ($gw_this['vars']['d'])
 		/* A part of SQL-request for listing terms */
 		$sql_az = '';
 		$ar_az = array();
-		for (; list($k, $v) = each($arSql);)
+		foreach ($arSql as $k => $v)
 		{
 			$ar_az[] = $v['value'];
 		}
@@ -799,7 +799,7 @@ if ($sys['id_current_status'] == '2_page__')
 				 );
 	$strHelp = '';
 	$strHelp .= '<dl>';
-	for(; list($k, $v) = each($arHelpMap);)
+	foreach ($arHelpMap as $k => $v)
 	{
 		$strHelp .= '<dt><b>' . $oL->m($k) . '</b></dt>';
 		$strHelp .= '<dd>' . $oL->m($v) . '</dd>';
@@ -875,11 +875,12 @@ $oTpl->addVal( 'ADMIN_LEFT_SIDE', $strL );
 $oTpl->parse();
 $str_output = $oTpl->output();
 /* Process text filters */
-while (!$sys['is_debug_output']
-		&& is_array($sys['filters_output'])
-		&& list($k, $v) = each($sys['filters_output']) )
+if (!$sys['is_debug_output'] && is_array($sys['filters_output']))
 {
-	$str_output = $v($str_output);
+	foreach ($sys['filters_output'] as $k => $v)
+	{
+		$str_output = $v($str_output);
+	}
 }
 print $str_output;
 

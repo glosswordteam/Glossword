@@ -327,7 +327,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		{
 			$this->arEl[$fieldname][0]['value'] = '';
 		}
-		while (list($elK, $elV) = each($this->arEl[$fieldname]))
+		foreach ($this->arEl[$fieldname] as $elK => $elV)
 		{
 			// break table for each definition
 			$tmp['strform'] .= '</tbody></table>';
@@ -567,7 +567,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 			$tmp['arEl'][0] = array('value' => '', 'attributes' => array('lang' => '--'));
 		}
 		//
-		while (list($chK, $chV) = each($tmp['arEl']))
+		foreach ($tmp['arEl'] as $chK => $chV)
 		{
 			//
 			$tmp['attributes'] = $this->objDom->get_attribute('lang', '', $chV);
@@ -662,7 +662,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		$this->setTag('textarea', 'title', $this->oL->m('tip002'));
 		/* */
 		$tmp['isLink'] = 0;
-		while (list($elK, $elV) = each($tmp['arEl']))
+		foreach ($tmp['arEl'] as $elK => $elV)
 		{
 			$tmp['str'] .= $elV['value'];
 			if (isset($elV['attributes']['text']))
@@ -721,7 +721,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		//
 		$this->unsetTag('textarea'); // reset settings for <textarea>
 		//
-		while (list($elK, $elV) = each($tmp['arEl']))
+		foreach ($tmp['arEl'] as $elK => $elV)
 		{
 			$tmp['str'] .= $elV['value'];
 			$tmp['str'] .= CRLF;
@@ -767,7 +767,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 			}
 			elseif (intval($ar['elK']) == intval($elK)) // multiarray
 			{
-				while (list($k, $v) = each($elV))
+				foreach ($elV as $k => $v)
 				{
 					$tmp['str'] .= $v['value'];
 					$tmp['str'] .= CRLF;

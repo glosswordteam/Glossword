@@ -87,7 +87,7 @@ else
 	/* */
 	$is_error_xml = 1;
 	$this->str .= '<ul class="xt">';
-	for (; list($k1, $v1) = each($arXmlLine);)
+	foreach ($arXmlLine as $k1 => $v1)
 	{
 		/* per each topic */
 		if (!isset($v1['children'])) { continue; }

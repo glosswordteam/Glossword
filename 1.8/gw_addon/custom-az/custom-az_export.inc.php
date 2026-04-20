@@ -80,7 +80,7 @@ else
 	$xml .= '<glossword version="'.$this->sys['version'].'">';
 	/* Serialize all parameters. */
 	$xml .= CRLF . '<custom_az profile_name="'.htmlspecialchars($this->ar_profile['profile_name']).'" is_active="'.$this->ar_profile['is_active'].'">';
-	for (; list($k, $arV) = each($arSql);)
+	foreach ($arSql as $k => $arV)
 	{
 		$xml .= CRLF . "\t". '<entry>';
 		$xml .= '<az_value><![CDATA['.$arV['az_value'].']]></az_value>';

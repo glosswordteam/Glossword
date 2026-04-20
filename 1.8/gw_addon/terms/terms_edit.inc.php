@@ -59,7 +59,7 @@ if (isset($this->gw_this['vars']['arPost']['is_all']))
 		$sql = 'SELECT * FROM `%s` '.$sql_where;
 		$arSql = $this->oDb->sqlExec( sprintf($sql, $arDictParamSource['tablename']) );
 		$id_term = $this->oDb->MaxId( $arDictParam['tablename'], 'id' );
-		while (list($k1, $arV) = each($arSql))
+		foreach ($arSql as $k1 => $arV)
 		{
 			$ar_q = array();
 			$id_term_prev = $arV['id'];
@@ -146,7 +146,7 @@ elseif (isset($this->gw_this['vars']['arPost']['ar_id']))
 		$sql = 'SELECT * FROM `%s` WHERE `id` IN (%s)'.$sql_where;
 		$arSql = $this->oDb->sqlExec( sprintf($sql, $arDictParamSource['tablename'], implode(',', $this->gw_this['vars']['arPost']['ar_id'])) );
 		$id_term = $this->oDb->MaxId( $arDictParam['tablename'], 'id' );
-		while (list($k1, $arV) = each($arSql))
+		foreach ($arSql as $k1 => $arV)
 		{
 			$ar_q = array();
 			$id_term_prev = $arV['id'];
@@ -253,7 +253,7 @@ if ($this->gw_this['vars']['w1'] == 'viewhistory')
 	$this->str .= '<th style="width:10%">'.$this->oL->m('action').'</th>';
 	$this->str .= '<th>'.$this->oL->m('term').', '.$this->oL->m('defn').'</th>';
 	$this->str .= '<th style="width:15%">'.$this->oL->m('date_modif').', '.$this->oL->m('user').'</th></thead><tbody>';
-	for (; list($arK, $arV) = each($arSql);)
+	foreach ($arSql as $arK => $arV)
 	{
 		$cnt % 2 ? ($bgcolor = $this->ar_theme['color_2']) : ($bgcolor = $this->ar_theme['color_1']);
 		$cnt++;

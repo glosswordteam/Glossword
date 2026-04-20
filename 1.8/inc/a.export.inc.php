@@ -111,7 +111,7 @@ function getFormExport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 	// reverse array keys <-- values;
 	$arReq = array_flip($arReq);
 	// mark fields as "REQUIRED" and make error messages
-	while(is_array($vars) && list($key, $val) = each($vars) )
+	foreach ((is_array($vars) ? $vars : array()) as $key => $val)
 	{
 		$arReqMsg[$key] = $arBrokenMsg[$key] = '';
 		if (isset($arReq[$key])) { $arReqMsg[$key] = ' <span style="color:#E30"><b>*</b></span>'; }
@@ -158,7 +158,7 @@ function getFormExport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 
 		$strForm .= '<table class="gw2TableFieldset" width="100%">';
 		reset($vars['arFmt']);
-		for (; list($k, $v) = each($vars['arFmt']);)
+		foreach ($vars['arFmt'] as $k => $v)
 		{
 			$strForm .= '<tr>';
 			$arBoxId['id'] = 'r_'.$v;

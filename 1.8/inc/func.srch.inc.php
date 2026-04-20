@@ -283,7 +283,7 @@ function gw_search ( $q, $ar_dict_ids, $a_search_params )
 				$arSql = $oDb->sqlExec( $sql );
 				/* Re-organize search results per dictionary . */
 				$i_cnt = 0;
-				for (; list($sqlK, $sqlV) = each( $arSql ); )
+				foreach ($arSql as $sqlK => $sqlV)
 				{
 					$tmp['a_results_temp'][$arDictParam['id']][$sqlV['term_id']][] = $sqlV['term_id'];
 					unset( $arSql[$i_cnt] );
@@ -291,7 +291,7 @@ function gw_search ( $q, $ar_dict_ids, $a_search_params )
 				}
 				foreach ($tmp['a_results_temp'] as $dictK => $resultsV)
 				{
-					while ( list($rK, $rV) = each( $resultsV ) )
+					foreach ($resultsV as $rK => $rV)
 					{
 						$tmp['arResults'][$dictK][] = $rK;
 						$tmp['arCache']['found']++;
@@ -350,7 +350,7 @@ function gw_search ( $q, $ar_dict_ids, $a_search_params )
 						/* Frontend */
 #prn_r( $sql );
 #exit;
-						$arSql = $oDb->sqlExec( $sql );
+                        $ar_sql = $oDb->sqlExec( $sql );
 
 						/* Re-organize search results per dictionary */
 						$i_cnt = 0;
@@ -414,7 +414,7 @@ function gw_search ( $q, $ar_dict_ids, $a_search_params )
 					$a_keywordsD = gw_array_exclude( $a_keywords, $a_stopwords );
 					$tmp['intKeywords'] = sizeof( $a_keywordsD );
 					$tmp['arResults'][$dictK] = array ( );
-					while ( list($rK, $id_terms) = each( $resultsV ) )
+					foreach ($resultsV as $rK => $id_terms)
 					{
 						if ( $a_search_params['adv'] != 'phrase'
 								&& sizeof( $id_terms ) != $tmp['intKeywords'] )
@@ -518,7 +518,7 @@ function gw_search ( $q, $ar_dict_ids, $a_search_params )
 					$tmp['intKeywords'] = sizeof( $a_keywords_diff );
 					$tmp['arResults'][$id_dict_results] = array ( );
 
-					while ( list( $rK, $id_terms) = each( $a_results ) )
+					foreach ($a_results as $rK => $id_terms)
 					{
 						/* Collect matched Term IDs */
 						$tmp['arResults'][$id_dict_results][] = $rK;
@@ -690,7 +690,7 @@ function gw_search_results ( $id_srch, $p, $id_dict = 0 )
 			/* A part of SQL-request for listing terms */
 			$sql_az = '';
 			$ar_az = array ( );
-			for (; list($k, $v) = each( $arAz ); )
+			foreach ($arAz as $k => $v)
 			{
 				$ar_az[] = $v['value'];
 			}

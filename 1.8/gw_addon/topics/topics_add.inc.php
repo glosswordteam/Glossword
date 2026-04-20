@@ -28,7 +28,7 @@ if ($this->gw_this['vars']['post'] == '')
 {
 	/* set default values */
 	$cnt = 0;
-	for (; list($id_lang, $arV) = each($this->gw_this['vars']['ar_languages']);)
+	foreach ($this->gw_this['vars']['ar_languages'] as $id_lang => $arV)
 	{
 		$arParsed['topic'][$cnt]['id_topic_phrase'] = '';
 		$arParsed['topic'][$cnt]['topic_title'] = '';
@@ -55,7 +55,7 @@ else
 	$arQ = array();
 	/* Fix on/off options */
 	$arIsV = array('is_active');
-	for (; list($k, $v) = each($arIsV);)
+	foreach ($arIsV as $k => $v)
 	{
 		$arPre[$v]  = isset($arPre[$v]) ? $arPre[$v] : 0;
 	}
@@ -69,7 +69,7 @@ else
 	$q1['int_sort'] = 999;
 	$q1['date_modified'] = $q1['date_created'] = $this->sys['time_now_gmt_unix'];
 	/* */
-	for (; list($elK, $arV) = each($arPre['topic']);)
+	foreach ($arPre['topic'] as $elK => $arV)
 	{
 		$q2['topic_title'] = $arV['topic_title'];
 		$q2['topic_descr'] = $arV['topic_descr'];

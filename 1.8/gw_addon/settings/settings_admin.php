@@ -68,7 +68,7 @@ class gw_addon_settings_admin extends gw_addon
 		// reverse array keys <-- values;
 		$arReq = array_flip($arReq);
 		// mark fields as "REQUIRED" and make error messages
-		while (is_array($vars) && list($key, $val) = each($vars) )
+		foreach ((is_array($vars) ? $vars : array()) as $key => $val)
 		{
 			$arReqMsg[$key] = $arBrokenMsg[$key] = '';
 			if (isset($arReq[$key])) { $arReqMsg[$key] = '&#160;<span class="red"><strong>*</strong></span>'; }
@@ -467,7 +467,7 @@ class gw_addon_settings_admin extends gw_addon
 			$str_form .= '<tr class="'.$trClass.'"><td>'.$this->oL->m('options').'</td><td>'.$this->oL->m(1024).'</td></tr>';
 		}
 		$str_form .= '<tr><td style="width:20%"></td><td>';
-		for (; list($k, $v) = each($vars);)
+		foreach ($vars as $k => $v)
 		{
 			if (!$vars['is_attach'] && ($k == 'sys_info'))
 			{

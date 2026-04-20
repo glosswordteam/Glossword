@@ -33,7 +33,7 @@ else
 	$arPost =& $this->gw_this['vars']['arPost'];
 	/* Fix on/off options */
 	$arIsV = array('is_include_date', 'is_as_file');
-	for (; list($k, $v) = each($arIsV);)
+	foreach ($arIsV as $k => $v)
 	{
 		$arPost[$v]  = isset($arPost[$v]) ? $arPost[$v] : 0;
 	}
@@ -42,7 +42,7 @@ else
 	$xml .= '<glossword>';
 	/* */
 	$arSql = $this->oDb->sqlExec('SELECT * FROM `'.$this->sys['tbl_prefix'].'topics`');
-	for (; list($k, $arV) = each($arSql);)
+	foreach ($arSql as $k => $arV)
 	{
 		$style_attr = '';
 		$id_topic = $arV['id_topic'];
@@ -58,14 +58,14 @@ else
 		/* get topic names */
 		$xml .= CRLF . "\t". '<entry>';
 		$arSql2 = $this->oDb->sqlExec($this->oSqlQ->getQ('get-topics-lang-adm', $id_topic));
-		for (; list($k2, $arV2) = each($arSql2);)
+		foreach ($arSql2 as $k2 => $arV2)
 		{
 			/* remove encoding name */
 			$arV2['id_lang'] = preg_replace("/-([a-z0-9])+$/", '', $arV2['id_lang']);
 			/* start topic names */
 			$xml .= CRLF . "\t\t". '<lang xml:lang="'.$arV2['id_lang'].'">';
 			unset($arV2['id_lang']);
-			for (; list($attrK, $attrV) = each($arV2);)
+			foreach ($arV2 as $attrK => $attrV)
 			{
 				$xml .= CRLF . "\t\t\t<". $attrK.'>';
 				$xml .= ($attrV == '') ? '' : '<![CDATA['.$attrV.']]>';

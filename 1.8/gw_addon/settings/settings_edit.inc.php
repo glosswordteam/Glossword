@@ -47,7 +47,7 @@ else
 		'is_log_search', 'is_log_ref', 'is_log_mail', 'is_show_topic_descr',
 		'is_use_xhtml', 'is_mod_rewrite'
 	);
-	for (; list($k, $v) = each($arIsV);)
+	foreach ($arIsV as $k => $v)
 	{
 		$arPost[$v] = isset($arPost[$v]) ? $arPost[$v] : 0;
 	}

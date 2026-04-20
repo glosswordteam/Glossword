@@ -246,7 +246,7 @@ class gwForms {
 			}
 			$extras = $this->htmlParamValue($this->tags[$formtype]);
 			$str = sprintf('<select%s>', $extras);
-			while (is_array($array) && list($k, $v) = each($array) )
+			foreach ((is_array($array) ? $array : array()) as $k => $v)
 			{
 				$s = '';
 				$title = '';

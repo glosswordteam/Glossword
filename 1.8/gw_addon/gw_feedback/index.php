@@ -58,7 +58,7 @@ class gw_addon_feedback extends gw_addon
 
 		$ar_req = array_flip( $ar_req );
 		/* mark fields as "Required" and display error message */
-		while ( is_array( $vars ) && list($k, $v) = each( $vars ) )
+		foreach ((is_array($vars) ? $vars : array()) as $k => $v)
 		{
 			$ar_req_msg[$k] = $ar_broken_msg[$k] = '';
 			if ( isset( $ar_req[$k] ) )
@@ -287,7 +287,7 @@ class gw_addon_feedback extends gw_addon
 			$vars['captcha'] = strtoupper( preg_replace( "/[^a-zA-Z0-9]/", '', $vars['captcha'] ) );
 			$arSql = $this->oDb->sqlExec( 'SELECT id FROM `' . $this->sys['tbl_prefix'] . 'captcha` WHERE `captcha` = "' . $vars['captcha'] . '"' );
 			$id_captcha = 0;
-			for (; list($arK, $arV) = each( $arSql ); )
+			foreach ($arSql as $arK => $arV)
 			{
 				$id_captcha = $arV['id'];
 			}

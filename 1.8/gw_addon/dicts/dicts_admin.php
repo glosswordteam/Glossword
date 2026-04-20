@@ -31,7 +31,7 @@ class gw_addon_dicts_admin extends gw_addon
 		$arSql = $this->oDb->sqlRun($this->oSqlQ->getQ('get-vkbd-profiles-adm'), $this->component);
 		$ar_profiles = array();
 		$this->ar_profiles = array();
-		while (is_array($arSql) && list($k, $arV) = each($arSql))
+		foreach ((is_array($arSql) ? $arSql : array()) as $k => $arV)
 		{
 			/* For <select> */
 			$this->ar_profiles[$arV['id_profile']] = $arV;
@@ -446,7 +446,7 @@ class gw_addon_dicts_admin extends gw_addon
 			/* term is required by default */
 			unset($arFields[1], $arFields[-1], $arFields[-2], $arFields[-3], $arFields[-4], $arFields[-5]);
 			$arFieldsStr = array();
-			for (; list($k, $v) = each($arFields);)
+			foreach ($arFields as $k => $v)
 			{
 				$fieldname = 'is_'.$v[0];
 				$vars[$fieldname] = isset($vars[$fieldname]) ? $vars[$fieldname] : 0;

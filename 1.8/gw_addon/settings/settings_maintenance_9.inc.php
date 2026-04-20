@@ -57,7 +57,7 @@ function gw_clear_history()
 	}
 	if (!empty($arSql))
 	{
-		for (; list($k, $v) = each($arSql);)
+		foreach ($arSql as $k => $v)
 		{
 			$ar_term_ids_dltd[$v['id_dict']][] = $v['id_term'];
 		}
@@ -76,7 +76,7 @@ function gw_clear_history()
 	$sql_one = 'SELECT `id`, `id_dict`, `id_term` FROM `'.$sys['tbl_prefix'].'history_terms` WHERE `is_active` != "3" ORDER BY `date_modified` DESC';
 	$arSql = $oDb->sqlExec($sql_one);
 	$ar_term_ids = array();
-	for (; list($k, $v) = each($arSql);)
+	foreach ($arSql as $k => $v)
 	{
 		if (!isset($ar_term_ids[$v['id_dict']][$v['id_term']]))
 		{
@@ -96,7 +96,7 @@ function gw_clear_history()
 	{
 		/* */
 		$is_error = 0;
-		for (; list($sqlk, $sqlv) = each($arQ);)
+		foreach ($arQ as $sqlk => $sqlv)
 		{
 			if (!$oDb->sqlExec($sqlv))
 			{

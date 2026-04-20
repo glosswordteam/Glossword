@@ -61,7 +61,7 @@ if ($this->gw_this['vars']['mode'] == 'up' || $this->gw_this['vars']['mode'] == 
 	$sql = sprintf('SELECT id_topic FROM `'.$this->sys['tbl_prefix'].'topics` WHERE `id_parent` = "%d" ORDER BY int_sort ASC', $arParsed['ar'][$this->gw_this['vars']['tid']]['p']);
 	$arSql = $this->oDb->sqlExec($sql);
 	$i = 10;
-	for (; list($arK, $arV) = each($arSql);)
+	foreach ($arSql as $arK => $arV)
 	{
 		$arQ[] = 'UPDATE `'.$this->sys['tbl_prefix'].'topics`
 					 SET int_sort = ' . $i . '
@@ -75,7 +75,7 @@ elseif ($this->gw_this['vars']['mode'] == 'reset')
 {
 	$i = 10;
 	$arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-topics_id-by-p', $arParsed['ar'][$this->gw_this['vars']['tid']]['p']));
-	for (; list($arK, $arV) = each($arSql);)
+	foreach ($arSql as $arK => $arV)
 	{
 		$arQ[] = sprintf('UPDATE `'.$this->sys['tbl_prefix'].'topics`
 					SET int_sort = "%d"
@@ -142,7 +142,7 @@ if ($this->gw_this['vars']['post'] == '')
 			$arKeys = gw_ctlg_get_tree($arParsed['ar'], $this->gw_this['vars']['tid']);
 			/* Unset the current Topic ID from subtopics tree */
 			unset($arKeys[$this->gw_this['vars']['tid']]);
-			while (is_array($arKeys) && list($k, $v) = each($arKeys))
+			foreach ((is_array($arKeys) ? $arKeys : array()) as $k => $v)
 			{
 				$arQ[] = 'DELETE FROM `'.$this->sys['tbl_prefix'].'topics` WHERE id_topic = "' . $v . '"';
 				$arQ[] = 'DELETE FROM `'.$this->sys['tbl_prefix'].'topics_phrase` WHERE id_topic = "' . $v . '"';
@@ -188,7 +188,7 @@ else
 
 	/* Fix on/off options */
 	$arIsV = array('is_active');
-	for (; list($k, $v) = each($arIsV);)
+	foreach ($arIsV as $k => $v)
 	{
 		$arPre[$v]  = isset($arPre[$v]) ? $arPre[$v] : 0;
 	}
@@ -203,7 +203,7 @@ else
 	if (isset($ar[$this->gw_this['vars']['tid']]['ch']))
 	{
 		$arKeys = gw_ctlg_get_tree($ar, $this->gw_this['vars']['tid']);
-		while (is_array($arKeys) && list($k, $v) = each($arKeys))
+		foreach ((is_array($arKeys) ? $arKeys : array()) as $k => $v)
 		{
 			$arQ[] = 'UPDATE `'.$this->sys['tbl_prefix'].'topics` SET `is_active` = "'.$q1['is_active'].'" WHERE id_parent = "' . $v . '"';
 		}
@@ -212,7 +212,7 @@ else
 	/* */
 	$arQ[] = 'DELETE FROM `'.$this->sys['tbl_prefix'].'topics_phrase` WHERE `id_topic` = "' . $this->gw_this['vars']['tid'] . '"';
 	$id_topic_phrase = $this->oDb->MaxId($this->sys['tbl_prefix'].'topics_phrase', 'id_topic_phrase');
-	for (; list($elK, $arV) = each( $arPre['topic']);)
+	foreach ($arPre['topic'] as $elK => $arV)
 	{
 		$arV['topic_title'] = str_replace(array('{%', '%}'), array('{', '}'), $arV['topic_title']);
 		$arV['topic_descr'] = str_replace(array('{%', '%}'), array('{', '}'), $arV['topic_descr']);

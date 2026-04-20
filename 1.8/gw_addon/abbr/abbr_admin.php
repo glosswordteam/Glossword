@@ -35,11 +35,18 @@ class gw_addon_abbr_admin extends gw_addon
 	}
 	function _get_nav()
 	{
-		/* The list of languags */
-		$arSql = $this->oDb->sqlRun($this->oSqlQ->getQ('get-abbr-lang'), $this->addon_name);
+        /* The list of profiles */
+        $sql = $this->oSqlQ->getQ('get-abbr-lang');
+        if (!$sql) {
+            $this->oDb->haltmsg('Query storage error get-abbr-lang');
+            return '';
+        }
+
+		$arSql = $this->oDb->sqlRun($sql, $this->addon_name);
+
 		$ar_languages = array();
 		$id_lang = 'en-utf8';
-		while (list($k, $arV) = each($arSql))
+		foreach ($arSql as $k => $arV)
 		{
 			if ($k == 0)
 			{
@@ -103,7 +110,7 @@ class gw_addon_abbr_admin extends gw_addon
 		}
 		$ar_req = array_flip($ar_req);
 		/* mark fields as "Required" and display error message */
-		while (is_array($vars) && list($k, $v) = each($vars) )
+		foreach ((is_array($vars) ? $vars : array()) as $k => $v)
 		{
 			$ar_req_msg[$k] = $ar_broken_msg[$k] = '';
 			if (isset($ar_req[$k])) { $ar_req_msg[$k] = '&#160;<span class="red"><b>*</b></span>'; }
@@ -205,9 +212,14 @@ class gw_addon_abbr_admin extends gw_addon
 		$isReset = 0;
 
 		/* The list of line feeds */
-		$arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-abbr-adm', $this->gw_this['vars']['w1'], $this->gw_this['vars']['w2']), $this->addon_name);
+        $sql = $this->oSqlQ->getQ('get-abbr-adm', $this->gw_this['vars']['w1'], $this->gw_this['vars']['w2']);
+        if (!$sql) {
+            $this->oDb->haltmsg('Query storage error get-abbr-adm');
+            return '';
+        }
+		$arSql = $this->oDb->sqlExec($sql, $this->addon_name);
 		$cnt_row = 1;
-		while (list($k, $arV) = each($arSql))
+		foreach ($arSql as $k => $arV)
 		{
 			$isReset = 0;
 			if ($k == 0) { $isReset = 1; }
@@ -299,7 +311,7 @@ class gw_addon_abbr_admin extends gw_addon
 			$arPost['abbr_long'] = trim($arPost['abbr_long']);
 			/* Fix on/off options */
 			$arIsV = array('is_active');
-			for (; list($k, $v) = each($arIsV);)
+			foreach ($arIsV as $k => $v)
 			{
 				$arPost[$v] = isset($arPost[$v]) ? $arPost[$v] : 0;
 			}
@@ -353,7 +365,7 @@ class gw_addon_abbr_admin extends gw_addon
 					 );
 			$strHelp = '';
 			$strHelp .= '<dl>';
-			for (; list($k, $v) = each($arHelpMap);)
+			foreach ($arHelpMap as $k => $v)
 			{
 				$strHelp .= '<dt><b>' . $this->oL->m($k) . '</b></dt>';
 				$strHelp .= '<dd>' . $this->oL->m($v) . '</dd>';
@@ -367,7 +379,7 @@ class gw_addon_abbr_admin extends gw_addon
 			$arPost =& $this->gw_this['vars']['arPost'];
 			/* Fix on/off options */
 			$arIsV = array('is_active');
-			for (; list($k, $v) = each($arIsV);)
+			foreach ($arIsV as $k => $v)
 			{
 				$arPost[$v] = isset($arPost[$v]) ? $arPost[$v] : 0;
 			}
