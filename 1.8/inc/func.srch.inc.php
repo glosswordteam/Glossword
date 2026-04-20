@@ -135,7 +135,7 @@ function gw_search ( $q, $ar_dict_ids, $a_search_params )
 			return $strA;
 		}
 		/* Check for empty list of dictionaries */
-		if ( empty( $arDict_Ids ) )
+		if ( empty( $ar_dict_ids ) )
 		{
 			$strA[0] = $oL->m( 'error' );
 			return $strA;
@@ -154,15 +154,15 @@ function gw_search ( $q, $ar_dict_ids, $a_search_params )
 
 	/* Search in single dictionary */
 	$a_stopwords = array ( );
-	if ( sizeof( $arDict_Ids ) == 1 )
+	if ( sizeof( $ar_dict_ids ) == 1 )
 	{
-		$tmp['arCache']['id_d'] = $arDict_Ids[0];
-		$tmp['redirect_url'][0] = 'd=' . $arDict_Ids[0];
+		$tmp['arCache']['id_d'] = $ar_dict_ids[0];
+		$tmp['redirect_url'][0] = 'd=' . $ar_dict_ids[0];
 		/* Get stopwords */
 		$a_stopwords = gw_get_stopwords( $arDictParam );
 		$a_keywords = gw_array_exclude( $a_keywords, $a_stopwords );
 	}
-	foreach ($arDict_Ids as $k => $dictK)
+	foreach ($ar_dict_ids as $k => $dictK)
 	{
 		$tmp['arDictParam'][$dictK] = gw_get_dict_param($dictK );
 	}
@@ -177,7 +177,7 @@ function gw_search ( $q, $ar_dict_ids, $a_search_params )
 	#exit;
 	// Assign `Unique ID' to query.
 	// Already uppercased, without stopwords, without special symbols, alphabetically sorted. Nice.
-	$tmp['arCache']['id_srch'] = md5( implode( '', $a_keywords ) . implode( '', $arDict_Ids ) . $tmp['arCache']['srch_settings']['in'] . $a_search_params['adv'] );
+	$tmp['arCache']['id_srch'] = md5( implode( '', $a_keywords ) . implode( '', $ar_dict_ids ) . $tmp['arCache']['srch_settings']['in'] . $a_search_params['adv'] );
 	// -----------------------------------------------
 	// Check for an existent query, if exists, get results and add hits + 1
 	if ( $sys['is_cache_search'] && $a_search_params['adv'] != 'phrase' )
@@ -276,7 +276,7 @@ function gw_search ( $q, $ar_dict_ids, $a_search_params )
 				}
 				else
 				{
-					$sql = $oSqlQ->getQ( 'get-terms-all', $arDictParam['tablename'], $arDict_Ids[0] );
+					$sql = $oSqlQ->getQ( 'get-terms-all', $arDictParam['tablename'], $ar_dict_ids[0] );
 				}
 #prn_r( $sql );
 #exit;
@@ -444,7 +444,7 @@ function gw_search ( $q, $ar_dict_ids, $a_search_params )
 			/* ----------------------------------------- */
 			/* 28 Sep 2010: Exact match */
 			/* ----------------------------------------- */
-			foreach ( $arDict_Ids as $kk => $id_dict )
+			foreach ( $ar_dict_ids as $kk => $id_dict )
 			{
 				/* Go for each keyword */
 				foreach ( $a_keywords as $k => $v )
