@@ -245,7 +245,7 @@ class gw_render extends gw_htmlforms
 			$tmp['strxml'] .= '<![CDATA['.$elV['value'].']]>';
 			//
 			// Parse subtags
-			for (reset($this->arFields); list($fK, $fV) = each($this->arFields);)
+			foreach ($this->arFields as $fK => $fV)
 			{
 				// not root elements only
 				if ((!isset($fV[4]) || !$fV[4]) && 
@@ -313,7 +313,7 @@ class gw_render extends gw_htmlforms
 			//
 			$tmp['strhtml'] .= ($elV['value'] != '') ? $tmp['br'] . '<div class="defn">'.$elV['value'].'</div>' : '';
 			/* Parse subtags */
-			for (reset($this->arFields); list($fK, $fV) = each($this->arFields);)
+			foreach ($this->arFields as $fK => $fV)
 			{
 				/* Not root elements only */
 				if ((!isset($fV[4]) || !$fV[4]) && 
@@ -714,7 +714,7 @@ class gw_render extends gw_htmlforms
 		/* */
 		$tmp['strform'] = $tmp['str'] = '';
 		/* */
-		for (reset($this->arEl[$fieldname]); list($elK, $elV) = each($this->arEl[$fieldname]);)
+		foreach ($this->arEl[$fieldname] as $elK => $elV)
 		{
 			if (isset($elV['value']) && (intval($ar['elK']) == intval($elK)))
 			{
@@ -758,7 +758,7 @@ class gw_render extends gw_htmlforms
 		
 		if (!empty($this->arEl) && isset($this->arEl[$fieldname]))
 		{
-			for (reset($this->arEl[$fieldname]); list($elK, $elV) = each($this->arEl[$fieldname]);)
+			foreach ($this->arEl[$fieldname] as $elK => $elV)
 			{
 				if (isset($elV['value']) && (intval($ar['elK']) == intval($elK)))
 				{
@@ -799,7 +799,7 @@ class gw_render extends gw_htmlforms
 		$strXml = '';
 		$t = new gw_timer;
 		// Go for each configured root field.
-		for (reset($this->arFields); list($fK, $fV) = each($this->arFields);)
+		foreach ($this->arFields as $fK => $fV)
 		{
 			if (isset($fV[4]) && $fV[4]) // select root elements only here
 			{
@@ -832,7 +832,7 @@ class gw_render extends gw_htmlforms
 		$strHtml = '';
 		#$t = new gw_timer;
 		// Go for each configured root field.
-		for (reset($this->arFields); list($fK, $fV) = each($this->arFields);)
+		foreach ($this->arFields as $fK => $fV)
 		{
 			if (isset($fV[4]) && $fV[4]) // select root elements only here
 			{

@@ -1,18 +1,18 @@
 <?php
+
 /**
- *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2004-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
-if (!defined('IN_GW'))
-{
-	die('<!-- $Id: a.import.inc.php 491 2008-06-13 10:05:06Z glossword_team $ -->');
+if (!defined('IN_GW')) {
+	die('<!-- Not in App -->');
 }
 /**
 	Import. External utility for a dictionary.
@@ -172,7 +172,7 @@ function gw_import_xml()
 			$rule_attr_regex = '/(?:^|'.$rule_spaces.')('.$rule_attr.'+)'.'('.$rule_spaces.'*=)(.*?[\'"])(?='.$rule_spaces.'|$)/xs';
 			/* fix attributes */
 			preg_match_all('/<term(.*?)>/', $gw_this['vars']['arPost']['xml'], $arTermParam);
-			for (reset($arTermParam[1]); list($k1, $v1) = each($arTermParam[1]);)
+			foreach ($arTermParam[1] as $k1 => $v1)
 			{
 				if (!$v1){ continue; }
 				$str_param = '';
@@ -222,7 +222,7 @@ function gw_import_xml()
 			$gw_this['vars']['arPost']['xml'] = str_replace('<![CDATA[<![CDATA[', '<![CDATA[', $gw_this['vars']['arPost']['xml']);
 			$gw_this['vars']['arPost']['xml'] = str_replace(']]>]]>', ']]>', $gw_this['vars']['arPost']['xml']);
 			$arTagNames = array();
-			for (reset($arFields); list($fK, $fV) = each($arFields);)
+			foreach ($arFields as $fK => $fV)
 			{
 				$arTagNames[] = $fV[0];
 			}
@@ -292,7 +292,7 @@ function gw_import_xml()
 		return;
 	}
 	/* For each raw <line> */
-	for (reset($ar_lines_raw); list($k_raw, $v_raw) = each($ar_lines_raw);)
+	foreach ($ar_lines_raw as $k_raw => $v_raw)
 	{
 		/* Start timer per a term */
 		$time_start = list($sm, $ss) = explode(' ', microtime());
@@ -326,7 +326,7 @@ function gw_import_xml()
 		$id_term = $id_term_old = $is_clean_map = $is_term_exists = 0;
 		$ar_keywords_raw = $ar_keywords = array();
 		if (!isset($arXmlLine['children'])) { continue; }
-		for (reset($arXmlLine['children']); list($k2, $v2) = each($arXmlLine['children']);)
+		foreach ($arXmlLine['children'] as $k2 => $v2)
 		{
 			if (!is_array($v2)){ continue; }
 			switch ($v2['tag'])
@@ -438,7 +438,7 @@ function gw_import_xml()
 
 					/* -- Custom Alphabetic Toolbar -- */
 					/* Select custom rules for uppercasing */
-					for (reset($arCustomAZOrder); list($arK, $arV) = each($arCustomAZOrder);)
+					foreach ($arCustomAZOrder as $arK => $arV)
 					{
 						$str_term_src = str_replace($arV['az_value_lc'], $arV['az_value'], $str_term_src);
 					}
@@ -494,16 +494,16 @@ function gw_import_xml()
 				break;
 				case 'defn':
 					$ar_keywords_raw[$v2['tag']][] = $v2['value'];
-					if (!isset($v2['children']))
-					{
-						continue;
-					}
-					for (reset($v2['children']); list($k3, $v3) = each($v2['children']);)
+						if (!isset($v2['children']))
+						{
+							continue 2;
+						}
+					foreach ($v2['children'] as $k3 => $v3)
 					{
 						/* no contents for definition */
 						if (!is_array($v3) && trim($v3) == '')
 						{
-							continue;
+							continue 3;
 						}
 						elseif (!is_array($v3))
 						{
@@ -519,7 +519,7 @@ function gw_import_xml()
 		}
 #		prn_r( $ar_keywords_raw );
 		/* Collect keywords per fields */
-		for (reset($arFields); list($fK, $fV) = each($arFields);)
+		foreach ($arFields as $fK => $fV)
 		{
 			#$ar_keywords[$fK] = array();
 			if (isset($ar_keywords_raw[$fV[0]]))
@@ -564,7 +564,7 @@ function gw_import_xml()
 		else
 		{
 			/* Post queries */
-			for (reset($arQ); list($qk, $qv) = each($arQ);)
+			foreach ($arQ as $qk => $qv)
 			{
 				$oDb->sqlExec($qv);
 			}
@@ -739,7 +739,7 @@ function gw_import_csv()
 		*/
 		$arXML = array();
 		$arDuplicates = array();
-		for (reset($ar_lines_csv); list($k1, $v1) = each($ar_lines_csv);)
+		foreach ($ar_lines_csv as $k1 => $v1)
 		{
 			/* id, term, ... */
 			$ar_line_csv = explode($gw_this['vars']['arPost']['str_separator'], $v1);
@@ -764,7 +764,7 @@ function gw_import_csv()
 			if (!isset($ar_line_csv[$arFields[-4][5]])){ $ar_line_csv[$arFields[-4][5]] = ''; }
 			if (!isset($ar_line_csv[$arFields[-5][5]])){ $ar_line_csv[$arFields[-5][5]] = ''; }
 			/* for each dictionary field */
-			for (reset($arFields); list($fK, $fV) = each($arFields);)
+			foreach ($arFields as $fK => $fV)
 			{
 				if (!isset($ar_line_csv[$fV[5]]))
 				{
@@ -805,7 +805,7 @@ function gw_import_csv()
 					case 'syn':
 					case 'antonym':
 						$ar_values = explode($gw_this['vars']['arPost']['str_separator_defn'], @$ar_line_csv[$fV[5]]);
-						for (reset($ar_values); list($kTag, $vTag) = each($ar_values);)
+						foreach ($ar_values as $kTag => $vTag)
 						{
 							/* Skip empty values */
 							if (trim($vTag) == ''){ continue; }
@@ -834,7 +834,7 @@ function gw_import_csv()
 					case 'trns':
 					case 'abbr':
 						$ar_trnsabbr = explode($gw_this['vars']['arPost']['str_separator_defn'], $ar_line_csv[$fV[5]]);
-						for (reset($ar_trnsabbr); list($kTag, $vTag) = each($ar_trnsabbr);)
+						foreach ($ar_trnsabbr as $kTag => $vTag)
 						{
 							/* Skip empty values */
 							if (trim($vTag) == ''){ continue; }
@@ -863,7 +863,7 @@ function gw_import_csv()
 					case 'phone':
 					case 'address':
 						$ar_values = explode($gw_this['vars']['arPost']['str_separator_defn'], @$ar_line_csv[$fV[5]]);
-						for (reset($ar_values); list($kTag, $vTag) = each($ar_values);)
+						foreach ($ar_values as $kTag => $vTag)
 						{
 							/* Skip empty values */
 							if (trim($vTag) == ''){ continue; }
@@ -906,13 +906,13 @@ function gw_import_csv()
 	$arData = $arQ = $arStatus = array();
 	$arStop = gw_get_stopwords($arDictParam);
 #	prn_r( $arXML );
-	for (reset($arXML); list($uid, $v1) = each($arXML);)
+	foreach ($arXML as $uid => $v1)
 	{
 		/* Start timer per a term */
 		$time_start = list($sm, $ss) = explode(' ', microtime());
 
 		/* Prepare keywords per field */
-		for (reset($v1); list($id_field, $v2) = each($v1);)
+		foreach ($v1 as $id_field => $v2)
 		{
 			if (!isset($arFields[$id_field])) { continue; }
 			$fV =& $arFields[$id_field];
@@ -943,7 +943,7 @@ function gw_import_csv()
 		$arData[$uid]['defn'] = '<defn>'.implode('', $v1).'</defn>';
 		if (isset($arDuplicates[$uid]))
 		{
-			for (reset($arDuplicates[$uid]); list($kD, $arVd) = each($arDuplicates[$uid]);)
+			foreach ($arDuplicates[$uid] as $kD => $arVd)
 			{
 				unset($arVd[1]);
 				$arData[$uid]['defn'] .= '<defn>'.implode('', $arVd).'</defn>';
@@ -1035,7 +1035,7 @@ function gw_import_csv()
 
 		/* -- Custom Alphabetic Toolbar -- */
 		/* Select custom rules for uppercasing */
-		for (reset($arCustomAZOrder); list($arK, $arV) = each($arCustomAZOrder);)
+		foreach ($arCustomAZOrder as $arK => $arV)
 		{
 			$str_term_src = str_replace($arV['az_value_lc'], $arV['az_value'], $str_term_src);
 		}
@@ -1111,7 +1111,7 @@ function gw_import_csv()
 		else
 		{
 			/* Post queries */
-			for (reset($arQ); list($qk, $qv) = each($arQ);)
+			foreach ($arQ as $qk => $qv)
 			{
 				$oDb->sqlExec($qv);
 			}
@@ -1635,7 +1635,7 @@ switch ($gw_this['vars']['arPost'][GW_ACTION])
 		$this->str .= '</tbody></table>';
 
 		$this->str .= '<ul class="gwsql">';
-		for (reset($arStatus); list($k, $t) = each($arStatus);)
+		foreach ($arStatus as $k => $t)
 		{
 			$t = str_replace("\r\n", ' ', $t);
 			$t = str_replace("\n", ' ', $t);

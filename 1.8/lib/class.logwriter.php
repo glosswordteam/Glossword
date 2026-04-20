@@ -48,7 +48,7 @@ class gw_logwriter
 			$str,
 			$this->remote_ua
 		);
-		for (reset($arLog); list($k, $v) = each($arLog);)
+		foreach ($arLog as $k => $v)
 		{
 			/* Completely decodes url parameters */
 			$arLog[$k] = urlencode(urldecode($arLog[$k]));
@@ -61,7 +61,7 @@ class gw_logwriter
 	{
 		ksort($arLog);
 		$arReplace = array('%2F' => '/', '%3A' => ':', '%3F' => '?', '%3D' => '=', '%26' => '&');
-		for (reset($arLog); list($k, $v) = each($arLog);)
+		foreach ($arLog as $k => $v)
 		{
 			/* Completely decodes url parameters */
 			$arLog[$k] = urlencode(urldecode($arLog[$k]));

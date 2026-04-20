@@ -121,19 +121,6 @@ if (!class_exists('gw_register_globals')) {
         /* 1.8.7: Fixes "Slash" problem */
         public function fix_slash($v, $level = 0)
         {
-            if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc()) {
-                if (is_array($v)) {
-                    $level++;
-                    if ($level <= $this->max_nesting_level) {
-                        foreach ($v as $k1 => $v1) {
-                            $v[$k1] = $this->fix_slash($v[$k1], $level);
-                        }
-                    }
-                } else {
-                    $v = stripslashes($v);
-                }
-            }
-
             return $v;
         }
 

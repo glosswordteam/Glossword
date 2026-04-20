@@ -92,7 +92,7 @@ $gw_this['vars'][GW_TARGET] = preg_replace('/[^a-z0-9_\-]/', '', $gw_this['vars'
 $sys['uri'] =& $gw_this['vars']['uri'];
 
 /* Depreciated method */
-for (reset($gw_this['vars']); list($k1, $v1) = each($gw_this['vars']);)
+foreach ($gw_this['vars'] as $k1 => $v1)
 {
 	$$k1 = $v1;
 }
@@ -412,7 +412,7 @@ if (isset($gw_this['vars']['srch']['by']) && $gw_this['vars']['srch']['by'] == '
 
 	// Set switcher for HTML
 	$arTplVars['srch']['v:chk_srch_by_dict'] = ' checked="checked"';
-	for (reset($gw_this['ar_dict_list']); list($kDict, $vDict) = each($gw_this['ar_dict_list']);)
+	foreach ($gw_this['ar_dict_list'] as $kDict => $vDict)
 	{
 		if ($d == 0)
 		{
@@ -812,7 +812,7 @@ else
    $oTpl->addVal( 'v:html_title', $oL->m('2_page__') . ' - ' . strip_tags($oL->m($sys['id_current_status'])) );
 }
 /* Add previously defined template variables */
-for (reset($arTplVars['srch']); list($k, $v) = each($arTplVars['srch']);)
+foreach ($arTplVars['srch'] as $k => $v)
 {
 	$oTpl->AddVal($k, $v);
 }
@@ -823,7 +823,7 @@ $oTpl->set_tpl($gw_this['id_tpl_page']);
 
 /* Append URL for integration */
 $tmp['input_url_append'] = '';
-for (reset($sys['ar_url_append']); list($k, $v) = each($sys['ar_url_append']);)
+foreach ($sys['ar_url_append'] as $k => $v)
 {
 	$tmp['input_url_append'] .= '<input type="hidden" name="'.$k.'" value="'.$v.'" />';
 }
@@ -831,13 +831,13 @@ $oTpl->addVal( 'v:input_url_append', $tmp['input_url_append'] );
 
 
 /* Parse dynamic blocks */
-for (reset($oTpl->tmp['d']); list($id_dynamic, $arV) = each($oTpl->tmp['d']);)
+foreach ($oTpl->tmp['d'] as $id_dynamic => $arV)
 {
 	if (is_array($arV))
 	{
-		for (reset($arV); list($k2, $v2) = each($arV);)
+		foreach ($arV as $k2 => $v2)
 		{
-			for (reset($v2); list($k, $v) = each($v2);)
+			foreach ($v2 as $k => $v)
 			{
 				$oTpl->assign(array($k => $v));
 			}

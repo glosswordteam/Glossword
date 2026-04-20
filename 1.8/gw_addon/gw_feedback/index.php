@@ -320,7 +320,7 @@ class gw_addon_feedback extends gw_addon
 				$vars['name'] = ($vars['name']) ? $vars['name'] : 'Anonymous';
 				$vars['email'] = ($vars['email']) ? $vars['email'] : 'anonymous@' . $this->sys['server_host'];
 				/* Limit the string length */
-				for ( reset( $vars ); list($k, $v) = each( $vars ); )
+				foreach ($vars as $k => $v)
 				{
 					$vars[$k] = mb_substr( $v, 0, $this->int_max_length );
 				}
@@ -392,7 +392,7 @@ class gw_addon_feedback extends gw_addon
 					$ar_query[] = gw_sql_replace( $q2, TBL_MAP_USER_TERM );
 				}
 				/* Post queries */
-				for ( reset( $ar_query ); list($qk, $qv) = each( $ar_query ); )
+				foreach ($ar_query as $qk => $qv)
 				{
 					$this->oDb->sqlExec( $qv );
 				}

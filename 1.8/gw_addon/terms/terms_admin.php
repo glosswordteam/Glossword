@@ -263,7 +263,7 @@ function switch2edit(id)
 		$str_form .= '<table class="gw2TableFieldset" width="100%"><tbody>';
 		$oForm->Set('arFields', $arFields );
 		// Go for each configured root field.
-		for (reset($arFields); list($fK, $fV) = each($arFields);)
+		foreach ($arFields as $fK => $fV)
 		{
 			if (isset($fV[4]) && $fV[4]) // select root elements only here
 			{

@@ -237,7 +237,7 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
     if (!$isDelete && $isTermExist) {
         /* Term already exists */
         $ar_matched_terms = [];
-        for (reset($arSql); list($arK, $arV) = each($arSql);) {
+        foreach ($arSql as $arK => $arV) {
             $ar_matched_terms[] = $oHtml->a(
                 $sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . GW_T_TERMS . '&id=' . $id_dict . '&tid=' . $arV['id'],
                 $arV['term'],
@@ -257,7 +257,7 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
     if ($isQ) {
         /* Prepare keywords per field */
 #		$ot = new gw_timer('addterm');
-        for (reset($arFields); list($fK, $fV) = each($arFields);) {
+        foreach ($arFields as $fK => $fV) {
             // Init
             $arKeywords[$fK] = [];
             //
@@ -300,7 +300,7 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
 #		print $ot->endp(__LINE__, __FILE__);
 #		exit;
         /* Remove double keywords from definition */
-        for (reset($arFields); list($fK, $fV) = each($arFields);) {
+        foreach ($arFields as $fK => $fV) {
             if ($fK != 0) {
                 $arKeywords[0] = gw_array_exclude($arKeywords[0], $arKeywords[$fK]);
             }

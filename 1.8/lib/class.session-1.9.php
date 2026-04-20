@@ -363,14 +363,14 @@ class gw_session_1_9
 		else
 		{
 			if (empty($this->ar_user) || is_string($this->ar_user)){ return; }
-			for (reset($this->ar_user); list($k, $v) = each($this->ar_user);)
+			foreach ($this->ar_user as $k => $v)
 			{
 				if ($k == $varname)
 				{
 					return $v;
 				}
 			}
-			for (reset($this->ar_user['user_settings']); list($k, $v) = each($this->ar_user['user_settings']);)
+			foreach ($this->ar_user['user_settings'] as $k => $v)
 			{
 				if ($k == $varname)
 				{
@@ -394,7 +394,7 @@ class gw_session_1_9
 		else
 		{
 			/* remove a defined variable only */
-			for (reset($this->ar_user['user_settings']); list($k, $v) = each($this->ar_user['user_settings']);)
+			foreach ($this->ar_user['user_settings'] as $k => $v)
 			{
 				if ($k == $varname)
 				{

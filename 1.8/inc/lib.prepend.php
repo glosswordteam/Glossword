@@ -123,7 +123,7 @@ $HTTP_REF = getenv('HTTP_REFERER');
 /* Specific technical purposes (error level, banners, counters etc.) */
 $arLocalIp = array('192.168.', '172.', '127.', '10.');
 $sys['is_show_stat'] = 1;
-for (reset($arLocalIp); list($k, $v) = each($arLocalIp);)
+foreach ($arLocalIp as $k => $v)
 {
 	if (preg_match("/^" . $v . "/", HTTP_HOST))
 	{

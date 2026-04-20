@@ -93,7 +93,7 @@ class gw_htmlforms extends gwForms
 		//
 		$jsToolbarOff = $jsToolbarSymbOff = $jsToolbarOn = '';
 		//
-		for (reset($arButtons); list($k, $v) = each($arButtons);)
+		foreach ($arButtons as $k => $v)
 		{
 			$arParam = explode("||", $v);
 			$this->setTag('input', 'title', $this->oL->m($arParam[4]));
@@ -422,7 +422,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 			$tmp['strform'] .= '</tr>';
 			//
 			// Parse subtags
-			for (reset($this->arFields); list($fK, $fV) = each($this->arFields);)
+			foreach ($this->arFields as $fK => $fV)
 			{
 				// not root elements only
 				if ((!isset($fV[4]) || !$fV[4]) && 
@@ -758,7 +758,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		{
 			$ar['elK'] = 0;
 		}
-		for (reset($this->arEl[$fieldname]); list($elK, $elV) = each($this->arEl[$fieldname]);)
+		foreach ($this->arEl[$fieldname] as $elK => $elV)
 		{
 			if (isset($elV['value']) && ($ar['elK'] == $elK))
 			{

@@ -29,7 +29,7 @@ function gwShuffle($maxBanners=1, $Array){
     if ($maxBanners > $ArrayC) {$maxBanners = $ArrayC - 1;}
     $str = "";
     $i2 = 0;
-	for (reset($Array); list($key, $val) = each($Array);)
+	foreach ($Array as $key => $val)
 	{
 		if ($i2 < $maxBanners)
 		{

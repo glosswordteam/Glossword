@@ -151,7 +151,7 @@ function gw_make_counters()
 	}
 	shuffle($ar[1]);
 	$cnt_counters = 0;
-	for (reset($ar[1]); list($k, $v) = each($ar[1]);)
+	foreach ($ar[1] as $k => $v)
 	{
 		if ($v[4] == ''){ continue; }
 		if ($cnt_counters == $max_links) { continue; }
@@ -183,7 +183,7 @@ function gw_make_counters_js()
 	$str_counters_a = '';
 	$max_links_script = sizeof($ar[1]);
 	$str_counters .= 'js_path_img="'.$sys['server_dir'] . '/'. $sys['path_img_www'].'";';
-	for (reset($ar[1]); list($k, $v) = each($ar[1]);)
+	foreach ($ar[1] as $k => $v)
 	{
 		if ($v[4] == ''){ continue; }
 		if ($cnt_counters == $max_links) { continue; }

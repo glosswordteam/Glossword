@@ -60,11 +60,11 @@ function gw_get_stopwords($dict_params)
  * Main function for searching terms.
  *
  * @param    string  $q Search query string
- * @param    array   $arDict_Ids Dictionary IDs
+ * @param    array   $ar_dict_ids Dictionary IDs
  * @param    array   $a_search_params Search parameters
  * @return   array   String term items, int total terms
  */
-function gw_search ( $q, $arDict_Ids, $a_search_params )
+function gw_search ( $q, $ar_dict_ids, $a_search_params )
 {
 	global $arDictParam, $sys, $gw_this;
 	global $oSqlQ, $oDb, $oHtml, $oFunc, $oL;
@@ -162,7 +162,7 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 		$a_stopwords = gw_get_stopwords( $arDictParam );
 		$a_keywords = gw_array_exclude( $a_keywords, $a_stopwords );
 	}
-	for ( reset( $arDict_Ids ); list($k, $dictK) = each( $arDict_Ids ); )
+	foreach ($arDict_Ids as $k => $dictK)
 	{
 		$tmp['arDictParam'][$dictK] = gw_get_dict_param($dictK );
 	}
@@ -245,7 +245,7 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 				break;
 			default:
 				/* Search by fields */
-				for ( reset( $a_search_params['in'] ); list($inK, $inV) = each( $a_search_params['in'] ); )
+				foreach ($a_search_params['in'] as $inK => $inV)
 				{
 					$tmp['arIn'][] = $inV;
 				}
@@ -289,7 +289,7 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 					unset( $arSql[$i_cnt] );
 					$i_cnt++;
 				}
-				for ( reset( $tmp['a_results_temp'] ); list($dictK, $resultsV) = each( $tmp['a_results_temp'] ); )
+				foreach ($tmp['a_results_temp'] as $dictK => $resultsV)
 				{
 					while ( list($rK, $rV) = each( $resultsV ) )
 					{
@@ -406,7 +406,7 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 #prn_r( $tmp );
 #exit;
 				/* Now sort search results */
-				for ( reset( $tmp['a_results_temp'] ); list($dictK, $resultsV) = each( $tmp['a_results_temp'] ); )
+				foreach ($tmp['a_results_temp'] as $dictK => $resultsV)
 				{
 					/* Get stopwords per dictionary */
 					$a_current_dict_params = gw_get_dict_param($dictK );
@@ -587,7 +587,7 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 	)
 	{
 		$tmp['arCache']['srch_settings'] = unserialize( $tmp['arCache']['srch_settings'] );
-		for ( reset( $tmp['arCache']['srch_settings']['results'] ); list($id_dict, $id_term) = each( $tmp['arCache']['srch_settings']['results'] ); )
+		foreach ($tmp['arCache']['srch_settings']['results'] as $id_dict => $id_term)
 		{
 			gwtk_header( $sys['server_proto'] . $sys['server_host'] .
 					$oHtml->url_normalize(
@@ -608,7 +608,7 @@ function gw_search ( $q, $arDict_Ids, $a_search_params )
 		$tmp['redirect_url'][] = 'note_afterpost=' . urlencode( $gw_this['vars']['note_afterpost'] );
 	}
 	/* */
-	for ( reset( $sys['ar_url_append'] ); list($k, $v) = each( $sys['ar_url_append'] ); )
+	foreach ($sys['ar_url_append'] as $k => $v)
 	{
 		$tmp['redirect_url'][] = $k . '=' . $v;
 	}
@@ -659,7 +659,7 @@ function gw_search_results ( $id_srch, $p, $id_dict = 0 )
 	$id_dict = in_array( $id_dict, $arSql['arDictIds'] ) ? $id_dict : 0;
 	$cnt_dict = 1;
 	/* Go for each dictionary */
-	for ( reset( $arSql['results'] ); list($dictK, $id_terms) = each( $arSql['results'] ); )
+	foreach ($arSql['results'] as $dictK => $id_terms)
 	{
 		$tmp['arDictParam'][$dictK] = gw_get_dict_param($dictK );
 		if ( $cnt_dict == 1 )
@@ -797,7 +797,7 @@ function gw_search_results ( $id_srch, $p, $id_dict = 0 )
 	$oHtml->setTag( 'a', 'style', 'text-decoration:underline' );
 	/* Resort dictionaries in alphabetic order */
 	$arQ['arDictIdsSorted'] = array ( );
-	for ( reset( $arSql['arDictIds'] ); list($k, $v_id_dict) = each( $arSql['arDictIds'] ); )
+	foreach ($arSql['arDictIds'] as $k => $v_id_dict)
 	{
 		$arSql['arDictIdsSorted'][$v_id_dict]['id'] = $tmp['arDictParam'][$v_id_dict]['id'];
 		$arSql['arDictIdsSorted'][$v_id_dict]['title'] = $tmp['arDictParam'][$v_id_dict]['title'];
@@ -809,7 +809,7 @@ function gw_search_results ( $id_srch, $p, $id_dict = 0 )
 	$tmp['dict_href'][3] = 'id_srch=' . $id_srch;
 	$tmp['dict_href'][4] = 'p=1';
 	$cnt = 1;
-	for ( reset( $arSql['arDictIdsSorted'] ); list($k1, $arV) = each( $arSql['arDictIdsSorted'] ); )
+	foreach ($arSql['arDictIdsSorted'] as $k1 => $arV)
 	{
 		$str_found_dict = $k1;
 		/* prepare the list of dictionaries with link to search results */
@@ -846,7 +846,7 @@ function gw_search_results ( $id_srch, $p, $id_dict = 0 )
 	$cnt = 0;
 #	prn_r( $arA );
 	/* For each re-formated results */
-	for ( reset( $arA ); list($k1, $v1) = each( $arA ); )
+	foreach ($arA as $k1 => $v1)
 	{
 		$arDictParam = gw_get_dict_param($v1['d_id'] );
 

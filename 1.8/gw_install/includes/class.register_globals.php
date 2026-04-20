@@ -2,8 +2,8 @@
 
 /**
  * Glossword - glossary compiler (http://glossword.biz/)
- * © 2008-2026 Glossword.biz team <team at glossword dot biz>
- * © 2002-2008 Dmitry N. Shilnikov
+ * Â© 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * Â© 2002-2008 Dmitry N. Shilnikov
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -132,25 +132,7 @@ class tkit_register_globals {
 	 */
     public function fix_slash($v, $level = 0)
 	{
-		if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc())
-		{
-			if (is_array($v))
-			{
-				++$level;
-				if ($level <= $this->max_nesting_level)
-				{
-					foreach ($v as $k1 => $v1)
-					{
-						$v[$k1] = $this->fix_slash($v[$k1], $level);
-					}
-				}
-			}
-			else
-			{
-				$v = stripslashes($v);
-			}
-		}
-		return $v;
+        return $v;
 	}
 	/* */
 	public function do_default(&$n, $v = '')

@@ -77,7 +77,7 @@ class gwForms {
 		{
 			// Do sort attributes in a good manner.
 			ksort($ar);
-			for (reset($ar); list($k, $v) = each($ar);)
+			foreach ($ar as $k => $v)
 			{
 				$str .= ($v != '') ? (' ' . $k . '="' . $v . '"') : '';
 			}
@@ -253,7 +253,7 @@ class gwForms {
 				if (is_array($value))
 				{
 					/* Multiple */
-					for (reset($value); list($kV, $vV) = each($value);)
+					foreach ($value as $kV => $vV)
 					{
 						if (strval($k) == strval($kV))
 						{

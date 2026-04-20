@@ -113,7 +113,7 @@ class gw_addon_visual_themes_admin extends gw_addon
         $str_form .= '<thead><tr><td style="width:' . $v_td1_width . '"></td><td></td></tr></thead><tbody>';
 
         $int_sort = 0;
-        for (reset($vars); list($k, $arV) = each($vars);) {
+        foreach ($vars as $k => $arV) {
             $int_sort += 10;
             $str_form .= '<tr>' .
                 '<td class="td1">' . $arV['settings_key'] .
@@ -205,7 +205,7 @@ function switch2edit(id)
 
         $oForm->setTag('input', 'size', '25');
         $oForm->setTag('input', 'dir', 'ltr');
-        for (reset($vars); list($k, $arV) = each($vars);) {
+        foreach ($vars as $k => $arV) {
             $arV['settings_value'] = preg_replace('/ $/', '&#32;', $arV['settings_value']);
 #			$arV['settings_value'] = preg_replace('/{(\w)/', '{%\\1', $arV['settings_value']);
 #			$arV['settings_value'] = preg_replace('/(\w)}/', '\\1%}', $arV['settings_value']);

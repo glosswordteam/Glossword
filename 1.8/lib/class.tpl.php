@@ -81,7 +81,7 @@ class gwv_template
 	function get_info_files()
 	{
 		$ar = array();
-		for (reset($this->pairsC); list($k, $v) = each($this->pairsC);)
+		foreach ($this->pairsC as $k => $v)
 		{
 			$ar[crc32($v['filename'])] = $v['filename'];
 		}
@@ -171,7 +171,7 @@ class gwv_template
 	function assign($ar = array())
 	{
 		$str = '';
-		for (reset($ar); list($n, $v) = each($ar);)
+		foreach ($ar as $n => $v)
 		{
 			/* $v_parsed = {namespace::template_name} */
 			$this->_parse_var($n);
@@ -300,7 +300,7 @@ class gwv_template
 		$tpl = array();
 		$this->var_last_parsed = '';
 		$tpl['value'] = '';
-		for (reset($this->pairsC); list($k, $arV) = each($this->pairsC);)
+		foreach ($this->pairsC as $k => $arV)
 		{
 			$tpl['value'] .= $arV['filedesc'];
 		}
@@ -309,7 +309,7 @@ class gwv_template
 		if (!$is_cached)
 		{
 			$this->is_cache_write = is_null($cacheKey) ? 0 : 1;
-			for (reset($this->pairsC); list($k, $arV) = each($this->pairsC);)
+			foreach ($this->pairsC as $k => $arV)
 			{
 				$tmp['filename_c'] = './'.$this->path_cache.'/'.$arV['filename']. '.php';
 				if (file_exists($tmp['filename_c']))
@@ -367,7 +367,7 @@ class gwv_template
 		$bpv =& $this->arBlockV[$dynName][];
 		if (is_array($vars))
 		{
-			for (reset($vars); list($k, $v) = each($vars);)
+			foreach ($vars as $k => $v)
 			{
 				@$bpv[$v] = $this->pairsV[$v];
 			}
@@ -375,7 +375,7 @@ class gwv_template
 		$a1 =& $this->arBlockI[$dynName]['childs'];
 		if (is_array($a1))
 		{
-			for (reset($a1); list($k, $child) = each($a1);)
+			foreach ($a1 as $k => $child)
 			{
 				$this->arBlockV[$child][] = 'end';
 			}
@@ -430,7 +430,7 @@ class gwv_template
 		$preg = "/({)([ A-Za-z0-9:\/\-_]+)(})/i";
 		if (preg_match_all($preg, $str, $tmp['tpl_matches']))
 		{
-			for (reset($tmp['tpl_matches'][0]); list($k2, $v2) = each($tmp['tpl_matches'][0]);)
+			foreach ($tmp['tpl_matches'][0] as $k2 => $v2)
 			{
 				$str_key = $tmp['tpl_matches'][2][$k2];
 				$this->_parse_var($str_key);
@@ -504,18 +504,18 @@ class gwv_template_cmd extends gwv_template
 	function get_contents_c($is_delete = 1)
 	{
 		$str = '';
-		for (reset($this->arBlockI); list($block, $info) = each($this->arBlockI);)
+		foreach ($this->arBlockI as $block => $info)
 		{
 			if (isset($info['var']) && is_array($info['var']))
 			{
-				for (reset($info['var']); list($k, $v) = each($info['var']);)
+				foreach ($info['var'] as $k => $v)
 				{
 					$str .= "\$arBlockI[\"$block\"]['var'][] = \"$v\";\n";
 				}
 			}
 			if (isset($info['childs']) && is_array($info['childs']))
 			{
-				for (reset($info['childs']); list($k, $child) = each($info['childs']);)
+				foreach ($info['childs'] as $k => $child)
 				{
 					$str .= "\$arBlockI[\"$block\"]['childs'][] = \"$child\";\n";
 				}

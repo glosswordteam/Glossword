@@ -326,7 +326,7 @@ function gw_sql2defnpreview($arSql)
 		}
 		if (!empty($arDuplicates[$k]))
 		{
-			for (reset($arDuplicates[$k]); list($kD, $arVd) = each($arDuplicates[$k]);)
+			foreach ($arDuplicates[$k] as $kD => $arVd)
 			{
 				/* remove some fields from definition preview */
 #				if (isset($arVd[1])) { unset($arVd[1]); }
@@ -678,7 +678,7 @@ function gw_custom_page($id_page)
 		}
 		for (; list($k2, $v2) = each($arVarPage);)
 		{
-			for (reset($v2); list($k, $v) = each($v2);)
+			foreach ($v2 as $k => $v)
 			{
 				$oTplPage->assign(array($k => $v));
 			}
@@ -1493,7 +1493,7 @@ function getTermParam2($tid = '', $name = '')
 			$sql = $oSqlQ->getQ('get-term-by-name', TBL_WORDLIST, TBL_WORDMAP, $arDictParam['tablename'], $gw_this['vars'][GW_ID_DICT], $word_srch_sql);
 		}
 		$arSql = $oDb->sqlExec($sql, sprintf("%05d", $gw_this['vars'][GW_ID_DICT]), 0);
-		for (reset($arSql); list($arK, $arV) = each($arSql);) // compare founded values (Q) with imported (T)
+		foreach ($arSql as $arK => $arV) // compare founded values (Q) with imported (T)
 		{
 			$isTermExist = 0;
 			// first method, 08 july 2000

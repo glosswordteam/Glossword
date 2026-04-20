@@ -629,7 +629,7 @@ function gw_ParsePre($arParsed, $arPre)
 				else
 				{
 					// Remove current key from definition and all related to key tags
-					for (reset($arParsed); list($targetK, $targetV) = each($arParsed);)
+					foreach ($arParsed as $targetK => $targetV)
 					{
 						/* unset only existed keys */
 						if (isset($targetV[$tmp['elK']]) && is_array($arParsed[$targetK][$tmp['elK']]))

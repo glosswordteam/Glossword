@@ -143,7 +143,7 @@ $sys['uri'] =& $gw_this['vars']['uri'];
 $gw_this['vars']['id'] = urldecode($gw_this['vars']['id']);
 
 /* Depreciated method */
-for (reset($gw_this['vars']); list($k1, $v1) = each($gw_this['vars']);)
+foreach ($gw_this['vars'] as $k1 => $v1)
 {
 	$$k1 = $v1;
 }
@@ -261,7 +261,7 @@ $gw_this['vars']['funcnames'][GW_T_DICT] = isset($gw_this['vars']['funcnames'][G
 /* Replace main page by dictionary page */
 if (!$gw_this['vars'][GW_ID_DICT] && ($gw_this['vars'][GW_ACTION] == ''))
 {
-	for (reset($gw_this['ar_dict_list']); list($kDict, $vDict) = each($gw_this['ar_dict_list']);)
+	foreach ($gw_this['ar_dict_list'] as $kDict => $vDict)
 	{
 		$arDictParam = gw_get_dict_param($vDict['dict_uri']);
 		if (isset($arDictParam['is_dict_as_index']) && $arDictParam['is_dict_as_index'])
@@ -529,7 +529,7 @@ if (isset($gw_this['vars']['srch']['by']) && $gw_this['vars']['srch']['by'] == '
 	//
 	// Set switcher for HTML
 	$arTplVars['srch'][] = array('v:chk_srch_by_dict' => ' checked="checked"' );
-	for (reset($gw_this['ar_dict_list']); list($kDict, $vDict) = each($gw_this['ar_dict_list']);)
+	foreach ($gw_this['ar_dict_list'] as $kDict => $vDict)
 	{
 		if ($gw_this['vars'][GW_ID_DICT] == '0')
 		{
@@ -551,7 +551,7 @@ else if (isset($gw_this['vars']['srch']['by']) && $gw_this['vars']['srch']['by']
 	$arTplVars['srch'][] = array('v:chk_srch_by_topic' => ' checked="checked"' );
 	// Get topic's tree ID
 	$gw_this['arTreeId'] = gw_ctlg_get_tree($gw_this['ar_topics_list'], $gw_this['vars']['id_topic']);
-	for (reset($gw_this['ar_dict_list']); list($kDict, $vDict) = each($gw_this['ar_dict_list']);)
+	foreach ($gw_this['ar_dict_list'] as $kDict => $vDict)
 	{
 		// check if dictionary presents in the selected topic
 		if (isset($gw_this['arTreeId'][$vDict['id_topic']]))

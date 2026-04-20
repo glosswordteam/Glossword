@@ -84,7 +84,7 @@ else
 		/* per each group */
 		if (!isset($v1['children'])) { continue; }
 		$id_group = $oDom->get_attribute('id', $v1['tag'], $v1);
-		for (reset($v1['children']); list($k2, $v2) = each($v1['children']);)
+		foreach ($v1['children'] as $k2 => $v2)
 		{
 			if (!is_array($v2)){ continue; }
 			$q2 = array();

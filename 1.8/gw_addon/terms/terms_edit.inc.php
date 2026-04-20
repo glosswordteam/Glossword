@@ -78,7 +78,7 @@ if (isset($this->gw_this['vars']['arPost']['is_all']))
 			else
 			{
 				/* Post queries */
-				for (reset($ar_q); list($qk, $qv) = each($ar_q);)
+				foreach ($ar_q as $qk => $qv)
 				{
 					$this->oDb->sqlExec($qv);
 				}
@@ -100,7 +100,7 @@ elseif (isset($this->gw_this['vars']['arPost']['ar_id']))
 		$sql = 'UPDATE `%s` SET `is_active` = "1" WHERE `id` IN (%s)'.$sql_where;
 		$sql = sprintf($sql, $arDictParam['tablename'], implode(',', $this->gw_this['vars']['arPost']['ar_id']));
 		$ar_query[] = $sql;
-		for (reset($this->gw_this['vars']['arPost']['ar_id']); list($k1, $id_term) = each($this->gw_this['vars']['arPost']['ar_id']);)
+		foreach ($this->gw_this['vars']['arPost']['ar_id'] as $k1 => $id_term)
 		{
 			/* -- History of changes -- */
 			/* Select History ID for the current term. Latest modification date. */
@@ -119,7 +119,7 @@ elseif (isset($this->gw_this['vars']['arPost']['ar_id']))
 		$sql = 'UPDATE `%s` SET `is_active` = "0" WHERE `id` IN (%s)'.$sql_where;
 		$sql = sprintf($sql, $arDictParam['tablename'], implode(',', $this->gw_this['vars']['arPost']['ar_id']));
 		$ar_query[] = $sql;
-		for (reset($this->gw_this['vars']['arPost']['ar_id']); list($k1, $id_term) = each($this->gw_this['vars']['arPost']['ar_id']);)
+		foreach ($this->gw_this['vars']['arPost']['ar_id'] as $k1 => $id_term)
 		{
 			/* -- History of changes -- */
 			/* Select History ID for the current term. Latest modification date. */
@@ -165,7 +165,7 @@ elseif (isset($this->gw_this['vars']['arPost']['ar_id']))
 			else
 			{
 				/* Post queries */
-				for (reset($ar_q); list($qk, $qv) = each($ar_q);)
+				foreach ($ar_q as $qk => $qv)
 				{
 					$this->oDb->sqlExec($qv);
 				}
@@ -367,7 +367,7 @@ if ($this->gw_this['vars']['post'] == '')
 		$ar_terms = array();
 		if (isset($this->gw_this['vars']['arPost']['ar_id']))
 		{
-			for (reset($this->gw_this['vars']['arPost']['ar_id']); list($k1, $id_term) = each($this->gw_this['vars']['arPost']['ar_id']);)
+			foreach ($this->gw_this['vars']['arPost']['ar_id'] as $k1 => $id_term)
 			{
 				$arTermParam = getTermParam($id_term);
 				$ar_terms[] = $arTermParam['term'];
@@ -450,7 +450,7 @@ if ($this->gw_this['vars']['post'] == '')
 		/* Multiple terms selected */
 		if (isset($this->gw_this['vars']['arPost']['ar_id']))
 		{
-			for (reset($this->gw_this['vars']['arPost']['ar_id']); list($k1, $id_term) = each($this->gw_this['vars']['arPost']['ar_id']);)
+			foreach ($this->gw_this['vars']['arPost']['ar_id'] as $k1 => $id_term)
 			{
 				$oConfirm->setField('hidden', 'arPost[ar_id][]', $id_term);
 			}

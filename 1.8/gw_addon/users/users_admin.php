@@ -364,7 +364,7 @@ document.forms[\'vbform\'][\'submit1\'].click();
 		$cnt = 0;
 		$ar_dict_ids = array();
 
-		for (reset($this->gw_this['ar_dict_list']); list($k, $arDictParam) = each($this->gw_this['ar_dict_list']);)
+		foreach ($this->gw_this['ar_dict_list'] as $k => $arDictParam)
 		{
 			$is_assigned = 0;
 			/* $vars['dictionaries'] is flipped */

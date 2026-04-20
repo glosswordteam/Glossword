@@ -93,7 +93,7 @@ else
 		if (!isset($v1['children'])) { continue; }
 		$id_topic = $oDom->get_attribute('id', $v1['tag'], $v1);
 		/* <entry> */
-		for (reset($v1['children']); list($k2, $v2) = each($v1['children']);)
+		foreach ($v1['children'] as $k2 => $v2)
 		{
 			if (!is_array($v2)){ continue; }
 			switch($v2['tag'])
@@ -104,13 +104,13 @@ else
 					$q1['id_topic'] = $q2['id_topic'] = $id_topic;
 				break;
 				case 'entry':
-					if (!isset($v2['children'])) { continue; }
-					for (reset($v2['children']); list($k3, $v3) = each($v2['children']);)
+					if (!isset($v2['children'])) { continue 2; }
+					foreach ($v2['children'] as $k3 => $v3)
 					{
 						$id_lang = $oDom->get_attribute('xml:lang', 'lang', $v3);
 						/* for each element */
 						if (!is_array($v3) || !isset($v3['children'])) { continue; }
-						for (reset($v3['children']); list($k4, $v4) = each($v3['children']);)
+						foreach ($v3['children'] as $k4 => $v4)
 						{
 							if (trim($v4['tag']) == ''){ continue; }
 							$q2[$v4['tag']] = $v4['value'];

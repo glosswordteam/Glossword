@@ -233,7 +233,7 @@ else
 	{
 #		if (preg_match("/^is_/", $arV['settings_key']))
 		/* Group of theme settings */
-		for ( reset( $vars ); list($k, $v) = each( $vars ); )
+		foreach ($vars as $k => $v)
 		{
 			$q = array ( );
 			$q['date_compiled'] = $this->sys['time_now_gmt_unix'] - 2;
@@ -250,7 +250,7 @@ else
 	}
 	elseif ( $this->gw_this['vars']['w1'] == 'css' )
 	{
-		for ( reset( $vars ); list($k, $v) = each( $vars ); )
+		foreach ($vars as $k => $v)
 		{
 			$vars[$k] = str_replace( '&#032;', '&#32;', $vars[$k] );
 			$vars[$k] = str_replace( array ( '{%', '%}' ), array ( '{', '}' ), $vars[$k] );
@@ -279,7 +279,7 @@ else
 		{
 			$vars['is_active'] = 1;
 		}
-		for ( reset( $vars ); list($k, $v) = each( $vars ); )
+		foreach ($vars as $k => $v)
 		{
 			$q1[$k] = $v;
 		}

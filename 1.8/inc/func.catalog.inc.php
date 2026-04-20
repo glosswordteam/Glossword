@@ -226,7 +226,7 @@ function getDictWordList($w1, $w2, $w3, $id_dict, $p, $is_descr = true, $is_full
 	{
 		return;
 	}
-	for (reset($arA); list($k1, $v1) = each($arA);)
+	foreach ($arA as $k1 => $v1)
 	{
 		/* Collect data for template */
 		if (GW_IS_BROWSE_WEB)
@@ -325,7 +325,7 @@ function getDictArray()
 	}
 	/* Resort using Dictionary ID */
 	$arSqlNew = array();
-	for (reset($arSql); list($k, $v) = each($arSql);)
+	foreach ($arSql as $k => $v)
 	{
 		unset($arSql[$k]);
 		$arSqlNew[$v['id']] = $v;
@@ -349,7 +349,7 @@ function getDictSrch($language = '', $x = 1, $y = 99, $qStrOrder = '', $is_form_
 		{
 			#$arDictMap[0] = '-'.$oL->m('1115').'-';
 		}
-		for (reset($arSql); list($arK, $arV) = each($arSql);)
+		foreach ($arSql as $arK => $arV)
 		{
 			$arDictMap[$arV['id']] = strip_tags($arV['title']);
 		}
@@ -410,7 +410,7 @@ function getDictList($language = '', $dict_nmax = 5, $x = 1, $y = 99, $qStrOrder
 	}
 	$cnt = 0;
 	$strGroupBy = 'tpname';
-	for (reset($arSql); list($arK, $arV) = each($arSql);)
+	foreach ($arSql as $arK => $arV)
 	{
 		switch ($sys['pages_link_mode'])
 		{
