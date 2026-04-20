@@ -292,7 +292,7 @@ else
 			{
 				if ($vars['is_hex'])
 				{
-					for (reset($arV); list($kV, $vV) = each($arV);)
+					foreach ($arV as $kV => $vV)
 					{
 						if (($arV[$kV] != '')
 							&& (($kV == 'dict_settings')||($kV == 'title')||($kV == 'description')||($kV == 'announce'))
@@ -376,7 +376,7 @@ else
 #					}
 					if ($vars['is_hex'])
 					{
-						for (reset($arV); list($kV, $vV) = each($arV);)
+						foreach ($arV as $kV => $vV)
 						{
 							if (($arV[$kV] != '')
 							   && (($kV == 'defn')||($kV == 'term')||($kV == 'term_1')||($kV == 'term_2')||($kV == 'term_3'))
@@ -520,7 +520,7 @@ else
 				{
 				if ($vars['is_hex'])
 				{
-						for (reset($arV); list($kV, $vV) = each($arV);)
+						foreach ($arV as $kV => $vV)
 						{
 							if (($arV[$kV] != '')
 								&& (($kV == 'word_text'))

@@ -80,7 +80,7 @@ else
 #$this->sys['isDebugQ'] = 1;
 		/* Fix on/off options */
 		$arIsV = array ( 'is_active', 'is_auth', 'is_post' );
-		for ( reset( $arFields ); list($k, $v) = each( $arFields ); )
+		foreach ($arFields as $k => $v)
 		{
 			$arIsV[] = 'is_' . $v[0];
 		}

@@ -46,7 +46,7 @@ function gw_dict_list_cnt($vars)
 	$ar_dict_ids = array();
 
 	/* Per each dictionary */
-	for (reset($gw_this['ar_dict_list']); list($id_dict, $arDictParam) = each($gw_this['ar_dict_list']);)
+	foreach ($gw_this['ar_dict_list'] as $id_dict => $arDictParam)
 	{
 		$arDictParam = gw_get_dict_param($id_dict);
 		$ar_dict_ids[] = $arDictParam['id'];
@@ -142,7 +142,7 @@ if ($this->gw_this['vars']['isConfirm'] == '1')
 else
 {
 	/* Check all dictionaries by default */
-	for (reset($this->gw_this['ar_dict_list']); list($k, $arDictParam) = each($this->gw_this['ar_dict_list']);)
+	foreach ($this->gw_this['ar_dict_list'] as $k => $arDictParam)
 	{
 		$arPost['dictionaries'][$arDictParam['id']] = 1;
 	}

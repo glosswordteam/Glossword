@@ -72,7 +72,7 @@ function gw_export_sqltable($tablename)
 	/* */
 	for (; list($arK, $arV) = each($arSql);)
 	{
-		for (reset($arV); list($kV, $vV) = each($arV);)
+		foreach ($arV as $kV => $vV)
 		{
 			if (($arV[$kV] != '') && preg_match('/(word_|abbr_|settings|code|topic|page_|character|term|defn)/', $kV))
 			{
@@ -121,7 +121,7 @@ function gw_backup()
 			$arSql = $oDb->sqlExec($sql);
 
 			/* create valid dictionary list */
-			for (reset($arSql); list($arK, $arV) = each($arSql);)
+			foreach ($arSql as $arK => $arV)
 			{
 				if ($arV['id'] >= $gw_this['vars']['w3'])
 				{
@@ -143,7 +143,7 @@ function gw_backup()
 			$arDictTables = array();
 
 			/* create a new list of not yet updated dictionaries  */
-			for (reset($arSql); list($arK, $arV) = each($arSql);)
+			foreach ($arSql as $arK => $arV)
 			{
 				if ($arV['id'] >= $gw_this['vars']['w3'])
 				{
@@ -201,7 +201,7 @@ function gw_backup()
 		$arStatus[] = array('', $oL->m('1335').': <strong>' . ($gw_cnt_dicts) . '</strong>' );
 	}
 	/* */
-	for (reset($arTables); list($k, $v) = each($arTables);)
+	foreach ($arTables as $k => $v)
 	{
 		$arStatus[] = array($v, gw_export_sqltable($v));
 	}

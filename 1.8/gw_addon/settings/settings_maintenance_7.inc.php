@@ -24,7 +24,7 @@ function gw_get_html_code()
 {
 	global $oFunc, $sys, $oL, $gw_this;
 	$arDictMap = array();
-	for (reset($gw_this['ar_dict_list']); list($arK, $arV) = each($gw_this['ar_dict_list']);)
+	foreach ($gw_this['ar_dict_list'] as $arK => $arV)
 	{
 		$arDictMap[$arV['id']] = strip_tags($arV['title']);
 	}

@@ -296,7 +296,7 @@ else
 			$incr_term = 0;
 #			$arCSV[-1] = 'id';
 			$arDictParam['is_term'] = 1;
-			for (reset($arFields); list($fK, $fV) = each($arFields);)
+			foreach ($arFields as $fK => $fV)
 			{
 				$arCSV[$fV[5]] = $fV[0];
 			}
@@ -307,14 +307,14 @@ else
 			$arCSV = array();
 			$arDuplicates = array(array());
 			/* */
-			for (reset($arSql); list($k, $arV) = each($arSql);)
+			foreach ($arSql as $k => $arV)
 			{
 				$incr_term = $k;
 				$strQ .= '';
 				$arPre = array();
 				$arDuplicates = array(array());
 				/* Init. */
-				for (reset($arFields); list($fK, $fV) = each($arFields);)
+				foreach ($arFields as $fK => $fV)
 				{
 					$arCSV[$incr_term][$fV[5]] = '';
 				}
@@ -328,7 +328,7 @@ else
 				/* */
 				$str_xml = '<term>'.$arV['term'].'</term>';
 				$arPre = gw_array_merge_clobber($arPre, gw_Xml2Array($str_xml. $arV['defn']));
-				for (reset($arFields); list($fK, $fV) = each($arFields);)
+				foreach ($arFields as $fK => $fV)
 				{
 					if ($arPost['td_mode'] == 't')
 					{
@@ -347,7 +347,7 @@ else
 					{
 						case 'defn':
 							$tmpf = array();
-							for (reset($arPre[$fV[0]]); list($kfV, $vfV) = each($arPre[$fV[0]]);)
+							foreach ($arPre[$fV[0]] as $kfV => $vfV)
 							{
 								/* Sometimes there are no definitions */
 								if ($kfV == 0)
@@ -362,10 +362,10 @@ else
 						break;
 						case 'abbr':
 						case 'trns':
-						for (reset($arPre[$fV[0]]); list($kfV, $vfV) = each($arPre[$fV[0]]);)
+						foreach ($arPre[$fV[0]] as $kfV => $vfV)
 						{
 							$ar_vvfV = array();
-							for (reset($vfV); list($kkfV, $vvfV) = each($vfV);)
+							foreach ($vfV as $kkfV => $vvfV)
 							{
 								$str_attributes = '';
 								if (isset($vvfV['attributes']))
@@ -388,10 +388,10 @@ else
 						case 'see':
 						case 'syn':
 						case 'antonym':
-						for (reset($arPre[$fV[0]]); list($kfV, $vfV) = each($arPre[$fV[0]]);)
+						foreach ($arPre[$fV[0]] as $kfV => $vfV)
 						{
 							$ar_vvfV = array();
-							for (reset($vfV); list($kkfV, $vvfV) = each($vfV);)
+							foreach ($vfV as $kkfV => $vvfV)
 							{
 							  	$str_attributes = '';
 								if (isset($vvfV['attributes']) && !empty($vvfV['attributes']) )
@@ -418,10 +418,10 @@ else
 						case 'src':
 						case 'phone':
 						case 'address':
-						for (reset($arPre[$fV[0]]); list($kfV, $vfV) = each($arPre[$fV[0]]);)
+						foreach ($arPre[$fV[0]] as $kfV => $vfV)
 						{
 							$ar_vvfV = array();
-							for (reset($vfV); list($kkfV, $vvfV) = each($vfV);)
+							foreach ($vfV as $kkfV => $vvfV)
 							{
 								$ar_vvfV[] = $vvfV['value'];
 							}
@@ -445,14 +445,14 @@ else
 				/* Secondary definitions */
 				if (!empty($arDuplicates[$incr_term]))
 				{
-					for (reset($arDuplicates[$incr_term]); list($kD, $arVd) = each($arDuplicates[$incr_term]);)
+					foreach ($arDuplicates[$incr_term] as $kD => $arVd)
 					{
-						for (reset($arVd); list($dKv, $dVv) = each($arVd);)
+						foreach ($arVd as $dKv => $dVv)
 						{
 							$arVd[$dKv] = text_parse_csv_column($dVv);
 						}
 						/* fill empty values for secondary definitions */
-						for (reset($arFields); list($fK, $fV) = each($arFields);)
+						foreach ($arFields as $fK => $fV)
 						{
 							if (!isset($arVd[$fV[5]]))
 							{

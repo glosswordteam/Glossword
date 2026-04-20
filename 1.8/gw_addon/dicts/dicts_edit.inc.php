@@ -167,7 +167,7 @@ else
 			'ar_filter_stopwords' => isset($arPost['ar_filter_stopwords']) ? array_flip($arPost['ar_filter_stopwords']) : array(),
 			'ar_filter_specials' => isset($arPost['ar_filter_specials']) ? array_flip($arPost['ar_filter_specials']) : array()
 		);
-		for (reset($arOnOff); list($k, $v) = each($arOnOff);)
+		foreach ($arOnOff as $k => $v)
 		{
 			$arDictNewSettings[$v] = isset($arPost[$v]) ? $arPost[$v] : 0;
 		}

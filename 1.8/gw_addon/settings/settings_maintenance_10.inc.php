@@ -60,7 +60,7 @@ function gw_show_form($vars, $runtime = 0, $arBroken = array(), $arReq = array()
 	$strForm .= '<tr><td style="width:25%"></td><td></td></tr>';
 
 	$arDictMap = array();
-	for (reset($gw_this['ar_dict_list']); list($arK, $arV) = each($gw_this['ar_dict_list']);)
+	foreach ($gw_this['ar_dict_list'] as $arK => $arV)
 	{
 		$arDictMap[$arV['id']] = '[ID: ' .$arV['id'].'] ' . strip_tags($arV['title']);
 	}

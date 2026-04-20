@@ -72,7 +72,7 @@ else
 		$arPost['time_upd'] = preg_replace("/[^0-9]/", '', $arPost['time_upd']);
 		$arPost['int_max_char_defn'] = preg_replace("/[^0-9]/", '', $arPost['int_max_char_defn']);
 		/* */
-		for (reset($arPost); list($k, $v) = each($arPost);)
+		foreach ($arPost as $k => $v)
 		{
 			$q = array();
 			$q['settings_key'] = $k;

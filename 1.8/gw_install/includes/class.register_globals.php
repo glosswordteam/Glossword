@@ -30,7 +30,7 @@ class tkit_register_globals {
     public function register($ar = array())
 	{
 		$tmp['_files'] = $tmp['_cookie'] = array();
-		for (reset($ar); list($k, $v) = each($ar);)
+		foreach ($ar as $k => $v)
 		{
 			if (isset($_POST[$v]) && ($_POST[$v] != ''))
 			{
@@ -119,7 +119,7 @@ class tkit_register_globals {
 						'window.location' => '[removed]',
 						"Redirect\s+302"  => '[removed]'
 					);
-			for (reset($arb); list($k, $v2) = each($arb);)
+			foreach ($arb as $k => $v2)
 			{
 				$v = preg_replace("#".$k."#i", $v2, $v);
 			}

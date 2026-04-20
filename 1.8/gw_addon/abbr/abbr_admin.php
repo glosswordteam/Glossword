@@ -62,7 +62,7 @@ class gw_addon_abbr_admin extends gw_addon
 			}
 		}
 		$ar_topics = array();
-		for (reset($this->ar_groups); list($k, $v) = each($this->ar_groups);)
+		foreach ($this->ar_groups as $k => $v)
 		{
 			$ar_topics[] = $this->oHtml->a(
 					$this->sys['page_admin'] . '?'.GW_ACTION.'='.GW_A_BROWSE.'&'.GW_TARGET.'='.$this->addon_name.'&w1=' . $this->gw_this['vars']['w1'].'&w2=' . $k,
@@ -157,7 +157,7 @@ class gw_addon_abbr_admin extends gw_addon
 
 		$ar_dict = array(0 => $this->oL->m('1113'));
 		/* Per each dictionary */
-		for (reset($this->gw_this['ar_dict_list']); list($k, $arDictParam) = each($this->gw_this['ar_dict_list']);)
+		foreach ($this->gw_this['ar_dict_list'] as $k => $arDictParam)
 		{
 			$ar_dict[$arDictParam['id']] = $arDictParam['title'];
 		}
@@ -400,7 +400,7 @@ class gw_addon_abbr_admin extends gw_addon
 				$ar_languages = $this->gw_this['vars']['ar_languages'];
 				/* Add empty values for other languages */
 				unset($ar_languages[$q1['id_lang']]);
-				for (reset($ar_languages); list($kl, $vl) = each($ar_languages);)
+				foreach ($ar_languages as $kl => $vl)
 				{
 					$q1['id_lang'] = $kl;
 					$q1['abbr_short'] = $q1['abbr_long'] = '';

@@ -45,7 +45,7 @@ function gw_dict_list_cnt($vars)
 	$strForm .= '<tr>';
 	$strForm .= '<td></td><td class="td2"><p class="div">'.$oL->m(1125).'<br />'.$oL->m(1126).'</p>';
 	$arDictMap = array();
-	for (reset($gw_this['ar_dict_list']); list($arK, $arV) = each($gw_this['ar_dict_list']);)
+	foreach ($gw_this['ar_dict_list'] as $arK => $arV)
 	{
 		$arDictMap[$arV['id']] = strip_tags($arV['title']). ' (' .$arV['int_terms'].')';
 	}
@@ -97,7 +97,7 @@ function gw_dict_merge($vars)
 	$arDictParam_target = gw_get_dict_param($vars['id_target']);
 	$id_term = $oDb->NextId($arDictParam_target['tablename'], 'id');
 	$int_terms = 0;
-	for (reset($vars['id_source']); list($k, $id_dict) = each($vars['id_source']);)
+	foreach ($vars['id_source'] as $k => $id_dict)
 	{
 		/* Go for each dictionary
 			1. Add term to Target dictionary
@@ -113,7 +113,7 @@ function gw_dict_merge($vars)
 		$str .= '<br />'.$arDictParam['title'].'...';
 		$sql = 'SELECT * FROM `'.$arDictParam['tablename'].'`';
 		$arSql = $oDb->sqlExec($sql);
-		for (reset($arSql); list($arK, $arV) = each($arSql);)
+		foreach ($arSql as $arK => $arV)
 		{
 			$q1['dict_id'] = $arDictParam_target['id'];
 			$arQ = array();
@@ -136,7 +136,7 @@ function gw_dict_merge($vars)
 			$q2['id_term'] = $q2['term_id'];
 			unset($q2['dict_id'], $q2['term_id']);
 			$arQ[] = gw_sql_update($q2, $sys['tbl_prefix'].'history_terms', sprintf('`id_term` = "%d" AND `id_dict` = "%d"', $id_term_prev, $id_dict));
-			for (reset($arQ); list($kQ, $vQ) = each($arQ);)
+			foreach ($arQ as $kQ => $vQ)
 			{
 				$oDb->sqlExec($vQ);
 			}

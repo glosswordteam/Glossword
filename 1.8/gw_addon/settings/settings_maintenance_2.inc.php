@@ -69,7 +69,7 @@ function gw_optimize_keywords()
 	$arKeyUnused = getUnusedKeywords();
 	$sql_o = 'DELETE FROM '.TBL_WORDLIST.' WHERE word_id IN (\'%s\')';
 	$arKeyId = array();
-	for (reset($arKeyUnused); list($k, $v) = each($arKeyUnused);)
+	foreach ($arKeyUnused as $k => $v)
 	{
 		$arKeyId[] = $v['word_id'];
 	}
@@ -95,7 +95,7 @@ function getUnusedKeywords()
 	global $oDb, $gw_this;
 	$sys['max_wordmap_clear'] = 5000;
 	/* 1.7.0: clear wordmap for terms which are not in dictionaries */
-	for (reset($gw_this['ar_dict_list'] ); list($k, $v) = each($gw_this['ar_dict_list'] );)
+	foreach ($gw_this['ar_dict_list'] as $k => $v)
 	{
 		$sql = 'SELECT wm.term_id FROM `'.TBL_WORDMAP.'` as wm
 				LEFT JOIN `'.$v['tablename'].'` as t
@@ -106,7 +106,7 @@ function getUnusedKeywords()
 				';
 		$arSql = $oDb->sqlExec($sql, '', 0);
 		$ar_term_id = array();
-		for (reset($arSql); list($k2, $v2) = each($arSql);)
+		foreach ($arSql as $k2 => $v2)
 		{
 			$ar_term_id[] = $v2['term_id'];
 		}

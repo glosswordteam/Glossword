@@ -35,7 +35,7 @@ function gw_addon_multilingual_vars_load($filename = '', $obj_tpl)
 		if ( isset($elV1['children']) && is_array($elV1['children']) )
 		{
 			$tmp['xml_varname'] = '';
-			for (reset($elV1['children']) ; list($elK2, $elV2) = each($elV1['children']);)
+			foreach ($elV1['children'] as $elK2 => $elV2)
 			{
 				if (isset($elV2['tag']) && isset($elV2['value']) && ($elV2['tag'] == 'prop'))
 				{

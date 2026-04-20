@@ -80,7 +80,7 @@ class gw_autolinks
 			if (trim($v1) == '') { unset($ar_preg_no[$k1]); continue; }
 			/* copy line */
 			$new_v1 = $v1;
-			for (reset($this->arLinks); list($k2, $v2) = each($this->arLinks);)
+			foreach ($this->arLinks as $k2 => $v2)
 			{
 				$k2 = substr($k2, 3);
 				if (preg_match_all("/".$regexp_l."($k2)".$regexp_r."/u", $new_v1, $ar_preg))

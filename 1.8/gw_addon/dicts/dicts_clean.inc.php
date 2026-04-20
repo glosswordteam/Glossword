@@ -72,7 +72,7 @@ elseif (!$this->gw_this['vars']['id'])
 	$this->str .= '<ul class="gwsql">';
 	$cnt_dict = 0;
 	$ar_allowed_dicts = $this->oSess->user_get('dictionaries');
-	for (reset($this->gw_this['ar_dict_list']); list($k, $v) = each($this->gw_this['ar_dict_list']);)
+	foreach ($this->gw_this['ar_dict_list'] as $k => $v)
 	{
 		if ( $this->oSess->is('is-sys-settings')
 			|| $this->oSess->is('is-dicts')

@@ -131,13 +131,13 @@ else
 		$this->str .= '<li>'.$q1['profile_name'].'</li>';
 		$is_error_xml = 0;
 		/* for each <entry> */
-		for (reset($v1['children']); list($k2, $v2) = each($v1['children']);)
+		foreach ($v1['children'] as $k2 => $v2)
 		{
 			if (!is_array($v2)){ continue; }
 			switch ($v2['tag'])
 			{
 				case 'entry':
-					for (reset($v2['children']); list($k3, $v3) = each($v2['children']);)
+					foreach ($v2['children'] as $k3 => $v3)
 					{
 						if (!is_array($v3)){ continue; }
 						$q2[$v3['tag']] = $v3['value'];
