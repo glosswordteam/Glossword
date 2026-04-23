@@ -40,4 +40,3 @@ if (!defined('IS_CLASS_CI_DB')) {
         }
     }
 }
-?>
