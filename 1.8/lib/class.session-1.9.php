@@ -17,52 +17,52 @@ if (!defined('IN_GW')) {
 }
 class gw_session_1_9
 {
-	var $oDb;
-	var $oL;
-	var $sys;
+	public $oDb;
+	public $oL;
+	public $sys;
 	
 	/* Field name */
-	var $db_user_settings = 'user_settings';
+	public $db_user_settings = 'user_settings';
 		
 	/* Guest User ID */
-	var $id_guest = 1;
-	var $ar_permissions = array();
+	public $id_guest = 1;
+	public $ar_permissions = array();
 	/* User settings */
-	var $is_changed = 0;
-	var $is_closed = 0;
+	public $is_changed = 0;
+	public $is_closed = 0;
 
 	/* Used for creatign Session ID */
-	var $is_use_remote_ip = 0;
-	var $is_use_remote_ua = 0;
-	var $str_secret;
+	public $is_use_remote_ip = 0;
+	public $is_use_remote_ua = 0;
+	public $str_secret;
 
-	var $ar_sess = array();
-	var $ar_user = array();
-	var $id_user;
-	var $id_sess;
-	var $sid;
-	var $url_login;
-	var $url_append_mode;
-	var $uri;
+	public $ar_sess = array();
+	public $ar_user = array();
+	public $id_user;
+	public $id_sess;
+	public $sid;
+	public $url_login;
+	public $url_append_mode;
+	public $uri;
 	/* Garbage collect probability in percent */
-	var $gc_probability = 4;
+	public $gc_probability = 4;
 	/* Session will be expired in `n` seconds (3600 = 1 hour) */
-	var $int_timeout = 3600;
-	var $time_changed;
-	var $time_now_gmt_unix;
+	public $int_timeout = 3600;
+	public $time_changed;
+	public $time_now_gmt_unix;
 	/* Times used in META tag */
-	var $time_refresh = 2;
+	public $time_refresh = 2;
 	/* Messages */
-	var $msg_1 = 'Session expired in case of inactivity.';
-	var $msg_2 = 'Authorization required. Session does not exist.';
-	var $msg_3 = 'You have logged out.';
-	var $msg_4 = 'Authorization required. Session expired or does not exist.';
-	var $msg_5 = 'Passed: %s minutes';
-	var $msg_6 = 'Time to idle: %s minutes';
-	var $db_table_users = '';
-	var $db_table_sessions = '';
+	public $msg_1 = 'Session expired in case of inactivity.';
+	public $msg_2 = 'Authorization required. Session does not exist.';
+	public $msg_3 = 'You have logged out.';
+	public $msg_4 = 'Authorization required. Session expired or does not exist.';
+	public $msg_5 = 'Passed: %s minutes';
+	public $msg_6 = 'Time to idle: %s minutes';
+	public $db_table_users = '';
+	public $db_table_sessions = '';
 
-	function load_settings()
+	public function load_settings()
 	{
 		$vars = array(
 			'msg_1' => $this->oL->m('1342'),
@@ -89,7 +89,7 @@ class gw_session_1_9
 	}
 	/* Access map per action */
 	/* See also users_admin.php */
-	function get_access_names()
+	public function get_access_names()
 	{
 		return array(
 			'is-email' => 0,
@@ -113,7 +113,7 @@ class gw_session_1_9
 	}
 	
 	/* */
-	function is_auth()
+	public function is_auth()
 	{
 		if (!$this->id_user || $this->id_user == $this->id_guest)
 		{
@@ -122,7 +122,7 @@ class gw_session_1_9
 		}
 	}
 	/* */
-	function is_perm($access_name)
+	public function is_perm($access_name)
 	{
 		if (isset($this->ar_permissions[strtoupper($access_name)]) 
 			&& $this->ar_permissions[strtoupper($access_name)])
@@ -138,7 +138,7 @@ class gw_session_1_9
 		return false;
 	}
 	/* */
-	function is($access_name)
+	public function is($access_name)
 	{
 		if (isset($this->ar_permissions[strtoupper($access_name)]) 
 			&& $this->ar_permissions[strtoupper($access_name)])
@@ -150,7 +150,7 @@ class gw_session_1_9
 	}
 
 	/* One function that manages sessions */
-	function sess_init($id_sess = 0)
+	public function sess_init($id_sess = 0)
 	{
 		if ($id_sess)
 		{
@@ -195,7 +195,7 @@ class gw_session_1_9
 		}
 	}
 	/* */
-	function sess_insert($id_user)
+	public function sess_insert($id_user)
 	{
 		if ($id_user == $this->id_guest)
 		{
@@ -224,14 +224,14 @@ class gw_session_1_9
 		}
 	}
 	/* Construct session unique number */
-	function make_session_id()
+	public function make_session_id()
 	{
 		$str_remote_ip = ($this->is_use_remote_ip) ? $this->remote_ip : '';
 		$str_remote_ua = ($this->is_use_remote_ua) ? $this->remote_ua : '';
 		return md5($this->url_login . $this->time_now . $str_remote_ip . $str_remote_ua . mt_rand() . $this->str_secret);
 	}
 	/* */
-	function url($url)
+	public function url($url)
 	{
 		$url = preg_replace("/".$this->sid."=[0-9A-Za-z]/", "", $url);
 		$url = preg_replace("/[&?]+$/", "", $url);
@@ -249,7 +249,7 @@ class gw_session_1_9
 	}
 	
 	/* */
-	function sess_close()
+	public function sess_close()
 	{
 		if ($this->is_closed) { return; }
 		$this->is_closed = 1;
@@ -266,7 +266,7 @@ class gw_session_1_9
 		}
 	}
 	/* */
-	function user_start($id_user)
+	public function user_start($id_user)
 	{
 		$this->id_user = $id_user;
 		/* No session or guest user */
@@ -284,7 +284,7 @@ class gw_session_1_9
 #prn_r( $this->id_user, 'id_user'  );
 	}
 	/* */
-	function user_load_values($id_user, $mode = 'single')
+	public function user_load_values($id_user, $mode = 'single')
 	{
 		$sql = 'SELECT u.* ';
 		$sql .= 'FROM `'.$this->db_table_users.'` AS u ';
@@ -322,7 +322,7 @@ class gw_session_1_9
 		}
 	}
 	/* */
-	function user_register_permissions($sp)
+	public function user_register_permissions($sp)
 	{
 		$ar_user_perm = unserialize($sp);
 		/* No permissions found */
@@ -340,7 +340,7 @@ class gw_session_1_9
 	/**
 	 * Adds a variable to secondary user settings.
 	 */
-	function user_set($varname, $value = '')
+	public function user_set($varname, $value = '')
 	{
 		$this->is_changed = 1;
 		$this->ar_user[$this->db_user_settings][$varname] = $value;
@@ -348,7 +348,7 @@ class gw_session_1_9
 	/**
 	 * Adds a variable to primary user settings.
 	 */
-	function user_set_val($varname, $value = '')
+	public function user_set_val($varname, $value = '')
 	{
 		$this->is_changed = 1;
 		$this->ar_user[$varname] = $value;
@@ -356,7 +356,7 @@ class gw_session_1_9
 	/**
 	 * Gets user settings.
 	 */
-	function user_get($varname = '')
+	public function user_get($varname = '')
 	{
 		if ($varname == '')
 		{
@@ -385,7 +385,7 @@ class gw_session_1_9
 	/**
 	 * Removes a variable from user settings.
 	 */
-	function user_unset($varname = '')
+	public function user_unset($varname = '')
 	{
 		$this->is_changed = 1;
 		if ($varname == '')
@@ -407,7 +407,7 @@ class gw_session_1_9
 		return true;
 	}
 	/* Close user session. Save user settings if needed */
-	function user_close()
+	public function user_close()
 	{
 		if ($this->is_changed)
 		{
@@ -415,7 +415,7 @@ class gw_session_1_9
 		}
 	}
 	/* private function to update user settings */
-	function _user_update()
+	public function _user_update()
 	{
 		$this->ar_user['user_settings'] = serialize($this->ar_user['user_settings']);
 		unset($this->ar_user['is_remember'], $this->ar_user['ua']);
@@ -427,7 +427,7 @@ class gw_session_1_9
 	/**
 	 * Remove session.
 	 */
-	function logout()
+	public function logout()
 	{
 		$sql = 'DELETE ';
 		$sql .= 'FROM `'.$this->db_table_sessions.'` ';
@@ -439,7 +439,7 @@ class gw_session_1_9
 	}
 
 	/* */
-	function user_get_time_seconds()
+	public function user_get_time_seconds()
 	{
 		$t = ($this->user_get('gmt_offset') * 3600);
 		if ($this->user_get('is_dst'))
@@ -448,7 +448,7 @@ class gw_session_1_9
 		}
 		return $t;
 	}
-	function user_get_time()
+	public function user_get_time()
 	{
 		$t = $this->sys['time_now_gmt_unix'] + ($this->user_get('gmt_offset') * 3600);
 		if ($this->user_get('is_dst'))
@@ -458,7 +458,7 @@ class gw_session_1_9
 		return $t;
 	}
 	/* */
-	function auth_info($id_user = '', $username = '', $email = '', $password = '')
+	public function auth_info($id_user = '', $username = '', $email = '', $password = '')
 	{
 		$sql = '';
 		if ($id_user)
@@ -497,7 +497,7 @@ class gw_session_1_9
 	}
 
 	/* Error handing */
-	function error($error_code = 0)
+	public function error($error_code = 0)
 	{
 		
 		/* Remove cookies on eny error */
@@ -549,4 +549,5 @@ class gw_session_1_9
 	
 }
 $sys['class_session'] = 'gw_session_1_9';
+
 

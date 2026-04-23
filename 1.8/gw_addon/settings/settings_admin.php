@@ -11,23 +11,24 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+
 if (!defined('IN_GW')) {
     die('<!-- Not in App -->');
 }
 /* */
 class gw_addon_settings_admin extends gw_addon
 {
-	var $str;
-	var $ar_component = array();
+	public $str;
+	public $ar_component = array();
 	/* Current component name */
-	var $component;
+	public $component;
 	/* Autoexec */
-	function __construct()
+	public function __construct()
 	{
 		$this->init();
 	}
 	/* */
-	function _get_nav()
+	public function _get_nav()
 	{
 		return '<div class="actions-secondary">'.
 			implode(' ', $this->gw_this['ar_actions_list'][$this->component]).
@@ -41,7 +42,7 @@ class gw_addon_settings_admin extends gw_addon
 	 * @return   string  complete HTML-code
 	 * @see textcodetoform(), getFormHeight()
 	 */
-	function get_form($vars, $runtime = 0, $arBroken = array(), $arReq = array())
+	public function get_form($vars, $runtime = 0, $arBroken = array(), $arReq = array())
 	{
 		$topic_mode = 'form';
 		$str_form = '';
@@ -336,7 +337,7 @@ class gw_addon_settings_admin extends gw_addon
 		return $oForm->Output($str_form);
 	}
 	/* Contacting technical support */
-	function get_form_support($vars)
+	public function get_form_support($vars)
 	{
 		$arSql = $this->oDb->sqlExec('SELECT version() AS v');
 
@@ -430,7 +431,7 @@ class gw_addon_settings_admin extends gw_addon
 		return $oForm->Output($str_form);
 	}
 	/* Preview for contacting technical support */
-	function get_form_support_preview($vars)
+	public function get_form_support_preview($vars)
 	{
 		$str = '';
 		$vars['message'] = nl2br($vars['message']);
@@ -487,7 +488,7 @@ class gw_addon_settings_admin extends gw_addon
 		return $oForm->Output($str_form);
 	}
 	/* */
-	function alpha()
+	public function alpha()
 	{
 		global $strR;
 

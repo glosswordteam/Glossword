@@ -11,6 +11,7 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+
 if (!defined('IN_GW')) {
 	die('<!-- Not in App -->');
 }
@@ -21,20 +22,20 @@ if (!defined('IN_GW')) {
 class gw_addon_topic_admin extends gw_addon
 {
 	/* Autoexec */
-	function __construct()
+	public function __construct()
 	{
 		$this->init();
 		/* */
 	}
 	/* */
-	function _get_nav()
+	public function _get_nav()
 	{
 		return '<div class="actions-secondary">'.
 			implode(' ', $this->gw_this['ar_actions_list'][$this->component]).
 			'</div>';
 	}
 	/* */
-	function get_form_topic($vars, $runtime = 0, $ar_broken = array(), $ar_req = array())
+	public function get_form_topic($vars, $runtime = 0, $ar_broken = array(), $ar_req = array())
 	{
 		$str_hidden = '';
 		$str_form = '';
@@ -171,7 +172,7 @@ class gw_addon_topic_admin extends gw_addon
 		return $oForm->Output($str_form);
 	}
 	/* Import and Export */
-	function get_form_export($vars)
+	public function get_form_export($vars)
 	{
 		$str_form = '';
 		/* */
@@ -213,7 +214,7 @@ class gw_addon_topic_admin extends gw_addon
 		return $oForm->Output($str_form);
 	}
 	/* */
-	function export()
+	public function export()
 	{
 		if ($this->gw_this['vars']['post'] == '')
 		{
@@ -306,7 +307,7 @@ class gw_addon_topic_admin extends gw_addon
 		$strR .= $this->str;
 	}
 	/* */
-	function get_form_import($vars)
+	public function get_form_import($vars)
 	{
 		$str_form = '';
 		/* */
@@ -369,7 +370,7 @@ class gw_addon_topic_admin extends gw_addon
 		return $oForm->Output($str_form);
 	}
 	/* */
-	function import()
+	public function import()
 	{
 		$ar_req_fields = array();
 		if ($this->gw_this['vars']['post'] == '')
@@ -488,7 +489,7 @@ class gw_addon_topic_admin extends gw_addon
 		$strR .= $this->str;
 	}
 	/* */
-	function remove()
+	public function remove()
 	{
 		$ar =& $this->gw_this['ar_topics_list'];
 #		$this->sys['isDebugQ'] = 1;
@@ -572,7 +573,7 @@ class gw_addon_topic_admin extends gw_addon
 		$strR .= $this->str;
 	}
 	/* */
-	function alpha()
+	public function alpha()
 	{
 		global $strR;
 		/* Call an action */
@@ -620,3 +621,4 @@ $arPageNumbers['topics_'.GW_A_UPDATE] = '';
 $pathAction = '';
 /* end of file */
 ?>
+

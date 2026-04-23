@@ -25,8 +25,8 @@ if (!defined('IN_GW')) {
 */
 class gw_user_agent 
 {
-	var $remote_ua;
-	function __construct()
+	public $remote_ua;
+	public function __construct()
 	{
 		global $sys;
 		$this->remote_ua = trim(substr(getenv('HTTP_USER_AGENT'), 0, 255));
@@ -37,7 +37,7 @@ class gw_user_agent
 		if (!isset($sys['is_ua_dm'])) { $sys['is_ua_dm'] = 0; }
 	}
 	/* */
-	function get_ua_type()
+	public function get_ua_type()
 	{
 		global $sys;
 		if (preg_match("/(". implode("|",array_keys($this->get_se_alias())) .")+/i", $this->remote_ua ))
@@ -55,7 +55,7 @@ class gw_user_agent
 		}
 	}
 	/* */
-	function get_browser_str($ua = '')
+	public function get_browser_str($ua = '')
 	{
 		if ($ua == '') { $ua = $this->remote_ua; }
 		if (preg_match( "/msie[\/\sa-z]*([\d\.]*)/i", $ua, $m )
@@ -98,7 +98,7 @@ class gw_user_agent
 		return 'Unknown';
 	}
 	/* */
-	function get_os_str($ua = '')
+	public function get_os_str($ua = '')
 	{
 		if ($ua == '') { $ua = $this->remote_ua; }
 		$ar =& $this->get_os();
@@ -114,12 +114,12 @@ class gw_user_agent
 		return 'Unknown';
 	}
 	/* */
-	function get_os()
+	public function get_os()
 	{
 		return array_keys($this->get_os_alias());
 	}
 	/* */
-	function get_browsers()
+	public function get_browsers()
 	{
 		$a = array_merge($this->get_browsers_alias(), $this->get_se_alias());
 		$a = array_merge($a, $this->get_dm_alias());
@@ -127,7 +127,7 @@ class gw_user_agent
 		return array_keys($a);
 	}
 	/* */
-	function get_browsers_alias()
+	public function get_browsers_alias()
 	{
 		return array (
 // Common web browsers text (IE and Netscape must not be in this list)
@@ -213,7 +213,7 @@ class gw_user_agent
 );
 	}
 	/* */
-	function get_se_alias()
+	public function get_se_alias()
 	{
 		return array (
 'irlbot'=>'IRLbot',
@@ -226,7 +226,7 @@ class gw_user_agent
 		);
 	}
 	/* */
-	function get_dm_alias()
+	public function get_dm_alias()
 	{
 		return array (
 '22acidownload'=>'22AciDownload',
@@ -246,7 +246,7 @@ class gw_user_agent
 		);
 	}
 	/* */
-	function get_os_alias()
+	public function get_os_alias()
 	{
 		return array (
 "windows nt 6\.0"=>'Windows Vista',
@@ -286,5 +286,4 @@ $oUa = new gw_user_agent;
 define('REMOTE_UA', $oUa->remote_ua);
 #prn_r( $oUa->get_browser_str( $oUa->remote_ua ) );
 #prn_r( $oUa->get_os_str( $oUa->remote_ua ) );
-/* end of file */
-?>
+

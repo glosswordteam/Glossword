@@ -44,39 +44,39 @@ if (!defined('IS_CLASS_TPL'))
 class gwv_template
 {
 	/* all variables are internal */
-	var $path_source = 'tpl';
-	var $path_cache = 'cache/tpl';
-	var $pairsC = array();
-	var $pairsV = array();
-	var $pairsN = array(); /* virtual namespaces */
-	var $namespace_default = 'GW';
-	var $tag_start = '';
-	var $tag_end = '';
-	var $tag_noncached = 'non';
-	var $is_tpl_show_names = 0;
-	var $o_encoding = 'utf-8';
-	var $ua_type = 'is_ua_client';
+	public $path_source = 'tpl';
+	public $path_cache = 'cache/tpl';
+	public $pairsC = array();
+	public $pairsV = array();
+	public $pairsN = array(); /* virtual namespaces */
+	public $namespace_default = 'GW';
+	public $tag_start = '';
+	public $tag_end = '';
+	public $tag_noncached = 'non';
+	public $is_tpl_show_names = 0;
+	public $o_encoding = 'utf-8';
+	public $ua_type = 'is_ua_client';
 	/* default caching rules */
-	var $is_cache_write = 0;
-	var $is_cache_parse = 0;
-	var $is_in_cache = 1;
-	var $is_cache_keypresent = 0;
+	public $is_cache_write = 0;
+	public $is_cache_parse = 0;
+	public $is_in_cache = 1;
+	public $is_cache_keypresent = 0;
 	/* default blocks */
-	var $arBlockV = array();
-	var $arBlockC = array();
-	var $arBlockI = array();
-	var $arChilds = array();
-	var $arNamespaces = array();
-	var $curLevel = 0;
-	var $arBlockPos = array();
-	var $varsRun = array();
+	public $arBlockV = array();
+	public $arBlockC = array();
+	public $arBlockI = array();
+	public $arChilds = array();
+	public $arNamespaces = array();
+	public $curLevel = 0;
+	public $arBlockPos = array();
+	public $varsRun = array();
 	/* */
-	var $ua_number = false;
+	public $ua_number = false;
 
 // --------------------------------------------------------
 // Autostart
 // --------------------------------------------------------
-	function __construct()
+	public function __construct()
 	{
 		$this->namespace_default = 'GW';
 		$this->oCmd = new gwv_template_cmd();
@@ -85,7 +85,7 @@ class gwv_template
 // Supply functions
 // --------------------------------------------------------
 	/* */
-	function get_info_files()
+	public function get_info_files()
 	{
 		$ar = array();
 		foreach ($this->pairsC as $k => $v)
@@ -97,14 +97,14 @@ class gwv_template
 	/**
 	 * @access  public
 	 */
-	function set_path_src($dir)
+	public function set_path_src($dir)
 	{
 		$this->path_source = $dir;
 	}
 	/**
 	 * @access  public
 	 */
-	function set_path_cache($dir)
+	public function set_path_cache($dir)
 	{
 		$this->path_cache = $dir;
 	}
@@ -112,7 +112,7 @@ class gwv_template
 	 * External load file function
 	 * @global $objFunc
 	 */
-	function _file_load($filename)
+	public function _file_load($filename)
 	{
 		global $oFunc;
 		return $oFunc->file_get_contents($filename);
@@ -121,7 +121,7 @@ class gwv_template
 	 * External save file function
 	 * @global $objFunc
 	 */
-	function _file_save($filename, $str, $mode = "w")
+	public function _file_save($filename, $str, $mode = "w")
 	{
 		global $oFunc;
 		return $oFunc->file_put_contents($filename, $str, $mode);
@@ -129,7 +129,7 @@ class gwv_template
 	/**
 	 *
 	 */
-	function _parse_var(&$n)
+	public function _parse_var(&$n)
 	{
 		/* normalize template names using current namespace */
 		$arParts = explode("::", $n);
@@ -154,7 +154,7 @@ class gwv_template
 	}
 // --------------------------------------------------------
 	/* $ar - the list of files */
-	function define($ar = array())
+	public function define($ar = array())
 	{
 		foreach ((is_array($ar) ? $ar : array()) as $tplName => $filename)
 		{
@@ -175,7 +175,7 @@ class gwv_template
 		}
 	}
 	/* */
-	function assign($ar = array())
+	public function assign($ar = array())
 	{
 		$str = '';
 		foreach ($ar as $n => $v)
@@ -201,7 +201,7 @@ class gwv_template
 		return $str;
 	}
 	/* */
-	function _compile($tplName)
+	public function _compile($tplName)
 	{
 		/* call commands class file */
 		$this->oCmd->_reset();
@@ -267,7 +267,7 @@ class gwv_template
 		return $strInternal;
 	}
 
-	function _e($v)
+	public function _e($v)
 	{
 		$tmp['var'] = '';
 		if ( $this->isNoCachedVar($v) && !$this->is_cache_parse && $this->is_cache_keypresent )
@@ -300,7 +300,7 @@ class gwv_template
 			echo $tmp['var'];
 		}
 	}
-	function parse($varName = '', $cacheKey = NULL)
+	public function parse($varName = '', $cacheKey = NULL)
 	{
 		// start
 		ob_start();
@@ -367,7 +367,7 @@ class gwv_template
 	 *
 	 * @access public
 	 */
-	function parseDynamic($dynName)
+	public function parseDynamic($dynName)
 	{
 		$this->_parse_var($dynName);
 		$vars =& $this->arBlockI[$dynName]['var'];
@@ -389,7 +389,7 @@ class gwv_template
 		}
 	}
 	/* */
-	function _dRun($dynName)
+	public function _dRun($dynName)
 	{
 		static $dyn;
 		# Writing cached file
@@ -433,7 +433,7 @@ class gwv_template
 		return true;
 	}
 	/* */
-	function _dEndHook()
+	public function _dEndHook()
 	{
 		# Writing cached file
 		if (!$this->is_in_cache && !$this->is_cache_parse && $this->is_cache_keypresent)
@@ -443,7 +443,7 @@ class gwv_template
 		}
 	}
 	/* */
-	function output($varName = NULL)
+	public function output($varName = NULL)
 	{
 		global $oFunc;
 		if (is_null($varName))
@@ -480,7 +480,7 @@ class gwv_template
 		return $str;
 	}
 	/* @access public */
-	function gw_text_replace_vars($t = '', $ar = array(), $is_keep = 0)
+	public function gw_text_replace_vars($t = '', $ar = array(), $is_keep = 0)
 	{
 		$arCmd = array();
 		$arRpl = array();
@@ -501,11 +501,11 @@ class gwv_template
 		return $t;
 	}
 	/* */
-	function _halt($str)
+	public function _halt($str)
 	{
 		print '<br />[Template class: ' . $str . ']';
 	}
-	function isNoCachedVar($varName)
+	public function isNoCachedVar($varName)
 	{
 		return (substr($varName, 0, 3) == 'non');
 	}
@@ -515,12 +515,12 @@ class gwv_template
 class gwv_template_cmd extends gwv_template
 {
 	/* */
-	function __construct()
+	public function __construct()
 	{
 		$this->_reset();
 	}
 	/* */
-	function _reset()
+	public function _reset()
 	{
 		$this->namespace_default = 'GW';
 		$this->arBlockV = array();
@@ -533,7 +533,7 @@ class gwv_template_cmd extends gwv_template
 		$this->curLevel = 0;
 	}
 	/* */
-	function get_contents_c($is_delete = 1)
+	public function get_contents_c($is_delete = 1)
 	{
 		$str = '';
 		foreach ($this->arBlockI as $block => $info)
@@ -560,7 +560,7 @@ class gwv_template_cmd extends gwv_template
 		return $str;
 	}
 	/* */
-	function _var($v)
+	public function _var($v)
 	{
 		$this->_parse_var($v);
 		if ($currBlock = @end($this->arBlockC))
@@ -570,12 +570,12 @@ class gwv_template_cmd extends gwv_template
 		return '<'.'?php $this->_e("'.$v.'");?>';
 	}
 	/* shorthand for dynamic() */
-	function d($dynName)
+	public function d($dynName)
 	{
 		return $this->dynamic($dynName);
 	}
 	/* */
-	function dynamic($dynName)
+	public function dynamic($dynName)
 	{
 		$this->_parse_var($dynName);
 		if (@end($this->arBlockC))
@@ -590,12 +590,12 @@ class gwv_template_cmd extends gwv_template
 		return '<'.'?php while ($this->_dRun("'.$dynName.'")) : ?>'.CRLF;
 	}
 	/* shorthand for dynamicEnd() */
-	function _dEnd()
+	public function _dEnd()
 	{
 		return $this->dynamicEnd();
 	}
 	/* */
-	function dynamicEnd()
+	public function dynamicEnd()
 	{
 		array_pop($this->arBlockC);
 		return '<'.'?php $this->_dEndHook(); endwhile; ?>'.CRLF;
@@ -603,4 +603,4 @@ class gwv_template_cmd extends gwv_template
 }
 $oTpl = new gwv_template();
 }
-?>
+

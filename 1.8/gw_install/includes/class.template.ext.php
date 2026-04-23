@@ -122,7 +122,7 @@ class tkit_template extends gwv_template
         $o->oFunc->file_put_contents($this->path_cache . '/' . $mode . '-' . $filename . '.php', $str, 'w');
     }
 
-    function _compile($tplName)
+    public function _compile($tplName)
     {
         $this->oCmd->_reset();
         $tmp = [];

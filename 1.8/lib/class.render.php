@@ -25,54 +25,54 @@ if (!defined('IN_GW')) {
 
 class gw_render extends gw_htmlforms
 {
-	var $is_html_preview = 0;
-	var $tag_abbr   = 'acronym'; // 'abbr' for XHTML 2.0
-	var $tag_trns   = 'acronym'; // 'abbr' for XHTML 2.0
+	public $is_html_preview = 0;
+	public $tag_abbr   = 'acronym'; // 'abbr' for XHTML 2.0
+	public $tag_trns   = 'acronym'; // 'abbr' for XHTML 2.0
 	// <trsp> tag
-	var $prepend_trsp  = '<span class="trsp">[';
-	var $split_trsp    = '; ';
-	var $append_trsp  = ']</span>';
+	public $prepend_trsp  = '<span class="trsp">[';
+	public $split_trsp    = '; ';
+	public $append_trsp  = ']</span>';
 	// <abbr> tag
-	var $prepend_abbr  = '';
-	var $postlang_abbr = '&#32;';
-	var $split_abbr    = '; <br />';
-	var $append_abbr   = '<br />';
+	public $prepend_abbr  = '';
+	public $postlang_abbr = '&#32;';
+	public $split_abbr    = '; <br />';
+	public $append_abbr   = '<br />';
 	// <trns> tag
-	var $prepend_trns  = '';
-	var $postlang_trns = '&#32;';
-	var $split_trns    = '; <br />';
-	var $append_trns   = '';
+	public $prepend_trns  = '';
+	public $postlang_trns = '&#32;';
+	public $split_trns    = '; <br />';
+	public $append_trns   = '';
 	// <usg> tag
-	var $prepend_usg   = '<dl><dt>';
-	var $split_usg     = '</dt><dt>';
-	var $append_usg    = '</dt></dl>';
+	public $prepend_usg   = '<dl><dt>';
+	public $split_usg     = '</dt><dt>';
+	public $append_usg    = '</dt></dl>';
 	// <see> and <syn> tags
-	var $prepend_see   = '';
-	var $split_see     = ', ';
-	var $append_see    = '';
+	public $prepend_see   = '';
+	public $split_see     = ', ';
+	public $append_see    = '';
 	// other tags
-	var $split_src     = ', ';
-	var $split_address = ', ';
-	var $split_phone   = ', ';
-	var $tag_stress_rule  = '<span class="stress">|</span>';
+	public $split_src     = ', ';
+	public $split_address = ', ';
+	public $split_phone   = ', ';
+	public $tag_stress_rule  = '<span class="stress">|</span>';
 	// internal switches, do not change
-	var $is_br_begin   = 0;
-	var $is_plural     = 0;
+	public $is_br_begin   = 0;
+	public $is_plural     = 0;
 	// available functions
-	var $arFuncList = array(
+	public $arFuncList = array(
 					   'make_xml_term' => 1, 'make_xml_trsp' => 1, 'make_xml_defn' => 1,
 					   'make_xml_abbr' => 1, 'make_xml_trns' => 1, 'make_xml_audio' => 1,
 					   'make_xml_syn'  => 1, 'make_xml_antonym' => 1, 'make_xml_see'  => 1,
 					   'make_xml_usg'  => 1, 'make_xml_src'  => 1, 'make_xml_address' => 1, 'make_xml_phone'  => 1
 					  );
-	var $arFuncList_html = array(
+	public $arFuncList_html = array(
 					   'make_html_term' => 1, 'make_html_trsp' => 1, 'make_html_defn' => 1,
 					   'make_html_abbr' => 1, 'make_html_trns' => 1, 'make_html_audio' => 1,
 					   'make_html_syn'  => 1, 'make_html_antonym' => 1, 'make_html_see'  => 1,
 					   'make_html_usg'  => 1, 'make_html_src'  => 1, 'make_html_address' => 1, 'make_html_phone'  => 1
 					  );
 	/* Autoexec */
-	function __construct()
+	public function __construct()
 	{
 		global $oSess, $oDb, $oSqlQ, $oL, $oHtml, $oFunc, $oTpl;
 		global $sys, $gw_this, $ar_theme;
@@ -86,7 +86,7 @@ class gw_render extends gw_htmlforms
 		$this->sys =& $sys;
 		$this->ar_theme =& $ar_theme;
 	}
-	function tag2field_xml($fieldname, $ar = array())
+	public function tag2field_xml($fieldname, $ar = array())
 	{
 		$fieldname = strtolower($fieldname);
 		$funcname = 'make_xml_' . $fieldname;
@@ -99,7 +99,7 @@ class gw_render extends gw_htmlforms
 			return $this->$funcname($fieldname, $ar);
 		}
 	}
-	function tag2field_html($fieldname, $ar = array())
+	public function tag2field_html($fieldname, $ar = array())
 	{
 		$fieldname = strtolower($fieldname);
 		$funcname = 'make_html_' . $fieldname;
@@ -110,22 +110,22 @@ class gw_render extends gw_htmlforms
 	}
 
 	//
-	function make_xml_term($fieldname, $ar = array())
+	public function make_xml_term($fieldname, $ar = array())
 	{
 #		$s = $this->objDom->get_content($this->arEl[$fieldname][0]);
 #		return $s;
 	}
-	function make_html_term($fieldname, $ar = array())
+	public function make_html_term($fieldname, $ar = array())
 	{
 		return '';
 	}
 	//
-	function make_xml_trsp($fieldname, $ar = array(), $tag = 'trsp')
+	public function make_xml_trsp($fieldname, $ar = array(), $tag = 'trsp')
 	{
 		return $this->make_xml_set_array2textarea($fieldname, $ar, 'trsp');
 	}
 	//
-	function make_html_trsp($fieldname, $ar = array(), $tag = 'trsp')
+	public function make_html_trsp($fieldname, $ar = array(), $tag = 'trsp')
 	{
 		$tmp['strxml'] = $tmp['str'] = '';
 		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
@@ -157,7 +157,7 @@ class gw_render extends gw_htmlforms
 		
 	}
 	/* 26 feb 2008: attached files */
-	function make_html_audio($fieldname, $ar = array(), $tag = 'audio')
+	public function make_html_audio($fieldname, $ar = array(), $tag = 'audio')
 	{
 		$tmp['strhtml'] = $tmp['str'] = '';
 		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
@@ -183,7 +183,7 @@ class gw_render extends gw_htmlforms
 		}
 		return $tmp['strhtml'];
 	}
-	function make_xml_audio($fieldname, $ar = array(), $tag = 'audio')
+	public function make_xml_audio($fieldname, $ar = array(), $tag = 'audio')
 	{
 		$tmp['strxml'] = $tmp['str'] = '';
 		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
@@ -212,7 +212,7 @@ class gw_render extends gw_htmlforms
 		return $tmp['strxml'];
 	}
 	/* */
-	function make_xml_defn($fieldname, $ar = array())
+	public function make_xml_defn($fieldname, $ar = array())
 	{
 		$tmp['strxml'] = '';
 
@@ -263,7 +263,7 @@ class gw_render extends gw_htmlforms
 		}
 		return $tmp['strxml'];
 	}
-	function make_html_defn($fieldname, $ar = array())
+	public function make_html_defn($fieldname, $ar = array())
 	{
 		$tmp['strhtml'] = $tmp['br'] = '';
 		//
@@ -354,7 +354,7 @@ class gw_render extends gw_htmlforms
 		return $tmp['strhtml'];
 	}
 	/* */
-	function make_xml_abbr($fieldname, $ar = array(), $tag = 'abbr')
+	public function make_xml_abbr($fieldname, $ar = array(), $tag = 'abbr')
 	{
 		$tmp['strxml'] = '';
 		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
@@ -384,7 +384,7 @@ class gw_render extends gw_htmlforms
 		}
 		return $tmp['strxml'];
 	}
-	function make_xml_trns($fieldname, $ar = array(), $tag = 'trns')
+	public function make_xml_trns($fieldname, $ar = array(), $tag = 'trns')
 	{
 		$tmp['strxml'] = '';
 		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
@@ -416,7 +416,7 @@ class gw_render extends gw_htmlforms
 		return $tmp['strxml'];
 	}
 	/* HTML-code for abbreviations */
-	function make_html_abbr ($fieldname, $ar = array(), $tag = 'abbr')
+	public function make_html_abbr ($fieldname, $ar = array(), $tag = 'abbr')
 	{
 		global $oDb, $oSqlQ;
 		global $gw_this, $arDictParam;
@@ -510,48 +510,48 @@ class gw_render extends gw_htmlforms
 		return $tmp['strhtml'];
 	}
 	/* */
-	function make_html_trns($fieldname, $ar = array(), $tag = 'trns')
+	public function make_html_trns($fieldname, $ar = array(), $tag = 'trns')
 	{
 		return $this->make_html_abbr($fieldname, $ar, $tag);
 	}
 	//
-	function make_xml_usg($fieldname, $ar = array())
+	public function make_xml_usg($fieldname, $ar = array())
 	{
 		return $this->make_xml_set_array2textarea($fieldname, $ar, 'usg');
 	}
-	function make_html_usg($fieldname, $ar = array())
+	public function make_html_usg($fieldname, $ar = array())
 	{
 		return $this->make_html_set_array2textarea($fieldname, $ar, 'usg');
 	}
 	//
-	function make_xml_src($fieldname, $ar = array())
+	public function make_xml_src($fieldname, $ar = array())
 	{
 		return $this->make_xml_set_textarea($fieldname, $ar, 'src');
 	}
-	function make_html_src($fieldname, $ar = array())
+	public function make_html_src($fieldname, $ar = array())
 	{
 		return $this->make_html_set_textarea($fieldname, $ar, 'src');
 	}
 	//
-	function make_xml_address($fieldname, $ar = array())
+	public function make_xml_address($fieldname, $ar = array())
 	{
 		return $this->make_xml_set_textarea($fieldname, $ar, 'address');
 	}
-	function make_html_address($fieldname, $ar = array())
+	public function make_html_address($fieldname, $ar = array())
 	{
 		return $this->make_html_set_textarea($fieldname, $ar, 'address');
 	}
 	//
-	function make_xml_phone($fieldname, $ar = array())
+	public function make_xml_phone($fieldname, $ar = array())
 	{
 		return $this->make_xml_set_textarea($fieldname, $ar, 'phone');
 	}
-	function make_html_phone($fieldname, $ar = array())
+	public function make_html_phone($fieldname, $ar = array())
 	{
 		return $this->make_html_set_textarea($fieldname, $ar, 'phone');
 	}
 	//
-	function make_xml_see($fieldname, $ar = array(), $tag = 'see')
+	public function make_xml_see($fieldname, $ar = array(), $tag = 'see')
 	{
 		$tmp['strxml'] = $tmp['str'] = '';
 		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
@@ -599,17 +599,17 @@ class gw_render extends gw_htmlforms
 		return $tmp['strxml'];
 	}
 	/* */
-	function make_xml_syn($fieldname, $ar = array())
+	public function make_xml_syn($fieldname, $ar = array())
 	{
 		return $this->make_xml_see($fieldname, $ar, 'syn');
 	}
 	/* */
-	function make_xml_antonym($fieldname, $ar = array())
+	public function make_xml_antonym($fieldname, $ar = array())
 	{
 		return $this->make_xml_see($fieldname, $ar, 'antonym');
 	}
 	/* */
-	function make_html_see($fieldname, $ar = array(), $tag = 'see')
+	public function make_html_see($fieldname, $ar = array(), $tag = 'see')
 	{
 		global $oHtml;
 		$tmp['strxml'] = $tmp['str'] = '';
@@ -648,16 +648,16 @@ class gw_render extends gw_htmlforms
 		}
 		return $tmp['strxml'];
 	}
-	function make_html_syn($fieldname, $ar = array(), $tag = 'syn')
+	public function make_html_syn($fieldname, $ar = array(), $tag = 'syn')
 	{
 		return $this->make_html_see($fieldname, $ar, $tag);
 	}
-	function make_html_antonym($fieldname, $ar = array(), $tag = 'antonym')
+	public function make_html_antonym($fieldname, $ar = array(), $tag = 'antonym')
 	{
 		return $this->make_html_see($fieldname, $ar, $tag);
 	}
 	//
-	function make_xml_set_textarea($fieldname, $ar = array(), $tag)
+	public function make_xml_set_textarea($fieldname, $ar = array(), $tag)
 	{
 		$tmp['strxml'] = $tmp['str'] = '';
 		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
@@ -680,7 +680,7 @@ class gw_render extends gw_htmlforms
 		return $tmp['strxml'];
 	}
 	//
-	function make_html_set_textarea($fieldname, $ar = array(), $tag)
+	public function make_html_set_textarea($fieldname, $ar = array(), $tag)
 	{
 		$tmp['str'] = '';
 		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
@@ -710,7 +710,7 @@ class gw_render extends gw_htmlforms
 		return $tmp['str'];
 	}
 	//
-	function make_xml_set_array2textarea($fieldname, $ar = array(), $tag)
+	public function make_xml_set_array2textarea($fieldname, $ar = array(), $tag)
 	{
 		/* */
 		$tmp['strform'] = $tmp['str'] = '';
@@ -742,7 +742,7 @@ class gw_render extends gw_htmlforms
 		return $tmp['str'];
 	}
 
-	function make_html_set_array2textarea($fieldname, $ar = array(), $tag)
+	public function make_html_set_array2textarea($fieldname, $ar = array(), $tag)
 	{
 		/* */
 		$tmp['str'] = '';
@@ -795,7 +795,7 @@ class gw_render extends gw_htmlforms
 	 * @param   array  $arPre Fields content structure
 	 * @return  string   XML-code (for database)
 	 */
-	function array_to_xml($arPre)
+	public function array_to_xml($arPre)
 	{
 		$strXml = '';
 		$t = new gw_timer;
@@ -827,7 +827,7 @@ class gw_render extends gw_htmlforms
 	 * @param   array  $arPre Fields content structure
 	 * @return  string   HTML-code (for website)
 	 */
-	function array_to_html($arPre)
+	public function array_to_html($arPre)
 	{
 		global $oHtml;
 		$strHtml = '';

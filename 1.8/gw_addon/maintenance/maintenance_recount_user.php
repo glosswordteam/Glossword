@@ -11,6 +11,7 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+
 if (!defined('IN_GW')) {
 	die('<!-- Not in App -->');
 }
@@ -22,14 +23,14 @@ include($sys['path_addon'].'/class.gw_addon.php');
 /* */
 class gw_addon_recount_user extends gw_addon
 {
-	var $addon_name = 'recount_user';
+	public $addon_name = 'recount_user';
 	/* Autoexec */
-	function __construct()
+	public function __construct()
 	{
 		$this->init_m();
 	}
 	/* */
-	function _recount()
+	public function _recount()
 	{
 		$sql = 'SELECT user_id, count(*) AS n
 				FROM `'.$this->sys['tbl_prefix'].'map_user_to_term`
@@ -47,7 +48,7 @@ class gw_addon_recount_user extends gw_addon
 		}
 	}
 	/* */
-	function alpha()
+	public function alpha()
 	{
 		if ((mt_rand() % 100) < $this->sys['prbblty_tasks'])
 		{
@@ -55,7 +56,7 @@ class gw_addon_recount_user extends gw_addon
 		}
 	}
 	/* */
-	function omega()
+	public function omega()
 	{
 	}
 }
@@ -64,5 +65,3 @@ $oM = new gw_addon_recount_user;
 $oM->alpha();
 $oM->omega();
 unset($oM);
-/* end of file */
-?>

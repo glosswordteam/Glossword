@@ -34,17 +34,17 @@
 
 class htmlRenderCells
 {
-    var $cellAlign = "";
-    var $cellClass = "";
-    var $tBorder = 0;
-    var $X = 1;
-    var $Y = 99;
-    var $ar = array();
-    var $totalItems = '';
-    var $page = 1;
-    var $tClass = '';
+    public $cellAlign = "";
+    public $cellClass = "";
+    public $tBorder = 0;
+    public $X = 1;
+    public $Y = 99;
+    public $ar = array();
+    public $totalItems = '';
+    public $page = 1;
+    public $tClass = '';
 
-    function RowsCols($numCols, $numRows, $col, $row, $pages=0)
+    public function RowsCols($numCols, $numRows, $col, $row, $pages=0)
     {
         $numStart = $num = "0";
         for ($i=1; $i <= $numRows; $i++)
@@ -58,7 +58,7 @@ class htmlRenderCells
         return $numStart;
     }
 
-function RenderCells()
+public function RenderCells()
 {
     $href = "";
     $str = "";

@@ -20,13 +20,13 @@ include($sys['path_addon'] . '/class.gw_addon.php');
 class gw_addon_feedback extends gw_addon
 {
 
-	var $str_before;
-	var $str_after;
-	var $int_max_length = 4096;
-	var $str;
-	var $html_title;
+	public $str_before;
+	public $str_after;
+	public $int_max_length = 4096;
+	public $str;
+	public $html_title;
 	/* Autoexec */
-	function __construct()
+	public function __construct()
 	{
 		$this->init();
 	}
@@ -34,7 +34,7 @@ class gw_addon_feedback extends gw_addon
 	/* */
 
 
-	function get_form_feedback ( $vars, $runtime = 0, $ar_broken = array ( ), $ar_req = array ( ) )
+	public function get_form_feedback ( $vars, $runtime = 0, $ar_broken = array ( ), $ar_req = array ( ) )
 	{
 
 		$str_hidden = '';
@@ -215,7 +215,7 @@ class gw_addon_feedback extends gw_addon
 	/* */
 
 
-	function alpha ()
+	public function alpha ()
 	{
 		global $str;
 
@@ -403,7 +403,7 @@ class gw_addon_feedback extends gw_addon
 	/* */
 
 
-	function make_html_title ( $old_html_title = '' )
+	public function make_html_title ( $old_html_title = '' )
 	{
 		return ($this->html_title ? $this->html_title : $old_html_title);
 	}
@@ -411,7 +411,7 @@ class gw_addon_feedback extends gw_addon
 	/* */
 
 
-	function omega ()
+	public function omega ()
 	{
 		$this->oTpl->addVal( 'block:feedback', $this->str );
 #		$this->oTpl->addVal( 'block:feedback', htmlspecialchars($this->str).$this->str);
@@ -442,3 +442,4 @@ $arV['page_title'] = $oFeedback->make_html_title( $arV['page_title'] );
 
 /* end of file */
 ?>
+

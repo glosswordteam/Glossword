@@ -17,13 +17,13 @@ if (!defined('IN_GW')) {
 /* */
 class gw_addon_users_admin extends gw_addon
 {
-	var $str;
-	var $ar = array();
-	var $ar_component = array();
+	public $str;
+	public $ar = array();
+	public $ar_component = array();
 	/* Current component name */
-	var $component;
+	public $component;
 	/* Autoexec */
-	function __construct()
+	public function __construct()
 	{
 		$this->init();
 
@@ -64,7 +64,7 @@ class gw_addon_users_admin extends gw_addon
 		}
 	}
 	/* */
-	function _get_nav()
+	public function _get_nav()
 	{
 		return '<div class="actions-secondary">'.
 			implode(' ', $this->gw_this['ar_actions_list'][$this->component]).
@@ -73,7 +73,7 @@ class gw_addon_users_admin extends gw_addon
 	/**
 	 * HTML-form for an action or a component
 	 */
-	function get_form_user($vars, $runtime = 0, $ar_broken = array(), $ar_req = array())
+	public function get_form_user($vars, $runtime = 0, $ar_broken = array(), $ar_req = array())
 	{
 		$str_hidden = '';
 		$str_form = '';
@@ -534,7 +534,7 @@ document.forms[\'vbform\'][\'submit1\'].click();
 		return $oForm->Output($str_form);
 	}
 	/* */
-	function alpha()
+	public function alpha()
 	{
 		global $strR;
 		/* Call an action */
@@ -581,3 +581,4 @@ $oAddonAdm->alpha();
 $pathAction = '';
 /* end of file */
 ?>
+

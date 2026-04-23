@@ -41,42 +41,42 @@ class gw_html {
 // Default variables
 
 	/* do parse through `htmlspecialchars' function before to output */
-	var $is_htmlspecialchars = 0;
+	public $is_htmlspecialchars = 0;
 	/* :cool: setup custom open tag! */
-	var $tagOpen    = '<';
+	public $tagOpen    = '<';
 	/* :cool: setup custom close tag!*/
-	var $tagClose   = '>';
+	public $tagClose   = '>';
 	/* default attributes for tags */
-	var $tags = array('a' => array('href' => ''));
+	public $tags = array('a' => array('href' => ''));
 	/* current virtual directory name */
-	var $server_dir = '';
+	public $server_dir = '';
 
 // --------------------------------------------------------
 // mod_rewrite configuration, for Apache webservers only
 
-	var $ar_except = array('admin');
+	public $ar_except = array('admin');
 	/* Append Session ID */
-	var $id_sess_name = 's';
-	var $id_sess = 0;
-	var $is_append_sid = 0;
-	var $ar_url_append = array();
+	public $id_sess_name = 's';
+	public $id_sess = 0;
+	public $is_append_sid = 0;
+	public $ar_url_append = array();
 	/* Do rebuild URL parameters for <a href="">  */
-	var $is_mod_rewrite = 0;
+	public $is_mod_rewrite = 0;
 	/* The rules to rebuild URL parameters.
 	   rule `array('/a/id/')' will always convert `?a=go&id=1 into `/go/1/'
 	   rule `array('a=view' => '/a/id/')' will convert `?a=view&id=1' into `/view/1/'
 	   only when `a' is `view'. */
-	var $mod_rewrite_rule = array('/a/id/');
+	public $mod_rewrite_rule = array('/a/id/');
 	/* String to add at the end of URL, /a/id/123.xhtml */
-	var $mod_rewrite_suffix = '.xhtml';
+	public $mod_rewrite_suffix = '.xhtml';
 	/* String to add at the end of URL, /a/index.xhtml */
-	var $mod_rewrite_index = 'index.xhtml';
+	public $mod_rewrite_index = 'index.xhtml';
 
 // --------------------------------------------------------
 // Support functions
 
 	/* */
-	function setTag($tag, $variable, $value)
+	public function setTag($tag, $variable, $value)
 	{
 		/* exclude bad rules */
 		if ($tag == 'a' && $variable == 'target') /* no `target' attribute in XHTML 1.1 */
@@ -90,7 +90,7 @@ class gw_html {
 		}
 	}
 	/* */
-	function unsetTag($tag, $var = '')
+	public function unsetTag($tag, $var = '')
 	{
 		if (isset($this->tags[$tag][$var]))
 		{
@@ -102,12 +102,12 @@ class gw_html {
 		}
 	}
 	/* */
-	function setVar($var, $value)
+	public function setVar($var, $value)
 	{
 		$this->$var = $value;
 	}
 	/* */
-	function unsetVar($var)
+	public function unsetVar($var)
 	{
 		if (isset($this->$var))
 		{
@@ -115,7 +115,7 @@ class gw_html {
 		}
 	}
 	/* */
-	function paramValue($ar, $delimeter = ' ', $frame = '"')
+	public function paramValue($ar, $delimeter = ' ', $frame = '"')
 	{
 		$str = '';
 		if (is_array($ar))
@@ -134,7 +134,7 @@ class gw_html {
 	}
 
 	/* */
-	function url_normalize($url)
+	public function url_normalize($url)
 	{
 		$url_new = '';
 		/* Do normalize URL in a good manner. */
@@ -236,7 +236,7 @@ class gw_html {
 
 
 	/* */
-	function url_dir2str($url)
+	public function url_dir2str($url)
 	{
 		global $sys;
 		$url = urldecode($url);
@@ -283,7 +283,7 @@ class gw_html {
 	 * @param array  $arQ URL parameters
 	 * @param string $str mod_rewrite Rule
 	 */
-	function url_rule2dir($arQ, $str)
+	public function url_rule2dir($arQ, $str)
 	{
 		$url = '';
 		$arRule = explode('/', $str);
@@ -337,7 +337,7 @@ class gw_html {
 	 * @param array  $arP URL parameters
 	 * @param array $str mod_rewrite Rule
 	 */
-	function url_rule2str($arP, $arRule)
+	public function url_rule2str($arP, $arRule)
 	{
 		$url = '';
 		reset($arRule);
@@ -396,20 +396,20 @@ class gw_html {
  * Tags functions
  * ----------------------------------------------------- */
 	/* */
-	function tag_open($t, $arAttr = array())
+	public function tag_open($t, $arAttr = array())
 	{
 		$t = preg_replace("/[^a-zA-Z0-9_:]/", '', $t);
 		$extras = $this->paramValue($arAttr);
 		return sprintf($this->tagOpen. '%s%s' .$this->tagClose, $t, $extras);
 	}
 	/* */
-	function tag_close($t)
+	public function tag_close($t)
 	{
 		$t = preg_replace("/[^a-zA-Z0-9_:]/", '', $t);
 		return $this->tagOpen.'/'.$t.$this->tagClose;
 	}
 	/* */
-	function a($url, $text = '', $title = '')
+	public function a($url, $text = '', $title = '')
 	{
 		$this->setTag( 'a', 'href', $this->url_normalize($url) );
 		$this->setTag( 'a', 'title', htmlspecialchars($title) );
@@ -422,7 +422,7 @@ class gw_html {
 				);
 	}
 	/* */
-	function input($name = '', $value = '')
+	public function input($name = '', $value = '')
 	{
 		$this->setTag('input', 'value', $value);
 		$this->setTag('input', 'name', $name);
@@ -435,7 +435,7 @@ class gw_html {
 				);
 	}
 	/* */
-	function img($src = '', $alt = '')
+	public function img($src = '', $alt = '')
 	{
 		if ($src != '')
 		{
@@ -454,7 +454,7 @@ class gw_html {
 				);
 	}
 	/* */
-	function table()
+	public function table()
 	{
 		$extras = $this->paramValue($this->tags['table']);
 		return $this->_results(
@@ -473,7 +473,7 @@ class gw_html {
 	 * @access  private
 	 * @return  string
 	 */
-	function _results($str)
+	public function _results($str)
 	{
 		if ($this->is_htmlspecialchars)
 		{

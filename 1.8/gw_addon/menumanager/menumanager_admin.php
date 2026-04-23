@@ -11,23 +11,24 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+
 if (!defined('IN_GW')) {
     die('<!-- Not in App -->');
 }
 /* */
 class gw_addon_menumanager_admin extends gw_addon
 {
-	var $str;
-	var $ar_component = array();
+	public $str;
+	public $ar_component = array();
 	/* Current component name */
-	var $component;
+	public $component;
 	/* Autoexec */
-	function __construct($str)
+	public function __construct($str)
 	{
 		$this->init();
 	}
 	/* */
-	function _get_nav()
+	public function _get_nav()
 	{
 		return '<div class="actions-secondary">'.
 			implode(' ', $this->gw_this['ar_actions_list'][$this->component]).
@@ -37,7 +38,7 @@ class gw_addon_menumanager_admin extends gw_addon
 	/**
 	 * HTML-form for an action or a component
 	 */
-	function get_form($vars, $runtime = 0, $ar_broken = array(), $ar_req = array())
+	public function get_form($vars, $runtime = 0, $ar_broken = array(), $ar_req = array())
 	{
 		$str_hidden = '';
 		$str_form = '';
@@ -348,7 +349,7 @@ gw_menumanager_get_option(\'menu-item-name\', gw_getElementById(\'arPost_id_acti
 		return $oForm->Output($str_form);
 	}
 	/* */
-	function alpha()
+	public function alpha()
 	{
 		global $strR;
 

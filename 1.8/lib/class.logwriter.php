@@ -29,27 +29,27 @@ if (!defined('IS_CLASS_LOGWRITE'))
 	
 class gw_logwriter
 {
-	var $remote_ip = 0;
-	var $remote_ua = '';
-	var $remote_ref = '';
-	var $current_date;
-	var $current_time;
-	var $path_logdir;
-	var $file_ex = '.log';
-	var $str_delim = ' ';
-	var $str_endline = "\n";
+	public $remote_ip = 0;
+	public $remote_ua = '';
+	public $remote_ref = '';
+	public $current_date;
+	public $current_time;
+	public $path_logdir;
+	public $file_ex = '.log';
+	public $str_delim = ' ';
+	public $str_endline = "\n";
 	/* */
-	function __construct($path_logdir = 'logs')
+	public function __construct($path_logdir = 'logs')
 	{
 		$this->path_logdir = $path_logdir;
 	}
 	/* */
-	function get_filename($dirname = 'default')
+	public function get_filename($dirname = 'default')
 	{
 		return $this->path_logdir.'/'.$dirname.'/'.$dirname.'_'.date("Y-m-d").$this->file_ex;
 	}
 	/* */
-	function get_str($str = '')
+	public function get_str($str = '')
 	{
 		$this->current_date = date("Ymd");
 		$this->current_time = date("His");
@@ -73,7 +73,7 @@ class gw_logwriter
 		return implode($this->str_delim, $arLog) . $this->str_endline;
 	}
 	/* */
-	function make_str($arLog)
+	public function make_str($arLog)
 	{
 		ksort($arLog);
 		$arReplace = array('%2F' => '/', '%3A' => ':', '%3F' => '?', '%3D' => '=', '%26' => '&');
@@ -92,3 +92,4 @@ $tmp['time'][__FILE__] = ($tmp['endtime'] - $tmp['start_time']);
 }
 /* end of file */
 ?>
+

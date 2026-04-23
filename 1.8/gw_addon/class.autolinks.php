@@ -21,22 +21,22 @@ if (!defined('IN_GW')) {
  */
 class gw_autolinks
 {
-	var $arLinks = array();
-	var $path_to_file = 'gw_xml/autolinks/words.txt';
-	var $is_abbr = 1;
-	var $is_url = 1;
-	var $str_splitter = ' = ';
-	var $str_abbreviation_tag = 'acronym';
+	public $arLinks = array();
+	public $path_to_file = 'gw_xml/autolinks/words.txt';
+	public $is_abbr = 1;
+	public $is_url = 1;
+	public $str_splitter = ' = ';
+	public $str_abbreviation_tag = 'acronym';
 	/* for <html> or [bbcode] tags */
-	var $regexp_no = array('html' => '<[div|span|p](?:[^>]|\n)*>', 'bbcode' => '\[(?:[^\]]|\n)*\]');
-	var $regexp_id = 'html';
+	public $regexp_no = array('html' => '<[div|span|p](?:[^>]|\n)*>', 'bbcode' => '\[(?:[^\]]|\n)*\]');
+	public $regexp_id = 'html';
 	/* */
-	function init($filename = '')
+	public function init($filename = '')
 	{
 		$this->load_file($filename);
 	}
 	/* */
-	function load_file($filename = '')
+	public function load_file($filename = '')
 	{
 		$filename = ($filename == '') ? $this->path_to_file : $filename;
 		$arLines = array();
@@ -68,7 +68,7 @@ class gw_autolinks
 		krsort($this->arLinks);
 	}
 	/* */
-	function autolink($t)
+	public function autolink($t)
 	{
 		/* Autolinks */
 		$regexp_l = "([^=][ \"\',\.;\(\[\]\/\n]|^)";

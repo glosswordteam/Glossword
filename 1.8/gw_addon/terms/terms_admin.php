@@ -11,24 +11,25 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+
 if (!defined('IN_GW')) {
 	die('<!-- Not in App -->');
 }
 /* */
 class gw_addon_terms_admin extends gw_addon
 {
-	var $str;
-	var $ar = array();
-	var $ar_component = array();
+	public $str;
+	public $ar = array();
+	public $ar_component = array();
 	/* Current component name */
-	var $component;
+	public $component;
 	/* Autoexec */
-	function __construct()
+	public function __construct()
 	{
 		$this->init();
 	}
 	/* */
-	function _get_nav()
+	public function _get_nav()
 	{
 		global $arDictParam, $arTermParam;
 		$this->oHtml->setTag('a', 'class', 'ext');
@@ -88,7 +89,7 @@ class gw_addon_terms_admin extends gw_addon
 			'</div>';
 	}
 	/* */
-	function get_dates($db_table)
+	public function get_dates($db_table)
 	{
 		$arSql = $this->oDb->sqlExec( $this->oSqlQ->getQ('get-date-mm', $db_table) );
 		$strA = array('max' => time(), 'min' => 0);
@@ -108,7 +109,7 @@ class gw_addon_terms_admin extends gw_addon
 		return $strA;
 	}
 	/* HTML-form for Export */
-	function get_form_export($vars)
+	public function get_form_export($vars)
 	{
 		$str_form = '';
 		/* */
@@ -181,7 +182,7 @@ class gw_addon_terms_admin extends gw_addon
 		return $oForm->Output($str_form);
 	}
 	/* */
-	function get_form_term($vars, $runtime = 0, $ar_broken = array(), $ar_req = array())
+	public function get_form_term($vars, $runtime = 0, $ar_broken = array(), $ar_req = array())
 	{
 		global $arDictParam, $arFields, $arTermParam;
 		global $oDom;
@@ -336,7 +337,7 @@ function switch2edit(id)
 		return $oForm->Output($str_form);
 	}
 	/* */
-	function alpha()
+	public function alpha()
 	{
 		global $strR;
 		/* Call an action */
@@ -384,3 +385,4 @@ $arPageNumbers['terms_'.GW_A_UPDATE] = '';
 $pathAction = '';
 /* end of file */
 ?>
+

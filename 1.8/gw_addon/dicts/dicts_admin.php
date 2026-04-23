@@ -18,14 +18,14 @@ if (!defined('IN_GW')) {
 class gw_addon_dicts_admin extends gw_addon
 {
 	/* Current component name */
-	var $component;
+	public $component;
 	/* Autoexec */
-	function __construct()
+	public function __construct()
 	{
 		$this->init();
 	}
 	/* */
-	function _get_nav()
+	public function _get_nav()
 	{
 		/* The list of profiles */
 		$arSql = $this->oDb->sqlRun($this->oSqlQ->getQ('get-vkbd-profiles-adm'), $this->component);
@@ -48,7 +48,7 @@ class gw_addon_dicts_admin extends gw_addon
 	/**
 	 * HTML-form for a profile
 	 */
-	function get_form_dict($vars, $runtime = 0, $ar_broken = array(), $ar_req = array())
+	public function get_form_dict($vars, $runtime = 0, $ar_broken = array(), $ar_req = array())
 	{
 		global $topic_mode, $arFields, $gw_this;
 		$topic_mode = 'form';
@@ -546,7 +546,7 @@ class gw_addon_dicts_admin extends gw_addon
 	}
 
 	/* */
-    function alpha()
+    public function alpha()
     {
         global $strR;
         /* Call an action */
@@ -593,3 +593,4 @@ $oAddonAdm = new gw_addon_dicts_admin;
 $oAddonAdm->alpha();
 /* Do not load old components */
 $pathAction = '';
+

@@ -41,7 +41,7 @@ class gw_addon_visual_themes_admin extends gw_addon
     /* */
 
 
-    function get_tpl_pages($id_theme)
+    public function get_tpl_pages($id_theme)
     {
         $ar_theme_gp = [];
         $url_part    = $this->sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . $this->component . '&tid=' . $id_theme;
@@ -73,7 +73,7 @@ class gw_addon_visual_themes_admin extends gw_addon
     /* */
 
 
-    function get_form_tpl($vars, $runtime = 0, $ar_broken = [], $ar_req = [])
+    public function get_form_tpl($vars, $runtime = 0, $ar_broken = [], $ar_req = [])
     {
         $str_hidden  = '';
         $str_form    = '';
@@ -151,7 +151,7 @@ class gw_addon_visual_themes_admin extends gw_addon
     /* */
 
 
-    function get_form_theme($vars, $runtime = 0, $ar_broken = [], $ar_req = [])
+    public function get_form_theme($vars, $runtime = 0, $ar_broken = [], $ar_req = [])
     {
         $str_hidden  = '';
         $str_form    = '';
@@ -330,7 +330,7 @@ function switch2edit(id)
     /* */
 
 
-    function get_form_export($vars)
+    public function get_form_export($vars)
     {
         $str_form = '';
         /* */
@@ -395,7 +395,7 @@ function switch2edit(id)
     }
 
 
-    function get_form_import($vars)
+    public function get_form_import($vars)
     {
         $str_form = '';
         /* */
@@ -476,7 +476,7 @@ function switch2edit(id)
     /* */
 
 
-    function alpha()
+    public function alpha()
     {
         global $strR;
         /* Call an action */

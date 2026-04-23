@@ -91,14 +91,14 @@ function file_readDirF($strDir, $ex = "(.*)")
 /* Glossword 1.9: Mail messages */
 class tkit_mail
 {
-	var $oTpl;
-	var $oFunc;
-	var $oL;
-	var $sys;
-	var $tpl_name;
-	var $h_mailer = 'Glossword';
+	public $oTpl;
+	public $oFunc;
+	public $oL;
+	public $sys;
+	public $tpl_name;
+	public $h_mailer = 'Glossword';
 	/* Autoexec */
-	function __construct($tpl_name)
+	public function __construct($tpl_name)
 	{
 		global $oFunc, $oL, $sys;
 		$this->oFunc =& $oFunc;
@@ -109,7 +109,7 @@ class tkit_mail
 		$this->oTpl->init('gw_admin');
 	}
 	/* Compose message */
-	function create_message($subject, $body)
+	public function create_message($subject, $body)
 	{
 		$body = $this->oFunc->mb_wordwrap($body, 70, CRLF);
 		/* Set internal Template class */
@@ -132,7 +132,7 @@ class tkit_mail
 	 *
 	 * @return  boolean True if success.
 	 */
-	function send($from_name, $from_email, $to_name, $to_email, $subject, $body, $is_debug = 0)
+	public function send($from_name, $from_email, $to_name, $to_email, $subject, $body, $is_debug = 0)
 	{
 		$from = '=?utf-8?B?'.base64_encode($from_name). '?= <'.$from_email.'>';
 		$to = '=?utf-8?B?'.base64_encode($to_name). '?= <'.$to_email.'>';
@@ -173,5 +173,3 @@ class tkit_mail
 	}
 }
 
-
-?>

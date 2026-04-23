@@ -23,13 +23,13 @@ if (!defined('IN_GW')) {
 //
 class gw_fields_extension
 {
-	var $curElementId = '';
+	public $curElementId = '';
 
-	function __construct($field_type)
+	public function __construct($field_type)
 	{
 
 	}
-	function get_js($fieldname, $id_element)
+	public function get_js($fieldname, $id_element)
 	{
 	 	$tmp['strJs'] = '<script type="text/javascript">/*<![CDATA[*/';
 	 	$tmp['strJs'] .= '
@@ -44,7 +44,7 @@ function dummy(parameter)
 		return $tmp['strJs'];
 	}
 
-	function get_html($fieldname, $id_element)
+	public function get_html($fieldname, $id_element)
 	{
 		global $oHtml;
 		$tmp['strHtml'] = '';
@@ -56,3 +56,4 @@ function dummy(parameter)
 }
 /* end of file */
 ?>
+

@@ -2,8 +2,8 @@
 
 /**
  * Glossword - glossary compiler (http://glossword.biz/)
- * © 2008-2026 Glossword.biz team <team at glossword dot biz>
- * © 2002-2008 Dmitry N. Shilnikov
+ * Â© 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * Â© 2002-2008 Dmitry N. Shilnikov
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,47 +21,47 @@ if (!defined('IN_GW')) {
  * @version $Id: class.forms.php 531 2008-07-09 19:20:16Z glossword_team $
  */
 class gwForms {
-	var $title              = '';
-	var $action             = 'post.php';
-	var $align_buttons      = 'right';
-	var $arReq              = array();
-	var $enctype            = 'application/x-www-form-urlencoded';
-	var $method             = 'post';
-	var $formbgcolor        = 'DDD';
-	var $formbordercolor    = '444';
-	var $formbordercolorL   = '#FFF';
-	var $formname           = 'vbform';
-	var $formvalue          = 'none';
-	var $formwidth          = '100%';
-	var $isButtonDel        = 0;
-	var $isButtonHelp       = 0;
-	var $isButtonCancel     = 1;
-	var $isButtonSubmit     = 1;
-	var $onclickCancel      = 'history.back(-1);document.getElementById(\'vbcontrol\').style.visibility=\'hidden\'';
-	var $onclickSubmit      = 'document.getElementById(\'vbcontrol\').style.visibility=\'hidden\'';
-	var $str                = '';
-	var $strNotes           = '&#160;';
-	var $submitcancel       = ' Cancel ';
-	var $submitdel          = ' Remove ';
-	var $submitdelname      = 'remove';
-	var $submitok           = ' OK ';
-	var $arLtr              = array();
-	var $charset            = 'utf-8';
-	var $is_htmlspecialchars= 0;
-	var $cnt_submit         = 0;
-	var $cnt_cancel         = 0;
-	var $cnt_delete         = 0;
+	public $title              = '';
+	public $action             = 'post.php';
+	public $align_buttons      = 'right';
+	public $arReq              = array();
+	public $enctype            = 'application/x-www-form-urlencoded';
+	public $method             = 'post';
+	public $formbgcolor        = 'DDD';
+	public $formbordercolor    = '444';
+	public $formbordercolorL   = '#FFF';
+	public $formname           = 'vbform';
+	public $formvalue          = 'none';
+	public $formwidth          = '100%';
+	public $isButtonDel        = 0;
+	public $isButtonHelp       = 0;
+	public $isButtonCancel     = 1;
+	public $isButtonSubmit     = 1;
+	public $onclickCancel      = 'history.back(-1);document.getElementById(\'vbcontrol\').style.visibility=\'hidden\'';
+	public $onclickSubmit      = 'document.getElementById(\'vbcontrol\').style.visibility=\'hidden\'';
+	public $str                = '';
+	public $strNotes           = '&#160;';
+	public $submitcancel       = ' Cancel ';
+	public $submitdel          = ' Remove ';
+	public $submitdelname      = 'remove';
+	public $submitok           = ' OK ';
+	public $arLtr              = array();
+	public $charset            = 'utf-8';
+	public $is_htmlspecialchars= 0;
+	public $cnt_submit         = 0;
+	public $cnt_cancel         = 0;
+	public $cnt_delete         = 0;
 	/**
 	 *
 	 */
-	function setTag($tag, $var, $value)
+	public function setTag($tag, $var, $value)
 	{
 		if ($tag != '')
 		{
 			$this->tags[$tag][$var] = $value;
 		}
 	}
-	function unsetTag($tag, $var = '')
+	public function unsetTag($tag, $var = '')
 	{
 		if (isset($this->tags[$tag][$var]))
 		{
@@ -75,7 +75,7 @@ class gwForms {
 	/**
 	 *
 	 */
-	function htmlParamValue($ar)
+	public function htmlParamValue($ar)
 	{
 		$str = '';
 		if (is_array($ar))
@@ -90,18 +90,18 @@ class gwForms {
 		return $str;
 	} // end of htmlParamValue()
 	/* */
-	function Set($varname, $value)
+	public function Set($varname, $value)
 	{
 		$this->$varname = $value;
 	}
-	function text_field2id($t)
+	public function text_field2id($t)
 	{
 		$t = preg_replace("/[^a-zA-Z0-9-_]/", "_", $t);
 		$t = preg_replace("/_{2,}/" , "_", $t);
 		return $t;
 	}
 	/* */
-	function field($formtype = 'input', $formname = '', $value = '', $textareaheight = 2, $array = '', $autofocus = 0)
+	public function field($formtype = 'input', $formname = '', $value = '', $textareaheight = 2, $array = '', $autofocus = 0)
 	{
 		global $oFunc;
 		$str = $strForm = '';
@@ -289,7 +289,7 @@ class gwForms {
 		return $str;
 	} // end of field();
 	/* */
-	function Output($formedhtml = "")
+	public function Output($formedhtml = "")
 	{
 		$str = "";
 		$ar = array();
@@ -346,7 +346,7 @@ class gwForms {
 		return $str;
 	}
 	/* Get HTML-code for buttons */
-	function get_button($b)
+	public function get_button($b)
 	{
 		switch ($b)
 		{

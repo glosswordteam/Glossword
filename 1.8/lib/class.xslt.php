@@ -26,12 +26,12 @@ if (!defined('IS_CLASS_GWXSLT'))
 
 class gw_xslt {
 
-	var $is_xslt_create = '';
-	var $is_xml_parse   = '';
-	var $encoding       = 'UTF-8';
-	var $method         = "xml";
+	public $is_xslt_create = '';
+	public $is_xml_parse   = '';
+	public $encoding       = 'UTF-8';
+	public $method         = "xml";
 	   
-	function __construct()
+	public function __construct()
 	{
 		global $oL;
 		$this->is_xslt_create = function_exists('xslt_create');
@@ -42,12 +42,12 @@ class gw_xslt {
 		}
 	}
 	
-	function xslt_process($xml, $xslt)
+	public function xslt_process($xml, $xslt)
 	{
 
 	}	
 
-	function parse($strXmlData = "", $strXslData = "")
+	public function parse($strXmlData = "", $strXslData = "")
 	{
 		if ($strXmlData == ''){ $strXmlData = $this->getXmlData(); }
 		if ($strXslData == ''){ $strXslData = $this->getXslData(); }
@@ -55,12 +55,12 @@ class gw_xslt {
 		$this->xslt_process($strXmlData, $strXslData);    
 	}
 
-	function getXmlData()
+	public function getXmlData()
 	{
 		$strXmlData = '<'.'?xml version="1.0"'.'?><body> Body </body>';
 		return $strXmlData;
 	}
-	function getXslData()
+	public function getXslData()
 	{
 		$strXslData = '<xsl:stylesheet
   version="1.0"
@@ -80,7 +80,7 @@ class gw_xslt {
 
 
 	
-	function showError($level, $msg)
+	public function showError($level, $msg)
 	{
 		// Error levels:
 		// 1 - critical
@@ -94,6 +94,3 @@ class gw_xslt {
 
 }
 
-
-
-?>

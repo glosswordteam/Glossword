@@ -22,30 +22,30 @@ if (!defined('IN_GW')) {
  */
 class gw_htmlforms extends gwForms
 {
-	var $Gsys     = array();
-	var $Gtmp     = array('strform' => '', 'str' => '');
-	var $oL       = array();
-	var $objDom   = '';
-	var $objDict  = '';
-	var $oFieldExt  = array();
-	var $arFields = array();
-	var $arEl     = array();
-	var $is_abbr_short = 0; // [ 0 - abbreviation | 1 - abbr.   ]
+	public $Gsys     = array();
+	public $Gtmp     = array('strform' => '', 'str' => '');
+	public $oL       = array();
+	public $objDom   = '';
+	public $objDict  = '';
+	public $oFieldExt  = array();
+	public $arFields = array();
+	public $arEl     = array();
+	public $is_abbr_short = 0; // [ 0 - abbreviation | 1 - abbr.   ]
 
 	// available functions
-	var $arFuncList = array(
+	public $arFuncList = array(
 					   'make_term' => 1, 'make_trsp' => 1, 'make_defn' => 1,
 					   'make_abbr' => 1, 'make_trns' => 1, 'make_audio' => 1,
 					   'make_syn'  => 1, 'make_antonym'  => 1, 'make_see'  => 1,
 					   'make_usg'  => 1, 'make_src'  => 1, 'make_address' => 1, 'make_phone'  => 1
 					  );
 	// autostart
-	function __construct()
+	public function __construct()
 	{
 		// load trns
 		// load abbr
 	}
-	function tag2field($fieldname, $ar = array())
+	public function tag2field($fieldname, $ar = array())
 	{
 		$fieldname = strtolower($fieldname);
 		$funcname = 'make_' . $fieldname;
@@ -55,7 +55,7 @@ class gw_htmlforms extends gwForms
 		}
 	}
 	//
-	function html_editor_make_toolbar($id = 0, $html_add = '', $html_remove = '')
+	public function html_editor_make_toolbar($id = 0, $html_add = '', $html_remove = '')
 	{
 		global $oFunc;
 		$this->unsetTag('input');
@@ -157,7 +157,7 @@ class gw_htmlforms extends gwForms
 		return $tmp['str'];
 	}
 	//
-	function make_term($fieldname, $ar = array())
+	public function make_term($fieldname, $ar = array())
 	{
 		global $oFunc;
 		if (!isset($this->arEl[$fieldname]))
@@ -252,7 +252,7 @@ class gw_htmlforms extends gwForms
 		return $tmp['strform'];
 	}
 	/* */
-	function make_audio($fieldname, $ar = array())
+	public function make_audio($fieldname, $ar = array())
 	{
 		$tmp['strform'] = '';
 		$tmp['strform'] .= '<tr class="'.$this->Gtmp['cssTrClass'].'">';
@@ -293,12 +293,12 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		return $tmp['strform'];
 	}
 	/* */
-	function make_trsp($fieldname, $ar = array())
+	public function make_trsp($fieldname, $ar = array())
 	{
 		return $this->make_set_array2textarea($fieldname, $ar);
 	}
 	//
-	function make_trsp_ext($fieldname, $ar)
+	public function make_trsp_ext($fieldname, $ar)
 	{
 		$str = '';
 		if (isset($this->Gsys['is_field_extensions']) && $this->Gsys['is_field_extensions'])
@@ -316,7 +316,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		return $str;
 	}
 	//
-	function make_defn($fieldname, $ar = array())
+	public function make_defn($fieldname, $ar = array())
 	{
 		global $oFunc, $oHtml, $gw_this, $oSess;
 		$tmp['strform'] = $tmp['strBtnRemove'] = $tmp['strHtmlTB'] = $tmp['strBtnAdd'] = '';
@@ -448,14 +448,14 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		return $tmp['strform'];
 	}
 	//
-	function load_abbr_trns()
+	public function load_abbr_trns()
 	{
 		global $gw_this;
 		$this->load_abbr($gw_this['vars']['id']);
 		$this->load_trns($gw_this['vars']['id']);
 	}
 	/* */
-    function load_trns($id_dict = 0)
+    public function load_trns($id_dict = 0)
     {
         global $gw_this, $oDb, $oSqlQ, $arDictParam;
         $tmp['strform'] = '';
@@ -498,7 +498,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
     }
 
     /* */
-    function load_abbr($id_dict = 0)
+    public function load_abbr($id_dict = 0)
     {
         global $gw_this, $oDb, $oSqlQ, $arDictParam;
         $tmp['strform'] = '';
@@ -541,12 +541,12 @@ $tmp['strform'] .= '/*]]>*/</script>';
         $this->Set('arAbbr', $tmp['arTmp']);
     }
 	/* */
-	function make_trns($fieldname, $ar = array())
+	public function make_trns($fieldname, $ar = array())
 	{
 		return $this->make_abbr($fieldname, $ar, 'trns');
 	}
 	/* */
-	function make_abbr($fieldname, $ar = array(), $tag = 'abbr')
+	public function make_abbr($fieldname, $ar = array(), $tag = 'abbr')
 	{
 		$tmp['strform'] = '';
 
@@ -634,22 +634,22 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		return $tmp['strform'];
 	}
 	//
-	function make_usg($fieldname, $ar = array())
+	public function make_usg($fieldname, $ar = array())
 	{
 		return $this->make_set_array2textarea($fieldname, $ar);
 	}
 	//
-	function make_src($fieldname, $ar = array())
+	public function make_src($fieldname, $ar = array())
 	{
 		return $this->make_set_textarea($fieldname, $ar);
 	}
 	//
-	function make_syn($fieldname, $ar = array())
+	public function make_syn($fieldname, $ar = array())
 	{
 		return $this->make_see($fieldname, $ar);
 	}
 	//
-	function make_see($fieldname, $ar = array())
+	public function make_see($fieldname, $ar = array())
 	{
 		global $oFunc;
 		$tmp['strform'] = $tmp['str'] = '';
@@ -697,22 +697,22 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		return $tmp['strform'];
 	}
 	/* */
-	function make_antonym($fieldname, $ar = array())
+	public function make_antonym($fieldname, $ar = array())
 	{
 		return $this->make_see($fieldname, $ar);
 	}
 	//
-	function make_address($fieldname, $ar = array())
+	public function make_address($fieldname, $ar = array())
 	{
 		return $this->make_set_textarea($fieldname, $ar);
 	}
 	//
-	function make_phone($fieldname, $ar = array())
+	public function make_phone($fieldname, $ar = array())
 	{
 		return $this->make_set_textarea($fieldname, $ar);
 	}
 	//
-	function make_set_textarea($fieldname, $ar = array())
+	public function make_set_textarea($fieldname, $ar = array())
 	{
 		global $oFunc;
 		$tmp['strform'] = $tmp['str'] = '';
@@ -748,7 +748,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		return $tmp['strform'];
 	}
 	//
-	function make_set_array2textarea($fieldname, $ar = array())
+	public function make_set_array2textarea($fieldname, $ar = array())
 	{
 		global $oFunc; /* getFormHeight */
 		$this->unsetTag('textarea');
@@ -822,3 +822,4 @@ $tmp['strform'] .= '/*]]>*/</script>';
 } // end of class
 
 ?>
+

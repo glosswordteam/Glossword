@@ -11,6 +11,7 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+
 if (!defined('IN_GW')) {
     die('<!-- Not in App -->');
 }
@@ -22,14 +23,14 @@ include($sys['path_addon'].'/class.gw_addon.php');
 /* */
 class gw_addon_clear_history_terms extends gw_addon
 {
-	var $addon_name = 'clear_history_terms';
+	public $addon_name = 'clear_history_terms';
 	/* Autoexec */
-	function __construct()
+	public function __construct()
 	{
 		$this->init_m();
 	}
 	/* */
-	function _gw_clear()
+	public function _gw_clear()
 	{
 		/* Clear history of changes */
 		$sql = sprintf('DELETE FROM `%s` WHERE `date_modified` < %s',
@@ -57,7 +58,7 @@ class gw_addon_clear_history_terms extends gw_addon
 		}
 	}
 	/* */
-	function alpha()
+	public function alpha()
 	{
 		if ((mt_rand() % 100) < $this->sys['prbblty_tasks'])
 		{
@@ -65,7 +66,7 @@ class gw_addon_clear_history_terms extends gw_addon
 		}
 	}
 	/* */
-	function omega()
+	public function omega()
 	{
 	}
 }
@@ -74,5 +75,3 @@ $oM = new gw_addon_clear_history_terms;
 $oM->alpha();
 $oM->omega();
 unset($oM);
-/* end of file */
-?>

@@ -20,7 +20,7 @@ class pch_template extends gwv_template
 {
 	/* File-based */
 	/*
-	function init()
+	public function init()
 	{
 		global $sys, $gv;
 		$this->path_source = $sys['path_tpl'].'/'.$gv['vars'][constant(PREFIX_CNST.'ID_TPL')];
@@ -28,7 +28,7 @@ class pch_template extends gwv_template
 	}
 	*/
 	/* SQL-based */
-	function init($id_style)
+	public function init($id_style)
 	{
 		global $oDb, $oFunc, $oSqlQ, $sys, $ar_theme;
 		$this->id_style = $id_style;
@@ -39,17 +39,17 @@ class pch_template extends gwv_template
 		$this->var_last_parsed = '';
 	}
 	/* @access public */
-	function addVal($k, $v)
+	public function addVal($k, $v)
 	{
 		$this->assign(array($k => $v));
 	}
 	/* @access public */
-	function getVal($k)
+	public function getVal($k)
 	{
 		$k = $this->namespace_default.'::'.sprintf("%u", crc32($k));
 		return isset($this->pairsV[$k]) ? $this->pairsV[$k] : false;
 	}
-	function set_tpl($id_group, $theme_name = '')
+	public function set_tpl($id_group, $theme_name = '')
 	{
 		global $ar_theme;
 		/* autoload theme colors */
@@ -104,11 +104,11 @@ class pch_template extends gwv_template
 			$this->pairsV = array();
 		}
 	}
-	function _file_load($filename, $field = 'html', $id_style = 1)
+	public function _file_load($filename, $field = 'html', $id_style = 1)
 	{
 		return false;
 	}
-	function _file_save($filename, $str, $mode = '', $id_style = 1)
+	public function _file_save($filename, $str, $mode = '', $id_style = 1)
 	{
 		global $oDb, $sys;
 		$sql = sprintf('UPDATE %s SET %s = "%s", date_compiled = %d
@@ -117,7 +117,7 @@ class pch_template extends gwv_template
 		);
 		$oDb->sqlExec($sql);
 	}
-	function _compile($tplName)
+	public function _compile($tplName)
 	{
 		global $sys;
 		$this->oCmd->_reset();
@@ -168,7 +168,7 @@ class pch_template extends gwv_template
 		}
 		return $strInternal;
 	}
-	function parse($varName = '', $cacheKey = NULL)
+	public function parse($varName = '', $cacheKey = NULL)
 	{
 		ob_start();
 		$tpl = array();

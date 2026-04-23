@@ -11,6 +11,7 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+
 if (!defined('IN_GW')) {
     die('<!-- Not in App -->');
 }
@@ -22,14 +23,14 @@ include($sys['path_addon'].'/class.gw_addon.php');
 /* */
 class gw_addon_clear_import_sessions extends gw_addon
 {
-	var $addon_name = 'clear_import_sessions';
+	public $addon_name = 'clear_import_sessions';
 	/* Autoexec */
-	function __construct()
+	public function __construct()
 	{
 		$this->init_m();
 	}
 	/* */
-	function _gw_clear()
+	public function _gw_clear()
 	{
 		/* Clear import sessions */
 		$sql = sprintf('DELETE FROM `%s` WHERE `date_start` < %s OR `date_end` = "0"',
@@ -38,7 +39,7 @@ class gw_addon_clear_import_sessions extends gw_addon
 		$this->oDb->sqlExec($sql);
 	}
 	/* */
-	function alpha()
+	public function alpha()
 	{
 		if ((mt_rand() % 100) < $this->sys['prbblty_tasks'])
 		{
@@ -46,7 +47,7 @@ class gw_addon_clear_import_sessions extends gw_addon
 		}
 	}
 	/* */
-	function omega()
+	public function omega()
 	{
 	}
 }
@@ -55,5 +56,3 @@ $oM = new gw_addon_clear_import_sessions;
 $oM->alpha();
 $oM->omega();
 unset($oM);
-/* end of file */
-?>

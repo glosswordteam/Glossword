@@ -2,8 +2,8 @@
 
 /**
  * Glossword - glossary compiler (http://glossword.biz/)
- * © 2008-2026 Glossword.biz team <team at glossword dot biz>
- * © 2002-2008 Dmitry N. Shilnikov
+ * Â© 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * Â© 2002-2008 Dmitry N. Shilnikov
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,16 +11,17 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+
 if (!defined('IN_GW')) {
     die('<!-- Not in App -->');
 }
 /* */
 class gw_addon_abbr_admin extends gw_addon
 {
-	var $addon_name = 'abbr';
-	var $ar_groups;
+	public $addon_name = 'abbr';
+	public $ar_groups;
 	/* Autoexec */
-	function __construct()
+	public function __construct()
 	{
 		$this->init();
 		$this->oL->setHomeDir($this->sys['path_locale']);
@@ -33,7 +34,7 @@ class gw_addon_abbr_admin extends gw_addon
 			'5' => $this->oL->m('custom')
 		);
 	}
-	function _get_nav()
+	public function _get_nav()
 	{
         /* The list of profiles */
         $sql = $this->oSqlQ->getQ('get-abbr-lang');
@@ -84,7 +85,7 @@ class gw_addon_abbr_admin extends gw_addon
 				'<p class="xt gray">'.$this->oL->m('topic').': '. implode(' | ', $ar_topics).'</p>';
 	}
 	/* */
-	function get_form_abbr($vars, $runtime = 0, $ar_broken = array(), $ar_req = array())
+	public function get_form_abbr($vars, $runtime = 0, $ar_broken = array(), $ar_req = array())
 	{
 		$str_hidden = '';
 		$str_form = '';
@@ -192,7 +193,7 @@ class gw_addon_abbr_admin extends gw_addon
 		return $oForm->Output($str_form);
 	}
 	/* */
-	function browse()
+	public function browse()
 	{
 		global $strR;
 
@@ -265,7 +266,7 @@ class gw_addon_abbr_admin extends gw_addon
 		$strR .= '/*]]>*/</script>';
 	}
 	/* */
-	function edit()
+	public function edit()
 	{
 		global $strR;
 		$ar_req_fields = array('abbr_short', 'abbr_long', 'id_group', 'id_lang');
@@ -341,7 +342,7 @@ class gw_addon_abbr_admin extends gw_addon
 		$strR .= $this->str;
 	}
 	/* */
-	function add()
+	public function add()
 	{
 		global $strR;
 		$ar_req_fields = array('abbr_short', 'abbr_long', 'id_group', 'id_lang');
@@ -430,7 +431,7 @@ class gw_addon_abbr_admin extends gw_addon
 		$strR .= $this->str;
 	}
 	/* */
-	function update()
+	public function update()
 	{
 		if ($this->gw_this['vars']['tid'])
 		{
@@ -442,7 +443,7 @@ class gw_addon_abbr_admin extends gw_addon
 		}
 	}
 	/* */
-	function remove()
+	public function remove()
 	{
 		global $strR;
 		/* Get Abbr settings */
@@ -485,7 +486,7 @@ class gw_addon_abbr_admin extends gw_addon
 		}
 	}
 	/* 1.8.6.5 */
-	function alpha()
+	public function alpha()
 	{
 		global $strR;
 		if (is_array($this->gw_this['vars']['arControl']))
@@ -535,3 +536,4 @@ $oAbbrAdm = new gw_addon_abbr_admin;
 $oAbbrAdm->alpha();
 /* Do not load old components */
 $pathAction = '';
+
