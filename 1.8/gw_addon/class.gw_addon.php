@@ -23,7 +23,7 @@ if (!defined('IN_GW')) {
  * include($sys['path_addon'].'/class.gw_addon.php');
  * class gw_addon_name extends gw_addon
  * {
- * function gw_addon_name()
+ * function __constructor()
  * {
  * $this->init();
  * }

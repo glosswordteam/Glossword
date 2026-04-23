@@ -2,8 +2,8 @@
 
 /**
  * Glossword - glossary compiler (http://glossword.biz/)
- * © 2008-2026 Glossword.biz team <team at glossword dot biz>
- * © 2002-2008 Dmitry N. Shilnikov
+ * Â© 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * Â© 2002-2008 Dmitry N. Shilnikov
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,11 +12,14 @@
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
 
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
+}
+
 /* --------------------------------------------------------
  * Library functions for daily use
  * ----------------------------------------------------- */
-$tmp['mtime'] = explode(' ', microtime());
-$tmp['start_time'] = (float)$tmp['mtime'][1] + (float)$tmp['mtime'][0];
+
 /* --------------------------------------------------------
  * Functions that must work without class initialization
  * ----------------------------------------------------- */
@@ -613,7 +616,7 @@ class gw_functions
      * Decodes numeric HTML entities into UTF-8 characters.
      *
      * Example:
-     * - &#1040; -> À
+     * - &#1040; -> ï¿½
      *
      * @param string $string Input string
      * @return string Decoded string
@@ -633,7 +636,7 @@ class gw_functions
      * Encodes UTF-8 characters as numeric HTML entities.
      *
      * Example:
-     * - À -> &#1040;
+     * - ï¿½ -> &#1040;
      *
      * @param string $string Input string
      * @return string Encoded string
@@ -848,10 +851,7 @@ class gw_functions
     }
 }
 
-$tmp['mtime'] = explode(' ', microtime());
-$tmp['endtime'] = (float)$tmp['mtime'][1] + (float)$tmp['mtime'][0];
-$tmp['time'][__FILE__] = ($tmp['endtime'] - $tmp['start_time']);
+
 /* automatic initialization */
 $oFunc = new gw_functions;
 
-?>
