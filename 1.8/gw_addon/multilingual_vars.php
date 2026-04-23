@@ -11,6 +11,10 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
+}
 /* ------------------------------------------------------- */
 /**
  * Enables multilingual variables for dictionary pages
