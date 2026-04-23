@@ -2,8 +2,8 @@
 
 /**
  * Glossword - glossary compiler (http://glossword.biz/)
- * © 2008 Glossword.biz team
- * © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Â© 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * Â© 2002-2008 Dmitry N. Shilnikov
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,9 +12,8 @@
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
 if (!defined('IN_GW')) {
-    die('<!-- $Id: terms_remove.inc.php 500 2008-06-15 23:38:18Z glossword_team $ -->');
+    die('<!-- Not in App -->');
 }
-
 /* Included from $oAddonAdm->alpha(); */
 
 if (!$this->gw_this['vars']['isConfirm']) {

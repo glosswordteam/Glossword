@@ -96,16 +96,6 @@ foreach ($gw_this['vars'] as $k1 => $v1)
 {
 	$$k1 = $v1;
 }
-#$arPostVars = array('file_location','arAudio','arImg','arVideo');
-#for (reset($arPostVars); list($k, $v) = each($arPostVars);)
-#{
-#	if (isset($_FILES[$v]) && ($_FILES[$v] != '')) // get values from FILES
-#	{
-#		$$v = $_FILES[$v];
-#		$gw_this['_files'][$v] = $_FILES[$v];
-#	}
-#}
-#prn_r( $_FILES, __LINE__ );
 unset($arPostVars);
 
 

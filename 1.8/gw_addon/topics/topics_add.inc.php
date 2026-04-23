@@ -1,18 +1,18 @@
 <?php
+
 /**
- *  Glossword - glossary compiler (http://glossword.biz/)
- *  © 2008 Glossword.biz team
- *  © 2002-2008 Dmitry N. Shilnikov <dev at glossword dot info>
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * Â© 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * Â© 2002-2008 Dmitry N. Shilnikov
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *  (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
-if (!defined('IN_GW'))
-{
-	die('<!-- $Id: topics_add.inc.php 497 2008-06-14 07:15:56Z glossword_team $ -->');
+if (!defined('IN_GW')) {
+    die('<!-- Not in App -->');
 }
 /* Included from $oAddonAdm->alpha(); */
 
@@ -78,23 +78,9 @@ else
 		$arQ[] = gw_sql_insert($q2, $this->sys['tbl_prefix'].'topics_phrase', 'id_topic_phrase = "'. $arV['id_topic_phrase'] .'"');
 	}
 	$arQ[] = gw_sql_insert($q1, $this->sys['tbl_prefix'].'topics', 'id_topic = "' . $this->gw_this['vars']['tid'] .'"');
-	/* Sorting subpages */
-#	$sql = sprintf('SELECT id_topic FROM `%s` WHERE id_parent = "%d" ORDER BY int_sort ASC', $this->sys['tbl_prefix'].'topics', $q1['id_parent']);
-#	$arSql = $this->oDb->sqlExec($sql);
-#	$i = 10;
-#	for (; list($arK, $arV) = each($arSql);)
-#	{
-#		$arQ[] = 'UPDATE ' . $this->sys['tbl_prefix'].'topics' . '
-#					SET `int_sort` = ' . $i . '
-#					WHERE `id_topic` = ' . $arV['id_topic'];
-#		$i += 10;
-#	}
+	/* @TODO Sorting subpages */
 	$this->str .= postQuery($arQ, GW_ACTION.'='.GW_A_BROWSE .'&'. GW_TARGET.'='.$this->gw_this['vars'][GW_TARGET], $this->sys['isDebugQ'], 0);
 }
 
 
 
-
-
-
-?>
