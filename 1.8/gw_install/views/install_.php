@@ -458,7 +458,7 @@ function INSTALL_select_db_name(id)
                 case 'REQUEST_URI':
                     $v['descr'] = $this->oTkit->_(10031);
                     break;
-                case 'mysql':
+                case 'mysqli':
                     $v['descr'] = $this->oTkit->_(10032);
                     break;
                 case 'xml':

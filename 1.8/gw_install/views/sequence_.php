@@ -66,7 +66,7 @@ foreach ($ar_results as $k => $v) {
         case 'REQUEST_URI':
             $v['descr'] = $this->oTkit->_(1010);
             break;
-        case 'mysql':
+        case 'mysqli':
             $v['descr'] = $this->oTkit->_(1011);
             break;
         case 'xml':
