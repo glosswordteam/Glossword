@@ -11,6 +11,7 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+
 if (!defined('IN_GW')) {
     die('<!-- Not in App -->');
 }
@@ -27,8 +28,8 @@ function selection() {
 }
 function checkSplit() {
 //    selection();
-	gw_getElementById(\'arPost_split2_\').style.border = "solid 1px '.$ar_theme['color_7'].'";
-	gw_getElementById(\'arPost_split2_\').style.color = "'.$ar_theme['color_black'].'";
+	gw_getElementById(\'arPost_split2_\').style.border = "solid 1px ' . $ar_theme['color_7'] . '";
+	gw_getElementById(\'arPost_split2_\').style.color = "' . $ar_theme['color_black'] . '";
     if (gw_getElementById(\'split_list1\').checked)
     {
 		gw_getElementById(\'arPost_split1_\').disabled = false;
@@ -44,8 +45,8 @@ function checkSplit() {
         gw_getElementById(\'labelList\').className = "gray";
 		gw_getElementById(\'arPost_split1_\').disabled = true;
 		gw_getElementById(\'arPost_split2_\').disabled = false; 
-		gw_getElementById(\'arPost_split2_\').style.border = "solid 1px '.$ar_theme['color_7'].'";
-		gw_getElementById(\'arPost_split2_\').style.color = "'.$ar_theme['color_black'].'";
+		gw_getElementById(\'arPost_split2_\').style.border = "solid 1px ' . $ar_theme['color_7'] . '";
+		gw_getElementById(\'arPost_split2_\').style.color = "' . $ar_theme['color_black'] . '";
 		/* create selection */
         if ((gwDOMtype != "") || typeof(slct) == \'undefined\')
         {
@@ -66,4 +67,3 @@ function setCheckboxesSQL(is_check) {
 checkSplit();
 ';
 $strForm .= '/*]]>*/</script>';
-?>

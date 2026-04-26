@@ -54,9 +54,9 @@ class gw_addon_custom_az_admin extends gw_addon
             }
             $str_status = $ar_v['is_active'] ? '' : ' <span class="badge badge-secondary"> ' . $this->oL->m('not_published') . '</span>';
             $this->ar_profiles_browse[$ar_v['id_profile']] = $this->oHtml->a(
-                $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->component, [GW_TARGET_ID => $ar_v['id_profile']]),
-                $profile_title
-            ) . $str_status;
+                    $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->component, [GW_TARGET_ID => $ar_v['id_profile']]),
+                    $profile_title
+                ) . $str_status;
 
             $this->ar_profiles[$ar_v['id_profile']] = $ar_v['profile_name'];
         }
@@ -82,15 +82,15 @@ class gw_addon_custom_az_admin extends gw_addon
      */
     public function get_form_custom_az($vars, $runtime = 0, $ar_broken = [], $ar_req = [])
     {
-        $str_form      = '';
-        $td_class_1    = 'td1';
-        $td_class_2    = 'td2';
-        $td1_width     = '25%';
-        $tid           = $this->gw_this['vars'][GW_TARGET_ID];
-        $action        = $this->gw_this['vars'][GW_ACTION];
-        $target        = $this->gw_this['vars'][GW_TARGET];
-        $ar_req_map    = [];
-        $ar_req_msg    = [];
+        $str_form = '';
+        $td_class_1 = 'td1';
+        $td_class_2 = 'td2';
+        $td1_width = '25%';
+        $tid = $this->gw_this['vars'][GW_TARGET_ID];
+        $action = $this->gw_this['vars'][GW_ACTION];
+        $target = $this->gw_this['vars'][GW_TARGET];
+        $ar_req_map = [];
+        $ar_req_msg = [];
         $ar_broken_msg = [];
 
         if (!empty($ar_req)) {
@@ -116,7 +116,7 @@ class gw_addon_custom_az_admin extends gw_addon
 
         /* Mark required fields and show validation errors */
         foreach ($vars as $field_name => $field_value) {
-            $ar_req_msg[$field_name]    = '';
+            $ar_req_msg[$field_name] = '';
             $ar_broken_msg[$field_name] = '';
 
             if (isset($ar_req_map[$field_name])) {
@@ -185,10 +185,10 @@ class gw_addon_custom_az_admin extends gw_addon
     {
         $oForm = new gwForms();
 
-        $str_hidden  = '';
-        $str_form    = '';
-        $v_class_1   = 'td1';
-        $v_class_2   = 'td2';
+        $str_hidden = '';
+        $str_form = '';
+        $v_class_1 = 'td1';
+        $v_class_2 = 'td2';
         $v_td1_width = '25%';
 
         $oForm = new gwForms();
@@ -207,7 +207,7 @@ class gw_addon_custom_az_admin extends gw_addon
 
         $ar_req = array_flip($ar_req);
         /* mark fields as "Required" and display error message */
-        foreach ((is_array($vars) ? $vars : array()) as $k => $v) {
+        foreach ((is_array($vars) ? $vars : []) as $k => $v) {
             $ar_req_msg[$k] = $ar_broken_msg[$k] = '';
             if (isset($ar_req[$k])) {
                 $ar_req_msg[$k] = '&#160;<span class="red"><b>*</b></span>';
@@ -217,9 +217,9 @@ class gw_addon_custom_az_admin extends gw_addon
             }
         }
         /* */
-        if ($this->gw_this['vars']['tid'] && isset($this->ar_profiles[$this->gw_this['vars']['tid']])) {
+        if ($this->gw_this['vars'][GW_TARGET_ID] && isset($this->ar_profiles[$this->gw_this['vars'][GW_TARGET_ID]])) {
             $str_form .= gw_get_form_title_nav(
-                $this->ar_profiles[$this->gw_this['vars']['tid']],
+                $this->ar_profiles[$this->gw_this['vars'][GW_TARGET_ID]],
                 '<span style="float:right">' . $oForm->get_button('submit') . '</span>'
             );
         } else {
@@ -247,17 +247,17 @@ class gw_addon_custom_az_admin extends gw_addon
                 '<td class="td2">' . $oForm->field('textarea', 'arPost[xml]', $vars['xml']) . '</td>' .
                 '</tr>';
 
-            $str_form             .= '<tr>' .
+            $str_form .= '<tr>' .
                 '<td class="td1">&#160;</td>' .
                 '<td class="td2">' . $oForm->field('file', 'file_location', $vars['file_location']) . '</td>' .
                 '</tr>';
             $this->ar_profiles[0] = '(' . $this->oL->m('3_profile') . ': ' . $this->oL->m('3_add') . ')';
-            $str_form             .= '<tr>' .
+            $str_form .= '<tr>' .
                 '<td class="td1">' . $this->oL->m('3_profile') . '</td>' .
                 '<td class="td2">' . $oForm->field(
                     'select',
                     'arPost[id_profile]',
-                    $this->gw_this['vars']['tid'],
+                    $this->gw_this['vars'][GW_TARGET_ID],
                     0,
                     $this->ar_profiles
                 ) . '</td>' .
@@ -265,7 +265,7 @@ class gw_addon_custom_az_admin extends gw_addon
         }
         $str_form .= '</tbody></table>';
         $str_form .= '</fieldset>';
-        $str_form .= $oForm->field('hidden', 'tid', $this->gw_this['vars']['tid']);
+        $str_form .= $oForm->field('hidden', GW_TARGET_ID, $this->gw_this['vars'][GW_TARGET_ID]);
         $str_form .= $oForm->field('hidden', GW_ACTION, $this->gw_this['vars'][GW_ACTION]);
         $str_form .= $oForm->field('hidden', GW_TARGET, $this->gw_this['vars'][GW_TARGET]);
         $str_form .= $oForm->field('hidden', $this->oSess->sid, $this->oSess->id_sess);
@@ -278,10 +278,10 @@ class gw_addon_custom_az_admin extends gw_addon
     {
         $oForm = new gwForms();
 
-        $str_hidden  = '';
-        $str_form    = '';
-        $v_class_1   = 'td1';
-        $v_class_2   = 'td2';
+        $str_hidden = '';
+        $str_form = '';
+        $v_class_1 = 'td1';
+        $v_class_2 = 'td2';
         $v_td1_width = '25%';
 
         $oForm = new gwForms();
@@ -297,7 +297,7 @@ class gw_addon_custom_az_admin extends gw_addon
 
         $ar_req = array_flip($ar_req);
         /* mark fields as "Required" and display error message */
-        foreach ((is_array($vars) ? $vars : array()) as $k => $v) {
+        foreach ((is_array($vars) ? $vars : []) as $k => $v) {
             $ar_req_msg[$k] = $ar_broken_msg[$k] = '';
             if (isset($ar_req[$k])) {
                 $ar_req_msg[$k] = '&#160;<span class="red"><strong>*</strong></span>';
@@ -338,7 +338,7 @@ class gw_addon_custom_az_admin extends gw_addon
         $str_form .= '</tbody></table>';
         $str_form .= '</fieldset>';
 
-        $str_form .= $oForm->field('hidden', 'tid', $this->gw_this['vars']['tid']);
+        $str_form .= $oForm->field('hidden', GW_TARGET_ID, $this->gw_this['vars'][GW_TARGET_ID]);
         $str_form .= $oForm->field('hidden', GW_ACTION, $this->gw_this['vars'][GW_ACTION]);
         $str_form .= $oForm->field('hidden', GW_TARGET, $this->gw_this['vars'][GW_TARGET]);
         $str_form .= $oForm->field('hidden', $this->oSess->sid, $this->oSess->id_sess);
@@ -357,10 +357,10 @@ class gw_addon_custom_az_admin extends gw_addon
     {
         global $strR;
 
-        $action_file          = $this->sys['path_component_action'];
-        $action_name          = $this->gw_this['vars'][GW_ACTION];
-        $target_name          = $this->gw_this['vars'][GW_TARGET];
-        $permission_names     = [];
+        $action_file = $this->sys['path_component_action'];
+        $action_name = $this->gw_this['vars'][GW_ACTION];
+        $target_name = $this->gw_this['vars'][GW_TARGET];
+        $permission_names = [];
         $permissions_like_sql = '1=0';
 
         /* Call an action */
@@ -399,7 +399,7 @@ class gw_addon_custom_az_admin extends gw_addon
 
         /* Component settings found */
         if (!empty($this->ar_component)) {
-            $this->component                = $this->ar_component['id_component_name'];
+            $this->component = $this->ar_component['id_component_name'];
             $this->sys['id_current_status'] = $this->oL->m($this->ar_component['cname'])
                 . ': '
                 . $this->oL->m($this->ar_component['aname']);
@@ -411,8 +411,8 @@ class gw_addon_custom_az_admin extends gw_addon
             return;
         }
 
-        $strR                           .= '<p class="xu">' . $this->oL->m('reason_13') . '</p>';
-        $strR                           .= '<p class="xt">' . $target_name . ': ' . $action_name . '</p>';
+        $strR .= '<p class="xu">' . $this->oL->m('reason_13') . '</p>';
+        $strR .= '<p class="xt">' . $target_name . ': ' . $action_name . '</p>';
         $this->sys['id_current_status'] = '';
     }
 }

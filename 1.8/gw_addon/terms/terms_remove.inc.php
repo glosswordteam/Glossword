@@ -36,9 +36,9 @@ $ar_post = &$this->gw_this['vars']['arPost'];
  5) Check permissions
  */
 
-$dict_id = isset($this->gw_this['vars']['id']) ? (int) $this->gw_this['vars']['id'] : 0;
-$current_user_id = (int) $this->oSess->user_get('id_user');
-$dict_table = isset($arDictParam['tablename']) ? (string) $arDictParam['tablename'] : '';
+$dict_id = isset($this->gw_this['vars']['id']) ? (int)$this->gw_this['vars']['id'] : 0;
+$current_user_id = (int)$this->oSess->user_get('id_user');
+$dict_table = isset($arDictParam['tablename']) ? (string)$arDictParam['tablename'] : '';
 
 if ($dict_id <= 0 || $dict_table === '' || !preg_match('/^[a-zA-Z0-9_]+$/', $dict_table)) {
     return;
@@ -78,10 +78,10 @@ if (isset($this->gw_this['vars']['arPost']['is_all'])) {
     $ar_term_ids = [];
 
     if (!isset($this->gw_this['vars']['arPost']['ar_id'])) {
-        $ar_term_ids[] = isset($this->gw_this['vars']['tid']) ? (int) $this->gw_this['vars']['tid'] : 0;
+        $ar_term_ids[] = isset($this->gw_this['vars']['tid']) ? (int)$this->gw_this['vars']['tid'] : 0;
     } else {
-        foreach ((array) $this->gw_this['vars']['arPost']['ar_id'] as $id_term) {
-            $ar_term_ids[] = (int) $id_term;
+        foreach ((array)$this->gw_this['vars']['arPost']['ar_id'] as $id_term) {
+            $ar_term_ids[] = (int)$id_term;
         }
     }
 
@@ -90,11 +90,7 @@ if (isset($this->gw_this['vars']['arPost']['is_all'])) {
 
     foreach ($ar_term_ids as $id_term) {
         if (isset($this->gw_this['vars']['arPost']['is_save_history'])) {
-            $ar_query[] = 'UPDATE `'
-                . $dict_table
-                . '` SET `is_active` = 3 WHERE `id` = '
-                . $id_term
-                . $sql_where;
+            $ar_query[] = 'UPDATE `' . $dict_table . '` SET `is_active` = 3 WHERE `id` = ' . $id_term . $sql_where;
 
             /* See `maintenance_clear_history_terms.php` for old term removal */
             /* -- Change history -- */
@@ -104,7 +100,7 @@ if (isset($this->gw_this['vars']['arPost']['is_all'])) {
             );
 
             if (!empty($ar_current[0])) {
-                $history_id = (int) $ar_current[0]['id'];
+                $history_id = (int)$ar_current[0]['id'];
 
                 /* Place into the removal schedule and set current user */
                 $ar_query[] = 'UPDATE `'
@@ -117,23 +113,14 @@ if (isset($this->gw_this['vars']['arPost']['is_all'])) {
             }
         } else {
             /* Remove now */
-            $ar_query[] = 'DELETE FROM `'
-                . $dict_table
-                . '` WHERE `id` = '
-                . $id_term
-                . $sql_where;
-
-            $ar_query[] = 'DELETE FROM `'
-                . $this->sys['tbl_prefix']
-                . 'history_terms` WHERE `id_term` = '
-                . $id_term
-                . $sql_where;
+            $ar_query[] = 'DELETE FROM `' . $dict_table . '` WHERE `id` = ' . $id_term . $sql_where;
+            $ar_query[] = 'DELETE FROM `' . $this->sys['tbl_prefix'] . 'history_terms` WHERE `id_term` = ' . $id_term . $sql_where;
         }
     }
 }
 
 $ar_dict_update = [];
-$ar_dict_update['date_modified'] = (int) $this->sys['time_now_gmt_unix'];
+$ar_dict_update['date_modified'] = (int)$this->sys['time_now_gmt_unix'];
 
 $ar_query[] = gw_sql_update(
     $ar_dict_update,

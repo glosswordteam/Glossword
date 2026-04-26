@@ -21,7 +21,7 @@ $this->str .= $this->_get_nav();
 
 /* */
 $this->str .= '<table class="tbl-browse gray" cellspacing="1" cellpadding="0" border="0" width="100%">';
-$this->str .= '<thead><tr style="color:'.$this->ar_theme['color_1'].';background:'.$this->ar_theme['color_6'].'">';
+$this->str .= '<thead><tr style="color:' . $this->ar_theme['color_1'] . ';background:' . $this->ar_theme['color_6'] . '">';
 $this->str .= '<th style="width:1%">N</th>';
 $this->str .= '<th>' . $this->oL->m('topic') . '</th>';
 $this->str .= '<th style="width:10%">' . $this->oL->m('1335') . '</th>';
@@ -37,5 +37,3 @@ $this->str .= gw_get_thread_pages($this->gw_this['ar_topics_list']);
 
 $this->str .= '</tbody></table>';
 $this->str .= '<br />';
-
-?>

@@ -19,93 +19,77 @@ if (!defined('IN_GW')) {
 /* */
 $this->str .= $this->_get_nav();
 
-$this->filename = 'gw_topics_map_'.@date("Y-m[M]-d", $this->sys['time_now_gmt_unix']).'.xml';
+$this->filename = 'gw_topics_map_' . date("Y-m[M]-d", $this->sys['time_now_gmt_unix']) . '.xml';
 
-if ($this->gw_this['vars']['post'] == '')
-{
-	/* Not submitted */
-	$arV['is_include_date'] = 1;
-	$arV['is_as_file'] = 1;
-	$this->str .= $this->get_form_export($arV);
+if ($this->gw_this['vars']['post'] == '') {
+    /* Not submitted */
+    $arV['is_include_date'] = 1;
+    $arV['is_as_file'] = 1;
+    $this->str .= $this->get_form_export($arV);
+} else {
+    $arPost =& $this->gw_this['vars']['arPost'];
+    /* Fix on/off options */
+    $arIsV = ['is_include_date', 'is_as_file'];
+    foreach ($arIsV as $k => $v) {
+        $arPost[$v] = isset($arPost[$v]) ? $arPost[$v] : 0;
+    }
+    /* */
+    $xml = '<' . '?xml version="1.0" encoding="UTF-8"?' . '>';
+    $xml .= '<glossword>';
+    /* */
+    $arSql = $this->oDb->sqlExec('SELECT * FROM `' . $this->sys['tbl_prefix'] . 'topics`');
+    foreach ($arSql as $k => $arV) {
+        $style_attr = '';
+        $id_topic = $arV['id_topic'];
+        unset($arV['id_topic']);
+        if (!$arPost['is_include_date']) {
+            unset($arV['date_created']);
+            unset($arV['date_modified']);
+        }
+        $xml .= CRLF . '<topic id="' . $id_topic . '">';
+        /* Now serialize all parameters. Fast and easy. */
+        $xml .= CRLF . "\t" . '<parameters><![CDATA[' . serialize($arV) . ']]></parameters>';
+        /* get topic names */
+        $xml .= CRLF . "\t" . '<entry>';
+        $arSql2 = $this->oDb->sqlExec($this->oSqlQ->getQ('get-topics-lang-adm', $id_topic));
+        foreach ($arSql2 as $k2 => $arV2) {
+            /* remove encoding name */
+            $arV2['id_lang'] = preg_replace("/-([a-z0-9])+$/", '', $arV2['id_lang']);
+            /* start topic names */
+            $xml .= CRLF . "\t\t" . '<lang xml:lang="' . $arV2['id_lang'] . '">';
+            unset($arV2['id_lang']);
+            foreach ($arV2 as $attrK => $attrV) {
+                $xml .= CRLF . "\t\t\t<" . $attrK . '>';
+                $xml .= ($attrV == '') ? '' : '<![CDATA[' . $attrV . ']]>';
+                $xml .= '</' . $attrK . '>';
+            }
+            $xml .= CRLF . "\t\t" . '</lang>';
+        }
+        $xml .= CRLF . "\t" . '</entry>';
+        $xml .= CRLF . '</topic>';
+    }
+    $xml .= CRLF . '</glossword>';
+    /* */
+    if ($arPost['is_as_file']) {
+        /* Send headers */
+        if (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+            header('Content-Type: application/force-download');
+        } else {
+            header('Content-Type: application/octet-stream');
+        }
+        header('Content-Length: ' . strlen($xml));
+        header('Content-disposition: attachment; filename="' . $this->filename . '"');
+        print $xml;
+        exit;
+    } else {
+        /* Write to disk */
+        $mode = 'w';
+        $filename = $this->sys['path_export'] . '/' . $this->filename;
+        $this->str .= '<ul class="xt">';
+        $this->str .= '<li><span class="gray">';
+        $this->str .= $this->oHtml->a($filename, $filename) . '</span>&#8230; ';
+        $isWrite = $this->oFunc->file_put_contents($filename, $xml, $mode);
+        $this->str .= ($isWrite ? 'ok (' . $this->oFunc->number_format(strlen($xml), 0, $this->oL->languagelist(LOCALE_LANG_RULES)) . ' ' . $this->oL->m('bytes') . ')' : $this->oL->m('error')) . '</li>';
+        $this->str .= '</ul>';
+    }
 }
-else
-{
-	$arPost =& $this->gw_this['vars']['arPost'];
-	/* Fix on/off options */
-	$arIsV = array('is_include_date', 'is_as_file');
-	foreach ($arIsV as $k => $v)
-	{
-		$arPost[$v]  = isset($arPost[$v]) ? $arPost[$v] : 0;
-	}
-	/* */
-	$xml = '<'.'?xml version="1.0" encoding="UTF-8"?'.'>';
-	$xml .= '<glossword>';
-	/* */
-	$arSql = $this->oDb->sqlExec('SELECT * FROM `'.$this->sys['tbl_prefix'].'topics`');
-	foreach ($arSql as $k => $arV)
-	{
-		$style_attr = '';
-		$id_topic = $arV['id_topic'];
-		unset($arV['id_topic']);
-		if (!$arPost['is_include_date'])
-		{
-			unset($arV['date_created']);
-			unset($arV['date_modified']);
-		}
-		$xml .= CRLF . '<topic id="'.$id_topic.'">';
-		/* Now serialize all parameters. Fast and easy. */
-		$xml .= CRLF . "\t". '<parameters><![CDATA['. serialize($arV) .']]></parameters>';
-		/* get topic names */
-		$xml .= CRLF . "\t". '<entry>';
-		$arSql2 = $this->oDb->sqlExec($this->oSqlQ->getQ('get-topics-lang-adm', $id_topic));
-		foreach ($arSql2 as $k2 => $arV2)
-		{
-			/* remove encoding name */
-			$arV2['id_lang'] = preg_replace("/-([a-z0-9])+$/", '', $arV2['id_lang']);
-			/* start topic names */
-			$xml .= CRLF . "\t\t". '<lang xml:lang="'.$arV2['id_lang'].'">';
-			unset($arV2['id_lang']);
-			foreach ($arV2 as $attrK => $attrV)
-			{
-				$xml .= CRLF . "\t\t\t<". $attrK.'>';
-				$xml .= ($attrV == '') ? '' : '<![CDATA['.$attrV.']]>';
-				$xml .= '</'. $attrK.'>';
-			}
-			$xml .= CRLF . "\t\t". '</lang>';
-		}
-		$xml .= CRLF . "\t". '</entry>';
-		$xml .= CRLF . '</topic>';
-	}
-	$xml .= CRLF . '</glossword>';
-	/* */
-	if ($arPost['is_as_file'])
-	{
-		/* Send headers */
-		if (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-		{
-			header('Content-Type: application/force-download');
-		}
-		else
-		{
-			header('Content-Type: application/octet-stream');
-		}
-		header('Content-Length: '.strlen($xml));
-		header('Content-disposition: attachment; filename="'.$this->filename.'"');
-		print $xml;
-		exit;
-	}
-	else
-	{
-		/* Write to disk */
-		$mode = 'w';
-		$filename = $this->sys['path_export'] .'/'. $this->filename ;
-		$this->str .= '<ul class="xt">';
-		$this->str .= '<li><span class="gray">';
-		$this->str .= $this->oHtml->a($filename, $filename) . '</span>&#8230; ';
-		$isWrite = $this->oFunc->file_put_contents($filename, $xml, $mode);
-		$this->str .= ( $isWrite ?  'ok (' . $this->oFunc->number_format(strlen($xml), 0, $this->oL->languagelist(LOCALE_LANG_RULES)) . ' ' . $this->oL->m('bytes') . ')' : $this->oL->m('error') ) . '</li>';
-		$this->str .= '</ul>';
-	}
-}
-
-?>

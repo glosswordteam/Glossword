@@ -14,6 +14,7 @@
 if (!defined('IN_GW')) {
     die('<!-- Not in App -->');
 }
+
 /* */
 
 class gw_addon_visual_themes_admin extends gw_addon
@@ -44,28 +45,28 @@ class gw_addon_visual_themes_admin extends gw_addon
     public function get_tpl_pages($id_theme)
     {
         $ar_theme_gp = [];
-        $url_part    = $this->sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . $this->component . '&tid=' . $id_theme;
+        $url_part = $this->sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . $this->component . '&tid=' . $id_theme;
         if ($id_theme == 'gw_admin') {
-            $ar_theme_gp[1]  = $this->oHtml->a($url_part . '&w1=1', $this->oL->m('1141'));
+            $ar_theme_gp[1] = $this->oHtml->a($url_part . '&w1=1', $this->oL->m('1141'));
             $ar_theme_gp[12] = $this->oHtml->a($url_part . '&w1=12', $this->oL->m('2_page__'));
             $ar_theme_gp[11] = $this->oHtml->a($url_part . '&w1=11', $this->oL->m('2_login'));
             $ar_theme_gp[14] = $this->oHtml->a($url_part . '&w1=14', $this->oL->m('1144'));
             $ar_theme_gp[13] = $this->oHtml->a($url_part . '&w1=13', $this->oL->m('1145'));
             $ar_theme_gp[15] = $this->oHtml->a($url_part . '&w1=15', $this->oL->m('1214'));
-            $ar_theme_gp[0]  = $this->oHtml->a($url_part . '&w1=css', 'CSS');
+            $ar_theme_gp[0] = $this->oHtml->a($url_part . '&w1=css', 'CSS');
         } else {
-            $ar_theme_gp[1]  = $this->oHtml->a($url_part . '&w1=1', $this->oL->m('1141'));
-            $ar_theme_gp[3]  = $this->oHtml->a($url_part . '&w1=3', $this->oL->m('1143'));
-            $ar_theme_gp[4]  = $this->oHtml->a($url_part . '&w1=4', $this->oL->m('dict'));
-            $ar_theme_gp[5]  = $this->oHtml->a($url_part . '&w1=5', $this->oL->m('2_page_term_browse'));
-            $ar_theme_gp[6]  = $this->oHtml->a($url_part . '&w1=6', $this->oL->m('1144'));
-            $ar_theme_gp[7]  = $this->oHtml->a($url_part . '&w1=7', $this->oL->m('term'));
-            $ar_theme_gp[8]  = $this->oHtml->a($url_part . '&w1=8', $this->oL->m('printversion'));
-            $ar_theme_gp[9]  = $this->oHtml->a($url_part . '&w1=9', $this->oL->m('custom_pages'));
+            $ar_theme_gp[1] = $this->oHtml->a($url_part . '&w1=1', $this->oL->m('1141'));
+            $ar_theme_gp[3] = $this->oHtml->a($url_part . '&w1=3', $this->oL->m('1143'));
+            $ar_theme_gp[4] = $this->oHtml->a($url_part . '&w1=4', $this->oL->m('dict'));
+            $ar_theme_gp[5] = $this->oHtml->a($url_part . '&w1=5', $this->oL->m('2_page_term_browse'));
+            $ar_theme_gp[6] = $this->oHtml->a($url_part . '&w1=6', $this->oL->m('1144'));
+            $ar_theme_gp[7] = $this->oHtml->a($url_part . '&w1=7', $this->oL->m('term'));
+            $ar_theme_gp[8] = $this->oHtml->a($url_part . '&w1=8', $this->oL->m('printversion'));
+            $ar_theme_gp[9] = $this->oHtml->a($url_part . '&w1=9', $this->oL->m('custom_pages'));
             $ar_theme_gp[10] = $this->oHtml->a($url_part . '&w1=10', $this->oL->m('1107'));
             $ar_theme_gp[13] = $this->oHtml->a($url_part . '&w1=13', $this->oL->m('1145'));
-            $ar_theme_gp[2]  = $this->oHtml->a($url_part . '&w1=2', $this->oL->m('1142'));
-            $ar_theme_gp[0]  = $this->oHtml->a($url_part . '&w1=css', 'CSS');
+            $ar_theme_gp[2] = $this->oHtml->a($url_part . '&w1=2', $this->oL->m('1142'));
+            $ar_theme_gp[0] = $this->oHtml->a($url_part . '&w1=css', 'CSS');
         }
         return $ar_theme_gp;
     }
@@ -75,8 +76,8 @@ class gw_addon_visual_themes_admin extends gw_addon
 
     public function get_form_tpl($vars, $runtime = 0, $ar_broken = [], $ar_req = [])
     {
-        $str_hidden  = '';
-        $str_form    = '';
+        $str_hidden = '';
+        $str_form = '';
         $v_td1_width = '25%';
 
         $oForm = new gwForms();
@@ -92,7 +93,7 @@ class gw_addon_visual_themes_admin extends gw_addon
         $oForm->Set('charset', $this->sys['internal_encoding']);
         $ar_req = array_flip($ar_req);
         /* mark fields as "Required" and display error message */
-        foreach ((is_array($vars) ? $vars : array()) as $k => $v) {
+        foreach ((is_array($vars) ? $vars : []) as $k => $v) {
             $ar_req_msg[$k] = $ar_broken_msg[$k] = '';
             if (isset($ar_req[$k])) {
                 $ar_req_msg[$k] = '&#160;<span class="red"><strong>*</strong></span>';
@@ -153,10 +154,10 @@ class gw_addon_visual_themes_admin extends gw_addon
 
     public function get_form_theme($vars, $runtime = 0, $ar_broken = [], $ar_req = [])
     {
-        $str_hidden  = '';
-        $str_form    = '';
-        $v_class_1   = 'td1';
-        $v_class_2   = 'td2';
+        $str_hidden = '';
+        $str_form = '';
+        $v_class_1 = 'td1';
+        $v_class_2 = 'td2';
         $v_td1_width = '25%';
 
         $oForm = new gwForms();
@@ -172,7 +173,7 @@ class gw_addon_visual_themes_admin extends gw_addon
         $oForm->Set('charset', $this->sys['internal_encoding']);
         $ar_req = array_flip($ar_req);
         /* mark fields as "Required" and display error message */
-        foreach ((is_array($vars) ? $vars : array()) as $k => $v) {
+        foreach ((is_array($vars) ? $vars : []) as $k => $v) {
             $ar_req_msg[$k] = $ar_broken_msg[$k] = '';
             if (isset($ar_req[$k])) {
                 $ar_req_msg[$k] = '&#160;<span class="red"><b>*</b></span>';
@@ -211,7 +212,7 @@ function switch2edit(id)
 #			$arV['settings_value'] = str_replace(array('{', '}'), array('{%', '%}'), $arV['settings_value']);
             $oForm->setTag('input', 'class', 'input');
             $oForm->setTag('input', 'maxlength', '250');
-            $bg_tag  = '';
+            $bg_tag = '';
             $bg_ctrl = '';
             /* Do not allow to edit admin theme */
             if ($this->gw_this['vars']['tid'] == 'gw_admin') {
@@ -223,7 +224,7 @@ function switch2edit(id)
                 $oForm->setTag('input', 'class', 'input50');
                 $oForm->setTag('input', 'maxlength', '7');
                 $invert_color = $this->oFunc->math_hex2negative($arV['settings_value']);
-                $bg_tag       = ' style="border:1px #CCC solid;color:#' . $invert_color . ';background:' . $arV['settings_value'] . '"';
+                $bg_tag = ' style="border:1px #CCC solid;color:#' . $invert_color . ';background:' . $arV['settings_value'] . '"';
                 #$bg_ctrl = ' [ Edit ] ';
             }
             if (is_numeric($this->gw_this['vars']['w1']) && ($this->gw_this['vars']['w1'] <= 2)) {
@@ -257,7 +258,7 @@ function switch2edit(id)
                 }
             } else {
                 /* Controls for the group of templates */
-                $url_tpl_add    = $this->sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_ADD . '&' . GW_TARGET . '=' . $this->component . '&tid=' . $this->gw_this['vars']['tid'] . '&w1=' . $this->gw_this['vars']['w1'] . '&w2=' . $arV['settings_key'];
+                $url_tpl_add = $this->sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_ADD . '&' . GW_TARGET . '=' . $this->component . '&tid=' . $this->gw_this['vars']['tid'] . '&w1=' . $this->gw_this['vars']['w1'] . '&w2=' . $arV['settings_key'];
                 $url_tpl_remove = $this->sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_REMOVE . '&' . GW_TARGET . '=' . $this->component . '&isConfirm=1&tid=' . $this->gw_this['vars']['tid'] . '&w1=' . $this->gw_this['vars']['w1'] . '&w2=' . $arV['settings_key'];
 
                 $str_tpl_ctrl = '<span class="actions-third" style="float:right">' . $this->oHtml->a(
@@ -284,7 +285,7 @@ function switch2edit(id)
                 $str_tpl_ctrl .= '</span>';
 
                 $int_height = $this->oFunc->getFormHeight($arV['settings_value'], 20) + 2;
-                $bg_tag     = ' dir="ltr" style="height:' . $int_height . 'em"';
+                $bg_tag = ' dir="ltr" style="height:' . $int_height . 'em"';
 
                 $this->oHtml->unsetTag('input');
                 $this->oHtml->setTag('input', 'type', 'button');
@@ -300,7 +301,7 @@ function switch2edit(id)
                 $oForm->setTag('textarea', 'style', 'text-align:left;width:100%;overflow:auto;display:none');
 
                 $arV['settings_value'] = gw_fix_db_to_field($arV['settings_value']);
-                $str_textarea          = $oForm->field(
+                $str_textarea = $oForm->field(
                     'textarea',
                     'arPost[' . $arV['settings_key'] . ']',
                     ($arV['settings_value']),
@@ -369,9 +370,9 @@ function switch2edit(id)
                 'a title="' . $this->oL->m('3_edit') . '" href',
                 $str_external_link
             );
-            $str_checkbox      = $oForm->field('checkbox', 'arPost[tpl_page][' . $k . ']', 1);
-            $str_label         = '<label for="arPost_tpl_page_' . $k . '_">' . strip_tags($page) . '</label>';
-            $str_form          .= '<tr><td style="width:1%">' . $str_checkbox . '</td><td class="td2 actions-third">' . $str_external_link . $str_label . '</td></tr>';
+            $str_checkbox = $oForm->field('checkbox', 'arPost[tpl_page][' . $k . ']', 1);
+            $str_label = '<label for="arPost_tpl_page_' . $k . '_">' . strip_tags($page) . '</label>';
+            $str_form .= '<tr><td style="width:1%">' . $str_checkbox . '</td><td class="td2 actions-third">' . $str_external_link . $str_label . '</td></tr>';
         }
         $str_form .= '</tbody></table>';
         $str_form .= '</td></tr>';
@@ -441,7 +442,7 @@ function switch2edit(id)
             $oForm->setTag('file', 'id', 'file_location_xml');
             $oForm->setTag('file', 'dir', 'ltr');
             $oForm->setTag('file', 'size', '25');
-            $str_form                               .= '<tr>' .
+            $str_form .= '<tr>' .
                 '<td class="td1">&#160;</td>' .
                 '<td class="td2">' . $oForm->field('file', 'file_location', $vars['file_location']) . '</td>' .
                 '</tr>';
@@ -488,11 +489,11 @@ function switch2edit(id)
                     unset($ar_perms[$permission]);
                 }
             }
-            $ar_sql_like2       = 'cmm.req_permission_map LIKE "%:' . implode(
+            $ar_sql_like2 = 'cmm.req_permission_map LIKE "%:' . implode(
                     ':%" OR cmm.req_permission_map LIKE "%:',
                     array_keys($ar_perms)
                 ) . ':%"';
-            $arSql              = $this->oDb->sqlRun(
+            $arSql = $this->oDb->sqlRun(
                 $this->oSqlQ->getQ(
                     'get-component-action-perm',
                     $ar_sql_like2,
@@ -506,13 +507,13 @@ function switch2edit(id)
                 $this->sys['id_current_status'] = $this->oL->m($this->ar_component['cname']) . ': ' . $this->oL->m(
                         $this->ar_component['aname']
                     );
-                $this->component                = &$this->ar_component['id_component_name'];
+                $this->component = &$this->ar_component['id_component_name'];
                 include_once($this->sys['path_component_action']);
                 $strR .= $this->str;
             } else {
                 $this->sys['id_current_status'] = '';
-                $strR                           .= '<p class="xu">' . $this->oL->m('reason_13') . '</p>';
-                $strR                           .= '<p class="xt">' . $this->gw_this['vars'][GW_TARGET] . ': ' . $this->gw_this['vars'][GW_ACTION] . '</p>';
+                $strR .= '<p class="xu">' . $this->oL->m('reason_13') . '</p>';
+                $strR .= '<p class="xt">' . $this->gw_this['vars'][GW_TARGET] . ': ' . $this->gw_this['vars'][GW_ACTION] . '</p>';
             }
         }
     }
@@ -526,5 +527,3 @@ $oAddonAdm->alpha();
 $arPageNumbers['visual-themes_' . GW_A_UPDATE] = '';
 /* Do not load old components */
 $pathAction = '';
-/* end of file */
-?>

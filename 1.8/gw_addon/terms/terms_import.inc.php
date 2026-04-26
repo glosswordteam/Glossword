@@ -19,41 +19,36 @@ if (!defined('IN_GW')) {
 /* */
 $this->str .= $this->_get_nav();
 
-if (empty($this->gw_this['ar_dict_list']))
-{
-	$this->str .= '<div class="margin-inside">';
-	$this->str .= '<div class="xu">'.$this->oL->m('reason_4').'</div>';
-	$this->str .= '<p class="actions-third">'.$this->oHtml->a($this->sys['page_admin'].'?'.GW_ACTION.'='.GW_A_ADD .'&'. GW_TARGET.'='.GW_T_DICTS, $this->oL->m('3_add'), $this->oL->m(1335).': '.$this->oL->m('3_add')  ).'</p>';
-	$this->str .= '</div>';
-	return;
+if (empty($this->gw_this['ar_dict_list'])) {
+    $this->str .= '<div class="margin-inside">';
+    $this->str .= '<div class="xu">' . $this->oL->m('reason_4') . '</div>';
+    $this->str .= '<p class="actions-third">' . $this->oHtml->a($this->sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_ADD . '&' . GW_TARGET . '=' . GW_T_DICTS, $this->oL->m('3_add'), $this->oL->m(1335) . ': ' . $this->oL->m('3_add')) . '</p>';
+    $this->str .= '</div>';
+    return;
 }
-if (!$this->gw_this['vars']['id'])
-{
-	/* Provide the list of dictionaries */
-	$this->str .= '<div class="margin-inside">';
-	$this->str .= '<div class="xu">'.$this->oL->m('srch_selectdict').':</div>';
-	$this->str .= '<ul class="gwsql">';
-	$cnt_dict = 0;
-	$ar_allowed_dicts = $this->oSess->user_get('dictionaries');
-	foreach ($this->gw_this['ar_dict_list'] as $k => $v)
-	{
-		if ( $this->oSess->is('is-sys-settings')
-			|| ( isset($ar_allowed_dicts[$v['id']]) 
-				&& $this->oSess->is('is-terms-import') )
-			)
-		{
-			$this->str .= '<li>'.gw_dict_browse_for_select($v).'</li>';
-			$cnt_dict++;
-		}
-	}
-	/* No allowed dictionaries */
-	if (!$cnt_dict)
-	{
-		$this->str .= '<li>'.$this->oL->m('reason_13').'</li>';
-	}
-	$this->str .= '</ul>';
-	$this->str .= '</div>';
-	return;
+if (!$this->gw_this['vars']['id']) {
+    /* Provide the list of dictionaries */
+    $this->str .= '<div class="margin-inside">';
+    $this->str .= '<div class="xu">' . $this->oL->m('srch_selectdict') . ':</div>';
+    $this->str .= '<ul class="gwsql">';
+    $cnt_dict = 0;
+    $ar_allowed_dicts = $this->oSess->user_get('dictionaries');
+    foreach ($this->gw_this['ar_dict_list'] as $k => $v) {
+        if ($this->oSess->is('is-sys-settings')
+            || (isset($ar_allowed_dicts[$v['id']])
+                && $this->oSess->is('is-terms-import'))
+        ) {
+            $this->str .= '<li>' . gw_dict_browse_for_select($v) . '</li>';
+            $cnt_dict++;
+        }
+    }
+    /* No allowed dictionaries */
+    if (!$cnt_dict) {
+        $this->str .= '<li>' . $this->oL->m('reason_13') . '</li>';
+    }
+    $this->str .= '</ul>';
+    $this->str .= '</div>';
+    return;
 }
 
 global $oL, $gw_this, $oSess, $oDb, $oSqlQ, $oHtml, $sys, $arFields;
@@ -67,10 +62,7 @@ $str = '';
 
 $this->sys['int_terms_total'] = 0;
 
-include_once( $this->sys['path_include'].'/a.import.inc.php' );
+include_once($this->sys['path_include'] . '/a.import.inc.php');
 
 $this->str .= $str;
 
-
-
-?>

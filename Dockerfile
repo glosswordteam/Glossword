@@ -15,7 +15,7 @@ RUN apt-get update \
  && docker-php-ext-configure gd \
       --with-jpeg-dir=/usr/include/ \
       --with-freetype-dir=/usr/include/ \
- && docker-php-ext-install -j$(nproc) mysqli gd \
+ && docker-php-ext-install -j$(nproc) mysqli gd mbstring \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 

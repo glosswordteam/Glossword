@@ -337,4 +337,3 @@ class gw_reqcheck
 	}
 
 }
-?>

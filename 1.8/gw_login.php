@@ -1,8 +1,8 @@
 <?php
 /**
  * Glossword - glossary compiler (http://glossword.biz/)
- * © 2008-2026 Glossword.biz team <team at glossword dot biz>
- * © 2002-2008 Dmitry N. Shilnikov
+ * ï¿½ 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * ï¿½ 2002-2008 Dmitry N. Shilnikov
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ $sys = array_merge($sys, gw_get_settings());
 $sys['visualtheme'] = isset($sys['visualtheme']) ? $sys['visualtheme'] : 'gw_admin';
 /* Auto time for server  */
 $sys['time_now'] = isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time();
-$sys['time_now_gmt_unix'] = $sys['time_now'] - @date('Z');
+$sys['time_now_gmt_unix'] = $sys['time_now'] - date('Z');
 $tmps = [];
 /* --------------------------------------------------------
  * mod_rewrite configuration
@@ -371,7 +371,10 @@ if ($gw_this['vars']['post'] == '') {
                 $oDb->sqlExec($sql);
                 /* Create new activation key */
                 $int_act_key = gw_make_uid('', 9, 3);
-                $sql = gw_sql_insert(['id_user' => $arSql['id_user'], 'auth_key' => $int_act_key, 'date_created' => $sys['time_now_gmt_unix']], $sys['tbl_prefix'] . 'auth_restore');
+                $sql = gw_sql_insert(['id_user'      => $arSql['id_user'],
+                                      'auth_key'     => $int_act_key,
+                                      'date_created' => $sys['time_now_gmt_unix'],
+                ], $sys['tbl_prefix'] . 'auth_restore');
                 $oDb->sqlExec($sql);
 
                 $sys['is_debug_mail'] = 0;
@@ -494,5 +497,3 @@ $oHdr->output();
 print $oTpl->output();
 /* Close session */
 #$oSess->user_close();
-/* end of file */
-?>

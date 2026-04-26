@@ -18,7 +18,7 @@ if (!defined('IN_GW')) {
 /* Included from $oAddonAdm->alpha(); */
 
 $target_id = (int)$this->gw_this['vars'][GW_TARGET_ID];
-$ar_query  = [];
+$ar_query = [];
 
 if (!$this->gw_this['vars']['isConfirm']) {
     /* Deletion must be confirmed */

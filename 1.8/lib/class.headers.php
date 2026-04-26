@@ -15,38 +15,65 @@
 if (!defined('IN_GW')) {
     die('<!-- Not in App -->');
 }
-/* --------------------------------------------------------
- * Simple HTTP-headers class
-/* ----------------------------------------------------- */
-if ( ! class_exists('gw_headers')) {
-    class gw_headers
+
+/**
+ * Stores and outputs HTTP headers.
+ */
+class gw_headers
+{
+    private $_headers = [];
+
+    /**
+     * Adds a header line to the queue.
+     *
+     * @param string $header_line
+     * @return void
+     */
+    public function add($header_line)
     {
-        public $is_debug = GW_DEBUG_HTTP;
-        public $arH = array();
-        public $arHText = array();
+        if ($header_line !== '') {
+            $this->_headers[] = $header_line;
+        }
+    }
 
-        public function add($str)
-        {
-            if ($str != '') {
-                $this->arH[] = $str;
-            }
+    /**
+     * Sends queued headers.
+     *
+     * @return void
+     */
+    public function output()
+    {
+        if (headers_sent()) {
+            return;
         }
 
-        public function output()
-        {
-            foreach ($this->arH as $k => $v) {
-                @header($v);
-                if ($this->is_debug) {
-                    $this->arHText[] = $v;
-                }
-            }
+        foreach ($this->_headers as $header_line) {
+            header($header_line);
         }
+    }
 
-        public function get()
-        {
-            return $this->arH;
-        }
-    } /* end of class */
-    /* Autostart */
-    $oHdr = new gw_headers;
-}
+    /**
+     * Returns queued headers.
+     *
+     * @return array
+     */
+    public function get()
+    {
+        return $this->_headers;
+    }
+
+    /**
+     * Returns headers registered in PHP.
+     *
+     * @return array
+     */
+    public function get_sent()
+    {
+        return headers_list();
+    }
+} /* end of class */
+
+/* Autostart */
+$oHdr = new gw_headers();
+
+

@@ -19,57 +19,59 @@ if (!defined('IN_GW')) {
 	Maintenance task
 */
 /* */
-include($sys['path_addon'].'/class.gw_addon.php');
+include($sys['path_addon'] . '/class.gw_addon.php');
+
 /* */
+
 class gw_addon_clear_history_terms extends gw_addon
 {
-	public $addon_name = 'clear_history_terms';
-	/* Autoexec */
-	public function __construct()
-	{
-		$this->init_m();
-	}
-	/* */
-	public function _gw_clear()
-	{
-		/* Clear history of changes */
-		$sql = sprintf('DELETE FROM `%s` WHERE `date_modified` < %s',
-				$this->sys['tbl_prefix'].'history_terms',
-				$this->sys['time_now_gmt_unix'] - ($this->sys['max_days_history_terms'] * 24) * 3600);
-		$this->oDb->sqlExec($sql);
-		$this->oDb->sqlExec('CHECK TABLE `'.$this->sys['tbl_prefix'].'history_terms`');
-		/* Clear terms */
-		$arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-history-to-remove'));
-		$arTermIds = $arQ = array();
-		/* Group terms by dictionary */
-		foreach ( $arSql as $k => $v )
-		{
-			$arTermIds[$v['id_dict']][] = $v['id_term'];
-			unset($arSql[$k]);
-		}
-		foreach ( $arTermIds as $id_dict => $v )
-		{
-			$sql = 'DELETE FROM `' . $this->gw_this['ar_dict_list'][$id_dict]['tablename'] . '` WHERE id IN (' . implode(',', $v) . ')';
-			$this->oDb->sqlExec($sql);
-			$sql = 'DELETE FROM `' . TBL_WORDMAP . '` WHERE term_id IN (' . implode(',', $v) . ')';
-			$this->oDb->sqlExec($sql);
-			$sql = 'DELETE FROM `' . TBL_MAP_USER_TERM . '` WHERE term_id IN (' . implode(',', $v) . ') AND dict_id = "' . $id_dict . '"';
-			$this->oDb->sqlExec($sql);
-		}
-	}
-	/* */
-	public function alpha()
-	{
-		if ((mt_rand() % 100) < $this->sys['prbblty_tasks'])
-		{
-			$this->_gw_clear();
-		}
-	}
-	/* */
-	public function omega()
-	{
-	}
+    public $addon_name = 'clear_history_terms';
+
+    /* Autoexec */
+    public function __construct()
+    {
+        $this->init_m();
+    }
+
+    /* */
+    public function _gw_clear()
+    {
+        /* Clear history of changes */
+        $sql = sprintf('DELETE FROM `%s` WHERE `date_modified` < %s',
+            $this->sys['tbl_prefix'] . 'history_terms',
+            $this->sys['time_now_gmt_unix'] - ($this->sys['max_days_history_terms'] * 24) * 3600);
+        $this->oDb->sqlExec($sql);
+        $this->oDb->sqlExec('CHECK TABLE `' . $this->sys['tbl_prefix'] . 'history_terms`');
+        /* Clear terms */
+        $arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-history-to-remove'));
+        $arTermIds = $arQ = [];
+        /* Group terms by dictionary */
+        foreach ($arSql as $k => $v) {
+            $arTermIds[$v['id_dict']][] = $v['id_term'];
+            unset($arSql[$k]);
+        }
+        foreach ($arTermIds as $id_dict => $v) {
+            $sql = 'DELETE FROM `' . $this->gw_this['ar_dict_list'][$id_dict]['tablename'] . '` WHERE id IN (' . implode(',', $v) . ')';
+            $this->oDb->sqlExec($sql);
+            $sql = 'DELETE FROM `' . TBL_WORDMAP . '` WHERE term_id IN (' . implode(',', $v) . ')';
+            $this->oDb->sqlExec($sql);
+            $sql = 'DELETE FROM `' . TBL_MAP_USER_TERM . '` WHERE term_id IN (' . implode(',', $v) . ') AND dict_id = "' . $id_dict . '"';
+            $this->oDb->sqlExec($sql);
+        }
+    }
+
+    /* */
+    public function alpha()
+    {
+        if ((mt_rand() % 100) < $this->sys['prbblty_tasks']) {
+            $this->_gw_clear();
+        }
+    }
+
+    /* */
+    public function omega() {}
 }
+
 /* */
 $oM = new gw_addon_clear_history_terms;
 $oM->alpha();

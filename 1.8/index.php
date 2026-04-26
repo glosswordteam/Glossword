@@ -39,7 +39,7 @@ $sys = array_merge($sys, gw_get_settings());
 $sys['visualtheme'] = isset($sys['visualtheme']) ? $sys['visualtheme'] : 'gw_brand';
 /* Auto time for server  */
 $sys['time_now'] = isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time();
-$sys['time_now_gmt_unix'] = $sys['time_now'] - @date('Z');
+$sys['time_now_gmt_unix'] = $sys['time_now'] - date('Z');
 $sys['time_now_db'] = ($sys['time_now_gmt_unix'] - date("s", $sys['time_now_gmt_unix']));
 $sys['time_now_db_cache'] = $sys['time_now_db'] - (date("i", $sys['time_now_db']) * 60);
 /* 1.8.7: Technical support */
@@ -61,10 +61,10 @@ if (isset($_GET['server_']) && $sys['is_allow_tech_support'])
 	print "\n".'path_img       : '.$sys['path_img'];
 	print "\n".'page_index     : '.$sys['page_index'];
 	print "\n";
-	print "\n".'time_now          : '.@date("Y-M-d H:i:s", $sys['time_now']);
-	print "\n".'time_now_gmt_unix : '.@date("Y-M-d H:i:s", $sys['time_now_gmt_unix']);
-	print "\n".'time_now_db       : '.@date("Y-M-d H:i:s", $sys['time_now_db']);
-	print "\n".'time_now_db_cache : '.@date("Y-M-d H:i:s", $sys['time_now_db_cache']);
+	print "\n".'time_now          : '.date("Y-M-d H:i:s", $sys['time_now']);
+	print "\n".'time_now_gmt_unix : '.date("Y-M-d H:i:s", $sys['time_now_gmt_unix']);
+	print "\n".'time_now_db       : '.date("Y-M-d H:i:s", $sys['time_now_db']);
+	print "\n".'time_now_db_cache : '.date("Y-M-d H:i:s", $sys['time_now_db_cache']);
 	exit;
 }
 /* --------------------------------------------------------

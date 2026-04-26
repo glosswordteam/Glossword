@@ -2,8 +2,8 @@
 
 /**
  * Glossword - glossary compiler (http://glossword.biz/)
- * © 2008-2026 Glossword.biz team <team at glossword dot biz>
- * © 2002-2008 Dmitry N. Shilnikov
+ * ï¿½ 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * ï¿½ 2002-2008 Dmitry N. Shilnikov
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,14 +60,14 @@ $ar_tables = [
 ];
 /* Read database configuration file */
 include('../db_config.php');
-$ar_params['db_host']   = GW_DB_HOST;
-$ar_params['db_user']   = GW_DB_USER;
-$ar_params['db_name']   = GW_DB_DATABASE;
-$ar_params['db_pass']   = GW_DB_PASSWORD;
+$ar_params['db_host'] = GW_DB_HOST;
+$ar_params['db_user'] = GW_DB_USER;
+$ar_params['db_name'] = GW_DB_DATABASE;
+$ar_params['db_pass'] = GW_DB_PASSWORD;
 $ar_params['db_prefix'] = $sys['tbl_prefix'];
-$ar_params['db_type']   = $sys['db_type'];
-$this->oDb              = $this->_init_db($ar_params);
-$this->oDb->db_debug_q  = false;
+$ar_params['db_type'] = $sys['db_type'];
+$this->oDb = $this->_init_db($ar_params);
+$this->oDb->db_debug_q = false;
 
 /* Check if not installed */
 if (!$this->oDb->table_exists('settings')) {
@@ -97,8 +97,8 @@ switch ($this->gv['step']) {
         $query = $this->oDb->get();
         $arSql = $query->result_array();
         foreach ($arSql as $k => $arV) {
-            $v           = str_replace('\_', '_', $arV['tablename']);
-            $v           = str_replace($ar_params['db_prefix'], '', $v);
+            $v = str_replace('\_', '_', $arV['tablename']);
+            $v = str_replace($ar_params['db_prefix'], '', $v);
             $ar_tables[] = $v;
         }
 
@@ -145,8 +145,8 @@ switch ($this->gv['step']) {
         $query = $this->oDb->get();
         $arSql = $query->result_array();
         foreach ($arSql as $k => $arV) {
-            $v           = str_replace('\_', '_', $arV['tablename']);
-            $v           = str_replace($ar_params['db_prefix'], '', $v);
+            $v = str_replace('\_', '_', $arV['tablename']);
+            $v = str_replace($ar_params['db_prefix'], '', $v);
             $ar_tables[] = $v;
         }
         /* */

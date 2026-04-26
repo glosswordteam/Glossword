@@ -24,7 +24,7 @@ if (!$this->gw_this['vars']['isConfirm']) {
     return;
 }
 
-$page_id = (int) $this->gw_this['vars'][GW_TARGET_ID];
+$page_id = (int)$this->gw_this['vars'][GW_TARGET_ID];
 
 /* Enable debug mode */
 # $this->sys['isDebugQ'] = 1;
@@ -41,7 +41,7 @@ if ($this->oSess->is('is-cpages')) {
     $is_allow_edit = 1;
 } elseif (
     $this->oSess->is('is-cpages-own')
-    && ((int) $ar_parsed['id_user'] === (int) $this->oSess->id_user)
+    && ((int)$ar_parsed['id_user'] === (int)$this->oSess->id_user)
 ) {
     $is_allow_edit = 1;
 }

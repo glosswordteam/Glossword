@@ -1184,13 +1184,13 @@ function date_extract_int($d, $fmt = "%d %M %Y %H:%i:%s")
     if ((sizeof($monthsL) < 12) || (sizeof($monthsS) < 12)) {
         return '';
     }
-    $YYYY = @date("Y", $d);
-    $MM   = @date("n", $d);
-    $dd   = @date("j", $d);
-    $HH   = @date("H", $d);
-    $ii   = @date("i", $d);
-    $ss   = @date("s", $d);
-    $hh   = @date("h", $d);
+    $YYYY = date("Y", $d);
+    $MM   = date("n", $d);
+    $dd   = date("j", $d);
+    $HH   = date("H", $d);
+    $ii   = date("i", $d);
+    $ss   = date("s", $d);
+    $hh   = date("h", $d);
     $a    = ($HH > 12) ? ('pm') : 'am';
     $A    = ($HH > 12) ? ('PM') : 'AM';
     $mL   = str_replace('_', ' ', $monthsL[$MM]);
@@ -1554,7 +1554,7 @@ function htmlFormSelectDate($name, $val)
             }
         }
         $strA[0] .= '<option value="2037">2037</option>';
-        for ($y = (@date("Y") + 1); $y > (@date("Y") - 7); $y--) {
+        for ($y = (date("Y") + 1); $y > (date("Y") - 7); $y--) {
             // autoselect
             if ($rowDate[1] == $y) {
                 $s = ' selected="selected"';

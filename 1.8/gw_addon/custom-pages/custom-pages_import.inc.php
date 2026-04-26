@@ -12,7 +12,7 @@
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
 if (!defined('IN_GW')) {
-	die('<!-- Not in App -->');
+    die('<!-- Not in App -->');
 }
 /* Included from $oAddonAdm->alpha(); */
 
@@ -21,143 +21,143 @@ if (!defined('IN_GW')) {
 $this->str .= $this->_get_nav();
 
 
-$ar_req_fields = array();
-if ($this->gw_this['vars']['post'] == '')
-{
-	$arV = array();
-	$arV['file_location'] = '';
-	$arV['is_merge'] = 1;
-	$arV['is_overwrite'] = 0;
-	$arV['xml'] = '';
-	/* Not submitted */
-	$this->str .= $this->get_form_import($arV);
+$ar_req_fields = [];
+if ($this->gw_this['vars']['post'] == '') {
+    $arV = [];
+    $arV['file_location'] = '';
+    $arV['is_merge'] = 1;
+    $arV['is_overwrite'] = 0;
+    $arV['xml'] = '';
+    /* Not submitted */
+    $this->str .= $this->get_form_import($arV);
 
-	$strHelp = '';
-	$strHelp .= '<dl>';
-	$strHelp .= '<dt><strong>XML</strong></dt>';
-	$strHelp .= '<dd>' . CRLF.'&lt;'.'?xml version="1.0" encoding="UTF-8"'.'?&gt;'.
-					'<br />&lt;glossword&gt;'.
-					'<br />&lt;custom_page id="1"&gt;'.
-					'<br />&#160;&lt;parameters&gt;&#8230;&lt;/parameters&gt;'.
-					'<br />&#160;&lt;page_php_1&gt;&#8230;&lt;/page_php_1&gt;'.
-					'<br />&#160;&lt;page_php_2&gt;&#8230;&lt;/page_php_2&gt;'.
-					'<br />&#160;&lt;entry&gt;'.
-					'<br />&#160;&#160;&lt;lang xml:lang="en"&gt;'.
-					'<br />&#160;&#160;&#160;&lt;page_title&gt;&#8230;&lt;/page_title&gt;'.
-					'<br />&#160;&#160;&#160;&lt;page_descr&gt;&#8230;&lt;/page_descr&gt;'.
-					'<br />&#160;&#160;&#160;&lt;page_content&gt;&#8230;&lt;/page_content&gt;'.
-					'<br />&#160;&#160;&#160;&lt;page_keywords&gt;&#8230;&lt;/page_keywords&gt;'.
-					'<br />&#160;&#160;&#160;&lt;id_page_phrase&gt;&#8230;&lt;/id_page_phrase&gt;'.
-					'<br />&#160;&lt;/lang&gt;'.
-					'<br />&#160;&lt;/entry&gt;'.
-					'<br />&lt;/custom_page&gt;'.
-					'<br />&lt;/glossword&gt;' . '</dd>';
-	$strHelp .= '</dl>';
-	$this->str .= '<br />'.kTbHelp($this->oL->m('2_tip'), $strHelp);
-}
-else
-{
-	$file_location = array('name' => '');
-	if (isset($this->gw_this['vars']['_files']['file_location']))
-	{
-		$file_location = $this->gw_this['vars']['_files']['file_location'];
-	}
-	$arPost =& $this->gw_this['vars']['arPost'];
-	/* */
-	$xml_file = isset($file_location['tmp_name']) ? $file_location['tmp_name'] : '';
-	$file_target = urlencode(time().'_'.$file_location['name']);
-	/* Create directory */
-	$this->oFunc->file_put_contents($this->sys['path_temporary'].'/t/'.$file_target, '');
-	if (is_uploaded_file($xml_file)
-		&& move_uploaded_file($xml_file, $this->sys['path_temporary'].'/t/'.$file_target)
-		)
-	{
-		$arPost['xml'] = $this->oFunc->file_get_contents($this->sys['path_temporary'].'/t/'.$file_target);
-		/* remove uploaded file */
-		unlink($this->sys['path_temporary'].'/t/'.$file_target);
-	}
+    $strHelp = '';
+    $strHelp .= '<dl>';
+    $strHelp .= '<dt><strong>XML</strong></dt>';
+    $strHelp .= '<dd>' . CRLF . '&lt;' . '?xml version="1.0" encoding="UTF-8"' . '?&gt;' .
+        '<br />&lt;glossword&gt;' .
+        '<br />&lt;custom_page id="1"&gt;' .
+        '<br />&#160;&lt;parameters&gt;&#8230;&lt;/parameters&gt;' .
+        '<br />&#160;&lt;page_php_1&gt;&#8230;&lt;/page_php_1&gt;' .
+        '<br />&#160;&lt;page_php_2&gt;&#8230;&lt;/page_php_2&gt;' .
+        '<br />&#160;&lt;entry&gt;' .
+        '<br />&#160;&#160;&lt;lang xml:lang="en"&gt;' .
+        '<br />&#160;&#160;&#160;&lt;page_title&gt;&#8230;&lt;/page_title&gt;' .
+        '<br />&#160;&#160;&#160;&lt;page_descr&gt;&#8230;&lt;/page_descr&gt;' .
+        '<br />&#160;&#160;&#160;&lt;page_content&gt;&#8230;&lt;/page_content&gt;' .
+        '<br />&#160;&#160;&#160;&lt;page_keywords&gt;&#8230;&lt;/page_keywords&gt;' .
+        '<br />&#160;&#160;&#160;&lt;id_page_phrase&gt;&#8230;&lt;/id_page_phrase&gt;' .
+        '<br />&#160;&lt;/lang&gt;' .
+        '<br />&#160;&lt;/entry&gt;' .
+        '<br />&lt;/custom_page&gt;' .
+        '<br />&lt;/glossword&gt;' . '</dd>';
+    $strHelp .= '</dl>';
+    $this->str .= '<br />' . kTbHelp($this->oL->m('2_tip'), $strHelp);
+} else {
+    $file_location = ['name' => ''];
+    if (isset($this->gw_this['vars']['_files']['file_location'])) {
+        $file_location = $this->gw_this['vars']['_files']['file_location'];
+    }
+    $arPost =& $this->gw_this['vars']['arPost'];
+    /* */
+    $xml_file = isset($file_location['tmp_name']) ? $file_location['tmp_name'] : '';
+    $file_target = urlencode(time() . '_' . $file_location['name']);
+    /* Create directory */
+    $this->oFunc->file_put_contents($this->sys['path_temporary'] . '/t/' . $file_target, '');
+    if (is_uploaded_file($xml_file)
+        && move_uploaded_file($xml_file, $this->sys['path_temporary'] . '/t/' . $file_target)
+    ) {
+        $arPost['xml'] = $this->oFunc->file_get_contents($this->sys['path_temporary'] . '/t/' . $file_target);
+        /* remove uploaded file */
+        unlink($this->sys['path_temporary'] . '/t/' . $file_target);
+    }
 #$this->sys['isDebugQ'] = 1;
-	/* Do import using DOM model */
-	$oDom = new gw_domxml;
-	$oDom->is_skip_white = 0;
-	$oDom->strData =& $arPost['xml'];
-	$oDom->parse();
-	$oDom->strData = '';
-	$arXmlLine = $oDom->get_elements_by_tagname('custom_page');
-	$arQ = $q1 = array();
-	/* */
-	if ($arPost['is_overwrite'])
-	{
-		$arQ[] = 'TRUNCATE TABLE `'.$this->sys['tbl_prefix'].'pages`';
-		$arQ[] = 'TRUNCATE TABLE `'.$this->sys['tbl_prefix'].'pages_phrase`';
-	}
-	/* */
-	$cnt_pages = 0;
-	$this->str .= '<ul class="xt">';
-	foreach ($arXmlLine as $k1 => $v1)
-	{
-		/* per each topic */
-		if (!isset($v1['children'])) { continue; }
-		$id_page = $oDom->get_attribute('id', $v1['tag'], $v1);
-		/* <entry> */
-		foreach ($v1['children'] as $k2 => $v2)
-		{
-			if (!is_array($v2)){ continue; }
-			switch($v2['tag'])
-			{
-				case 'parameters':
-					$q2 = array();
-					$q1 = unserialize($oDom->get_content($v2));
-					$q1['id_page'] = $q2['id_page'] = $id_page;
-					$cnt_pages++;
-				break;
-				case 'entry':
-					if (!isset($v2['children'])) { continue 2; }
-					foreach ($v2['children'] as $k3 => $v3)
-					{
-						$id_lang = $oDom->get_attribute('xml:lang', 'lang', $v3);
-						/* for each element */
-						if (!is_array($v3) || !isset($v3['children'])) { continue; }
-						foreach ($v3['children'] as $k4 => $v4)
-						{
-							if (trim($v4['tag']) == ''){ continue; }
-							$q2[$v4['tag']] = $v4['value'];
-						}
-						$q2['id_lang'] = $id_lang.'-'.$this->gw_this['vars']['lang_enc'];
-						$arQ[] = gw_sql_replace($q2, $this->sys['tbl_prefix'].'pages_phrase');
-					}
-				break;
-				default:
-					/* page_php_1, page_php_2 */
-					$q1[$v2['tag']] = $v2['value'];
-				break;
-			}
-		}
-		if (!isset($q1['date_created']))
-		{
-			$q1['date_created'] = $q1['date_modified'] = $this->sys['time_now_gmt_unix'];
-		}
-		/* 1.8.7: Old files didn't have User ID */
-		if (!isset($q1['id_user']))
-		{
-			$q1['id_user'] = $this->oSess->id_user;
-		}
-		$arQ[] = gw_sql_replace($q1, $this->sys['tbl_prefix'].'pages');
-	}
-	$this->str .= '</ul>';
-	/* */
-	if (!$cnt_pages)
-	{
-		$arPost['is_merge'] = 1;
-		if ($arPost['is_overwrite'])
-		{
-			$arPost['is_merge'] = 0;
-		}
-		$arPost['file_location'] = '';
-		$this->str .= $this->get_form_import($arPost);
-		return;
-	}
-	$this->str .= postQuery($arQ, 'a=' . GW_A_BROWSE . '&'.GW_TARGET.'=' . $this->component.'&note_afterpost='.$this->oL->m('custom_pages').': '.$cnt_pages, $this->sys['isDebugQ'], 0);
+    /* Do import using DOM model */
+    $oDom = new gw_domxml;
+    $oDom->is_skip_white = 0;
+    $oDom->strData =& $arPost['xml'];
+    $oDom->parse();
+    $oDom->strData = '';
+    $arXmlLine = $oDom->get_elements_by_tagname('custom_page');
+    $arQ = $q1 = [];
+    /* */
+    if ($arPost['is_overwrite']) {
+        $arQ[] = 'TRUNCATE TABLE `' . $this->sys['tbl_prefix'] . 'pages`';
+        $arQ[] = 'TRUNCATE TABLE `' . $this->sys['tbl_prefix'] . 'pages_phrase`';
+    }
+    /* */
+    $cnt_pages = 0;
+    $this->str .= '<ul class="xt">';
+    foreach ($arXmlLine as $k1 => $v1) {
+        /* per each topic */
+        if (!isset($v1['children'])) {
+            continue;
+        }
+        $id_page = $oDom->get_attribute('id', $v1['tag'], $v1);
+        /* <entry> */
+        foreach ($v1['children'] as $k2 => $v2) {
+            if (!is_array($v2)) {
+                continue;
+            }
+            switch ($v2['tag']) {
+                case 'parameters':
+                    $q2 = [];
+                    $q1 = unserialize($oDom->get_content($v2));
+                    $q1['id_page'] = $q2['id_page'] = $id_page;
+                    $cnt_pages++;
+                    break;
+                case 'entry':
+                    if (!isset($v2['children'])) {
+                        continue 2;
+                    }
+                    foreach ($v2['children'] as $k3 => $v3) {
+                        $id_lang = $oDom->get_attribute('xml:lang', 'lang', $v3);
+                        /* for each element */
+                        if (!is_array($v3) || !isset($v3['children'])) {
+                            continue;
+                        }
+                        foreach ($v3['children'] as $k4 => $v4) {
+                            if (trim($v4['tag']) == '') {
+                                continue;
+                            }
+                            $q2[$v4['tag']] = $v4['value'];
+                        }
+                        $q2['id_lang'] = $id_lang . '-' . $this->gw_this['vars']['lang_enc'];
+                        $arQ[] = gw_sql_replace($q2, $this->sys['tbl_prefix'] . 'pages_phrase');
+                    }
+                    break;
+                default:
+                    /* page_php_1, page_php_2 */
+                    $q1[$v2['tag']] = $v2['value'];
+                    break;
+            }
+        }
+        if (!isset($q1['date_created'])) {
+            $q1['date_created'] = $q1['date_modified'] = $this->sys['time_now_gmt_unix'];
+        }
+        /* 1.8.7: Old files didn't have User ID */
+        if (!isset($q1['id_user'])) {
+            $q1['id_user'] = $this->oSess->id_user;
+        }
+        $arQ[] = gw_sql_replace($q1, $this->sys['tbl_prefix'] . 'pages');
+    }
+    $this->str .= '</ul>';
+    /* */
+    if (!$cnt_pages) {
+        $arPost['is_merge'] = 1;
+        if ($arPost['is_overwrite']) {
+            $arPost['is_merge'] = 0;
+        }
+        $arPost['file_location'] = '';
+        $this->str .= $this->get_form_import($arPost);
+        return;
+    }
+
+    $this->str .= postQuery(
+        $arQ,
+        $this->oUrl->build_admin_url(GW_A_BROWSE, $this->component, ['note_afterpost' => $this->oL->m('custom_pages') . ': ' . $cnt_pages]),
+        $this->sys['isDebugQ'],
+        $this->sys['isPause']
+    );
 }
 
-?>

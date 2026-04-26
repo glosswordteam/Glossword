@@ -21,13 +21,13 @@ if (!defined('IN_GW')) {
  *
  *  @version $Id: a.export.js.php 84 2007-06-19 13:01:21Z yrtimd $
  */
-$yf = @date("Y");
-$mf = @date("m");
-$df = @date("d");
-$dateFromD = @date("YmdH:i:s", @mktime(0,0,0, $mf, ($df - 1), $yf));
-$dateTillD = @date("YmdH:i:s", @mktime(23,59,59, $mf, ($df - 1), $yf));
-$dateFromM = @date("YmdH:i:s", @mktime(0,0,0, $mf, 1, $yf));
-$dateTillM = @date("YmdH:i:s", @mktime(23,59,59, ($mf + 1), 0, $yf));
+$yf = date("Y");
+$mf = date("m");
+$df = date("d");
+$dateFromD = date("YmdH:i:s", mktime(0,0,0, $mf, ($df - 1), $yf));
+$dateTillD = date("YmdH:i:s", mktime(23,59,59, $mf, ($df - 1), $yf));
+$dateFromM = date("YmdH:i:s", mktime(0,0,0, $mf, 1, $yf));
+$dateTillM = date("YmdH:i:s", mktime(23,59,59, ($mf + 1), 0, $yf));
 $strForm .= '<script type="text/javascript">/*<![CDATA[*/';
 $strForm .= '
 
@@ -58,14 +58,14 @@ function setAll()
 {
     if (!fy.disabled)
     {
-        fy.value = "' . @date("Y", $vars['min']) . '";
-        fm.value = "' . @date("m", $vars['min']) . '";
-        fd.value = "' . @date("d", $vars['min']) . '";
-        fs.value = "' . @date("H", $vars['min']) . ":" . @date("i", $vars['min']) . ":" . @date("s", $vars['min']) . '";
-        ty.value = "' . @date("Y", $vars['max']) . '";
-        tm.value = "' . @date("m", $vars['max']) . '";
-        td.value = "' . @date("d", $vars['max']) . '";
-        ts.value = "' . @date("H", $vars['max']) . ":" . @date("i", $vars['max']) . ":" . @date("s", $vars['max']) . '";
+        fy.value = "' . date("Y", $vars['min']) . '";
+        fm.value = "' . date("m", $vars['min']) . '";
+        fd.value = "' . date("d", $vars['min']) . '";
+        fs.value = "' . date("H", $vars['min']) . ":" . date("i", $vars['min']) . ":" . date("s", $vars['min']) . '";
+        ty.value = "' . date("Y", $vars['max']) . '";
+        tm.value = "' . date("m", $vars['max']) . '";
+        td.value = "' . date("d", $vars['max']) . '";
+        ts.value = "' . date("H", $vars['max']) . ":" . date("i", $vars['max']) . ":" . date("s", $vars['max']) . '";
     }
 }
 function setToday()
@@ -74,9 +74,9 @@ function setToday()
     {
         fs.value = "00:00:00";
         ts.value = "23:59:59";
-        td.value = fd.value = "' . @date("d") . '";
-        tm.value = fm.value = "' . @date("m") . '";
-        ty.value = fy.value = "' . @date("Y") . '";
+        td.value = fd.value = "' . date("d") . '";
+        tm.value = fm.value = "' . date("m") . '";
+        ty.value = fy.value = "' . date("Y") . '";
     }
 }
 function setD()

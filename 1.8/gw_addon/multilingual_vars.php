@@ -21,72 +21,73 @@ if (!defined('IN_GW')) {
  * and for the whole website
  */
 /* */
-function gw_addon_multilingual_vars_load($filename = '', $obj_tpl)
+function gw_addon_multilingual_vars_load($filename, $obj_tpl)
 {
-	global $oFunc, $$obj_tpl;
-	global $sys, $gw_this, $arDictParam;
+    global $oFunc, $sys, $gw_this, $arDictParam;
+    global $$obj_tpl;
 
-	// Read additional template variables
-	$oDomCode = new gw_domxml;
-	$oDomCode->strData = $oFunc->file_get_contents($filename);
-	$oDomCode->parse();
-	// start parsing every translation unit, <tu>
-	$oEl = $oDomCode->get_elements_by_tagname('tu');
-	foreach ($oEl as $elK1 => $elV1)
-	{
-		if ( isset($elV1['children']) && is_array($elV1['children']) )
-		{
-			$tmp['xml_varname'] = '';
-			foreach ($elV1['children'] as $elK2 => $elV2)
-			{
-				if (isset($elV2['tag']) && isset($elV2['value']) && ($elV2['tag'] == 'prop'))
-				{
-					// get variable names
-					$tmp['xml_varname'] = $elV2['value'];
-				}
-				elseif (isset($elV2['attributes']['xml:lang'])
-					&& isset($elV2['children'][0]['value'])
-					&& $elV2['attributes']['xml:lang'] == $gw_this['vars'][GW_LANG_I]
-				)
-				{
-					// set assigned value
-#					$$oTpl->addVal( $tmp['xml_varname'], '<span class="gwvar">'.$elV2['children'][0]['value'].'</span>&#32;');
-					$$obj_tpl->addVal( $tmp['xml_varname'], $elV2['children'][0]['value']);
-				}
-				elseif (isset($elV2['attributes']['xml:lang'])
-					&& isset($elV2['children'][0]['value'])
-					&& $elV2['attributes']['xml:lang'] == str_replace('-utf8', '', $sys['locale_name'])
-				)
-				{
-					// set default value
-					$$obj_tpl->addVal( $tmp['xml_varname'], $elV2['children'][0]['value']);
-				}
-			} // each setting
-		}
-	} // while
+    $tpl = $$obj_tpl;
+
+    $oDomCode = new gw_domxml();
+    $oDomCode->strData = $oFunc->file_get_contents($filename);
+    $oDomCode->parse();
+
+    // Compute once outside the loop
+    $targetLang = $gw_this['vars'][GW_LANG_I];
+    $localeName = str_replace('-utf8', '', $sys['locale_name']);
+
+    foreach ($oDomCode->get_elements_by_tagname('tu') as $tu) {
+        if (empty($tu['children']) || !is_array($tu['children'])) {
+            continue;
+        }
+
+        $varname = '';
+        $targetValue = null;
+        $defaultValue = null;
+
+        foreach ($tu['children'] as $child) {
+            $tag = isset($child['tag']) ? $child['tag'] : '';
+            $value = isset($child['value']) ? $child['value'] : '';
+            $lang = isset($child['attributes']['xml:lang']) ? $child['attributes']['xml:lang'] : '';
+            $segValue = isset($child['children'][0]['value']) ? $child['children'][0]['value'] : null;
+
+            if ($tag === 'prop' && $value !== '') {
+                $varname = $value;
+            } elseif ($segValue !== null) {
+                // Exact language match takes priority over locale fallback
+                if ($lang === $targetLang) {
+                    $targetValue = $segValue;
+                } elseif ($lang === $localeName && $targetValue === null) {
+                    $defaultValue = $segValue;
+                }
+            }
+        }
+
+        if ($varname !== '') {
+            $result = $targetValue !== null ? $targetValue : $defaultValue;
+            if ($result !== null) {
+                $tpl->addVal($varname, $result);
+            }
+        }
+    }
 }
+
 /* */
 function gw_addon_multilingual_vars($id_dict = 0, $obj_tpl = 'oTpl')
 {
-	if ($id_dict > 0)
-	{
-		$filename = sprintf("gw_xml/multilingual_vars/%d.xml", $id_dict);
-		gw_addon_multilingual_vars_load($filename, $obj_tpl);
-	}
-	$filename = sprintf("gw_xml/multilingual_vars/common.xml", $id_dict);
-	gw_addon_multilingual_vars_load($filename, $obj_tpl);
-
+    if ($id_dict > 0) {
+        $filename = sprintf("gw_xml/multilingual_vars/%d.xml", $id_dict);
+        gw_addon_multilingual_vars_load($filename, $obj_tpl);
+    }
+    $filename = sprintf("gw_xml/multilingual_vars/common.xml", $id_dict);
+    gw_addon_multilingual_vars_load($filename, $obj_tpl);
 }
+
 /* Load multilingual vars per dictionary */
-if (isset($arDictParam['id']) && $arDictParam['id'])
-{
-	gw_addon_multilingual_vars($arDictParam['id']);
+if (isset($arDictParam['id']) && $arDictParam['id']) {
+    gw_addon_multilingual_vars($arDictParam['id']);
 }
 /* Allow multilingual_vars in admin */
-if (GW_IS_BROWSE_WEB || (GW_IS_BROWSE_ADMIN && ${GW_ACTION} != GW_A_EDIT) )
-{
-	gw_addon_multilingual_vars();
+if (GW_IS_BROWSE_WEB || (GW_IS_BROWSE_ADMIN && ${GW_ACTION} != GW_A_EDIT)) {
+    gw_addon_multilingual_vars();
 }
-
-/* end of file */
-?>

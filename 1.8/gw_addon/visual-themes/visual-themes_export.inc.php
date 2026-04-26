@@ -20,118 +20,96 @@ if (!defined('IN_GW')) {
 $this->str .= $this->_get_nav();
 
 
-if ($this->gw_this['vars']['post'] == '')
-{
-	$arV['tpl_pages'] = $this->get_tpl_pages($this->gw_this['vars']['tid']);
-	$arV['is_as_file'] = 0;
-	/* Not submitted */
-	$this->str .= $this->get_form_export($arV);
-		}
-		else
-		{
-	$arPost =& $this->gw_this['vars']['arPost'];
-	/* fix Print version */
-	if (isset($arPost['tpl_page'][7]))
-	{
-		$arPost['tpl_page'][8] = 1;
-	}
-	/* Fix on/off options */
-	$arIsV = array('is_binary', 'is_as_file');
-	foreach ($arIsV as $k => $v)
-	{
-		$arPost[$v]  = isset($arPost[$v]) ? $arPost[$v] : 0;
-	}
-	/* */
-	$xml = '<'.'?xml version="1.0" encoding="UTF-8"?'.'>';
-	$path_template = $this->sys['path_temporary'].'/t/'.$this->gw_this['vars']['tid'];
-	/* Basic info */
-	$arSql = $this->oDb->sqlExec('SELECT * FROM `'.$this->sys['tbl_prefix'].'theme` WHERE `id_theme` = "'. gw_text_sql($this->gw_this['vars']['tid']) .'"');
-	$style_attr = '';
-	foreach ($arSql as $k => $arV)
-	{
-		unset($arV['is_active']);
-		$arV['version'] = $arV['v1'].'.'.$arV['v2'].'.'.$arV['v3'];
-		unset($arV['v1'], $arV['v2'], $arV['v3']);
-		foreach ($arV as $attrK => $attrV)
-		{
-			$style_attr .= CRLF.' '.$attrK.'="'.$attrV.'"';
-		}
-	}
-	$xml .= CRLF . '<style'.$style_attr.'>';
-	/* */
-	if (!empty($arPost['tpl_page']))
-	{
-		$arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-theme', gw_text_sql($this->gw_this['vars']['tid']), implode(',', array_keys($arPost['tpl_page']))) );
-		$ar_theme = array();
-		foreach ($arSql as $arK => $arV)
-		{
-			$ar_theme[$arV['settings_key']] = $arV['settings_value'];
-		}
-		$xml .= CRLF . "\t". '<group id="settings">';
-		foreach ($ar_theme as $settings_key => $settings_value)
-		{
-			$xml .= CRLF . "\t\t" . '<setting key="';
-			$xml .= $settings_key;
-			$xml .= '"><![CDATA[';
-			$settings_value = str_replace('<![CDATA[', '&lt;![CDATA[', $settings_value);
-			$settings_value = str_replace(']]>', ']]&gt;', $settings_value);
-			$xml .= $settings_value;
-			$xml .= ']]></setting>';
-			unset($ar_theme[$settings_key]);
-		}
-		$xml .= CRLF . "\t" . '</group>';
-	}
-	if ($arPost['is_binary'])
-	{
-		$ar_files = file_readDirF($path_template, '//');
-		if (!empty($ar_files))
-		{
-			$xml .= CRLF . "\t". '<group id="binary">';
-			foreach ($ar_files as $k => $v)
-			{
-				$xml .= CRLF . "\t\t" . '<setting key="';
-				$xml .= $v;
-				$xml .= '">';
-				$xml .= bin2hex($this->oFunc->file_get_contents($path_template.'/'.$v));
-				$xml .= '</setting>';
-			}
-			$xml .= CRLF . "\t" . '</group>';
-		}
-	}
-	$xml .= CRLF . '</style>';
-	/* */
-	$filename = 'visual-themes_'. $this->gw_this['vars']['tid'].'_'.@date("Y-m[M]-d", $this->sys['time_now_gmt_unix']) .'.xml';
-	/* */
-	if ($arPost['is_as_file'])
-	{
-		/* Send headers */
-		if (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-		{
-			header('Content-Type: application/force-download');
-		}
-		else
-		{
-			header('Content-Type: application/octet-stream');
-		}
-		header('Content-Length: '.strlen($xml));
-		header('Content-disposition: attachment; filename="'. $filename);
-		print $xml;
-		exit;
-	}
-	else
-	{
-		/* Write to disk */
-		$filename = $this->sys['path_export'] . '/'. $filename;
-		$mode = 'w';
-		$this->str .= '<ul class="xt">';
-		$this->str .= '<li><span class="gray">';
-		$this->str .= $this->oHtml->a($filename, $filename) . '</span>&#8230; ';
-		$isWrite = $this->oFunc->file_put_contents($filename, $xml, $mode);
-		$this->str .= ( $isWrite ?  'ok (' . $this->oFunc->number_format(strlen($xml), 0, $this->oL->languagelist(LOCALE_LANG_RULES)) . ' ' . $this->oL->m('bytes') . ')' : $this->oL->m('error') ) . '</li>';
-		$this->str .= '</ul>';
-	}
+if ($this->gw_this['vars']['post'] == '') {
+    $arV['tpl_pages'] = $this->get_tpl_pages($this->gw_this['vars']['tid']);
+    $arV['is_as_file'] = 0;
+    /* Not submitted */
+    $this->str .= $this->get_form_export($arV);
+} else {
+    $arPost =& $this->gw_this['vars']['arPost'];
+    /* fix Print version */
+    if (isset($arPost['tpl_page'][7])) {
+        $arPost['tpl_page'][8] = 1;
+    }
+    /* Fix on/off options */
+    $arIsV = ['is_binary', 'is_as_file'];
+    foreach ($arIsV as $k => $v) {
+        $arPost[$v] = isset($arPost[$v]) ? $arPost[$v] : 0;
+    }
+    /* */
+    $xml = '<' . '?xml version="1.0" encoding="UTF-8"?' . '>';
+    $path_template = $this->sys['path_temporary'] . '/t/' . $this->gw_this['vars']['tid'];
+    /* Basic info */
+    $arSql = $this->oDb->sqlExec('SELECT * FROM `' . $this->sys['tbl_prefix'] . 'theme` WHERE `id_theme` = "' . gw_text_sql($this->gw_this['vars']['tid']) . '"');
+    $style_attr = '';
+    foreach ($arSql as $k => $arV) {
+        unset($arV['is_active']);
+        $arV['version'] = $arV['v1'] . '.' . $arV['v2'] . '.' . $arV['v3'];
+        unset($arV['v1'], $arV['v2'], $arV['v3']);
+        foreach ($arV as $attrK => $attrV) {
+            $style_attr .= CRLF . ' ' . $attrK . '="' . $attrV . '"';
+        }
+    }
+    $xml .= CRLF . '<style' . $style_attr . '>';
+    /* */
+    if (!empty($arPost['tpl_page'])) {
+        $arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-theme', gw_text_sql($this->gw_this['vars']['tid']), implode(',', array_keys($arPost['tpl_page']))));
+        $ar_theme = [];
+        foreach ($arSql as $arK => $arV) {
+            $ar_theme[$arV['settings_key']] = $arV['settings_value'];
+        }
+        $xml .= CRLF . "\t" . '<group id="settings">';
+        foreach ($ar_theme as $settings_key => $settings_value) {
+            $xml .= CRLF . "\t\t" . '<setting key="';
+            $xml .= $settings_key;
+            $xml .= '"><![CDATA[';
+            $settings_value = str_replace('<![CDATA[', '&lt;![CDATA[', $settings_value);
+            $settings_value = str_replace(']]>', ']]&gt;', $settings_value);
+            $xml .= $settings_value;
+            $xml .= ']]></setting>';
+            unset($ar_theme[$settings_key]);
+        }
+        $xml .= CRLF . "\t" . '</group>';
+    }
+    if ($arPost['is_binary']) {
+        $ar_files = file_readDirF($path_template, '//');
+        if (!empty($ar_files)) {
+            $xml .= CRLF . "\t" . '<group id="binary">';
+            foreach ($ar_files as $k => $v) {
+                $xml .= CRLF . "\t\t" . '<setting key="';
+                $xml .= $v;
+                $xml .= '">';
+                $xml .= bin2hex($this->oFunc->file_get_contents($path_template . '/' . $v));
+                $xml .= '</setting>';
+            }
+            $xml .= CRLF . "\t" . '</group>';
+        }
+    }
+    $xml .= CRLF . '</style>';
+    /* */
+    $filename = 'visual-themes_' . $this->gw_this['vars']['tid'] . '_' . date("Y-m[M]-d", $this->sys['time_now_gmt_unix']) . '.xml';
+    /* */
+    if ($arPost['is_as_file']) {
+        /* Send headers */
+        if (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+            header('Content-Type: application/force-download');
+        } else {
+            header('Content-Type: application/octet-stream');
+        }
+        header('Content-Length: ' . strlen($xml));
+        header('Content-disposition: attachment; filename="' . $filename);
+        print $xml;
+        exit;
+    } else {
+        /* Write to disk */
+        $filename = $this->sys['path_export'] . '/' . $filename;
+        $mode = 'w';
+        $this->str .= '<ul class="xt">';
+        $this->str .= '<li><span class="gray">';
+        $this->str .= $this->oHtml->a($filename, $filename) . '</span>&#8230; ';
+        $isWrite = $this->oFunc->file_put_contents($filename, $xml, $mode);
+        $this->str .= ($isWrite ? 'ok (' . $this->oFunc->number_format(strlen($xml), 0, $this->oL->languagelist(LOCALE_LANG_RULES)) . ' ' . $this->oL->m('bytes') . ')' : $this->oL->m('error')) . '</li>';
+        $this->str .= '</ul>';
+    }
 }
 
-
-
-?>

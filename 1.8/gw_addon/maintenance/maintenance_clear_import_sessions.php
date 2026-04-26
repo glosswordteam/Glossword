@@ -19,38 +19,42 @@ if (!defined('IN_GW')) {
 	Maintenance task
 */
 /* */
-include($sys['path_addon'].'/class.gw_addon.php');
+include($sys['path_addon'] . '/class.gw_addon.php');
+
 /* */
+
 class gw_addon_clear_import_sessions extends gw_addon
 {
-	public $addon_name = 'clear_import_sessions';
-	/* Autoexec */
-	public function __construct()
-	{
-		$this->init_m();
-	}
-	/* */
-	public function _gw_clear()
-	{
-		/* Clear import sessions */
-		$sql = sprintf('DELETE FROM `%s` WHERE `date_start` < %s OR `date_end` = "0"',
-				$this->sys['tbl_prefix'].'import_sessions',
-				$this->sys['time_now_gmt_unix'] - ($this->sys['max_days_history_terms'] * 24) * 3600);
-		$this->oDb->sqlExec($sql);
-	}
-	/* */
-	public function alpha()
-	{
-		if ((mt_rand() % 100) < $this->sys['prbblty_tasks'])
-		{
-			$this->_gw_clear();
-		}
-	}
-	/* */
-	public function omega()
-	{
-	}
+    public $addon_name = 'clear_import_sessions';
+
+    /* Autoexec */
+    public function __construct()
+    {
+        $this->init_m();
+    }
+
+    /* */
+    public function _gw_clear()
+    {
+        /* Clear import sessions */
+        $sql = sprintf('DELETE FROM `%s` WHERE `date_start` < %s OR `date_end` = "0"',
+            $this->sys['tbl_prefix'] . 'import_sessions',
+            $this->sys['time_now_gmt_unix'] - ($this->sys['max_days_history_terms'] * 24) * 3600);
+        $this->oDb->sqlExec($sql);
+    }
+
+    /* */
+    public function alpha()
+    {
+        if ((mt_rand() % 100) < $this->sys['prbblty_tasks']) {
+            $this->_gw_clear();
+        }
+    }
+
+    /* */
+    public function omega() {}
 }
+
 /* */
 $oM = new gw_addon_clear_import_sessions;
 $oM->alpha();

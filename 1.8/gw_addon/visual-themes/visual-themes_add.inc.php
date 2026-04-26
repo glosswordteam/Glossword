@@ -23,71 +23,58 @@ $this->str .= $this->_get_nav();
 #$this->sys['isDebugQ'] = 1;
 
 $arPost =& $this->gw_this['vars']['arPost'];
-$ar_req_fields = $q1 = array();
+$ar_req_fields = $q1 = [];
 /* 24 Jun 2006: Add template into the group of templates */
-if ($this->gw_this['vars']['w2'])
-{
-	if ($this->gw_this['vars']['post'] == '')
-	{
-		$arSql = $this->oDb->sqlExec($this->oSqlQ->getQ(
-				'get-settings-by-gp', gw_text_sql($this->gw_this['vars']['tid']), gw_text_sql($this->gw_this['vars']['w1']))
-		);
-		$this->str .= $this->get_form_tpl($arSql, 0, 0, $ar_req_fields);
-	}
-	else
-	{
-		$q1['settings_key'] = $arPost['new_template']['new'];
-		$q1['id_group'] = $this->gw_this['vars']['w1'];
-		$q1['int_sort'] = $arPost['new_template']['int_sort'];
-		$arQ[] = gw_sql_insert($q1, $this->sys['tbl_prefix'].'theme_group');
-		unset($arPost['new_template']);
-		foreach ($arPost as $k => $v)
-		{
-			$q2 = array();
-			$q2['int_sort'] = $v['int_sort'];
-			$q2['settings_key'] = $v['new'];
-			$arQ[] = gw_sql_update($q2,
-						$this->sys['tbl_prefix'].'theme_group',
-						sprintf('settings_key = "%s" AND id_group = "%d"',
-							gw_text_sql($v['old']), gw_text_sql($this->gw_this['vars']['w1'])
-						)
-					);
-		}
-		/* And empty values to all visual themes */
-		/* The list of visual themes */
-		$arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-themes-adm'), $this->component);
-		foreach ($arSql as $arK => $arV)
-		{
-			$q3 = array();
-			/*
-				When the selected theme is `gw_admin', add new template to `gw_admin' only.
-				Otherwise, add new template to all visual themes but not to `gw_admin'
-			*/
-			if ($this->gw_this['vars']['tid'] == 'gw_admin')
-			{
-				if ($arV['id_theme'] == $this->gw_this['vars']['tid'])
-				{
-					$q3['id_theme'] = $arV['id_theme'];
-					$q3['settings_key'] = $q1['settings_key'];
-					$q3['settings_value'] = $q3['code'] = $q3['code_i'] = '';
-					$arQ[] = gw_sql_insert($q3, $this->sys['tbl_prefix'].'theme_settings');
-				}
-			}
-			else
-			{
-				if ($arV['id_theme'] == 'gw_admin')
-				{
-					continue;
-				}
-				$q3['id_theme'] = $arV['id_theme'];
-				$q3['settings_key'] = $q1['settings_key'];
-				$q3['settings_value'] = $q3['code'] = $q3['code_i'] = '';
-				$arQ[] = gw_sql_insert($q3, $this->sys['tbl_prefix'].'theme_settings');
-			}
-		}
-		$this->str .= postQuery($arQ, 'a='. GW_A_EDIT .'&'. GW_TARGET.'='.$this->gw_this['vars'][GW_TARGET].'&tid='.$this->gw_this['vars']['tid'].'&w1='.$this->gw_this['vars']['w1'], $this->sys['isDebugQ'], 0);
-	}
+if ($this->gw_this['vars']['w2']) {
+    if ($this->gw_this['vars']['post'] == '') {
+        $arSql = $this->oDb->sqlExec($this->oSqlQ->getQ(
+            'get-settings-by-gp', gw_text_sql($this->gw_this['vars']['tid']), gw_text_sql($this->gw_this['vars']['w1']))
+        );
+        $this->str .= $this->get_form_tpl($arSql, 0, 0, $ar_req_fields);
+    } else {
+        $q1['settings_key'] = $arPost['new_template']['new'];
+        $q1['id_group'] = $this->gw_this['vars']['w1'];
+        $q1['int_sort'] = $arPost['new_template']['int_sort'];
+        $arQ[] = gw_sql_insert($q1, $this->sys['tbl_prefix'] . 'theme_group');
+        unset($arPost['new_template']);
+        foreach ($arPost as $k => $v) {
+            $q2 = [];
+            $q2['int_sort'] = $v['int_sort'];
+            $q2['settings_key'] = $v['new'];
+            $arQ[] = gw_sql_update($q2,
+                $this->sys['tbl_prefix'] . 'theme_group',
+                sprintf('settings_key = "%s" AND id_group = "%d"',
+                    gw_text_sql($v['old']), gw_text_sql($this->gw_this['vars']['w1'])
+                )
+            );
+        }
+        /* And empty values to all visual themes */
+        /* The list of visual themes */
+        $arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-themes-adm'), $this->component);
+        foreach ($arSql as $arK => $arV) {
+            $q3 = [];
+            /*
+                When the selected theme is `gw_admin', add new template to `gw_admin' only.
+                Otherwise, add new template to all visual themes but not to `gw_admin'
+            */
+            if ($this->gw_this['vars']['tid'] == 'gw_admin') {
+                if ($arV['id_theme'] == $this->gw_this['vars']['tid']) {
+                    $q3['id_theme'] = $arV['id_theme'];
+                    $q3['settings_key'] = $q1['settings_key'];
+                    $q3['settings_value'] = $q3['code'] = $q3['code_i'] = '';
+                    $arQ[] = gw_sql_insert($q3, $this->sys['tbl_prefix'] . 'theme_settings');
+                }
+            } else {
+                if ($arV['id_theme'] == 'gw_admin') {
+                    continue;
+                }
+                $q3['id_theme'] = $arV['id_theme'];
+                $q3['settings_key'] = $q1['settings_key'];
+                $q3['settings_value'] = $q3['code'] = $q3['code_i'] = '';
+                $arQ[] = gw_sql_insert($q3, $this->sys['tbl_prefix'] . 'theme_settings');
+            }
+        }
+        $this->str .= postQuery($arQ, 'a=' . GW_A_EDIT . '&' . GW_TARGET . '=' . $this->gw_this['vars'][GW_TARGET] . '&tid=' . $this->gw_this['vars']['tid'] . '&w1=' . $this->gw_this['vars']['w1'], $this->sys['isDebugQ'], 0);
+    }
 }
 
-
-?>

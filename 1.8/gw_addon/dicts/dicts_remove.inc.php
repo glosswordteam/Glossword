@@ -26,7 +26,7 @@ $this->str .= $this->_get_nav();
  * - User may edit other users' dictionaries.
  */
 $is_allow_dict = 0;
-$dict_id = (int) $this->gw_this['vars']['id'];
+$dict_id = (int)$this->gw_this['vars']['id'];
 
 /* Dictionary ID is specified */
 if ($dict_id > 0) {
@@ -37,7 +37,7 @@ if ($dict_id > 0) {
         $this->oSess->is('is-sys-settings')
         || $this->oSess->is('is-dicts')
         || (
-            ((int) $arDictParam['id_user'] === (int) $this->oSess->id_user)
+            ((int)$arDictParam['id_user'] === (int)$this->oSess->id_user)
             && $this->oSess->is('is-dicts-own')
         )
     ) {
@@ -60,19 +60,19 @@ if ($dict_id > 0) {
 
     $cnt_dict = 0;
 
-    foreach ((array) $this->gw_this['ar_dict_list'] as $dict_item) {
+    foreach ((array)$this->gw_this['ar_dict_list'] as $dict_item) {
         if (
             $this->oSess->is('is-sys-settings')
             || $this->oSess->is('is-dicts')
             || (
-                ((int) $dict_item['id_user'] === (int) $this->oSess->id_user)
+                ((int)$dict_item['id_user'] === (int)$this->oSess->id_user)
                 && $this->oSess->is('is-dicts-own')
             )
         ) {
             $confirm_title = str_replace(
                 ["\\", "'", "\r", "\n"],
                 ["\\\\", "\\'", '\r', '\n'],
-                (string) $dict_item['title']
+                (string)$dict_item['title']
             );
 
             $confirm_message = $this->oL->m('3_remove')
@@ -122,7 +122,7 @@ $ar_query[] = gw_sql_update(
     '`id_dict` = ' . $dict_id
 );
 
-$dict_table_name = isset($arDictParam['tablename']) ? (string) $arDictParam['tablename'] : '';
+$dict_table_name = isset($arDictParam['tablename']) ? (string)$arDictParam['tablename'] : '';
 if ($dict_table_name !== '' && preg_match('/^[a-zA-Z0-9_]+$/', $dict_table_name)) {
     $ar_query[] = $this->oSqlQ->getQ('drop-table', $dict_table_name);
 }

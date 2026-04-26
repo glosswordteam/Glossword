@@ -75,14 +75,14 @@ switch ($this->gv['step']) {
         );
 
         if (empty($this->gv['arp'])) {
-            $this->gv['arp']['db_host']     = 'localhost';
-            $this->gv['arp']['db_user']     = 'root';
-            $this->gv['arp']['db_pass']     = '';
-            $this->gv['arp']['db_prefix']   = 'gw_';
+            $this->gv['arp']['db_host'] = 'localhost';
+            $this->gv['arp']['db_user'] = 'root';
+            $this->gv['arp']['db_pass'] = '';
+            $this->gv['arp']['db_prefix'] = 'gw_';
             $this->gv['arp']['db_name_new'] = $this->gv['arp']['db_name_existent'] = 'glossword';
-            $is_str_checked_new             = '';
-            $is_str_checked_existent        = ' checked="checked"';
-            $is_str_checked_preinstall      = ' checked="checked"';
+            $is_str_checked_new = '';
+            $is_str_checked_existent = ' checked="checked"';
+            $is_str_checked_preinstall = ' checked="checked"';
         } else {
             $is_str_checked_new = $is_str_checked_existent = $is_str_checked_preinstall = '';
             /* Checkbox */
@@ -190,10 +190,10 @@ function INSTALL_select_db_name(id)
             /* Special mode for radio buttons */
             if ($k == 'use_db' && $v == 'existent' && $this->gv['arp']['db_name_existent'] == '') {
                 $this->ar_broken['db_name_existent'] = true;
-                $is_error_db_name_existent           = 1;
+                $is_error_db_name_existent = 1;
             } elseif ($k == 'use_db' && $v == 'new' && $this->gv['arp']['db_name_new'] == '') {
                 $this->ar_broken['db_name_new'] = true;
-                $is_error_db_name_new           = 1;
+                $is_error_db_name_new = 1;
             }
         }
         /* */
@@ -303,8 +303,7 @@ function INSTALL_select_db_name(id)
                         20047,
                         '<strong>' . $this->gv['arp']['db_host'] . '</strong>',
                         '<strong>' . $this->gv['arp']['db_user'] . '</strong>'
-                    ) . '<br />' . $this->oTkit->_(20048) . '<br />' . mysqli_connect_errno(
-                    ) . ' - ' . mysqli_connect_error(),
+                    ) . '<br />' . $this->oTkit->_(20048) . '<br />' . mysqli_connect_errno() . ' - ' . mysqli_connect_error(),
                     false
                 )
             );
@@ -326,12 +325,12 @@ function INSTALL_select_db_name(id)
             return;
         }
         $this->oChecker->SetCfg($config);
-        $ar_info    = $this->oChecker->GetInfo();
+        $ar_info = $this->oChecker->GetInfo();
         $ar_results = $this->oChecker->GetResults();
-        $points     = $this->oChecker->GetPoints();
+        $points = $this->oChecker->GetPoints();
 
         /* Select version */
-        $result     = mysqli_query($db_conn, 'SELECT VERSION() AS version');
+        $result = mysqli_query($db_conn, 'SELECT VERSION() AS version');
         $db_version = '';
         if ($result) {
             while ($arV = mysqli_fetch_assoc($result)) {
@@ -349,7 +348,7 @@ function INSTALL_select_db_name(id)
             'status'  => (version_compare($db_version, '5.7.0') > 0),
         ];
         /* Select max_packed size */
-        $result                = mysqli_query($db_conn, 'SHOW VARIABLES LIKE "max_allowed_packet"');
+        $result = mysqli_query($db_conn, 'SHOW VARIABLES LIKE "max_allowed_packet"');
         $db_max_allowed_packet = 0;
         if ($result) {
             while ($arV = mysqli_fetch_assoc($result)) {
@@ -360,9 +359,7 @@ function INSTALL_select_db_name(id)
         $ar_results[] = [
             'tag'     => 'db',
             'name'    => $this->oTkit->_(10041, 'max_allowed_packet'),
-            'val_ini' => $this->oTkit->number_format($db_max_allowed_packet / 1024 / 1024, 1) . ' ' . $this->oTkit->_(
-                    10052
-                ),
+            'val_ini' => $this->oTkit->number_format($db_max_allowed_packet / 1024 / 1024, 1) . ' ' . $this->oTkit->_(10052),
             'val_req' => '1 ' . $this->oTkit->_(10052),
             'point'   => '',
             'descr'   => $this->oTkit->_(10042),
@@ -383,8 +380,8 @@ function INSTALL_select_db_name(id)
             if (file_exists($folder) && is_dir($folder) && is_writeable($folder)) {
                 $is_return = true;
             }
-            $real_folder  = realpath($folder) ? realpath($folder) : $folder;
-            $real_folder  = str_replace('\\', '/', $real_folder);
+            $real_folder = realpath($folder) ? realpath($folder) : $folder;
+            $real_folder = str_replace('\\', '/', $real_folder);
             $ar_results[] = [
                 'tag'     => 'dir',
                 'name'    => $this->oTkit->_(10045, $folder),
@@ -408,7 +405,7 @@ function INSTALL_select_db_name(id)
                     $filename
                 ) : $filename;
             $real_filename = str_replace('\\', '/', $real_filename);
-            $ar_results[]  = [
+            $ar_results[] = [
                 'tag'     => 'file',
                 'name'    => $this->oTkit->_(10047, $filename),
                 'val_ini' => $is_return,
@@ -433,7 +430,7 @@ function INSTALL_select_db_name(id)
         $this->oTpl->set_tpl(GW2_TPL_WEB_INDEX);
         /* */
         foreach ($ar_results as $k => $v) {
-            $class_li     = $v['status'] ? 'status-ok' : 'status-error';
+            $class_li = $v['status'] ? 'status-ok' : 'status-error';
             $v['val_ini'] = is_bool($v['val_ini']) && $v['val_ini'] == false ? $this->oTkit->_(10016) : $v['val_ini'];
             $v['val_ini'] = is_bool($v['val_ini']) && $v['val_ini'] == true ? $this->oTkit->_(10017) : $v['val_ini'];
             $v['val_req'] = is_bool($v['val_req']) && $v['val_req'] == false ? $this->oTkit->_(10016) : $v['val_req'];
@@ -442,7 +439,7 @@ function INSTALL_select_db_name(id)
             /* */
             switch ($v['name']) {
                 case 'PHP_VERSION':
-                    $v['name']  = $this->oTkit->_(10021);
+                    $v['name'] = $this->oTkit->_(10021);
                     $v['descr'] = $this->oTkit->_(10022);
                     break;
                 case 'register_globals':
@@ -452,7 +449,7 @@ function INSTALL_select_db_name(id)
                     $v['descr'] = $this->oTkit->_(10026);
                     break;
                 case 'PCRE_UTF8':
-                    $v['name']  = $this->oTkit->_(10027);
+                    $v['name'] = $this->oTkit->_(10027);
                     $v['descr'] = $this->oTkit->_(10028);
                     break;
                 case 'REQUEST_URI':
@@ -512,24 +509,24 @@ function INSTALL_select_db_name(id)
             }
             /* */
             $this->oTpl->assign([
-                                    'v:id'            => hash('md5', $v['name']),
-                                    'v:li_class'      => $class_li,
-                                    'v:subject'       => $v['name'],
-                                    'v:val_ini'       => $v['val_ini'],
-                                    'v:val_req'       => $v['val_req'],
-                                    'v:pts'           => $v['point'],
-                                    'v:description'   => $v['descr'],
-                                    'v:passed_failed' => $v['status'] ? $this->oTkit->_(10007) : $this->oTkit->_(10006),
-                                ]);
+                'v:id'            => hash('md5', $v['name']),
+                'v:li_class'      => $class_li,
+                'v:subject'       => $v['name'],
+                'v:val_ini'       => $v['val_ini'],
+                'v:val_req'       => $v['val_req'],
+                'v:pts'           => $v['point'],
+                'v:description'   => $v['descr'],
+                'v:passed_failed' => $v['status'] ? $this->oTkit->_(10007) : $this->oTkit->_(10006),
+            ]);
             $this->oTpl->parseDynamic('foreach:sequence');
         }
         /* Total */
         $this->oTpl->assign([
-                                'v:total_points'        => '',
-                                'v:total_passed_failed' => $this->oChecker->GetChecked() ? $this->oTkit->_(
-                                    10007
-                                ) : $this->oTkit->_(10006),
-                            ]);
+            'v:total_points'        => '',
+            'v:total_passed_failed' => $this->oChecker->GetChecked() ? $this->oTkit->_(
+                10007
+            ) : $this->oTkit->_(10006),
+        ]);
         $this->oTpl->tmp['d']['if:sequence'] = true;
 
         /* Next step */
@@ -579,13 +576,13 @@ function INSTALL_select_db_name(id)
 
         /* Admin account and installation path */
         if (!isset($this->gv['arp']['post'])) {
-            $this->gv['arp']['admin_name']  = 'Admin User';
+            $this->gv['arp']['admin_name'] = 'Admin User';
             $this->gv['arp']['admin_login'] = 'admin';
-            $this->gv['arp']['admin_pass']  = '';
+            $this->gv['arp']['admin_pass'] = '';
             $this->gv['arp']['server_host'] = (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
             $this->gv['arp']['admin_email'] = 'admin@' . $this->gv['arp']['server_host'];
-            $this->gv['arp']['server_dir']  = dirname(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
-            $ar_path                        = explode("/", $this->gv['arp']['server_dir']);
+            $this->gv['arp']['server_dir'] = dirname(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
+            $ar_path = explode("/", $this->gv['arp']['server_dir']);
             unset($ar_path[sizeof($ar_path) - 1]);
             $this->gv['arp']['server_dir'] = implode('/', $ar_path);
         }
@@ -704,7 +701,7 @@ start_timer_full_path();
 
         $ar_results = [];
 
-        $this->gv['arp']['db_settings']            = unserialize(base64_decode($this->gv['arp']['db_settings']));
+        $this->gv['arp']['db_settings'] = unserialize(base64_decode($this->gv['arp']['db_settings']));
         $this->gv['arp']['db_settings']['db_name'] = ($this->gv['arp']['db_settings']['use_db'] === 'existent') ? $this->gv['arp']['db_settings']['db_name_existent'] : $this->gv['arp']['db_settings']['db_name_new'];
 
         /* Prepare configuration file */
@@ -741,7 +738,7 @@ start_timer_full_path();
 
         /* Connect to database */
         /* Set Database class */
-        $this->oDb           = $this->_init_db($this->gv['arp']['db_settings']);
+        $this->oDb = $this->_init_db($this->gv['arp']['db_settings']);
         $this->oDb->db_debug = true;
         /* Creating database tables */
         $sql_structure = $this->oFunc->file_get_contents('sql/install-structure.sql');
@@ -749,9 +746,9 @@ start_timer_full_path();
         $sql_structure = preg_replace("/--(.*)\n/", '', $sql_structure);
         $sql_structure = str_replace(["\r\n", "\r", "\n"], ' ', $sql_structure);
         $sql_structure = preg_replace("/[ ]{2,}/", ' ', $sql_structure);
-        $ar_sql        = explode(';', $sql_structure);
+        $ar_sql = explode(';', $sql_structure);
         $sql_structure = '';
-        $is_return     = true;
+        $is_return = true;
         $ar_sql_tables = [];
         foreach ($ar_sql as $sql) {
             if (trim($sql) == '') {
@@ -783,7 +780,7 @@ start_timer_full_path();
         $sql_data = preg_replace("/--(.*)\n/", '', $sql_data);
         $sql_data = str_replace(["\r\n", "\r", "\n"], "\n", $sql_data);
         $sql_data = preg_replace("/[ ]{2,}/", ' ', $sql_data);
-        $ar_sql   = explode(";\n", $sql_data);
+        $ar_sql = explode(";\n", $sql_data);
         foreach ($ar_sql as $sql) {
             if (trim($sql) == '') {
                 continue;
@@ -795,24 +792,24 @@ start_timer_full_path();
         }
         /* Change default settings */
         $this->oDb->update(
-                                                                                                                     'users',
-                                                                                                                     [
-                                                                                                                         'password'      => hash(
-                                                                                                                             'md5',
-                                                                                                                             $this->gv['arp']['admin_pass']
-                                                                                                                         ),
-                                                                                                                         'login'         => $this->gv['arp']['admin_login'],
-                                                                                                                         'is_active'     => 1,
-                                                                                                                         'date_reg'      => $this->g(
-                                                                                                                             'time_gmt'
-                                                                                                                         ),
-                                                                                                                         'user_fname'    => $this->gv['arp']['admin_name'],
-                                                                                                                         'user_sname'    => ' ',
-                                                                                                                         'user_email'    => $this->gv['arp']['admin_email'],
-                                                                                                                         'user_perm'     => 'a:16:{s:8:"IS-EMAIL";i:1;s:8:"IS-LOGIN";i:1;s:11:"IS-PASSWORD";i:1;s:8:"IS-USERS";i:1;s:13:"IS-TOPICS-OWN";i:1;s:9:"IS-TOPICS";i:1;s:12:"IS-DICTS-OWN";i:1;s:8:"IS-DICTS";i:1;s:12:"IS-TERMS-OWN";i:1;s:8:"IS-TERMS";i:1;s:15:"IS-TERMS-IMPORT";i:1;s:15:"IS-TERMS-EXPORT";i:1;s:13:"IS-CPAGES-OWN";i:1;s:9:"IS-CPAGES";i:1;s:15:"IS-SYS-SETTINGS";i:1;s:10:"IS-SYS-MNT";i:1;}',
-                                                                                                                         'user_settings' => 'a:10:{s:10:"avatar_img";s:0:"";s:12:"avatar_img_y";s:0:"";s:12:"avatar_img_x";s:0:"";s:10:"gmt_offset";s:1:"3";s:9:"is_htmled";s:1:"1";s:13:"is_use_avatar";i:0;s:11:"locale_name";s:7:"en-utf8";s:8:"location";s:0:"";s:11:"visualtheme";s:9:"gw_silver";s:12:"dictionaries";a:0:{}}',
-                                                                                                                     ],
-                                                                                                                     ['id_user' => '2']
+            'users',
+            [
+                'password'      => hash(
+                    'md5',
+                    $this->gv['arp']['admin_pass']
+                ),
+                'login'         => $this->gv['arp']['admin_login'],
+                'is_active'     => 1,
+                'date_reg'      => $this->g(
+                    'time_gmt'
+                ),
+                'user_fname'    => $this->gv['arp']['admin_name'],
+                'user_sname'    => ' ',
+                'user_email'    => $this->gv['arp']['admin_email'],
+                'user_perm'     => 'a:16:{s:8:"IS-EMAIL";i:1;s:8:"IS-LOGIN";i:1;s:11:"IS-PASSWORD";i:1;s:8:"IS-USERS";i:1;s:13:"IS-TOPICS-OWN";i:1;s:9:"IS-TOPICS";i:1;s:12:"IS-DICTS-OWN";i:1;s:8:"IS-DICTS";i:1;s:12:"IS-TERMS-OWN";i:1;s:8:"IS-TERMS";i:1;s:15:"IS-TERMS-IMPORT";i:1;s:15:"IS-TERMS-EXPORT";i:1;s:13:"IS-CPAGES-OWN";i:1;s:9:"IS-CPAGES";i:1;s:15:"IS-SYS-SETTINGS";i:1;s:10:"IS-SYS-MNT";i:1;}',
+                'user_settings' => 'a:10:{s:10:"avatar_img";s:0:"";s:12:"avatar_img_y";s:0:"";s:12:"avatar_img_x";s:0:"";s:10:"gmt_offset";s:1:"3";s:9:"is_htmled";s:1:"1";s:13:"is_use_avatar";i:0;s:11:"locale_name";s:7:"en-utf8";s:8:"location";s:0:"";s:11:"visualtheme";s:9:"gw_silver";s:12:"dictionaries";a:0:{}}',
+            ],
+            ['id_user' => '2']
         );
         /* Change system settings */
         $this->oDb->update('settings', ['settings_val' => $this->g('version')], ['settings_key' => 'version']);
@@ -846,7 +843,7 @@ start_timer_full_path();
         */
 
         /* Import custom pages */
-        $is_return    = $this->import_custom_pages_file('xml/gw_custom_pages.xml');
+        $is_return = $this->import_custom_pages_file('xml/gw_custom_pages.xml');
         $ar_results[] = [
             'tag'     => 'file',
             'name'    => $this->oTkit->_(20010) . ': ' . $this->oTkit->_(20069),
@@ -858,13 +855,13 @@ start_timer_full_path();
         ];
 
         /* Writing configuration file */
-        $filename      = '../db_config.php';
+        $filename = '../db_config.php';
         $real_filename = realpath(dirname($filename)) ? realpath(dirname($filename)) . '/' . basename(
                 $filename
             ) : $filename;
         $real_filename = str_replace('\\', '/', $real_filename);
 
-        $is_return    = $this->oFunc->file_put_contents('../db_config.php', $str_file, 'w');
+        $is_return = $this->oFunc->file_put_contents('../db_config.php', $str_file, 'w');
         $ar_results[] = [
             'tag'     => 'file',
             'name'    => $this->oTkit->_(20070),
@@ -892,29 +889,29 @@ start_timer_full_path();
         $this->oTpl->set_tpl(GW2_TPL_WEB_INDEX);
         /* */
         foreach ($ar_results as $k => $v) {
-            $class_li     = $v['status'] ? 'status-ok' : 'status-error';
+            $class_li = $v['status'] ? 'status-ok' : 'status-error';
             $v['val_ini'] = is_bool($v['val_ini']) && $v['val_ini'] == false ? $this->oTkit->_(10016) : $v['val_ini'];
             $v['val_ini'] = is_bool($v['val_ini']) && $v['val_ini'] == true ? $this->oTkit->_(10017) : $v['val_ini'];
             $v['val_req'] = is_bool($v['val_req']) && $v['val_req'] == false ? $this->oTkit->_(10016) : $v['val_req'];
             $v['val_req'] = is_bool($v['val_req']) && $v['val_req'] == true ? $this->oTkit->_(10017) : $v['val_req'];
             $v['val_req'] = ($v['val_req'] == '-1') ? $this->oTkit->_(10018) : $v['val_req'];
             $this->oTpl->assign([
-                                    'v:id'            => hash('md5', $v['name']),
-                                    'v:li_class'      => $class_li,
-                                    'v:subject'       => $v['name'],
-                                    'v:val_ini'       => $v['val_ini'],
-                                    'v:val_req'       => $v['val_req'],
-                                    'v:pts'           => $v['point'],
-                                    'v:description'   => $v['descr'],
-                                    'v:passed_failed' => $v['status'] ? $this->oTkit->_(10007) : $this->oTkit->_(10006),
-                                ]);
+                'v:id'            => hash('md5', $v['name']),
+                'v:li_class'      => $class_li,
+                'v:subject'       => $v['name'],
+                'v:val_ini'       => $v['val_ini'],
+                'v:val_req'       => $v['val_req'],
+                'v:pts'           => $v['point'],
+                'v:description'   => $v['descr'],
+                'v:passed_failed' => $v['status'] ? $this->oTkit->_(10007) : $this->oTkit->_(10006),
+            ]);
             $this->oTpl->parseDynamic('foreach:sequence');
         }
         /* Always "Passed" */
         $this->oTpl->assign([
-                                'v:total_points'        => '',
-                                'v:total_passed_failed' => $this->oTkit->_(10007),
-                            ]);
+            'v:total_points'        => '',
+            'v:total_passed_failed' => $this->oTkit->_(10007),
+        ]);
         $this->oTpl->tmp['d']['if:sequence'] = true;
         /* */
         $this->oTpl->addVal(
@@ -950,13 +947,13 @@ start_timer_full_path();
         $this->oHtml->append_html_title($this->oTkit->_(20071));
         $this->oHtml->append_html_title($this->oTkit->_(10001) . ' ' . $this->gv['step']);
 
-        $is_return       = true;
-        $ar_results      = [];
+        $is_return = true;
+        $ar_results = [];
         $this->gv['arp'] = unserialize(base64_decode($this->gv['arp']));
 
         /* Connect to database */
         /* Set Database class */
-        $this->oDb             = $this->_init_db($this->gv['arp']['db_settings']);
+        $this->oDb = $this->_init_db($this->gv['arp']['db_settings']);
         $this->oDb->db_debug_q = false;
 
         /* Import sample data */
@@ -966,9 +963,9 @@ start_timer_full_path();
             $sql_structure = preg_replace("/--(.*)\n/", '', $sql_structure);
             $sql_structure = str_replace(["\r\n", "\r", "\n"], ' ', $sql_structure);
             $sql_structure = preg_replace("/[ ]{2,}/", ' ', $sql_structure);
-            $ar_sql        = explode(';', $sql_structure);
+            $ar_sql = explode(';', $sql_structure);
             $sql_structure = '';
-            $is_return     = true;
+            $is_return = true;
 
             foreach ($ar_sql as $sql) {
                 if (trim($sql) == '') {
@@ -1000,7 +997,7 @@ start_timer_full_path();
             ];
         }
         /* Import topics */
-        $is_return    = $this->import_topics_file('xml/gw_topics_map.xml');
+        $is_return = $this->import_topics_file('xml/gw_topics_map.xml');
         $ar_results[] = [
             'tag'     => 'file',
             'name'    => $this->oTkit->_(20010) . ': ' . $this->oTkit->_(20012),
@@ -1014,7 +1011,7 @@ start_timer_full_path();
         /* Import visual themes */
         $ar_items = [];
         foreach (glob('xml/visual-themes_*.xml') as $filename) {
-            $is_return  = $this->import_visual_themes_file($filename);
+            $is_return = $this->import_visual_themes_file($filename);
             $ar_items[] = str_replace('xml/', '', $filename);
         }
         $ar_results[] = [
@@ -1036,7 +1033,7 @@ start_timer_full_path();
         );
         $ar_items = [];
         foreach (glob('xml/custom-az_*.xml') as $filename) {
-            $is_return  = $this->import_custom_az_file($filename);
+            $is_return = $this->import_custom_az_file($filename);
             $ar_items[] = str_replace('xml/', '', $filename);
         }
         $ar_results[] = [
@@ -1060,23 +1057,23 @@ start_timer_full_path();
             $v['val_req'] = is_bool($v['val_req']) && $v['val_req'] == false ? $this->oTkit->_(10016) : $v['val_req'];
             $v['val_req'] = is_bool($v['val_req']) && $v['val_req'] == true ? $this->oTkit->_(10017) : $v['val_req'];
             $v['val_req'] = ($v['val_req'] == '-1') ? $this->oTkit->_(10018) : $v['val_req'];
-            $class_li     = $v['status'] ? 'status-ok' : 'status-error';
+            $class_li = $v['status'] ? 'status-ok' : 'status-error';
             $this->oTpl->assign([
-                                    'v:id'            => hash('md5', $v['name']),
-                                    'v:li_class'      => $class_li,
-                                    'v:subject'       => $v['name'],
-                                    'v:val_ini'       => $v['val_ini'],
-                                    'v:val_req'       => $v['val_req'],
-                                    'v:pts'           => $v['point'],
-                                    'v:description'   => $v['descr'],
-                                    'v:passed_failed' => $v['status'] ? $this->oTkit->_(10007) : $this->oTkit->_(10006),
-                                ]);
+                'v:id'            => hash('md5', $v['name']),
+                'v:li_class'      => $class_li,
+                'v:subject'       => $v['name'],
+                'v:val_ini'       => $v['val_ini'],
+                'v:val_req'       => $v['val_req'],
+                'v:pts'           => $v['point'],
+                'v:description'   => $v['descr'],
+                'v:passed_failed' => $v['status'] ? $this->oTkit->_(10007) : $this->oTkit->_(10006),
+            ]);
             $this->oTpl->parseDynamic('foreach:sequence');
         }
         $this->oTpl->assign([
-                                'v:total_points'        => '',
-                                'v:total_passed_failed' => $this->oTkit->_(10007),
-                            ]);
+            'v:total_points'        => '',
+            'v:total_passed_failed' => $this->oTkit->_(10007),
+        ]);
         $this->oTpl->tmp['d']['if:sequence'] = true;
 
         /* */

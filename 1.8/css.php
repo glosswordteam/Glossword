@@ -21,9 +21,7 @@ define('GW_REQUEST_URI', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'
 					: ((isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != '') ? ($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'])
 					: $_ENV['PHP_SELF'])));
 
-if (function_exists('date_default_timezone_set')) {
-	date_default_timezone_set('UTC');
-}
+date_default_timezone_set('UTC');
 
 /* When Glossword is not installed */
 if (!isset($sys['server_dir'])) {

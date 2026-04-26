@@ -182,4 +182,3 @@ class tkit_register_globals {
 		}
 	}
 }}
-?>

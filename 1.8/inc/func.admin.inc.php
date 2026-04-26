@@ -63,60 +63,56 @@ function gw_topic_recount()
 /* */
 function gw_after_redirect_url($action, $id_term = 0)
 {
-	global $arTermParam, $arDictParam, $oSess, $oHtml, $oDb, $oL, $sys;
-	$str_url = '';
-	switch ($action)
-	{
-		case GW_AFTER_DICT_UPDATE:
-			/* Redirect to "Editing dictionary settings" page */
-			$str_url = GW_ACTION.'='.GW_A_EDIT .'&'. GW_TARGET.'='.GW_T_DICTS . '&id='.$arDictParam['id']. '&tid='.$arDictParam['id'];
-		break;
-		case GW_AFTER_SRCH_BACK:
-			/* Search again */
-			if ($oSess->user_get('q'))
-			{
-				$str_url = GW_ACTION . '=' . GW_A_SEARCH .
-							'&q=' . $oSess->user_get('q') .
-							'&srch[in]=' . $oSess->user_get('in') .
-							'&srch[adv]=' . $oSess->user_get('srch_adv') .
-							'&srch[by]=' . $oSess->user_get('srch_by') .
-							'&d=' . $arDictParam['id'];
-			}
-		break;
-		case GW_AFTER_TERM_ADD:
-			/* Redirect to "Add a term" */
-			$str_url = GW_ACTION.'='.GW_A_ADD . '&' .GW_TARGET.'='.GW_T_TERMS . '&id='.$arDictParam['id'];
-		break;
-		case GW_AFTER_TERM_GW_A_IMPORT:
-			/* Import terms page */
-			$str_url = GW_ACTION.'='.GW_A_IMPORT. '&' .GW_TARGET.'='.GW_T_TERMS .'&id='.$arDictParam['id'];
-		break;
-	}
-	/* Add link to a term */
-	if ($id_term && $arDictParam['id'])
-	{
-		/* on SEF enabled */
-		switch ($sys['pages_link_mode'])
-		{
-			case GW_PAGE_LINK_NAME:
-				$arTermParam['uri'] = urlencode(gw_fix_input_to_db($arTermParam['term']));
-			break;
-			case GW_PAGE_LINK_URI:
-				$arTermParam['uri'] = urlencode($arTermParam['term_uri']);
-			break;
-			default:
-				$arTermParam['uri'] = $id_term;
-			break;
-		}
-		$str_url .= '&note_afterpost='.
-				urlencode(strip_tags($arTermParam['term']).': <a href="'.$oHtml->url_normalize($sys['page_admin'].'?'.GW_ACTION.'='.GW_A_EDIT.'&d='.$arDictParam['id'].'&'.GW_TARGET.'='.GW_T_TERMS.'&tid='.$id_term).'">'.$oL->m('3_edit').'</a>');
-		if ( $arDictParam['is_active'] == 1 ) {
-			$str_url .= '  - '.urlencode('<a class="ext" href="'.$oHtml->url_normalize($sys['page_index'].'?'.GW_ACTION.'='.GW_T_TERM.'&d='.$arDictParam['uri'].'&'.GW_TARGET.'='.$arTermParam['uri']).'" onclick="window.open(this.href);return false">'.$oL->m('1283').'</a>');
-		}
-	}
+    global $arTermParam, $arDictParam, $oSess, $oHtml, $oDb, $oL, $sys;
+    $str_url = '';
+    switch ($action) {
+        case GW_AFTER_DICT_UPDATE:
+            /* Redirect to "Editing dictionary settings" page */
+            $str_url = GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . GW_T_DICTS . '&id=' . $arDictParam['id'] . '&tid=' . $arDictParam['id'];
+            break;
+        case GW_AFTER_SRCH_BACK:
+            /* Search again */
+            if ($oSess->user_get('q')) {
+                $str_url = GW_ACTION . '=' . GW_A_SEARCH .
+                    '&q=' . $oSess->user_get('q') .
+                    '&srch[in]=' . $oSess->user_get('in') .
+                    '&srch[adv]=' . $oSess->user_get('srch_adv') .
+                    '&srch[by]=' . $oSess->user_get('srch_by') .
+                    '&d=' . $arDictParam['id'];
+            }
+            break;
+        case GW_AFTER_TERM_ADD:
+            /* Redirect to "Add a term" */
+            $str_url = GW_ACTION . '=' . GW_A_ADD . '&' . GW_TARGET . '=' . GW_T_TERMS . '&id=' . $arDictParam['id'];
+            break;
+        case GW_AFTER_TERM_GW_A_IMPORT:
+            /* Import terms page */
+            $str_url = GW_ACTION . '=' . GW_A_IMPORT . '&' . GW_TARGET . '=' . GW_T_TERMS . '&id=' . $arDictParam['id'];
+            break;
+    }
+    /* Add link to a term */
+    if ($id_term && $arDictParam['id']) {
+        /* on SEF enabled */
+        switch ($sys['pages_link_mode']) {
+            case GW_PAGE_LINK_NAME:
+                $arTermParam['uri'] = urlencode(gw_fix_input_to_db($arTermParam['term']));
+                break;
+            case GW_PAGE_LINK_URI:
+                $arTermParam['uri'] = urlencode($arTermParam['term_uri']);
+                break;
+            default:
+                $arTermParam['uri'] = $id_term;
+                break;
+        }
+        $str_url .= '&note_afterpost=' .
+            urlencode(strip_tags($arTermParam['term']) . ': <a href="' . $oHtml->url_normalize($sys['page_admin'] . '?' . GW_ACTION . '=' . GW_A_EDIT . '&d=' . $arDictParam['id'] . '&' . GW_TARGET . '=' . GW_T_TERMS . '&tid=' . $id_term) . '">' . $oL->m('3_edit') . '</a>');
+        if ($arDictParam['is_active'] == 1) {
+            $str_url .= '  - ' . urlencode('<a class="ext" href="' . $oHtml->url_normalize($sys['page_index'] . '?' . GW_ACTION . '=' . GW_T_TERM . '&d=' . $arDictParam['uri'] . '&' . GW_TARGET . '=' . $arTermParam['uri']) . '" onclick="window.open(this.href);return false">' . $oL->m('1283') . '</a>');
+        }
+    }
 #	prn_r( $str_url );
 #	exit;
-	return $str_url;
+    return $str_url;
 }
 
 

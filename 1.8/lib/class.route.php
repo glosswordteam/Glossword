@@ -103,7 +103,7 @@ class gwUrlBuilder
 
         return $this->_build_url(
             $this->get_page_index(),
-            $base_params + (array) $params
+            $base_params + (array)$params
         );
     }
 

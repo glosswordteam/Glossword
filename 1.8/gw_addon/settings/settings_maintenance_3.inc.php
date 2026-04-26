@@ -20,66 +20,64 @@ if (!defined('IN_GW')) {
 /* Script functions below */
 function gw_dict_list_cnt($vars)
 {
-	global $oL, $sys, $oFunc, $gw_this, $ar_theme, $oSess;
+    global $oL, $sys, $oFunc, $gw_this, $ar_theme, $oSess;
 
-	$oForm = new gwForms();
-	$oForm->Set('action', $sys['page_admin']);
-	$oForm->Set('submitok', $oL->m('2_continue'));
-	$oForm->Set('submitcancel', $oL->m('3_cancel'));
-	$oForm->Set('formbgcolor', $ar_theme['color_2']);
-	$oForm->Set('formbordercolor', $ar_theme['color_4']);
-	$oForm->Set('formbordercolorL', $ar_theme['color_1']);
-	$oForm->Set('align_buttons', $sys['css_align_right']);
-	$oForm->Set('charset', $sys['internal_encoding']);
+    $oForm = new gwForms();
+    $oForm->Set('action', $sys['page_admin']);
+    $oForm->Set('submitok', $oL->m('2_continue'));
+    $oForm->Set('submitcancel', $oL->m('3_cancel'));
+    $oForm->Set('formbgcolor', $ar_theme['color_2']);
+    $oForm->Set('formbordercolor', $ar_theme['color_4']);
+    $oForm->Set('formbordercolorL', $ar_theme['color_1']);
+    $oForm->Set('align_buttons', $sys['css_align_right']);
+    $oForm->Set('charset', $sys['internal_encoding']);
 
-	$trClass = '';
-	$strForm = '';
+    $trClass = '';
+    $strForm = '';
 
-	$strForm .= '<table style="text-align:'.$sys['css_align_left'].'" cellspacing="3" cellpadding="0" border="0" width="100%">';
-	$strForm .= '<tbody><tr>'.
-				'<td>';
-	$strForm .= '<span class="xt gray"><a href="#" onclick="setCheckboxes(true); return false;">'.$oL->m('select_on').'</a>'.
-				' &#8226; '.
-				'<a href="#" onclick="setCheckboxes(false); return false;">'.$oL->m('select_off').'</a></span>';
-	$strForm .= '<table class="xt" cellspacing="1" cellpadding="0" border="0" width="100%">';
-	$strForm .= '<tbody><tr><td style="width:1%"></td><td style="width:9%"></td><td style="width:90%"></td></tr>';
+    $strForm .= '<table style="text-align:' . $sys['css_align_left'] . '" cellspacing="3" cellpadding="0" border="0" width="100%">';
+    $strForm .= '<tbody><tr>' .
+        '<td>';
+    $strForm .= '<span class="xt gray"><a href="#" onclick="setCheckboxes(true); return false;">' . $oL->m('select_on') . '</a>' .
+        ' &#8226; ' .
+        '<a href="#" onclick="setCheckboxes(false); return false;">' . $oL->m('select_off') . '</a></span>';
+    $strForm .= '<table class="xt" cellspacing="1" cellpadding="0" border="0" width="100%">';
+    $strForm .= '<tbody><tr><td style="width:1%"></td><td style="width:9%"></td><td style="width:90%"></td></tr>';
 
-	$ar_dict_ids = array();
+    $ar_dict_ids = [];
 
-	/* Per each dictionary */
-	foreach ($gw_this['ar_dict_list'] as $id_dict => $arDictParam)
-	{
-		$arDictParam = gw_get_dict_param($id_dict);
-		$ar_dict_ids[] = $arDictParam['id'];
-		$is_assigned = 0;
-		/* $vars['dictionaries'] is flipped */
-		if (isset($vars['dictionaries'][$arDictParam['id']]))
-		{
-			$is_assigned = 1;
-		}
-		$str_external_link = $arDictParam['is_active'] ? '<a href="'.$sys['page_index'].'?a=list&amp;d='. $arDictParam['uri'] .'" onclick="window.open(this.href);return false;">&gt;&gt;&gt;</a> ' : '';
-		$strForm .= '<tr>'.
-					'<td>' .
-					$oForm->field('checkbox', 'arPost[dictionaries]['. $arDictParam['id'] . ']', $is_assigned) .
-					'</td><td>'.
-					$oFunc->number_format($arDictParam['int_terms'], 0, $oL->languagelist(LOCALE_LANG_RULES)).
-					'</td><td class="td2 actions-third">'.
-					$str_external_link .
-					'<label for="arPost_dictionaries_' . $arDictParam['id'] . '_">'.
-					$arDictParam['title'] .
-					'</label></td>'.
-					'</tr>';
-	}
-	$strForm .= $oForm->field('hidden', $oSess->sid, $oSess->id_sess);
-	$strForm .= $oForm->field('hidden', GW_ACTION, $gw_this['vars'][GW_ACTION]);
-	$strForm .= $oForm->field('hidden', GW_TARGET, $gw_this['vars'][GW_TARGET]);
-	$strForm .= $oForm->field('hidden', 'tid', $gw_this['vars']['tid']);
-	$strForm .= $oForm->field('hidden', 'w1', $gw_this['vars']['w1']);
-	$strForm .= $oForm->field('hidden', 'isConfirm', 1);
-	$strForm .= '</tbody></table>';
-	/* Check/Uncheck All */
-	$strForm .= '<script type="text/javascript">/*<![CDATA[*/';
-	$strForm .= '
+    /* Per each dictionary */
+    foreach ($gw_this['ar_dict_list'] as $id_dict => $arDictParam) {
+        $arDictParam = gw_get_dict_param($id_dict);
+        $ar_dict_ids[] = $arDictParam['id'];
+        $is_assigned = 0;
+        /* $vars['dictionaries'] is flipped */
+        if (isset($vars['dictionaries'][$arDictParam['id']])) {
+            $is_assigned = 1;
+        }
+        $str_external_link = $arDictParam['is_active'] ? '<a href="' . $sys['page_index'] . '?a=list&amp;d=' . $arDictParam['uri'] . '" onclick="window.open(this.href);return false;">&gt;&gt;&gt;</a> ' : '';
+        $strForm .= '<tr>' .
+            '<td>' .
+            $oForm->field('checkbox', 'arPost[dictionaries][' . $arDictParam['id'] . ']', $is_assigned) .
+            '</td><td>' .
+            $oFunc->number_format($arDictParam['int_terms'], 0, $oL->languagelist(LOCALE_LANG_RULES)) .
+            '</td><td class="td2 actions-third">' .
+            $str_external_link .
+            '<label for="arPost_dictionaries_' . $arDictParam['id'] . '_">' .
+            $arDictParam['title'] .
+            '</label></td>' .
+            '</tr>';
+    }
+    $strForm .= $oForm->field('hidden', $oSess->sid, $oSess->id_sess);
+    $strForm .= $oForm->field('hidden', GW_ACTION, $gw_this['vars'][GW_ACTION]);
+    $strForm .= $oForm->field('hidden', GW_TARGET, $gw_this['vars'][GW_TARGET]);
+    $strForm .= $oForm->field('hidden', 'tid', $gw_this['vars']['tid']);
+    $strForm .= $oForm->field('hidden', 'w1', $gw_this['vars']['w1']);
+    $strForm .= $oForm->field('hidden', 'isConfirm', 1);
+    $strForm .= '</tbody></table>';
+    /* Check/Uncheck All */
+    $strForm .= '<script type="text/javascript">/*<![CDATA[*/';
+    $strForm .= '
 		function setCheckboxes(is_check) {
 			str = "";
 			ardict = [' . implode(',', $ar_dict_ids) . '];
@@ -88,67 +86,59 @@ function gw_dict_list_cnt($vars)
 			}
 		}
 	';
-	$strForm .= '/*]]>*/</script>';
-	/* */
-	$strForm .= '</td></tr>';
-	$strForm .= '</tbody></table>';
-	return $oForm->Output($strForm);
+    $strForm .= '/*]]>*/</script>';
+    /* */
+    $strForm .= '</td></tr>';
+    $strForm .= '</tbody></table>';
+    return $oForm->Output($strForm);
 }
+
 /* */
 function gw_dict_recount($vars)
 {
-	global $gw_this, $oDb;
-	if (empty($vars))
-	{
-		return;
-	}
-	$str = '';
-	$str .= '<ul class="xt">';
-	/* Per each dictionary */
-	foreach ($vars['dictionaries'] as $id_dict => $v)
-	{
-		$arQ = array();
-		global $arDictParam;
-		$arDictParam = gw_get_dict_param($id_dict);
-		if (!isset($arDictParam['tablename']))
-		{
-			continue;
-		}
-		$qDict['int_terms'] = gw_sys_dict_count_terms();
-		$qDict['int_bytes'] = gw_sys_dict_count_bytes();
-		$arQ[] = gw_sql_update($qDict, gw_get_tbl_name('dict'), "id = '".$arDictParam['id']."'");
+    global $gw_this, $oDb;
+    if (empty($vars)) {
+        return;
+    }
+    $str = '';
+    $str .= '<ul class="xt">';
+    /* Per each dictionary */
+    foreach ($vars['dictionaries'] as $id_dict => $v) {
+        $arQ = [];
+        global $arDictParam;
+        $arDictParam = gw_get_dict_param($id_dict);
+        if (!isset($arDictParam['tablename'])) {
+            continue;
+        }
+        $qDict['int_terms'] = gw_sys_dict_count_terms();
+        $qDict['int_bytes'] = gw_sys_dict_count_bytes();
+        $arQ[] = gw_sql_update($qDict, gw_get_tbl_name('dict'), "id = '" . $arDictParam['id'] . "'");
 
-		$arQ[] = 'CHECK TABLE `' . $arDictParam['tablename'] .'`';
-		$arQ[] = 'ALTER TABLE `'. $arDictParam['tablename'] .'` PACK_KEYS=1 CHECKSUM=0 DELAY_KEY_WRITE=1';
-		$arQ[] = 'OPTIMIZE TABLE `'. $arDictParam['tablename'] .'`';
-		/* */
-		foreach ($arQ as $sqlk => $sqlv)
-		{
-			$oDb->sqlExec($sqlv);
-		}
-		$str .= '<li><span class="green"><strong>'.$qDict['int_terms']. '</strong></span> ' . $arDictParam['title'] .'</li>';
-	}
-	$str .= '</ul>';
-	return $str;
+        $arQ[] = 'CHECK TABLE `' . $arDictParam['tablename'] . '`';
+        $arQ[] = 'ALTER TABLE `' . $arDictParam['tablename'] . '` PACK_KEYS=1 CHECKSUM=0 DELAY_KEY_WRITE=1';
+        $arQ[] = 'OPTIMIZE TABLE `' . $arDictParam['tablename'] . '`';
+        /* */
+        foreach ($arQ as $sqlk => $sqlv) {
+            $oDb->sqlExec($sqlv);
+        }
+        $str .= '<li><span class="green"><strong>' . $qDict['int_terms'] . '</strong></span> ' . $arDictParam['title'] . '</li>';
+    }
+    $str .= '</ul>';
+    return $str;
 }
+
 /* Script action below */
 
 $arPost =& $this->gw_this['vars']['arPost'];
 
 $this->str .= gw_get_form_title_nav($this->oL->m(1003));
-if ($this->gw_this['vars']['isConfirm'] == '1')
-{
-	$this->str .= gw_dict_recount($arPost);
-}
-else
-{
-	/* Check all dictionaries by default */
-	foreach ($this->gw_this['ar_dict_list'] as $k => $arDictParam)
-	{
-		$arPost['dictionaries'][$arDictParam['id']] = 1;
-	}
+if ($this->gw_this['vars']['isConfirm'] == '1') {
+    $this->str .= gw_dict_recount($arPost);
+} else {
+    /* Check all dictionaries by default */
+    foreach ($this->gw_this['ar_dict_list'] as $k => $arDictParam) {
+        $arPost['dictionaries'][$arDictParam['id']] = 1;
+    }
 }
 /* Get the list of dictionaries to recount */
 $this->str .= gw_dict_list_cnt($arPost);
-
-?>

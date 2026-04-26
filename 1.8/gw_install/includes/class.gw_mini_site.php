@@ -156,7 +156,7 @@ class gw_mini_site
 
         /* Auto time for server */
         $this->a('time_req', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time());
-        $this->a('time_gmt', $this->V->time_req - @date('Z'));
+        $this->a('time_gmt', $this->V->time_req - date('Z'));
 
         /* Get accepted encoding */
         $this->a(

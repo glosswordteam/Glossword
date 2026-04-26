@@ -134,10 +134,10 @@ function getFormExport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 		$strForm .= '<td class="td2">';
 		$strForm .= '<table cellspacing="0" cellpadding="1" border="0" width="100%">'.
 					'<tbody><tr>'.
-					'<td style="width:1%">'.$oL->m('from_time').'&#160;</td><td>' . htmlFormSelectDate("arPost[date_min]", @date("YmdHis", $vars['min'])) . '</td>'.
+					'<td style="width:1%">'.$oL->m('from_time').'&#160;</td><td>' . htmlFormSelectDate("arPost[date_min]", date("YmdHis", $vars['min'])) . '</td>'.
 					'</tr>'.
 					'<tr>'.
-					'<td>'.$oL->m('till_time').'&#160;</td><td>' . htmlFormSelectDate("arPost[date_max]", @date("YmdHis", $vars['max'])) . '</td>'.
+					'<td>'.$oL->m('till_time').'&#160;</td><td>' . htmlFormSelectDate("arPost[date_max]", date("YmdHis", $vars['max'])) . '</td>'.
 					'</tr>'.
 					'</tbody></table>';
 		$strForm .= '</td>';
@@ -232,9 +232,9 @@ case GW_A_ADD:
 			$tmp['ar_min_his'] = explode(':', $arPost['date_minS']);
 			$tmp['ar_max_his'] = explode(':', $arPost['date_maxS']);
 			/* hour, minute, second, month, day, year  */
-			$vars['min']  = @mktime($tmp['ar_min_his'][0], $tmp['ar_min_his'][1], $tmp['ar_min_his'][2],
+			$vars['min']  = mktime($tmp['ar_min_his'][0], $tmp['ar_min_his'][1], $tmp['ar_min_his'][2],
 								$arPost['date_minM'], $arPost['date_minD'], $arPost['date_minY']);
-			$vars['max']  = @mktime($tmp['ar_max_his'][0], $tmp['ar_max_his'][1], $tmp['ar_max_his'][2],
+			$vars['max']  = mktime($tmp['ar_max_his'][0], $tmp['ar_max_his'][1], $tmp['ar_max_his'][2],
 								$arPost['date_maxM'], $arPost['date_maxD'], $arPost['date_maxY']);
 			$vars['arFmt'] = str_replace('export_', '', $ar_formats);
 			$vars['fmt_default'] = 'XML';

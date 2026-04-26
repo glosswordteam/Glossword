@@ -24,7 +24,7 @@ if (!$this->gw_this['vars']['isConfirm']) {
     return;
 }
 
-$target_id = (int) $this->gw_this['vars']['tid'];
+$target_id = (int)$this->gw_this['vars']['tid'];
 
 /* Remove from profiles */
 $ar_query[] = gw_sql_delete(

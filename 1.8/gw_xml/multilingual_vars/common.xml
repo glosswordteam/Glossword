@@ -2,7 +2,7 @@
 <tmx version="1.4">
 
 <tu>
- <prop type="varname">r_dict_updated</prop>
+ <prop type="x-varname">r_dict_updated</prop>
  <tuv xml:lang="en"><seg>Usage example</seg></tuv>
  <tuv xml:lang="ru"><seg>Примеры использования</seg></tuv>
 </tu>

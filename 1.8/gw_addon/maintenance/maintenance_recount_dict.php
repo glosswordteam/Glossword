@@ -49,13 +49,13 @@ class gw_addon_recount_dict extends gw_addon
             // Calculate total bytes.
             $sql = 'SELECT SUM(int_bytes) AS bytes FROM `' . $dictParam['tablename'] . '`';
             $result = $this->oDb->sqlExec($sql);
-            $dictStats = ['int_bytes' => isset($result[0]['bytes']) ? (int) $result[0]['bytes'] : 0];
+            $dictStats = ['int_bytes' => isset($result[0]['bytes']) ? (int)$result[0]['bytes'] : 0];
 
             // Count active terms (created before now).
             $sql = 'SELECT COUNT(*) AS n FROM `' . $dictParam['tablename'] . '`
-                    WHERE `is_active` = "1" AND `date_created` <= ' . (int) $this->sys['time_now_db'];
+                    WHERE `is_active` = "1" AND `date_created` <= ' . (int)$this->sys['time_now_db'];
             $result = $this->oDb->sqlExec($sql);
-            $dictStats['int_terms'] = isset($result[0]['n']) ? (int) $result[0]['n'] : 0;
+            $dictStats['int_terms'] = isset($result[0]['n']) ? (int)$result[0]['n'] : 0;
 
             // Prepare update query (assumes gw_sql_update escapes properly).
             $updateQueries[] = gw_sql_update($dictStats, gw_get_tbl_name('dict'), "id = '" . $dictId . "'");

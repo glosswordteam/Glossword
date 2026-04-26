@@ -19,7 +19,7 @@ if (!defined('IN_GW')) {
 /* */
 $this->str .= $this->_get_nav();
 
-/** 
+/**
  * Conditions:
  * - User is admin.
  * - User is creator of the dictionary AND it is allowed to edit his own dictionaries.
@@ -28,7 +28,7 @@ $this->str .= $this->_get_nav();
 
 #$this->sys['isDebugQ'] = 1;
 
-/** 
+/**
  * Conditions:
  * - User is admin.
  * - User is the creator of the dictionary AND it is allowed to edit his own dictionaries.
@@ -36,80 +36,69 @@ $this->str .= $this->_get_nav();
  */
 $is_allow_dict = 0;
 /* Dictionary ID specified */
-if ($this->gw_this['vars']['id'])
-{
-	global $arDictParam;
-	
-	if (!$this->gw_this['vars']['isConfirm'])
-	{
-		/* Should be confirmed */
-		/* 1.8.9: Quick remove added, confirmation is not needed */
-		#return;
-	}
-	/* */
-	if ( $this->oSess->is('is-sys-settings')
-		|| $this->oSess->is('is-dicts')
-		|| ($arDictParam['id_user'] == $this->oSess->id_user && $this->oSess->is('is-dicts-own'))
-		)
-	{
-		$is_allow_dict = 1;
-		/* Run tasks below */
-	}
-	if (!$is_allow_dict)
-	{
-		$this->str .= '<p class="xu">'.$this->oL->m('reason_13').'</p>';
-		$this->str .= '<div class="xt">'.$this->oL->m('1258').'</div>';
-		$this->str .= '<div class="xt">'.$this->oL->m('1260').'</div>';
-		return;
-	}
-}
-elseif (!$this->gw_this['vars']['id'])
-{
-	/* No dictionary ID specified */
-	/* Provide the list of dictionaries */
-	$this->str .= '<div class="margin-inside">';
-	$this->str .= '<div class="xu">'.$this->oL->m('srch_selectdict').':</div>';
-	$this->str .= '<ul class="gwsql">';
-	$cnt_dict = 0;
-	$ar_allowed_dicts = $this->oSess->user_get('dictionaries');
-	foreach ($this->gw_this['ar_dict_list'] as $k => $v)
-	{
-		if ( $this->oSess->is('is-sys-settings')
-			|| $this->oSess->is('is-dicts')
-			|| ($v['id_user'] == $this->oSess->id_user && $this->oSess->is('is-dicts-own'))
-			)
-		{
-			$this->oHtml->setTag('a', 'onclick', 'return confirm(\''.$this->oL->m('3_clean').': &quot;'.htmlspecialchars($v['title']).'&quot;. '.$this->oL->m('9_remove').'\' )');
-			$this->str .= '<li>'.gw_dict_browse_for_select($v).'</li>';
-			$cnt_dict++;
-		}
-	}
-	$this->oHtml->setTag('a', 'onclick', '');
-	/* No allowed dictionaries */
-	if (!$cnt_dict)
-	{
-		$this->str .= '<li>'.$this->oL->m('reason_4').'</li>';
-		$this->str .= '<li>'.$this->oL->m('reason_13').'</li>';
-	}
-	$this->str .= '</ul>';
-	$this->str .= '</div>';
-	return;
+if ($this->gw_this['vars']['id']) {
+    global $arDictParam;
+
+    if (!$this->gw_this['vars']['isConfirm']) {
+        /* Should be confirmed */
+        /* 1.8.9: Quick remove added, confirmation is not needed */
+        #return;
+    }
+    /* */
+    if ($this->oSess->is('is-sys-settings')
+        || $this->oSess->is('is-dicts')
+        || ($arDictParam['id_user'] == $this->oSess->id_user && $this->oSess->is('is-dicts-own'))
+    ) {
+        $is_allow_dict = 1;
+        /* Run tasks below */
+    }
+    if (!$is_allow_dict) {
+        $this->str .= '<p class="xu">' . $this->oL->m('reason_13') . '</p>';
+        $this->str .= '<div class="xt">' . $this->oL->m('1258') . '</div>';
+        $this->str .= '<div class="xt">' . $this->oL->m('1260') . '</div>';
+        return;
+    }
+} elseif (!$this->gw_this['vars']['id']) {
+    /* No dictionary ID specified */
+    /* Provide the list of dictionaries */
+    $this->str .= '<div class="margin-inside">';
+    $this->str .= '<div class="xu">' . $this->oL->m('srch_selectdict') . ':</div>';
+    $this->str .= '<ul class="gwsql">';
+    $cnt_dict = 0;
+    $ar_allowed_dicts = $this->oSess->user_get('dictionaries');
+    foreach ($this->gw_this['ar_dict_list'] as $k => $v) {
+        if ($this->oSess->is('is-sys-settings')
+            || $this->oSess->is('is-dicts')
+            || ($v['id_user'] == $this->oSess->id_user && $this->oSess->is('is-dicts-own'))
+        ) {
+            $this->oHtml->setTag('a', 'onclick', 'return confirm(\'' . $this->oL->m('3_clean') . ': &quot;' . htmlspecialchars($v['title']) . '&quot;. ' . $this->oL->m('9_remove') . '\' )');
+            $this->str .= '<li>' . gw_dict_browse_for_select($v) . '</li>';
+            $cnt_dict++;
+        }
+    }
+    $this->oHtml->setTag('a', 'onclick', '');
+    /* No allowed dictionaries */
+    if (!$cnt_dict) {
+        $this->str .= '<li>' . $this->oL->m('reason_4') . '</li>';
+        $this->str .= '<li>' . $this->oL->m('reason_13') . '</li>';
+    }
+    $this->str .= '</ul>';
+    $this->str .= '</div>';
+    return;
 }
 /* */
-$arQ = array();
-$arQ[] = 'TRUNCATE `'.$arDictParam['tablename'].'`';
+$arQ = [];
+$arQ[] = 'TRUNCATE `' . $arDictParam['tablename'] . '`';
 $arQ[] = $this->oSqlQ->getQ('del-by-dict_id', TBL_MAP_USER_TERM, $this->gw_this['vars']['id']);
 $arQ[] = $this->oSqlQ->getQ('del-wordmap-by-dict', $this->gw_this['vars']['id']);
-$arQ[] = sprintf('DELETE FROM `%s` WHERE id_dict = "%d"', $this->sys['tbl_prefix'].'history_terms', $this->gw_this['vars']['id']);
-$arQ[] = sprintf('UPDATE `%s` SET int_terms = 0, int_terms_total = 0, int_bytes = 0 WHERE `id` = "%d"', $this->sys['tbl_prefix'].'dict', $this->gw_this['vars']['id']);
+$arQ[] = sprintf('DELETE FROM `%s` WHERE id_dict = "%d"', $this->sys['tbl_prefix'] . 'history_terms', $this->gw_this['vars']['id']);
+$arQ[] = sprintf('UPDATE `%s` SET int_terms = 0, int_terms_total = 0, int_bytes = 0 WHERE `id` = "%d"', $this->sys['tbl_prefix'] . 'dict', $this->gw_this['vars']['id']);
 /* */
-$arQ[] = 'ALTER TABLE `'.$arDictParam['tablename'].'` PACK_KEYS=0 CHECKSUM=0 DELAY_KEY_WRITE=1 AUTO_INCREMENT=1';
-$arQ[] = 'CHECK TABLE `'.$arDictParam['tablename'].'`';
-$this->str .= gw_tmp_clear( $this->gw_this['vars']['id'] );
+$arQ[] = 'ALTER TABLE `' . $arDictParam['tablename'] . '` PACK_KEYS=0 CHECKSUM=0 DELAY_KEY_WRITE=1 AUTO_INCREMENT=1';
+$arQ[] = 'CHECK TABLE `' . $arDictParam['tablename'] . '`';
+$this->str .= gw_tmp_clear($this->gw_this['vars']['id']);
 /* Redirect to... */
 $arPost['after'] = GW_AFTER_DICT_UPDATE;
 $str_url = gw_after_redirect_url($arPost['after']);
 $this->str .= postQuery($arQ, $str_url, $this->sys['isDebugQ'], 0);
 
-
-?>

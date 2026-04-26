@@ -41,8 +41,8 @@ function gw_make_captcha()
     /* characters for a new image */
     $chars = gw_str_random('QWRUSDFGZ23456789', mt_rand(3, 6));
     $len = strlen($chars);
-    $foreground_color = array(mt_rand(0, 100), mt_rand(0, 100), mt_rand(0, 100));
-    $background_color = array(mt_rand(200, 255), mt_rand(200, 255), mt_rand(200, 255));
+    $foreground_color = [mt_rand(0, 100), mt_rand(0, 100), mt_rand(0, 100)];
+    $background_color = [mt_rand(200, 255), mt_rand(200, 255), mt_rand(200, 255)];
     $width = 175;
     $height = 60;
     /* final image */
@@ -54,10 +54,10 @@ function gw_make_captcha()
     imagefill($im1, 0, 0, $bgcol);
     imagefill($im2, 0, 0, $bgcol);
     /* */
-    $ar_fonts = array('font1.png', 'font2.png', 'font3.png', 'font4.png');
+    $ar_fonts = ['font1.png', 'font2.png', 'font3.png', 'font4.png'];
     shuffle($ar_fonts);
     /* Load fonts */
-    $font_metrics = array();
+    $font_metrics = [];
     foreach ($ar_fonts as $k => $font_file) {
         $font_resource[$k] = imagecreatefrompng('img/' . $font_file);
         imagealphablending($font_resource[$k], true);
@@ -68,7 +68,7 @@ function gw_make_captcha()
         for ($i = 0; $i < $fontfile_width[$k] && $symbol < $alphabet_length; $i++) {
             $transparent = (imagecolorat($font_resource[$k], $i, 0) >> 24) == 127;
             if (!$reading_symbol && !$transparent) {
-                $font_metrics[$k][$alphabet{$symbol}] = array('start' => $i);
+                $font_metrics[$k][$alphabet{$symbol}] = ['start' => $i];
                 $reading_symbol = true;
                 continue;
             }
@@ -101,7 +101,7 @@ function gw_make_captcha()
         $x += $m['end'] - $m['start'] - $shift;
     }
     /* Clean font images */
-    if ( !empty( $font_resource ) ) {
+    if (!empty($font_resource)) {
         foreach ($font_resource as $k => $v) {
             imagedestroy($v);
         }
@@ -193,9 +193,8 @@ function gw_make_captcha()
 
 /* Auto time for server */
 $maketimes = time();
-$offset = @date('Z');
-$sys['time_gmt'] = $maketimes - (@date('I') ? ($offset - 3600) : $offset);
+$offset = date('Z');
+$sys['time_gmt'] = $maketimes - (date('I') ? ($offset - 3600) : $offset);
 /* */
 gw_make_captcha();
 
-/* end of file */

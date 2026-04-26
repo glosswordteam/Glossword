@@ -49,7 +49,7 @@ if ( $gw_this['vars']['layout'] != '' ) // settings for all dictionary pages
 		if ( $sys['is_cache_http'] )
 		{
 			/* first header */
-			$oHdr->add( "Last-Modified: " . @date( "D, d M Y H:i:s", $mktCreated ) . ' GMT' );
+			$oHdr->add( "Last-Modified: " . date( "D, d M Y H:i:s", $mktCreated ) . ' GMT' );
 		}
 		/* Do we need to link main page from main page? No. */
 		if ( $gw_this['vars']['layout'] == 'index' )
@@ -118,7 +118,7 @@ if ( $gw_this['vars']['layout'] != '' ) // settings for all dictionary pages
 	
 		if ( $sys['is_cache_http'] )
 		{
-			$oHdr->add( "Last-Modified: " . @date( "D, d M Y H:i:s", $sys['time_now_gmt_unix'] ) . " GMT" );
+			$oHdr->add( "Last-Modified: " . date( "D, d M Y H:i:s", $sys['time_now_gmt_unix'] ) . " GMT" );
 		}
 	}
 } // end of dictionary pages

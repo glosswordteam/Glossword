@@ -155,5 +155,3 @@ if ($this->gw_this['vars']['post'] == '') {
         $this->str .= $this->get_form_vkbd($arPost, 1, $ar_broken, $ar_req_fields);
     }
 }
-
-?>

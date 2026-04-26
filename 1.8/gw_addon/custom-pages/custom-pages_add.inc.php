@@ -20,9 +20,9 @@ $this->str .= $this->_get_nav();
 
 $ar_pre = isset($this->gw_this['vars']['arPre']) ? $this->gw_this['vars']['arPre'] : null;
 
-$ar_parsed       = [];
+$ar_parsed = [];
 $ar_parsed['ar'] = &$this->ar;
-$ar_req_fields   = [];
+$ar_req_fields = [];
 
 if ($this->gw_this['vars']['post'] == '') {
     /* Set default values */
@@ -40,10 +40,10 @@ if ($this->gw_this['vars']['post'] == '') {
         $cnt++;
     }
 
-    $ar_parsed['is_active']  = 1;
-    $ar_parsed['id_parent']  = 0;
-    $ar_parsed['page_icon']  = '';
-    $ar_parsed['page_uri']   = 'page-' . (int)time();
+    $ar_parsed['is_active'] = 1;
+    $ar_parsed['id_parent'] = 0;
+    $ar_parsed['page_icon'] = '';
+    $ar_parsed['page_uri'] = 'page-' . (int)time();
     $ar_parsed['page_php_1'] = '';
     $ar_parsed['page_php_2'] = '';
 
@@ -51,7 +51,7 @@ if ($this->gw_this['vars']['post'] == '') {
 
     /* Additional actions */
     if (is_array($ar_pre)) {
-        $is_first  = 0;
+        $is_first = 0;
         $ar_parsed = gw_ParsePre($ar_parsed, $ar_pre);
     }
 
@@ -80,15 +80,15 @@ if ($this->gw_this['vars']['post'] == '') {
         $ar_pre = [];
     }
 
-    $ar_queries         = [];
-    $table_pages        = gw_get_tbl_name('pages');
+    $ar_queries = [];
+    $table_pages = gw_get_tbl_name('pages');
     $table_pages_phrase = gw_get_tbl_name('pages_phrase');
 
     /* Fix on/off options */
     $ar_pre['is_active'] = isset($ar_pre['is_active']) ? (int)$ar_pre['is_active'] : 0;
     $ar_pre['id_parent'] = isset($ar_pre['id_parent']) ? (int)$ar_pre['id_parent'] : 0;
 
-    $id_page             = $this->oDb->NextId($table_pages, 'id_page');
+    $id_page = $this->oDb->NextId($table_pages, 'id_page');
     $id_page_phrase_base = $this->oDb->NextId($table_pages_phrase, 'id_page_phrase');
 
     $page_uri = isset($ar_pre['page_uri']) ? trim((string)$ar_pre['page_uri']) : '';

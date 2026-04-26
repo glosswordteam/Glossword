@@ -805,7 +805,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 				$this->setTag('textarea', 'onselect', 'storeCaret(this)');
 				$this->setTag('textarea', 'onkeyup', 'storeCaret(this)');
 			}
-			$oFieldExt = new gw_fields_extension($fieldname);
+			$oFieldExt = new gw_fields_extension();
 			$tmp['strform'] .= $oFieldExt->get_js($fieldname, $ar['elK']);
 			$tmp['strform'] .= $oFieldExt->get_html($fieldname, $ar['elK']);
 		}

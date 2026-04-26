@@ -73,10 +73,10 @@ class gw_addon_vkbd_admin extends gw_addon
             ];
 
         $strHidden = '';
-        $strForm   = '';
-        $classTd1  = 'td1';
-        $classTd2  = 'td2';
-        $td1Width  = '25%';
+        $strForm = '';
+        $classTd1 = 'td1';
+        $classTd2 = 'td2';
+        $td1Width = '25%';
 
         $oForm = new gwForms();
         $oForm->Set('action', $this->sys['page_admin']);
@@ -95,15 +95,15 @@ class gw_addon_vkbd_admin extends gw_addon
             $oForm->Set('submitdel', $this->oL->m('3_remove'));
         }
 
-        $requiredFields   = array_flip($ar_req);
+        $requiredFields = array_flip($ar_req);
         $requiredMessages = [];
-        $brokenMessages   = [];
-        $brokenMessage    = '<span class="red"><b>' . $this->oL->m('reason_9') . '</b></span><br />';
+        $brokenMessages = [];
+        $brokenMessage = '<span class="red"><b>' . $this->oL->m('reason_9') . '</b></span><br />';
 
         /* mark fields as "Required" and display error message */
         foreach ((array)$vars as $key => $value) {
             $requiredMessages[$key] = '';
-            $brokenMessages[$key]   = '';
+            $brokenMessages[$key] = '';
 
             if (isset($requiredFields[$key])) {
                 $requiredMessages[$key] = '&#160;<span class="red"><b>*</b></span>';
@@ -208,11 +208,11 @@ class gw_addon_vkbd_admin extends gw_addon
                     unset($ar_perms[$permission]);
                 }
             }
-            $ar_sql_like2       = 'cmm.req_permission_map LIKE "%:' . implode(
+            $ar_sql_like2 = 'cmm.req_permission_map LIKE "%:' . implode(
                     ':%" OR cmm.req_permission_map LIKE "%:',
                     array_keys($ar_perms)
                 ) . ':%"';
-            $arSql              = $this->oDb->sqlRun(
+            $arSql = $this->oDb->sqlRun(
                 $this->oSqlQ->getQ(
                     'get-component-action-perm',
                     $ar_sql_like2,
@@ -226,13 +226,13 @@ class gw_addon_vkbd_admin extends gw_addon
                 $this->sys['id_current_status'] = $this->oL->m($this->ar_component['cname']) . ': ' . $this->oL->m(
                         $this->ar_component['aname']
                     );
-                $this->component                =& $this->ar_component['id_component_name'];
+                $this->component =& $this->ar_component['id_component_name'];
                 include_once($this->sys['path_component_action']);
                 $strR .= $this->str;
             } else {
                 $this->sys['id_current_status'] = '';
-                $strR                           .= '<p class="xu">' . $this->oL->m('reason_13') . '</p>';
-                $strR                           .= '<p class="xt">' . $this->gw_this['vars'][GW_TARGET] . ': ' . $this->gw_this['vars'][GW_ACTION] . '</p>';
+                $strR .= '<p class="xu">' . $this->oL->m('reason_13') . '</p>';
+                $strR .= '<p class="xt">' . $this->gw_this['vars'][GW_TARGET] . ': ' . $this->gw_this['vars'][GW_ACTION] . '</p>';
             }
         }
     }

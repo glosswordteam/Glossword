@@ -47,11 +47,11 @@ class gw_addon_custom_pages_admin extends gw_addon
      */
     public function get_form($vars, $runtime = 0, $ar_broken = [], $ar_req = [])
     {
-        $str_hidden  = '';
-        $str_form    = '';
-        $str_js      = '';
-        $v_class_1   = 'td1';
-        $v_class_2   = 'td2';
+        $str_hidden = '';
+        $str_form = '';
+        $str_js = '';
+        $v_class_1 = 'td1';
+        $v_class_2 = 'td2';
         $v_td1_width = '25%';
 
         $oForm = new gwForms();
@@ -72,7 +72,7 @@ class gw_addon_custom_pages_admin extends gw_addon
         $oForm->Set('isButtonSubmit', 1);
         $ar_req = array_flip($ar_req);
         /* mark fields as "Required" and display error message */
-        foreach ((is_array($vars) ? $vars : array()) as $k => $v) {
+        foreach ((is_array($vars) ? $vars : []) as $k => $v) {
             $ar_req_msg[$k] = $ar_broken_msg[$k] = '';
             if (isset($ar_req[$k])) {
                 $ar_req_msg[$k] = '&#160;<span class="red"><strong>*</strong></span>';
@@ -85,7 +85,7 @@ class gw_addon_custom_pages_admin extends gw_addon
         $oForm->setTag('select', 'class', 'input50');
         /* */
 #		$fieldname = $this->component;
-        $fieldname        = 'page';
+        $fieldname = 'page';
         $int_custom_pages = sizeof($vars['page']);
 
         $str_form .= gw_get_form_title_nav(
@@ -94,7 +94,7 @@ class gw_addon_custom_pages_admin extends gw_addon
         );
         foreach ($vars['page'] as $elK => $arV) {
             $tmp['strBtnRemove'] = '';
-            $tmp['strBtnAdd']    = '<input type="submit" style="text-align:center;width:24px;height:24px" class="submitcancel" name="' .
+            $tmp['strBtnAdd'] = '<input type="submit" style="text-align:center;width:24px;height:24px" class="submitcancel" name="' .
                 'arControl[' . $fieldname . '][' . GW_A_ADD . '][' . $elK . '][0]" title="' .
                 $this->oL->m('3_add') . '" value="+"/>';
             if ($int_custom_pages > 1) {
@@ -266,7 +266,7 @@ class gw_addon_custom_pages_admin extends gw_addon
     public function get_dates()
     {
         $arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-date-mm', $this->sys['tbl_prefix'] . 'pages'));
-        $ar    = ['max' => time(), 'min' => 0];
+        $ar = ['max' => time(), 'min' => 0];
         foreach ($arSql as $arK => $arV) {
             if (empty($arV['max']) && empty($arV['min'])) {
                 /* no date */
@@ -307,11 +307,11 @@ class gw_addon_custom_pages_admin extends gw_addon
         $str_form .= '<tr><td></td><td class="td2">' . $this->oL->m('tip001') . '</td></tr>';
         $str_form .= '<tr>' .
             '<td class="td1">' . $this->oL->m('from_time') . ':</td>' .
-            '<td class="td2">' . htmlFormSelectDate('arPost[date_min]', @date("YmdHis", $vars['min'])) . '</td>' .
+            '<td class="td2">' . htmlFormSelectDate('arPost[date_min]', date("YmdHis", $vars['min'])) . '</td>' .
             '</tr>';
         $str_form .= '<tr>' .
             '<td class="td1">' . $this->oL->m('till_time') . ':</td>' .
-            '<td class="td2">' . htmlFormSelectDate('arPost[date_max]', @date("YmdHis", $vars['max'])) . '</td>' .
+            '<td class="td2">' . htmlFormSelectDate('arPost[date_max]', date("YmdHis", $vars['max'])) . '</td>' .
             '</tr>';
 
         $str_form .= '<tr>' .
@@ -399,30 +399,30 @@ class gw_addon_custom_pages_admin extends gw_addon
                 '</tr>';
         }
         $arBoxId['id'] = 'arPost_is_overwrite_';
-        $str_form      .= '<tr>';
-        $str_form      .= '<td class="td1">' . $oForm->field(
+        $str_form .= '<tr>';
+        $str_form .= '<td class="td1">' . $oForm->field(
                 'radio',
                 'arPost[is_overwrite]',
                 '1',
                 $vars['is_overwrite'],
                 $arBoxId
             ) . '</td>';
-        $str_form      .= '<td class="td2"><label for="arPost_is_overwrite_">' . $this->oL->m(
+        $str_form .= '<td class="td2"><label for="arPost_is_overwrite_">' . $this->oL->m(
                 'overwrite'
             ) . '</label></td>';
-        $str_form      .= '</tr>';
+        $str_form .= '</tr>';
         $arBoxId['id'] = 'arPost_is_merge_';
-        $str_form      .= '<tr>';
-        $str_form      .= '<td class="td1">' . $oForm->field(
+        $str_form .= '<tr>';
+        $str_form .= '<td class="td1">' . $oForm->field(
                 'radio',
                 'arPost[is_overwrite]',
                 '0',
                 $vars['is_merge'],
                 $arBoxId
             ) . '</td>';
-        $str_form      .= '<td class="td2"><label for="arPost_is_merge_">' . $this->oL->m('1158') . '</label></td>';
-        $str_form      .= '</tr>';
-        $str_form      .= '</tbody></table>';
+        $str_form .= '<td class="td2"><label for="arPost_is_merge_">' . $this->oL->m('1158') . '</label></td>';
+        $str_form .= '</tr>';
+        $str_form .= '</tbody></table>';
         /* */
         $str_form .= '</td></tr>';
         $str_form .= '</tbody></table>';
@@ -449,14 +449,14 @@ class gw_addon_custom_pages_admin extends gw_addon
         }
 
         $table_pages = gw_get_tbl_name('pages');
-        $ar_sql      = $this->oDb->sqlExec($this->oSqlQ->getQ('get-custompages_id-by-p', $parent_id));
+        $ar_sql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-custompages_id-by-p', $parent_id));
 
         if (!is_array($ar_sql) || empty($ar_sql)) {
             return false;
         }
 
         $ar_queries = [];
-        $int_sort   = 10;
+        $int_sort = 10;
 
         foreach ($ar_sql as $ar_v) {
             if ($ar_v['id_page'] <= 0) {
@@ -517,7 +517,7 @@ class gw_addon_custom_pages_admin extends gw_addon
     private function _move_page($page_id, $mode)
     {
         $page_id = (int)$page_id;
-        $mode    = (string)$mode;
+        $mode = (string)$mode;
 
         if ($page_id <= 0 || ($mode != 'up' && $mode != 'dn')) {
             return false;
@@ -527,8 +527,8 @@ class gw_addon_custom_pages_admin extends gw_addon
 
         $sql = sprintf(
             'UPDATE `%s`
-         SET `int_sort` = (`int_sort` %s)
-         WHERE `id_page` = %d',
+             SET `int_sort` = (`int_sort` %s)
+             WHERE `id_page` = %d',
             gw_get_tbl_name('pages'),
             $sort_delta_sql,
             $page_id
@@ -550,7 +550,7 @@ class gw_addon_custom_pages_admin extends gw_addon
     private function _set_page_tree_active($page_id, $mode)
     {
         $page_id = (int)$page_id;
-        $mode    = (string)$mode;
+        $mode = (string)$mode;
 
         if ($page_id <= 0 || ($mode != 'off' && $mode != 'on')) {
             return false;
@@ -573,7 +573,7 @@ class gw_addon_custom_pages_admin extends gw_addon
             return false;
         }
 
-        $is_active  = ($mode == 'on') ? 1 : 0;
+        $is_active = ($mode == 'on') ? 1 : 0;
         $ar_queries = [];
 
         $ar_queries[] = 'UPDATE `' . gw_get_tbl_name('pages') . '`
@@ -604,11 +604,11 @@ class gw_addon_custom_pages_admin extends gw_addon
                     unset($ar_perms[$permission]);
                 }
             }
-            $ar_sql_like2       = 'cmm.req_permission_map LIKE "%:' . implode(
+            $ar_sql_like2 = 'cmm.req_permission_map LIKE "%:' . implode(
                     ':%" OR cmm.req_permission_map LIKE "%:',
                     array_keys($ar_perms)
                 ) . ':%"';
-            $arSql              = $this->oDb->sqlRun(
+            $arSql = $this->oDb->sqlRun(
                 $this->oSqlQ->getQ(
                     'get-component-action-perm',
                     $ar_sql_like2,
@@ -622,13 +622,13 @@ class gw_addon_custom_pages_admin extends gw_addon
                 $this->sys['id_current_status'] = $this->oL->m($this->ar_component['cname']) . ': ' . $this->oL->m(
                         $this->ar_component['aname']
                     );
-                $this->component                =& $this->ar_component['id_component_name'];
+                $this->component =& $this->ar_component['id_component_name'];
                 include_once($this->sys['path_component_action']);
                 $strR .= $this->str;
             } else {
                 $this->sys['id_current_status'] = '';
-                $strR                           .= '<p class="xu">' . $this->oL->m('reason_13') . '</p>';
-                $strR                           .= '<p class="xt">' . $this->gw_this['vars'][GW_TARGET] . ': ' . $this->gw_this['vars'][GW_ACTION] . '</p>';
+                $strR .= '<p class="xu">' . $this->oL->m('reason_13') . '</p>';
+                $strR .= '<p class="xt">' . $this->gw_this['vars'][GW_TARGET] . ': ' . $this->gw_this['vars'][GW_ACTION] . '</p>';
             }
         }
     }

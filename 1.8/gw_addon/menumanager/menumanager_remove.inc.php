@@ -24,8 +24,8 @@ if (!$this->gw_this['vars']['isConfirm']) {
 }
 
 $ar_query = [];
-$target_id = (int) $this->gw_this['vars'][GW_TARGET_ID];
-$delete_mode = isset($this->gw_this['vars']['w1']) ? (string) $this->gw_this['vars']['w1'] : '';
+$target_id = (int)$this->gw_this['vars'][GW_TARGET_ID];
+$delete_mode = isset($this->gw_this['vars']['w1']) ? (string)$this->gw_this['vars']['w1'] : '';
 
 switch ($delete_mode) {
     case 'primary':

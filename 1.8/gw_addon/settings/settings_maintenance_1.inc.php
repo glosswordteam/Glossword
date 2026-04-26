@@ -18,139 +18,118 @@ if (!defined('IN_GW')) {
 
 $ar_req_fields = 'message';
 
-$this->ar_msg_topics = array(
-	1 => $this->oL->m('1029'),
-	2 => $this->oL->m('1030'),
-	3 => $this->oL->m('1031'),
-	4 => $this->oL->m('1032'),
-	5 => $this->oL->m('1033'),
-	6 => $this->oL->m('1034'),
-);
+$this->ar_msg_topics = [
+    1 => $this->oL->m('1029'),
+    2 => $this->oL->m('1030'),
+    3 => $this->oL->m('1031'),
+    4 => $this->oL->m('1032'),
+    5 => $this->oL->m('1033'),
+    6 => $this->oL->m('1034'),
+];
 
 /* */
-if ($this->gw_this['vars']['post'] == '')
-{
-	/* Default settings */
-	$vars['id_topic'] = 1;
-	$vars['is_attach'] = 1;
-	$vars['message'] = '';
-	$vars['is_preview'] = 1;
-	/* Not submitted */
-	$this->str .= $this->get_form_support($vars, 0, 0, $ar_req_fields);
-}
-else
-{
-	/* */
-	$arPost =& $this->gw_this['vars']['arPost'];
-	/* Fix on/off options */
-	$arIsV = array('is_attach');
-	foreach ($arIsV as $k => $v)
-	{
-		$arPost[$v] = isset($arPost[$v]) ? $arPost[$v] : 0;
-	}
-	/* */
-	if ($arPost['is_preview'])
-	{
-		/* Preview */
-		$arPost['is_preview'] = 0;
-		$arPost['name'] =  $this->gw_this['vars']['name'];
-		$arPost['email'] =  $this->gw_this['vars']['email'];
-		$arPost['id_topic'] = $this->gw_this['vars']['arPost']['id_topic'];
-		$this->str .= $this->get_form_support_preview($arPost);
-	}
-	else
-	{
-		/* Send */
-		$v_mailto = 'team@glossword.biz';
-		$str_mail_body = '<'.'?xml version="1.0"?'.'>';
-		foreach ($arPost as $k => $v)
-		{
-			$str_mail_body .= '<'.$k .'><![CDATA[ '. $v . ']]></'.$k .'>';
-		}
-		$str_mail_body .= '</xml>';
-		$str_mail_body = gw_htmlspecialchars_ltgt($str_mail_body);
+if ($this->gw_this['vars']['post'] == '') {
+    /* Default settings */
+    $vars['id_topic'] = 1;
+    $vars['is_attach'] = 1;
+    $vars['message'] = '';
+    $vars['is_preview'] = 1;
+    /* Not submitted */
+    $this->str .= $this->get_form_support($vars, 0, 0, $ar_req_fields);
+} else {
+    /* */
+    $arPost =& $this->gw_this['vars']['arPost'];
+    /* Fix on/off options */
+    $arIsV = ['is_attach'];
+    foreach ($arIsV as $k => $v) {
+        $arPost[$v] = isset($arPost[$v]) ? $arPost[$v] : 0;
+    }
+    /* */
+    if ($arPost['is_preview']) {
+        /* Preview */
+        $arPost['is_preview'] = 0;
+        $arPost['name'] = $this->gw_this['vars']['name'];
+        $arPost['email'] = $this->gw_this['vars']['email'];
+        $arPost['id_topic'] = $this->gw_this['vars']['arPost']['id_topic'];
+        $this->str .= $this->get_form_support_preview($arPost);
+    } else {
+        /* Send */
+        $v_mailto = 'team@glossword.biz';
+        $str_mail_body = '<' . '?xml version="1.0"?' . '>';
+        foreach ($arPost as $k => $v) {
+            $str_mail_body .= '<' . $k . '><![CDATA[ ' . $v . ']]></' . $k . '>';
+        }
+        $str_mail_body .= '</xml>';
+        $str_mail_body = gw_htmlspecialchars_ltgt($str_mail_body);
 
-		$this->oL->applyCustomPhrases('mail', $this->gw_this['vars'][GW_LANG_I].'-'.$this->gw_this['vars']['lang_enc']);
+        $this->oL->applyCustomPhrases('mail', $this->gw_this['vars'][GW_LANG_I] . '-' . $this->gw_this['vars']['lang_enc']);
 
-		/* Start new messenger */
-		$oMail = new tkit_mail('mail_feedback');
-		$this->sys['is_debug_mail'] = 0;
-		/* Prepage subject */
-		$str_subject = '[GW] Glossword report';
-		/* Send mail */
-		if ($oMail->send(
-				$arPost['name'],
-				$arPost['email'],
-				'Dmitry-Sh',
-				$v_mailto,
-				$str_subject,
-				$oMail->create_message($str_subject, $str_mail_body),
-				$this->sys['is_debug_mail']
-			))
-		{
-			$this->str = '<br />'.$this->oL->m('fb_complete');
-		}
-		else
-		{
-			$this->str .= sprintf('<br /><span class="red xu">'.$this->oL->m('reason_17').'</span>', $v_mailto);
-			$this->str .= '<br /><br /><div class="xt">';
-			$this->str .= $str_mail_body;
-			$this->str .= '</div>';
-		}
-	}
+        /* Start new messenger */
+        $oMail = new tkit_mail('mail_feedback');
+        $this->sys['is_debug_mail'] = 0;
+        /* Prepage subject */
+        $str_subject = '[GW] Glossword report';
+        /* Send mail */
+        if ($oMail->send(
+            $arPost['name'],
+            $arPost['email'],
+            'Dmitry-Sh',
+            $v_mailto,
+            $str_subject,
+            $oMail->create_message($str_subject, $str_mail_body),
+            $this->sys['is_debug_mail']
+        )) {
+            $this->str = '<br />' . $this->oL->m('fb_complete');
+        } else {
+            $this->str .= sprintf('<br /><span class="red xu">' . $this->oL->m('reason_17') . '</span>', $v_mailto);
+            $this->str .= '<br /><br /><div class="xt">';
+            $this->str .= $str_mail_body;
+            $this->str .= '</div>';
+        }
+    }
 }
 
 /* */
 function gw_get_cfg()
 {
-	global $sys, $oDb;
-	/* */
-	$arSql = $oDb->sqlExec('SELECT version() as v');
-	$arInfoA = array(
-	'{API}'                  => PHP_SAPI,
-	'{DOCUMENT_ROOT}'        => getenv('DOCUMENT_ROOT'),
-	'{SCRIPT_FILENAME}'      => getenv('SCRIPT_FILENAME'),
-	'{SERVER_SOFTWARE}'      => getenv('SERVER_SOFTWARE'),
-	'{GW_REQUEST_URI}'          => preg_replace('/[0-9a-f]{32}/', '', GW_REQUEST_URI),
-	'{sys_server}'           => $sys['server_proto'].$sys['server_host'].$sys['server_dir'],
-	);
-	$arInfoT = array(
-	'{expose_php}'           => (int) ini_get("expose_php"),
-	'{magic_quotes_gpc}'     => (int) ini_get("magic_quotes_gpc"),
-	'{magic_quotes_runtime}' => (int) ini_get("magic_quotes_runtime"),
-	'{magic_quotes_sybase}'  => (int) ini_get("magic_quotes_sybase"),
-	'{max_execution_time}'   => (int) ini_get("max_execution_time"),
-	'{post_max_size}'        => (int) ini_get("post_max_size"),
-	'{register_globals}'     => (int) ini_get("register_globals"),
-	'{safe_mode}'            => (int) ini_get("safe_mode"),
-	'{short_open_tag}'       => (int) ini_get("short_open_tag"),
-	'{mbstring.internal_encoding}' => ini_get('mbstring.internal_encoding')
-	);
-	$str = '';
-	$str .= '<line>'.CRLF;
-	$str .= '<term>'.$sys['server_host'].'</term>'.CRLF;
-	$str .= '<defn>'.CRLF;
-	foreach ($arInfoA as $k => $v)
-	{
-		$str .= '<abbr lang="'.$k.'">'.$v.'</abbr>'.CRLF;
-	}
-	foreach ($arInfoT as $k => $v)
-	{
-		$str .= '<trns lang="'.$k.'">'.$v.'</trns>'.CRLF;
-	}
-	if (function_exists('get_loaded_extensions'))
-	{
-		$ar = get_loaded_extensions();
-		sort($ar);
-		foreach ($ar as $k => $v)
-		{
-			$str .= '<see>'.$v.'</see>'.CRLF;
-		}
-	}
-	$str .= '</defn>'.CRLF;
-	$str .= '</line>'.CRLF;
-	return $str;
+    global $sys, $oDb;
+    /* */
+    $arSql = $oDb->sqlExec('SELECT version() as v');
+    $arInfoA = [
+        '{API}'             => PHP_SAPI,
+        '{DOCUMENT_ROOT}'   => getenv('DOCUMENT_ROOT'),
+        '{SCRIPT_FILENAME}' => getenv('SCRIPT_FILENAME'),
+        '{SERVER_SOFTWARE}' => getenv('SERVER_SOFTWARE'),
+        '{GW_REQUEST_URI}'  => preg_replace('/[0-9a-f]{32}/', '', GW_REQUEST_URI),
+        '{sys_server}'      => $sys['server_proto'] . $sys['server_host'] . $sys['server_dir'],
+    ];
+    $arInfoT = [
+        '{expose_php}'                 => (int)ini_get("expose_php"),
+        '{max_execution_time}'         => (int)ini_get("max_execution_time"),
+        '{post_max_size}'              => (int)ini_get("post_max_size"),
+        '{register_globals}'           => (int)ini_get("register_globals"),
+        '{safe_mode}'                  => (int)ini_get("safe_mode"),
+        '{short_open_tag}'             => (int)ini_get("short_open_tag"),
+        '{mbstring.internal_encoding}' => ini_get('mbstring.internal_encoding'),
+    ];
+    $str = '';
+    $str .= '<line>' . CRLF;
+    $str .= '<term>' . $sys['server_host'] . '</term>' . CRLF;
+    $str .= '<defn>' . CRLF;
+    foreach ($arInfoA as $k => $v) {
+        $str .= '<abbr lang="' . $k . '">' . $v . '</abbr>' . CRLF;
+    }
+    foreach ($arInfoT as $k => $v) {
+        $str .= '<trns lang="' . $k . '">' . $v . '</trns>' . CRLF;
+    }
+    if (function_exists('get_loaded_extensions')) {
+        $ar = get_loaded_extensions();
+        sort($ar);
+        foreach ($ar as $k => $v) {
+            $str .= '<see>' . $v . '</see>' . CRLF;
+        }
+    }
+    $str .= '</defn>' . CRLF;
+    $str .= '</line>' . CRLF;
+    return $str;
 }
-
-
-?>

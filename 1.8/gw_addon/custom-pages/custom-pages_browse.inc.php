@@ -40,4 +40,3 @@ $this->str .= gw_get_thread_pages($this->ar);
 $this->str .= '</tbody></table>';
 $this->str .= '<br />';
 
-?>

@@ -98,4 +98,3 @@ $strData .= '<td style="text-align:' . $sys['css_align_right'] . '">'
     . $oFunc->number_format($sumHits, 0, $oL->languagelist(LOCALE_LANG_RULES))
     . '</td>';
 $strData .= '</tr>';
-?>

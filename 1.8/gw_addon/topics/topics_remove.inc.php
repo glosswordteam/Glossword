@@ -22,7 +22,7 @@ if (!$this->gw_this['vars']['isConfirm']) {
     return;
 }
 
-$topic_id = isset($this->gw_this['vars']['tid']) ? (int) $this->gw_this['vars']['tid'] : 0;
+$topic_id = isset($this->gw_this['vars']['tid']) ? (int)$this->gw_this['vars']['tid'] : 0;
 if ($topic_id <= 0) {
     $this->str .= '<p class="xr"><span class="red">' . $this->oL->m('reason_11') . '</span></p>';
 
@@ -43,7 +43,7 @@ if ($this->oSess->is('is-topics')) {
 } elseif (
     $this->oSess->is('is-topics-own')
     && isset($ar_parsed['id_user'])
-    && ((int) $ar_parsed['id_user'] === (int) $this->oSess->id_user)
+    && ((int)$ar_parsed['id_user'] === (int)$this->oSess->id_user)
 ) {
     $is_allow_edit = 1;
 }
@@ -79,13 +79,13 @@ if (!empty($ar_sql)) {
 /* The last root topic cannot be deleted */
 if (
     isset($ar_topics[$topic_id]['id_parent'])
-    && (int) $ar_topics[$topic_id]['id_parent'] === 0
+    && (int)$ar_topics[$topic_id]['id_parent'] === 0
 ) {
     $sql = 'SELECT COUNT(*) AS n
             FROM `' . $this->sys['tbl_prefix'] . 'topics`
             WHERE `id_parent` = 0';
     $ar_sql = $this->oDb->sqlExec($sql);
-    $root_topics_count = isset($ar_sql[0]['n']) ? (int) $ar_sql[0]['n'] : 0;
+    $root_topics_count = isset($ar_sql[0]['n']) ? (int)$ar_sql[0]['n'] : 0;
 
     if ($root_topics_count <= 1) {
         $is_error = 1;

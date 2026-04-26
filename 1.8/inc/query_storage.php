@@ -22,27 +22,25 @@ class gwtk_query_storage extends gw_query_storage
     /* */
     public function setQ()
     {
-        return $this->q_import(array('query_storage_global', 'query_storage_sess'));
+        return $this->q_import(['query_storage_global', 'query_storage_sess']);
     }
 
     /* */
     public function setAddonQ($ar)
     {
         global $gw_this, $sys;
-        $arSql = array();
+        $arSql = [];
         foreach ($ar as $k => $v) {
             $target = preg_replace('/[^a-z0-9_\-]/', '', strtolower($gw_this['vars'][GW_TARGET]));
             $query_file = preg_replace('/[^a-z0-9_\-]/', '', strtolower($v));
             $path = $sys['path_addon'] . '/' . $target . '/' . $query_file . $this->str_suffix . '.php';
             if (file_exists($path)) {
-                $tmp = array();
+                $tmp = [];
                 include($path);
                 $arSql = array_merge($arSql, $tmp['ar_queries']);
             }
         }
         $this->is_loaded = 1;
-        $this->arQ       = array_merge($this->arQ, $arSql);
+        $this->arQ = array_merge($this->arQ, $arSql);
     }
 }
-
-/* end of file */

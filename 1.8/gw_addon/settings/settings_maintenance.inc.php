@@ -22,71 +22,64 @@ if (!defined('IN_GW')) {
 /* */
 $this->str .= $this->_get_nav();
 /* */
-if (!$this->gw_this['vars']['w1'])
-{
-	$ar_task[1] = $this->oL->m(1001);
-	$ar_task[2] = $this->oL->m(1002);
-	$ar_task[3] = $this->oL->m(1003);
-	$ar_task[4] = $this->oL->m(1004);
-	$ar_task[5] = $this->oL->m(1005);
-	$ar_task[7] = $this->oL->m(1007);
-	$ar_task[8] = $this->oL->m(1266);
-	$ar_task[9] = $this->oL->m(1305);
-	$ar_task[10] = $this->oL->m(1363);
+if (!$this->gw_this['vars']['w1']) {
+    $ar_task[1] = $this->oL->m(1001);
+    $ar_task[2] = $this->oL->m(1002);
+    $ar_task[3] = $this->oL->m(1003);
+    $ar_task[4] = $this->oL->m(1004);
+    $ar_task[5] = $this->oL->m(1005);
+    $ar_task[7] = $this->oL->m(1007);
+    $ar_task[8] = $this->oL->m(1266);
+    $ar_task[9] = $this->oL->m(1305);
+    $ar_task[10] = $this->oL->m(1363);
 
-	$this->str .= '<div class="margin-inside">';
-	$this->str .= '<div class="xu">'.$this->oL->m('task_list').'</div>';
-	$this->str .= '<ul class="gwsql">';
-	foreach ($ar_task as $k => $v)
-	{
-		$this->str .= sprintf('<li ><a class="xw" href="%s">%s</a></li>',
-			append_url($this->sys['page_admin'].'?'.GW_ACTION.'='.$this->gw_this['vars'][GW_ACTION].'&w1='.$k.'&'.GW_TARGET.'='.$this->gw_this['vars'][GW_TARGET]),
-			$v
-		);
-	}
-	$this->str .= '</ul>';
-	$this->str .= '</div>';
+    $this->str .= '<div class="margin-inside">';
+    $this->str .= '<div class="xu">' . $this->oL->m('task_list') . '</div>';
+    $this->str .= '<ul class="gwsql">';
+    foreach ($ar_task as $k => $v) {
+        $this->str .= sprintf('<li ><a class="xw" href="%s">%s</a></li>',
+            append_url($this->sys['page_admin'] . '?' . GW_ACTION . '=' . $this->gw_this['vars'][GW_ACTION] . '&w1=' . $k . '&' . GW_TARGET . '=' . $this->gw_this['vars'][GW_TARGET]),
+            $v
+        );
+    }
+    $this->str .= '</ul>';
+    $this->str .= '</div>';
 }
-$tmp['filename'] = $this->sys['path_addon'].'/'.$this->gw_this['vars'][GW_TARGET].'/'.$this->gw_this['vars'][GW_TARGET].'_'.$this->gw_this['vars'][GW_ACTION].'_'.$this->gw_this['vars']['w1'].'.inc.php';
-if (file_exists($tmp['filename']))
-{
-	include_once($tmp['filename']);
+$tmp['filename'] = $this->sys['path_addon'] . '/' . $this->gw_this['vars'][GW_TARGET] . '/' . $this->gw_this['vars'][GW_TARGET] . '_' . $this->gw_this['vars'][GW_ACTION] . '_' . $this->gw_this['vars']['w1'] . '.inc.php';
+if (file_exists($tmp['filename'])) {
+    include_once($tmp['filename']);
 }
 
 /* */
 function html_array_to_table_multi($ar, $is_print = 1)
 {
-	if (empty($ar)) { $ar = array(); }
-	if (is_string($ar)) { $ar = array(array($ar)); }
-	$str = '<table cellpadding="2" cellspacing="1" width="95%" border="0"><tbody>';
-	foreach ($ar as $k => $arV)
-	{
-		if (is_string($arV)) { $arV = array($arV); }
-		$td_width = empty($arV) ? 1: ceil(100 / sizeof($arV));
-		$td_style = '';
-		if ($k == 0)
-		{
-			$td_style = ' style="width:'.$td_width.'%"';
-		}
-		$str .= '<tr>';
-		foreach ($arV as $k2 => $v2)
-		{
-			$str .= '<td'. $td_style .'>'.  $v2 .'</td>';
-		}
-		$str .= '</tr>';
-	}
-	$str .= '</tbody></table>';
-	if ($is_print)
-	{
-		print $str;
-	}
-	else
-	{
-		return $str;
-	}
+    if (empty($ar)) {
+        $ar = [];
+    }
+    if (is_string($ar)) {
+        $ar = [[$ar]];
+    }
+    $str = '<table cellpadding="2" cellspacing="1" width="95%" border="0"><tbody>';
+    foreach ($ar as $k => $arV) {
+        if (is_string($arV)) {
+            $arV = [$arV];
+        }
+        $td_width = empty($arV) ? 1 : ceil(100 / sizeof($arV));
+        $td_style = '';
+        if ($k == 0) {
+            $td_style = ' style="width:' . $td_width . '%"';
+        }
+        $str .= '<tr>';
+        foreach ($arV as $k2 => $v2) {
+            $str .= '<td' . $td_style . '>' . $v2 . '</td>';
+        }
+        $str .= '</tr>';
+    }
+    $str .= '</tbody></table>';
+    if ($is_print) {
+        print $str;
+    } else {
+        return $str;
+    }
 }
 
-
-
-/* end of file */
-?>

@@ -13,7 +13,7 @@
  */
 
 if (!defined('IN_GW')) {
-	die('<!-- Not in App -->');
+    die('<!-- Not in App -->');
 }
 // --------------------------------------------------------
 /**
@@ -23,37 +23,31 @@ if (!defined('IN_GW')) {
 //
 class gw_fields_extension
 {
-	public $curElementId = '';
+    public $curElementId = '';
 
-	public function __construct($field_type)
-	{
+    public function __construct() {}
 
-	}
-	public function get_js($fieldname, $id_element)
-	{
-	 	$tmp['strJs'] = '<script type="text/javascript">/*<![CDATA[*/';
-	 	$tmp['strJs'] .= '
-
+    public function get_js($fieldname, $id_element)
+    {
+        $tmp['strJs'] = '<script type="text/javascript">/*<![CDATA[*/';
+        $tmp['strJs'] .= '
 function dummy(parameter)
 {
 	var n = "value\'s";
 }
-
 ';
-		$tmp['strJs'] .= '/*]]>*/</script>';
-		return $tmp['strJs'];
-	}
+        $tmp['strJs'] .= '/*]]>*/</script>';
+        return $tmp['strJs'];
+    }
 
-	public function get_html($fieldname, $id_element)
-	{
-		global $oHtml;
-		$tmp['strHtml'] = '';
-		/* Extended code */
-		$tmp['strHtml'] .= '';
+    public function get_html($fieldname, $id_element)
+    {
+        global $oHtml;
+        $tmp['strHtml'] = '';
+        /* Extended code */
+        $tmp['strHtml'] .= '';
 
-		return $tmp['strHtml'];
-	}
+        return $tmp['strHtml'];
+    }
 }
-/* end of file */
-?>
 

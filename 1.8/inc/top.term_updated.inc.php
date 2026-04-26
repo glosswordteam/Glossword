@@ -179,4 +179,3 @@ foreach ($ar_terms as $arV) {
     $strData .= '<td class="xt">' . $url_dict . '</td>';
     $strData .= '</tr>';
 }
-?>

@@ -55,14 +55,7 @@ if ($settings_key !== '') {
 
     $this->str .= postQuery(
         $ar_query,
-        $this->oUrlBuilder->build_admin_url(
-            GW_A_EDIT,
-            $this->gw_this['vars'][GW_TARGET],
-            [
-                'tid' => $theme_id,
-                'w1' => $group_id,
-            ]
-        ),
+        $this->oUrlBuilder->build_admin_url(GW_A_EDIT, $this->gw_this['vars'][GW_TARGET], ['tid' => $theme_id, 'w1' => $group_id]),
         $this->sys['isDebugQ'],
         $this->sys['isPause']
     );

@@ -209,7 +209,7 @@ class gw_addon_check_file_versions extends gw_addon
             $date_modified = file_exists($filename) ? filemtime($filename) : 0;
             if ($date_modified) {
                 // Convert to GMT
-                $date_modified                    -= @date('Z');
+                $date_modified -= date('Z');
                 $ar_fm[$date_modified . '-' . $k] = $filename;
             }
         }
@@ -223,7 +223,7 @@ class gw_addon_check_file_versions extends gw_addon
           <link>' . $this->sys['server_url'] . '/</link>
           <description></description>
           <copyright></copyright>
-          <lastBuildDate>' . @date('r', $this->sys['time_now_gmt_unix']) . '</lastBuildDate>
+          <lastBuildDate>' . date('r', $this->sys['time_now_gmt_unix']) . '</lastBuildDate>
           <ttl>3600</ttl>
         ';
 
@@ -244,7 +244,7 @@ class gw_addon_check_file_versions extends gw_addon
             $str_rss .= CRLF . '<item>';
             $str_rss .= '<title>' . $filename . '</title>';
             $str_rss .= '<link>' . $file_url . '</link>';
-            $str_rss .= '<pubDate>' . @date('r', $date_modified) . '</pubDate>';
+            $str_rss .= '<pubDate>' . date('r', $date_modified) . '</pubDate>';
 
             $ar_dir = explode('/', $filename);
             if (isset($ar_dir[1])) {

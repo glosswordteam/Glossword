@@ -295,8 +295,8 @@ if (!isset($this->gw_this['vars']['post']) || ($this->gw_this['vars']['post'] ==
         $this->str .= postQuery(
             $ar_query,
             $redirect_url,
-            (int)$this->sys['isDebugQ'],
-            0
+            $this->sys['isDebugQ'],
+            $this->sys['isPause']
         );
     } else {
         $this->oTpl->addVal(
@@ -309,5 +309,3 @@ if (!isset($this->gw_this['vars']['post']) || ($this->gw_this['vars']['post'] ==
 }
 
 $this->str .= '</td></tr></tbody></table>';
-
-?>

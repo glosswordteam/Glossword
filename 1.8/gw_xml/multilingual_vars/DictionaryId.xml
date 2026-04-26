@@ -16,7 +16,7 @@
 -->
 
 <tu>
- <prop type="varname">VARIABLE</prop>
+ <prop type="x-varname">VARIABLE</prop>
  <tuv xml:lang="en"><seg>Variable</seg></tuv>
  <tuv xml:lang="ru"><seg>Переменная</seg></tuv>
 </tu>

@@ -1663,6 +1663,3 @@ break;
 default:
 break;
 }
-
-/* End of file */
-?>
