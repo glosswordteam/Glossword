@@ -28,4 +28,3 @@ $lang['pass_new'] = 'Naujas slaptažodis';
 $lang['pass_current'] = 'Esamas slaptažodis';
 $lang['2_page__'] = 'Nustatymų panelės pradžia';
 $lang['securenote'] = 'Tik vidiniam naudojimui';
-?>

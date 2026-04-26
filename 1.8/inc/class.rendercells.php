@@ -123,6 +123,3 @@ public function RenderCells()
 }
 
 } // end of class
-
-
-?>

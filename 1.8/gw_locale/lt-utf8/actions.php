@@ -59,4 +59,3 @@ $lang['3_add_abbr'] = 'Pridėti santrumpą';
 $lang['3_add'] = 'Pridėti';
 $lang['3_cfg'] = 'Konfigūracija';
 $lang['3_update'] = 'Atnaujinti';
-?>

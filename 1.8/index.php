@@ -668,5 +668,3 @@ if ($sys['is_use_gzip'])
  * ----------------------------------------------------- */
 $oHdr->output();
 print $str_output;
-/* end of file */
-?>

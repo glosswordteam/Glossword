@@ -20,4 +20,3 @@ $lang['ed_elochki'] = 'kabutės';
 $lang['ed_p'] = 'paragrafas';
 $lang['ed_em'] = 'pavertimas';
 $lang['ed_bold'] = 'pastorinimas';
-?>

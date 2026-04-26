@@ -24,4 +24,3 @@ $lang['3_add_topic'] = 'New topic';
 /**
  * The end of translation file.
  */
-?>

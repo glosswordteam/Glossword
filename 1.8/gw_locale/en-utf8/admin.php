@@ -46,4 +46,3 @@ $lang['securenote'] = 'For internal use only';
 /**
  * The end of translation file.
  */
-?>

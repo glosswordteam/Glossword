@@ -196,4 +196,3 @@ class pch_template extends gwv_template
 
 }
 
-?>

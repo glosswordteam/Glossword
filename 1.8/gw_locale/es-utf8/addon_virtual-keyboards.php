@@ -22,4 +22,3 @@ $lang['1306'] = 'Letras';
 /**
  * The end of translation file.
  */
-?>

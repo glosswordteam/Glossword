@@ -510,5 +510,4 @@ if ($this->gw_this['vars']['w1'] == '2') {
         $oHtml->setTag('a', 'target', '');
     }
 }
-/* end o file */
-?>
+

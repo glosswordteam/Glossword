@@ -4,4 +4,3 @@
 $lang[1307] = 'Pridėkite raides atskiriant kableliu (pvz.: Ä,Á,Ă)';
 $lang['2_page_virtual_keyboard_browse'] = 'Virtualių klaviatūrų sąrašas';
 $lang[1306] = 'Raidės';
-?>

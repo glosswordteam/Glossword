@@ -30,4 +30,3 @@ $lang['abbr_short'] = 'Short form';
 /**
  * The end of translation file.
  */
-?>

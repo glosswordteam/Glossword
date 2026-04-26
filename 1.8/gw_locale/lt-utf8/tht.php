@@ -22,4 +22,3 @@ $lang['th_3'] = 'Parodymų vidurkis';
 $lang['th_1'] = 'Pavadinimas';
 $lang['r_dict_averagehits'] = 'Popiuliariausi žodynai';
 $lang['r_dict_newest'] = 'Paskutiniai pridėti žodynai';
-?>

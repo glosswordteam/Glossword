@@ -22,4 +22,3 @@ $lang['2_page_custom_pages_browse'] = 'Список индивидуальных
 /**
  * The end of translation file.
  */
-?>

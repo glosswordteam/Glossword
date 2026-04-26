@@ -22,4 +22,3 @@ $lang['1291'] = 'Активировать профиль';
 /**
  * The end of translation file.
  */
-?>

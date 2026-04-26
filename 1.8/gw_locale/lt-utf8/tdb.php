@@ -19,4 +19,3 @@ $lang[1135] = 'Kelių pavadinimai';
 $lang[1137] = 'Pagrindiniai nustatymai';
 $lang['tpl_list'] = 'Šablonų sąrašas';
 $lang['catalog'] = 'Katalogas';
-?>

@@ -28,4 +28,3 @@ $lang['2_page__srch'] = 'Buscando en';
 /**
  * The end of translation file.
  */
-?>

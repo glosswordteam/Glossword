@@ -11,4 +11,3 @@ $lang['mail_newuser'] = '<p>Sveiki {USERNAME}.</p>
 <p>Jei turite klausimų, susisiekite el. paštu {CONTACT_EMAIL}.</p>';
 $lang['mail_newpass'] = '<p>Sveiki {USERNAME}.</p> <p>Jūs prašėte naujo slaptažodio svetainėje {SITENAME}. </p> <p>Norėdami naudoti naują slaptažodį spauskite nuorodą žemiau: <br /> {U_ACTIVATE}</p>';
 $lang['2_page_user_register'] = 'Naujo naudotojo registracija';
-?>

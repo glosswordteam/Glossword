@@ -28,4 +28,3 @@ $lang['2_page__srch'] = 'Поиск...';
 /**
  * The end of translation file.
  */
-?>

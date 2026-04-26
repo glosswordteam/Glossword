@@ -890,4 +890,3 @@ class gw_render extends gw_htmlforms
 		return $strHtml;
 	}
 } // end of class
-?>

@@ -184,4 +184,3 @@ $lang['term'] = 'Término';
 /**
  * The end of translation file.
  */
-?>

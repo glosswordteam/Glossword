@@ -1736,6 +1736,3 @@ class CI_DB_active_record extends CI_DB_driver {
 	}
 	
 }
-
-/* End of file DB_active_rec.php */
-/* Location: ./system/database/DB_active_rec.php */

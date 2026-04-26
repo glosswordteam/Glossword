@@ -25,4 +25,3 @@ $lang['dictdump_custom'] = 'Другое';
 /**
  * The end of translation file.
  */
-?>

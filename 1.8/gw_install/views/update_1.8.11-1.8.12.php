@@ -153,4 +153,3 @@ if (!empty($ar_status))
 /* */
 $this->oTpl->tmp['d']['if:install'] = true;
 
-?>

@@ -20,4 +20,3 @@ $lang['log_search'] = 'Search queries log';
 /**
  * The end of translation file.
  */
-?>

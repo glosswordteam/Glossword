@@ -40,4 +40,3 @@ $lang['reason_3'] = 'Žodynai rasti pagal temą.';
 $lang['reason_2'] = 'Šioje temoje yra daugiau temų.';
 $lang['reason_1'] = 'Paskutinė tema. Bent viena tema turi egzsituoti.';
 $lang['reason_7'] = 'Žodynai nerasti.';
-?>

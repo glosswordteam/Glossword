@@ -132,4 +132,3 @@ if (isset($sys['is_prepend']) && $sys['is_prepend']) {
 }
 $sys['file_lock'] = 'gw_temp/gw_install.lock';
 
-/* end of file */

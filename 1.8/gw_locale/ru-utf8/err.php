@@ -58,4 +58,3 @@ $lang['reason_7'] = 'Словари не обнаружены.';
 /**
  * The end of translation file.
  */
-?>

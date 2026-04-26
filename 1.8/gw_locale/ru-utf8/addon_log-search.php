@@ -20,4 +20,3 @@ $lang['log_search'] = 'Журнал поисковых запросов';
 /**
  * The end of translation file.
  */
-?>

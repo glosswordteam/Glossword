@@ -11,4 +11,3 @@ $a = array(
 	'decimal_separator' => ',',
 	'part_separator' => '&#160;',
 );
-?>

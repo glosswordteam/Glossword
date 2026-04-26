@@ -29,4 +29,3 @@ $lang['2_page_user_register'] = 'Регистрация нового польз�
 /**
  * The end of translation file.
  */
-?>

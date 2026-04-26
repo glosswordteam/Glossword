@@ -61,4 +61,3 @@ $lang['tip002'] = 'Каждый термин с новой строки.';
 /**
  * The end of translation file.
  */
-?>

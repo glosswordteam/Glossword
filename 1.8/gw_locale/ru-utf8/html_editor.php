@@ -38,4 +38,3 @@ $lang['ed_bold'] = 'полужирный';
 /**
  * The end of translation file.
  */
-?>

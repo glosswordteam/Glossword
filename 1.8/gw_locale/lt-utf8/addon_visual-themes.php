@@ -8,4 +8,3 @@ $lang[1145] = 'Įterpti blokai';
 $lang[1143] = 'Antraštinis puslapis';
 $lang[1142] = 'Kintamieji';
 $lang[1141] = 'Spalvos';
-?>

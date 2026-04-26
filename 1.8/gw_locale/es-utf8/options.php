@@ -221,4 +221,3 @@ $lang['ed_xref'] = 'Poner un enlace a un término';
 /**
  * The end of translation file.
  */
-?>

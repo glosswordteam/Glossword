@@ -185,4 +185,3 @@ $lang['term'] = 'Термин';
 /**
  * The end of translation file.
  */
-?>

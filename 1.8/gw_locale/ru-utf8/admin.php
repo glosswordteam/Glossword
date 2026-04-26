@@ -46,4 +46,3 @@ $lang['securenote'] = 'Для служебного пользования';
 /**
  * The end of translation file.
  */
-?>

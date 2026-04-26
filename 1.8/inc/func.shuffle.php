@@ -68,4 +68,3 @@ function sh($array){
     $fA = $array;
     return $fA;
 } # end of function
-?>

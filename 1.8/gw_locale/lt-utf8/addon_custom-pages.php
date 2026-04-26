@@ -4,4 +4,3 @@
 $lang[1157] = 'Pašalinti puslapį';
 $lang[1156] = 'Tėvininis puslapis';
 $lang['2_page_custom_pages_browse'] = 'Individualių puslapių sąrašas';
-?>

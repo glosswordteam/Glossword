@@ -32,4 +32,3 @@ $lang['2_page_user_register'] = 'Registro de nuevo usuario';
 /**
  * The end of translation file.
  */
-?>

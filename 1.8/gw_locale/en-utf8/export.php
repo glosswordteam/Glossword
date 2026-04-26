@@ -25,4 +25,3 @@ $lang['dictdump_custom'] = 'Custom number';
 /**
  * The end of translation file.
  */
-?>

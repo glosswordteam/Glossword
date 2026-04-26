@@ -77,4 +77,3 @@ $lang['3_update'] = 'Actualizar';
 /**
  * The end of translation file.
  */
-?>

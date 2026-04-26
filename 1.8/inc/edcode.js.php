@@ -254,4 +254,3 @@ $tmp['strform'] .= '<script type="text/javascript">/*<![CDATA[*/
 	}
 
 /*]]>*/</script>';
-?>

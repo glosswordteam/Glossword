@@ -22,4 +22,3 @@ $lang['1306'] = 'Буквы';
 /**
  * The end of translation file.
  */
-?>

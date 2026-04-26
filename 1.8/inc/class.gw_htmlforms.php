@@ -821,5 +821,4 @@ $tmp['strform'] .= '/*]]>*/</script>';
 
 } // end of class
 
-?>
 

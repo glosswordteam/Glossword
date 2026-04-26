@@ -222,4 +222,3 @@ $lang['not_published'] = 'Inactive';
 /**
  * The end of translation file.
  */
-?>

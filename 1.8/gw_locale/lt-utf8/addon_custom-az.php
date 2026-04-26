@@ -4,4 +4,3 @@
 $lang[1293] = 'Standartinė rikiavimo tvarka';
 $lang[1292] = 'Raidės';
 $lang[1291] = 'Aktyvuoti profilį';
-?>

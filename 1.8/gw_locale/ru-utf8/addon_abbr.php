@@ -30,4 +30,3 @@ $lang['abbr_short'] = 'Краткая форма';
 /**
  * The end of translation file.
  */
-?>

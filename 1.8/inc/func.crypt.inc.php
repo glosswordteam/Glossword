@@ -151,4 +151,3 @@ function url_decrypt($mode, $in)
     }
     return $in;
 } // end of url_decrypt()
-?>

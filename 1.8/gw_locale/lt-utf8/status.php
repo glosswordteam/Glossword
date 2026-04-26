@@ -10,4 +10,3 @@ $lang['2_page_sys_maintenance'] = 'Sistemos atnaujinimo darbai';
 $lang['2_page_user_browse'] = 'Naudotojų sąrašas';
 $lang['2_page_17'] = 'Atnaujinamas terminas';
 $lang['2_page__srch'] = 'Ieškoma...';
-?>

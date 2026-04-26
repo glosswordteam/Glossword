@@ -6,4 +6,3 @@ $lang['3_undertopic'] = 'Tėvininė tema';
 $lang['3_add_subtopic'] = 'Pridėti subtemą';
 $lang['3_remove_topic'] = 'Pašalinti šią temą';
 $lang['3_add_topic'] = 'Nauja tema';
-?>

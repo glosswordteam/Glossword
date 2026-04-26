@@ -26,4 +26,3 @@ $lang['1141'] = 'Цвета';
 /**
  * The end of translation file.
  */
-?>

@@ -22,4 +22,3 @@ $lang['2_page_custom_pages_browse'] = 'The list of custom pages';
 /**
  * The end of translation file.
  */
-?>

@@ -24,4 +24,3 @@ $lang['3_add_topic'] = 'Nueva categoría';
 /**
  * The end of translation file.
  */
-?>

@@ -13,5 +13,3 @@ $tmp['ar_queries'] = array(
 					',
 
 );
-/* end of file */
-?>

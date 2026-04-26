@@ -22,4 +22,3 @@ $lang['1291'] = 'Activate the profile';
 /**
  * The end of translation file.
  */
-?>

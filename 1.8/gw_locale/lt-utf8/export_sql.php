@@ -9,4 +9,3 @@ $lang['sql_keywords'] = 'Įtraukti raktažodžius paieškos varikliams';
 $lang['sql_droptable'] = 'Pridėt &quot;DROP TABLE&quot;';
 $lang['sql_data'] = 'Duomenys';
 $lang['sql_structure'] = 'Struktūra';
-?>

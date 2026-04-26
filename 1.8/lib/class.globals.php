@@ -169,4 +169,4 @@ if (!class_exists('gw_register_globals')) {
     }
     unset($ar);
 }
-/* end of file */
+

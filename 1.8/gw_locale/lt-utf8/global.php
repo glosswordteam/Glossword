@@ -176,4 +176,3 @@ $lang['web_stat'] = 'Statistikos';
 $lang['web_m_top10'] = 'Top 10';
 $lang['web_m_fb'] = 'Atsiliepimas';
 $lang['term'] = 'Terminas';
-?>

@@ -40,4 +40,3 @@ $lang['r_dict_newest'] = 'Últimos diccionarios añadidos';
 /**
  * The end of translation file.
  */
-?>

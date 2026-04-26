@@ -12,4 +12,3 @@ $lang['custom'] = 'Kiti';
 $lang['id_group'] = 'Grupė';
 $lang['abbr_long'] = 'Ilga forma';
 $lang['abbr_short'] = 'Trumpa forma';
-?>

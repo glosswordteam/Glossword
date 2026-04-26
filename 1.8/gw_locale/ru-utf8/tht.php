@@ -40,4 +40,3 @@ $lang['r_dict_newest'] = 'Недавно добавленные словари';
 /**
  * The end of translation file.
  */
-?>

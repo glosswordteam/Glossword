@@ -491,4 +491,3 @@ $tmp['mtime'] = explode(' ', microtime());
 $tmp['endtime'] = (float)$tmp['mtime'][1] + (float)$tmp['mtime'][0];
 $tmp['time'][__FILE__] = ($tmp['endtime'] - $tmp['start_time']);
 }
-?>

@@ -7,4 +7,3 @@ $lang['timeframe'] = 'Laiko rėmas';
 $lang['dictdump_fmt'] = 'Duomenų išvedimo formatas';
 $lang['dictdump_files'] = 'Failai';
 $lang['dictdump_custom'] = 'Individualizuoti numeriai';
-?>

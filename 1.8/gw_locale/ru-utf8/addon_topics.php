@@ -24,4 +24,3 @@ $lang['3_add_topic'] = 'Создать тему';
 /**
  * The end of translation file.
  */
-?>

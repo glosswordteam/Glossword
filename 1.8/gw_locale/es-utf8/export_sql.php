@@ -27,4 +27,3 @@ $lang['sql_structure'] = 'Estructura';
 /**
  * The end of translation file.
  */
-?>

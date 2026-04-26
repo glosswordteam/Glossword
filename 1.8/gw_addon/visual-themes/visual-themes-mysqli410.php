@@ -14,4 +14,3 @@ $tmp['ar_queries'] = array(
 						ORDER BY g.id_group, g.int_sort
 			',
 );
-?>

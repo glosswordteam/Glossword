@@ -38,4 +38,3 @@ $lang['ed_bold'] = 'negrita';
 /**
  * The end of translation file.
  */
-?>

@@ -40,4 +40,3 @@ $lang['r_dict_newest'] = 'Last added dictionaries';
 /**
  * The end of translation file.
  */
-?>

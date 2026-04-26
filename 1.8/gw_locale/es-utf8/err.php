@@ -58,4 +58,3 @@ $lang['reason_7'] = 'No se encontraron diccionarios';
 /**
  * The end of translation file.
  */
-?>

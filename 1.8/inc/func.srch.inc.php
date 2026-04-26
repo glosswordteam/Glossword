@@ -972,5 +972,3 @@ function gw_search_cleanup ()
 	$oDb->sqlExec( 'CHECK TABLE `' . $sys['tbl_prefix'] . 'stat_search`' );
 }
 
-/* end of file */
-?>

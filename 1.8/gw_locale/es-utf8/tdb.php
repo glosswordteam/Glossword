@@ -37,4 +37,3 @@ $lang['catalog'] = 'Catálogo';
 /**
  * The end of translation file.
  */
-?>

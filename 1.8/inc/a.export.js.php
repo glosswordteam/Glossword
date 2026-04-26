@@ -109,4 +109,3 @@ function setM()
 }
 ';
 $strForm .= ' /*]]>*/</script>';
-?>

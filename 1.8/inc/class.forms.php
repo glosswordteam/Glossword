@@ -365,5 +365,3 @@ class gwForms {
 		}
 	}
 }
-/* end of file */
-?>

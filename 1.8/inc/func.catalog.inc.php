@@ -1251,8 +1251,3 @@ function gw_breadcrumbs_is_in_root($ar, $tid = 0, $id_root)
 	}
 	return false;
 }
-
-
-
-/* end of file */
-?>

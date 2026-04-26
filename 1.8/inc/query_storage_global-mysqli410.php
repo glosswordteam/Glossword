@@ -619,4 +619,4 @@ $tmp['ar_queries'] = [
 					 ) ENGINE=MyISAM DEFAULT CHARSET=utf8
 					",
 ];
-/* end of file */
+

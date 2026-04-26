@@ -203,4 +203,3 @@ $lang['allow_letters'] = 'Rodyti abėcėlinę įrankių juostą (A-Z)';
 $lang['sysname'] = 'Duombazės lentelės pavadinimas';
 $lang['options'] = 'Nuostatos';
 $lang['ed_xref'] = 'įdėti nuorodą į terminą';
-?>

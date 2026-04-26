@@ -60,4 +60,3 @@ $lang['tip002'] = 'Separar términos con una nueva línea.';
 /**
  * The end of translation file.
  */
-?>

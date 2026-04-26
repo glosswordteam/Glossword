@@ -26,4 +26,3 @@ $lang['1141'] = 'Colors';
 /**
  * The end of translation file.
  */
-?>

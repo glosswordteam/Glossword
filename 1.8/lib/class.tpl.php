@@ -261,7 +261,7 @@ class gwv_template
 #			prn_r( $strInternal, __LINE__ );
 			$tmp['str_i'] = '<?php'.
 							CRLF . '$template_timestamp = ' . strval(time()-1) . ';'.
-							CRLF . $strInternal . '?>';
+							CRLF . $strInternal;
 			$this->_file_save($tmp['filename_i'], $tmp['str_i'], 'w');
 		} /* end */
 		return $strInternal;

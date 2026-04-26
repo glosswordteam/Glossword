@@ -44,4 +44,3 @@ $lang['tip004'] = 'Pasirinite direktorijos pavadinimą kur HTML šablonai yra la
 $lang['tip001'] = 'Eksprotuoti reikšmes, kurios pridėtos ar atnaujintos pasirinktu laikotarpiu.';
 $lang['tip003'] = 'Įvardinkite žodyno duombazės lentelę, naudokite [0-9a-z]. Vėliau pakeisti nebus galima.';
 $lang['tip002'] = 'Išskirkite terminus naujomis eilutėmis.';
-?>

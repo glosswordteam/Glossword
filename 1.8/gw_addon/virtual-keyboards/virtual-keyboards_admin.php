@@ -245,4 +245,4 @@ $oAddonAdm->alpha();
 $arPageNumbers['virtual-keyboards_' . GW_A_UPDATE] = '';
 /* Do not load old components */
 $pathAction = '';
-/* end of file */
+

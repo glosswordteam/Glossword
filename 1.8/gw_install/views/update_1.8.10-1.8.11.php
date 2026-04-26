@@ -1,7 +1,7 @@
 <?php
 /**
  *  Glossword - Glossary Compiler
- *  © 2008 Glossword.biz team (http://glossword.biz/)
+ *  ï¿½ 2008 Glossword.biz team (http://glossword.biz/)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -140,4 +140,3 @@ if (!empty($ar_status))
 /* */
 $this->oTpl->tmp['d']['if:install'] = true;
 
-?>
