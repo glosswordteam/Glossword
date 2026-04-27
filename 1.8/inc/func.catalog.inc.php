@@ -400,44 +400,43 @@ function getDictSrch($language = '', $x = 1, $y = 99, $qStrOrder = '', $is_form_
  */
 function getDictList($language = '', $dict_nmax = 5, $x = 1, $y = 99, $qStrOrder = '')
 {
-	global $sys, $gw_this, $ar_theme;
-	global $oHtml, $oFunc, $oSess, $oL;
+    global $sys, $gw_this, $ar_theme;
+    global $oHtml, $oFunc, $oSess, $oL;
 
-	$str = '';
-	$arSql =& $gw_this['ar_dict_list'];
-	$languagelist =& $gw_this['vars']['ar_languages'];
-	if (sizeof($arSql) == 0) // no dictionaries
-	{
-		return '<strong>' . $oL->m('reason_4') . '</strong>';
-	}
-	$cnt = 0;
-	$strGroupBy = 'tpname';
-	foreach ($arSql as $arK => $arV)
-	{
-		switch ($sys['pages_link_mode'])
-		{
-			case GW_PAGE_LINK_NAME:
-				$arV['uri'] = urlencode($arV['title']);
-			break;
-			case GW_PAGE_LINK_URI:
-				$arV['uri'] = urlencode($arV['dict_uri']);
-			break;
-			default:
-				$arV['uri'] = $arV['id'];
-			break;
-		}
-		$arDictMap[$arV['id_topic']][$arK] = $arV;
-	}
-	// get topics map
-	$ar =& $gw_this['ar_topics_list'];
-	if (empty($ar)){ return; }
-	// display catalog in web mode
-	if (GW_IS_BROWSE_WEB)
-	{
-		$page_index =& $sys['page_index'];
-		$str = getCatalogTitle($ar, $arDictMap, 0, 1, $dict_nmax);
-	}
-	return $str;
+    $str = '';
+    $arSql =& $gw_this['ar_dict_list'];
+    $languagelist =& $gw_this['vars']['ar_languages'];
+    if (sizeof($arSql) == 0) // no dictionaries
+    {
+        return '<strong>' . $oL->m('reason_4') . '</strong>';
+    }
+    $cnt = 0;
+    $strGroupBy = 'tpname';
+    foreach ($arSql as $arK => $arV) {
+        switch ($sys['pages_link_mode']) {
+            case GW_PAGE_LINK_NAME:
+                $arV['uri'] = urlencode($arV['title']);
+                break;
+            case GW_PAGE_LINK_URI:
+                $arV['uri'] = urlencode($arV['dict_uri']);
+                break;
+            default:
+                $arV['uri'] = $arV['id'];
+                break;
+        }
+        $arDictMap[$arV['id_topic']][$arK] = $arV;
+    }
+    // get topics map
+    $ar =& $gw_this['ar_topics_list'];
+    if (empty($ar)) {
+        return;
+    }
+    // display catalog in web mode
+    if (GW_IS_BROWSE_WEB) {
+        $page_index =& $sys['page_index'];
+        $str = getCatalogTitle($ar, $arDictMap, 0, 1, $dict_nmax);
+    }
+    return $str;
 }
 
 
@@ -450,9 +449,6 @@ function getDictList($language = '', $dict_nmax = 5, $x = 1, $y = 99, $qStrOrder
 function getCatalogTitle($ar, $arDictMap, $p = 0, $depth = 1, $dict_nmax, $runtime = 0)
 {
 	global $curDateMk, $curDate, $oL, $sys, $oFunc, $oHtml, $gw_this, $ar_theme;
-
-
-    return '';
 
 	$str = '';
 	$runtime++;
@@ -635,8 +631,7 @@ function gw_create_tree_topics($id = 0)
 	}
 	/* Create the list of topics */
 	$arSqlc = gw_rearrange_to_locale($arSqlc, 'id_topic');
-    return $arSqlc;
-	#return gw_rearrange_to_tree($arSqlc, $id, 'id_topic');
+	return gw_rearrange_to_tree($arSqlc, $id, 'id_topic');
 }
 
 /* */
@@ -669,7 +664,7 @@ function gw_create_flat_custom_pages($id = 0)
  *
  * @return array
  */
-function gw_rearrange_to_tree(array $ar_sql, $root_id = 0, $id_name = 'id_page')
+function gw_rearrange_to_tree2(array $ar_sql, $root_id = 0, $id_name = 'id_page')
 {
     $tree = [
         $root_id => [],
@@ -718,13 +713,68 @@ function gw_rearrange_to_tree(array $ar_sql, $root_id = 0, $id_name = 'id_page')
 }
 
 
+/**
+ * Rearrange flat localized rows to parent-child tree.
+ *
+ * Topics keep nested structure.
+ *
+ * @param array $ar_sql
+ * @param int $root_id
+ * @param string $id_name
+ *
+ * @return array
+ */
+function gw_rearrange_to_tree(array $ar_sql, $root_id = 0, $id_name = 'id_page')
+{
+    $root_id = (int) $root_id;
+
+    $tree = [
+        $root_id => [],
+    ];
+
+    $rows_by_id = [];
+
+    foreach ($ar_sql as $row) {
+        $parsed = gw_parse_composite_entity_id($row[$id_name]);
+
+        $row_id = (int) $parsed['id'];
+        $parent_id = (int) $row['p'];
+
+        $row['id'] = $row_id;
+        $row[$id_name] = $row_id;
+        $row['int_sort'] = (int) $parsed['int_sort'];
+
+        $rows_by_id[$row_id] = $row;
+
+        if (!isset($tree[$parent_id])) {
+            $tree[$parent_id] = [];
+        }
+
+        $tree[$parent_id]['ch'][$row_id] = $row_id;
+        $tree[$parent_id]['max'] = $row_id;
+
+        if (!isset($tree[$parent_id]['min'])) {
+            $tree[$parent_id]['min'] = $row_id;
+        }
+    }
+
+    /* Merge row data into tree nodes. */
+    foreach ($rows_by_id as $row_id => $row) {
+        if (!isset($tree[$row_id])) {
+            $tree[$row_id] = $row;
+        } else {
+            foreach ($row as $field_name => $field_value) {
+                $tree[$row_id][$field_name] = $field_value;
+            }
+        }
+    }
+
+    return $tree;
+}
+
 
 /**
- * Rearrange localized rows and select one row per entity for the current locale.
- *
- * Rows are grouped by a composite key based on sort order and entity ID.
- * For each group the current locale row is selected when available,
- * otherwise the first available locale row is used.
+ * Create localized rows using composite sort+id keys.
  *
  * @param array $ar_sql
  * @param string $id_name
@@ -737,16 +787,17 @@ function gw_rearrange_to_locale($ar_sql, $id_name = 'id_page')
 
     $ar_grouped = [];
     $ar_result = [];
+    $current_lang = $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc'];
 
     foreach ($ar_sql as $ar_v) {
-        $entity_id = isset($ar_v[$id_name]) ? (int) $ar_v[$id_name] : 0;
-        $composite_id = sprintf('%05d', $ar_v['int_sort']) . sprintf('%05d', $entity_id);
-        $ar_v[$id_name] = $composite_id;
+        $entity_id = (int) $ar_v[$id_name];
+        $composite_id = sprintf('%05d', (int) $ar_v['int_sort']) . sprintf('%05d', $entity_id);
 
+        $ar_v[$id_name] = $composite_id;
         $ar_grouped[$composite_id][$ar_v['id_lang']] = $ar_v;
     }
 
-    $current_lang = $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc'];
+    ksort($ar_grouped, SORT_STRING);
 
     foreach ($ar_grouped as $ar_locales) {
         if (isset($ar_locales[$current_lang])) {
@@ -763,6 +814,38 @@ function gw_rearrange_to_locale($ar_sql, $id_name = 'id_page')
     return $ar_result;
 }
 
+/**
+ * Parse composite sort+id value.
+ *
+ * Example: 0001000001 => sort 10, id 1.
+ *
+ * @param mixed $value
+ *
+ * @return array
+ */
+function gw_parse_composite_entity_id($value)
+{
+    $value = (string) $value;
+
+    if ($value !== '' && ctype_digit($value) && strlen($value) >= 10) {
+        return [
+            'int_sort' => (int) substr($value, 0, 5),
+            'id' => (int) substr($value, 5, 5),
+        ];
+    }
+
+    if ($value !== '' && ctype_digit($value) && strlen($value) >= 8) {
+        return [
+            'int_sort' => (int) substr($value, 0, 5),
+            'id' => (int) substr($value, 5, 3),
+        ];
+    }
+
+    return [
+        'int_sort' => 0,
+        'id' => (int) $value,
+    ];
+}
 
 /**
  * Build tree, recursive:
@@ -1367,6 +1450,9 @@ function gw_get_thread_pages($items = [], $start_id = 0, $cnt_row = 1)
     $rows = [];
 
     foreach ($items as $item_key => $item) {
+        if (!is_array($item) || !isset($item['id'])) {
+            continue;
+        }
         $item['_gw_id'] = gw_thread_page_get_id($item, $item_key);
         $item['_gw_sort'] = gw_thread_page_get_sort($item, $item_key);
         $rows[] = $item;
