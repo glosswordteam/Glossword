@@ -150,7 +150,7 @@ if ($this->gw_this['vars']['post'] == '') {
 
     $this->str .= postQuery(
         $arQ,
-        $this->oUrl->build_admin_url(GW_A_BROWSE, $this->component, [GW_TARGET_ID => $id_profile]),
+        $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->component, [GW_TARGET_ID => $id_profile]),
         $this->sys['isDebugQ'],
         $this->sys['isPause']
     );

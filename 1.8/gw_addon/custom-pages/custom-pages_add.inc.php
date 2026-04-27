@@ -86,7 +86,7 @@ if ($this->gw_this['vars']['post'] == '') {
 
     /* Fix on/off options */
     $ar_pre['is_active'] = isset($ar_pre['is_active']) ? (int)$ar_pre['is_active'] : 0;
-    $ar_pre['id_parent'] = isset($ar_pre['id_parent']) ? (int)$ar_pre['id_parent'] : 0;
+    $ar_pre['id_parent'] = 0;
 
     $id_page = $this->oDb->NextId($table_pages, 'id_page');
     $id_page_phrase_base = $this->oDb->NextId($table_pages_phrase, 'id_page_phrase');

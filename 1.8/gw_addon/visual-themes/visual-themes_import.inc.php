@@ -118,7 +118,7 @@ if ($this->gw_this['vars']['post'] == '') {
     }
     $this->str .= postQuery(
         $arQ,
-        $this->oUrl->build_admin_url(GW_A_BROWSE, $this->component),
+        $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->component),
         $this->sys['isDebugQ'],
         1
     );

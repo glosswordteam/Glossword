@@ -256,7 +256,7 @@ class gw_addon_abbr_admin extends gw_addon
 
             $bgcolor = $cnt_row % 2 ? $this->ar_theme['color_1'] : $this->ar_theme['color_2'];
 
-            $href_edit = $this->oUrl->build_admin_url(
+            $href_edit = $this->oUrlBuilder->build_admin_url(
                 GW_A_EDIT,
                 $this->addon_name,
                 $edit_url_params + [
@@ -264,7 +264,7 @@ class gw_addon_abbr_admin extends gw_addon
                 ]
             );
 
-            $href_remove = $this->oUrl->build_admin_url(
+            $href_remove = $this->oUrlBuilder->build_admin_url(
                 GW_A_REMOVE,
                 $this->addon_name,
                 $remove_url_params + [
@@ -272,7 +272,7 @@ class gw_addon_abbr_admin extends gw_addon
                 ]
             );
 
-            $href_on = $this->oUrl->build_admin_url(
+            $href_on = $this->oUrlBuilder->build_admin_url(
                 GW_A_EDIT,
                 $this->addon_name,
                 $toggle_url_params + [
@@ -281,7 +281,7 @@ class gw_addon_abbr_admin extends gw_addon
                 ]
             );
 
-            $href_off = $this->oUrl->build_admin_url(
+            $href_off = $this->oUrlBuilder->build_admin_url(
                 GW_A_EDIT,
                 $this->addon_name,
                 $toggle_url_params + [
@@ -345,7 +345,6 @@ class gw_addon_abbr_admin extends gw_addon
         $strR .= $this->_get_nav();
 
         /* Switching On/off */
-#		$this->sys['isDebugQ'] = 1;
         $arQ = [];
         if ($this->gw_this['vars']['mode'] == 'off') {
             $arQ[] = 'UPDATE `' . $this->sys['tbl_prefix'] . 'abbr`

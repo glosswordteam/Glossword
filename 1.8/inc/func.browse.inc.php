@@ -508,194 +508,169 @@ function gw_build_abbr_preview_text(array $preview_values, array $ar_theme)
 /* Create custom page */
 function gw_custom_page($id_page)
 {
-	global $oSqlQ, $oDb, $oTpl, $oFunc, $oHtml, $oL;
-	global $gw_this, $sys, $str_current_section, $ar_tpl_construct, $arPost, $layout, $ar_theme;
-	$id_lang = 0;
-	/* Check languages first */
-	switch ($sys['pages_link_mode'])
-	{
-		case GW_PAGE_LINK_NAME:
-			$sql_id_page = 'gpph.page_title = "'.gw_text_sql($id_page).'"';
-			if (is_numeric($id_page))
-			{
-				$sql_id_page = 'gp.id_page = "'.gw_text_sql($id_page).'"';
-			}
-		break;
-		case GW_PAGE_LINK_URI:
-			$sql_id_page = 'gp.page_uri = "'.gw_text_sql($id_page).'"';
-			if (is_numeric($id_page))
-			{
-				$sql_id_page = 'gp.id_page = "'.gw_text_sql($id_page).'"';
-			}
-		break;
-		default:
-			$sql_id_page = 'gp.id_page = "'.gw_text_sql($id_page).'"';
-		break;
-	}
-	$arSql = $oDb->sqlRun($oSqlQ->getQ('get-custompages-lang', $sql_id_page), 'page');
-	foreach ($arSql as $arK => $arV)
-	{
-		if ($arV['id_lang'] == $gw_this['vars'][GW_LANG_I].'-'.$gw_this['vars']['lang_enc'])
-		{
-			$id_lang = $arV['id_lang'];
-			break;
-		}
-		elseif ($arV['id_lang'] == $sys['locale_name'])
-		{
-			$id_lang = $arV['id_lang'];
-		}
-		else
-		{
-			$id_lang = $arV['id_lang'];
-		}
-	}
-	if (empty($arSql))
-	{
-		gwtk_header($sys['server_proto'].$sys['server_host'].$sys['page_index'], $sys['is_delay_redirect']);
-	}
-	$id_page_int = 0;
-	if ($id_lang)
-	{
-		$arSql = $oDb->sqlRun($oSqlQ->getQ('get-custompages', $sql_id_page, $id_lang), 'page');
-		/* Redirect to new URL */
-		$is_redirect = 0;
-		switch ($sys['pages_link_mode'])
-		{
-			case GW_PAGE_LINK_NAME:
-				$page_uri = 'page_title';
-				$is_redirect = ($id_page != $arSql[0][$page_uri]) && !is_numeric($id_page);
-			break;
-			case GW_PAGE_LINK_URI:
-				$page_uri = 'page_uri';
-				$is_redirect = ($arSql[0][$page_uri] && $id_page != $arSql[0][$page_uri]) && !is_numeric($id_page);
-			break;
-			default:
-				$page_uri = 'id_page';
-				$is_redirect = ($id_page != $arSql[0][$page_uri]);
-			break;
-		}
-		if ($is_redirect)
-		{
-			global $oHtml;
-			$href_page = $sys['page_index'].'?'.GW_ACTION.'='.'viewpage&'.'&id='.$arSql[0][$page_uri];
-			gwtk_header($sys['server_proto'].$sys['server_host'].$oHtml->url_normalize($href_page), $sys['is_delay_redirect'], __FILE__, __LINE__);
-		}
-		foreach ($arSql as $arK => $arV)
-		{
-			$id_page_int = $arV['id_page'];
-			/* Process text filters */
-			if (!$sys['is_debug_output'] && is_array($sys['filters_defn']))
-			{
-				foreach ($sys['filters_defn'] as $k => $v)
-				{
-					$arV['page_content'] = $v($arV['page_content']);
-				}
-			}
-			/* Custom content */
-			$oTpl->addVal( 'block:page_content', $arV['page_content']);
-			$oTpl->addVal( 'block:page_descr', $arV['page_descr']);
-			/* Custom PHP-code */
-			eval( $arV['page_php_1'] );
-			$gw_this['ar_breadcrumb'][] = $gw_this['arTitle'][] = $str_current_section = strip_tags($arV['page_title']);
-		}
-	}
-	/* Create the list of subpages */
-	$arSqlc = $oDb->sqlRun($oSqlQ->getQ('get-custompages-list'), 'page');
-	$arSqlc = gw_rearrange_to_locale($arSqlc);
-	$arSqlc = gw_rearrange_to_tree($arSqlc);
-	$ar_page_titles = array();
-	$ar_pages_p_uplevel = array();
-	$ar_pages_p_level = isset($arSqlc[$id_page_int]) ? $arSqlc[$id_page_int] : array();
-	$arTpl['subpages_cnt'] = 0;
-	$arTpl['subpages_tpl'] = '';
-	$arTpl['subpages_dl'] = '';
+    global $oSqlQ, $oDb, $oTpl, $oFunc, $oHtml, $oL;
+    global $gw_this, $sys, $str_current_section, $ar_tpl_construct, $arPost, $layout, $ar_theme;
+    $id_lang = 0;
+    /* Check languages first */
+    switch ($sys['pages_link_mode']) {
+        case GW_PAGE_LINK_NAME:
+            $sql_id_page = 'gpph.page_title = "' . gw_text_sql($id_page) . '"';
+            if (is_numeric($id_page)) {
+                $sql_id_page = 'gp.id_page = "' . gw_text_sql($id_page) . '"';
+            }
+            break;
+        case GW_PAGE_LINK_URI:
+            $sql_id_page = 'gp.page_uri = "' . gw_text_sql($id_page) . '"';
+            if (is_numeric($id_page)) {
+                $sql_id_page = 'gp.id_page = "' . gw_text_sql($id_page) . '"';
+            }
+            break;
+        default:
+            $sql_id_page = 'gp.id_page = "' . gw_text_sql($id_page) . '"';
+            break;
+    }
+    $arSql = $oDb->sqlRun($oSqlQ->getQ('get-custompages-lang', $sql_id_page), 'page');
+    foreach ($arSql as $arK => $arV) {
+        if ($arV['id_lang'] == $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']) {
+            $id_lang = $arV['id_lang'];
+            break;
+        } elseif ($arV['id_lang'] == $sys['locale_name']) {
+            $id_lang = $arV['id_lang'];
+        } else {
+            $id_lang = $arV['id_lang'];
+        }
+    }
+    if (empty($arSql)) {
+        gwtk_header($sys['server_proto'] . $sys['server_host'] . $sys['page_index'], $sys['is_delay_redirect']);
+    }
+    $id_page_int = 0;
+    if ($id_lang) {
+        $arSql = $oDb->sqlRun($oSqlQ->getQ('get-custompages', $sql_id_page, $id_lang), 'page');
+        /* Redirect to new URL */
+        $is_redirect = 0;
+        switch ($sys['pages_link_mode']) {
+            case GW_PAGE_LINK_NAME:
+                $page_uri = 'page_title';
+                $is_redirect = ($id_page != $arSql[0][$page_uri]) && !is_numeric($id_page);
+                break;
+            case GW_PAGE_LINK_URI:
+                $page_uri = 'page_uri';
+                $is_redirect = ($arSql[0][$page_uri] && $id_page != $arSql[0][$page_uri]) && !is_numeric($id_page);
+                break;
+            default:
+                $page_uri = 'id_page';
+                $is_redirect = ($id_page != $arSql[0][$page_uri]);
+                break;
+        }
+        if ($is_redirect) {
+            global $oHtml;
+            $href_page = $sys['page_index'] . '?' . GW_ACTION . '=' . 'viewpage&' . '&id=' . $arSql[0][$page_uri];
+            gwtk_header($sys['server_proto'] . $sys['server_host'] . $oHtml->url_normalize($href_page), $sys['is_delay_redirect'], __FILE__, __LINE__);
+        }
+        foreach ($arSql as $arK => $arV) {
+            $id_page_int = $arV['id_page'];
+            /* Process text filters */
+            if (!$sys['is_debug_output'] && is_array($sys['filters_defn'])) {
+                foreach ($sys['filters_defn'] as $k => $v) {
+                    $arV['page_content'] = $v($arV['page_content']);
+                }
+            }
+            /* Custom content */
+            $oTpl->addVal('block:page_content', $arV['page_content']);
+            $oTpl->addVal('block:page_descr', $arV['page_descr']);
+            /* Custom PHP-code */
+            eval($arV['page_php_1']);
+            $gw_this['ar_breadcrumb'][] = $gw_this['arTitle'][] = $str_current_section = strip_tags($arV['page_title']);
+        }
+    }
+    /* Create the list of subpages */
+    $arSqlc = $oDb->sqlRun($oSqlQ->getQ('get-custompages-list'), 'page');
+    $arSqlc = gw_rearrange_to_locale($arSqlc);
+    #$arSqlc = gw_rearrange_to_tree($arSqlc);
+    $ar_page_titles = [];
+    $ar_pages_p_uplevel = [];
+    $ar_pages_p_level = isset($arSqlc[$id_page_int]) ? $arSqlc[$id_page_int] : [];
+    $arTpl['subpages_cnt'] = 0;
+    $arTpl['subpages_tpl'] = '';
+    $arTpl['subpages_dl'] = '';
 
-	/* The list of pages, 1 level up. */
-	$ar_parents = isset($arSqlc[$id_page_int]['p']) ? $arSqlc[$arSqlc[$id_page_int]['p']]['ch'] : array();
-	foreach ($ar_parents as $page_k => $ar_page_v)
-	{
-		if (($arSqlc[$page_k]['p'] == 0) && ($layout != 'title')) { continue; }
-		switch ($sys['pages_link_mode'])
-		{
-			case GW_PAGE_LINK_NAME:
-				$str_page_id = urlencode($arSqlc[$page_k]['page_title']);
-			break;
-			case GW_PAGE_LINK_URI:
-				$str_page_id = urlencode($arSqlc[$page_k]['page_uri']);
-			break;
-			default:
-				$str_page_id = $arSqlc[$page_k]['id'];
-			break;
-		}
+    /* The list of pages, 1 level up. */
+    $ar_parents = isset($arSqlc[$id_page_int]['p']) ? $arSqlc[$arSqlc[$id_page_int]['p']]['ch'] : [];
+    foreach ($ar_parents as $page_k => $ar_page_v) {
+        if (($arSqlc[$page_k]['p'] == 0) && ($layout != 'title')) {
+            continue;
+        }
+        switch ($sys['pages_link_mode']) {
+            case GW_PAGE_LINK_NAME:
+                $str_page_id = urlencode($arSqlc[$page_k]['page_title']);
+                break;
+            case GW_PAGE_LINK_URI:
+                $str_page_id = urlencode($arSqlc[$page_k]['page_uri']);
+                break;
+            default:
+                $str_page_id = $arSqlc[$page_k]['id'];
+                break;
+        }
 #		if ($arSqlc[$page_k]['p'] == 0) { continue; }
-		$ar_page_titles[] = $oHtml->a( $sys['page_index'] .
-			'?a='.GW_A_CUSTOMPAGE.'&id=' . $str_page_id, $arSqlc[$page_k]['title']
-		);
-	}
-	if (!empty($ar_page_titles))
-	{
-		$arTpl['subpages_ul'] = '<ul><li>' . implode('</li><li>', $ar_page_titles) . '</li></ul>';
-	}
-	/* */
-	if (isset($arSqlc[$id_page_int]['ch']))
-	{
-		$arVarPage = array();
-		$ar_page_titles = array();
-		$subpages_cnt = 0;
-		/* The list of subpages, current level. */
-		$ar_subpages = $arSqlc[$id_page_int]['ch'];
-		foreach ($ar_subpages as $page_k => $ar_page_v)
-		{
-			switch ($sys['pages_link_mode'])
-			{
-				case GW_PAGE_LINK_NAME:
-					$str_page_id = urlencode($arSqlc[$page_k]['title']);
-				break;
-				case GW_PAGE_LINK_URI:
-					$str_page_id = urlencode($arSqlc[$page_k]['page_uri']);
-				break;
-				default:
-					$str_page_id = $arSqlc[$page_k]['id'];
-				break;
-			}
-			$arVarPage[$page_k] = $arSqlc[$page_k];
-			$arVarPage[$page_k]['url:page_title'] = $oHtml->a( $sys['page_index'] .
-				'?a='.GW_A_CUSTOMPAGE.'&id=' . $str_page_id, $arSqlc[$page_k]['title']
-			);
-			$ar_page_titles[] = $arVarPage[$page_k]['url:page_title'];
-			$subpages_cnt++;
-			if (isset($arVarPage[$page_k]['ch']))
-			{
-				unset($arVarPage[$page_k]['ch']);
-			}
-		}
-		$arTpl['subpages_ul'] = '<ul><li>' . implode('</li><li>', $ar_page_titles) . '</li></ul>';
-		/* the list of nested pages with short description */
-		$oTplPage = new $sys['class_tpl'];
-		$oTplPage->init($gw_this['vars']['visualtheme']);
-		$oTplPage->set_tpl('tpl_custom_pages_list');
-		if (isset($sys['path_www_images']))
-		{
-			$oTplPage->addVal( 'v:path_img_www', $sys['dirname'] . '/'. $sys['path_www_images'] );
-		}
-		foreach ($arVarPage as $k2 => $v2)
-		{
-			foreach ($v2 as $k => $v)
-			{
-				$oTplPage->assign(array($k => $v));
-			}
-			$oTplPage->parseDynamic('list_custom_pages');
-		}
-		$oTplPage->parse();
-		$arTpl['subpages_dl'] = $oTplPage->output();
-		$arTpl['subpages_cnt'] = $subpages_cnt;
-	}
-	foreach ($arTpl as $k => $v)
-	{
-		$oTpl->addVal($k, $v);
-	}
-	$gw_this['id_page_int'] = $id_page_int;
-	$gw_this['ar_pages'] = $arSqlc;
+        $ar_page_titles[] = $oHtml->a($sys['page_index'] .
+            '?a=' . GW_A_CUSTOMPAGE . '&id=' . $str_page_id, $arSqlc[$page_k]['title']
+        );
+    }
+    if (!empty($ar_page_titles)) {
+        $arTpl['subpages_ul'] = '<ul><li>' . implode('</li><li>', $ar_page_titles) . '</li></ul>';
+    }
+    /* */
+    if (isset($arSqlc[$id_page_int]['ch'])) {
+        $arVarPage = [];
+        $ar_page_titles = [];
+        $subpages_cnt = 0;
+        /* The list of subpages, current level. */
+        $ar_subpages = $arSqlc[$id_page_int]['ch'];
+        foreach ($ar_subpages as $page_k => $ar_page_v) {
+            switch ($sys['pages_link_mode']) {
+                case GW_PAGE_LINK_NAME:
+                    $str_page_id = urlencode($arSqlc[$page_k]['title']);
+                    break;
+                case GW_PAGE_LINK_URI:
+                    $str_page_id = urlencode($arSqlc[$page_k]['page_uri']);
+                    break;
+                default:
+                    $str_page_id = $arSqlc[$page_k]['id'];
+                    break;
+            }
+            $arVarPage[$page_k] = $arSqlc[$page_k];
+            $arVarPage[$page_k]['url:page_title'] = $oHtml->a($sys['page_index'] .
+                '?a=' . GW_A_CUSTOMPAGE . '&id=' . $str_page_id, $arSqlc[$page_k]['title']
+            );
+            $ar_page_titles[] = $arVarPage[$page_k]['url:page_title'];
+            $subpages_cnt++;
+            if (isset($arVarPage[$page_k]['ch'])) {
+                unset($arVarPage[$page_k]['ch']);
+            }
+        }
+        $arTpl['subpages_ul'] = '<ul><li>' . implode('</li><li>', $ar_page_titles) . '</li></ul>';
+        /* the list of nested pages with short description */
+        $oTplPage = new $sys['class_tpl'];
+        $oTplPage->init($gw_this['vars']['visualtheme']);
+        $oTplPage->set_tpl('tpl_custom_pages_list');
+        if (isset($sys['path_www_images'])) {
+            $oTplPage->addVal('v:path_img_www', $sys['dirname'] . '/' . $sys['path_www_images']);
+        }
+        foreach ($arVarPage as $k2 => $v2) {
+            foreach ($v2 as $k => $v) {
+                $oTplPage->assign([$k => $v]);
+            }
+            $oTplPage->parseDynamic('list_custom_pages');
+        }
+        $oTplPage->parse();
+        $arTpl['subpages_dl'] = $oTplPage->output();
+        $arTpl['subpages_cnt'] = $subpages_cnt;
+    }
+    foreach ($arTpl as $k => $v) {
+        $oTpl->addVal($k, $v);
+    }
+    $gw_this['id_page_int'] = $id_page_int;
+    $gw_this['ar_pages'] = $arSqlc;
 }
 
 /**
@@ -823,6 +798,11 @@ function gw_get_top10($mode, $amount = 10, $isItemOnly = 0, $order = 0, $top10Di
     }
 
     return $str;
+}
+
+/* @deprecated */
+function getTop10($mode, $amount = 10, $isItemOnly = 0, $order = 0, $top10Display = 1){
+    return gw_get_top10($mode, $amount, $isItemOnly, $order, $top10Display);
 }
 
 /**

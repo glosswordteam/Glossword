@@ -70,6 +70,9 @@ if (!defined('IS_CLASS_ADDON')) {
         public $ar_theme = [];
 
         /** @var array */
+        public $ar = [];
+
+        /** @var array */
         public $arDictParam = [];
 
         /** @var gw_url_builder */
@@ -77,6 +80,9 @@ if (!defined('IS_CLASS_ADDON')) {
 
         public $str;
         public $cfg;
+
+        /** @var Current component name */
+        public $component;
 
         /**
          * Initialize full addon dependencies.

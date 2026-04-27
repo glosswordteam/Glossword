@@ -168,7 +168,7 @@ if ($this->gw_this['vars']['post'] == '') {
         /* */
         $this->str .= postQuery(
             $queryA,
-            $this->oUrl->build_admin_url(GW_A_EDIT, GW_T_DICTS, ['id' => $q['id']]),
+            $this->oUrlBuilder->build_admin_url(GW_A_EDIT, GW_T_DICTS, ['id' => $q['id']]),
             $this->sys['isDebugQ'],
             $this->sys['isPause']
         );

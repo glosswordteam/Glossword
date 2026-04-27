@@ -35,6 +35,7 @@ $this->str .= '</tr></thead><tbody>';
 
 $topic_mode = 'html';
 
+// init() -> gw_create_tree_custom_pages()
 $this->str .= gw_get_thread_pages($this->ar);
 
 $this->str .= '</tbody></table>';

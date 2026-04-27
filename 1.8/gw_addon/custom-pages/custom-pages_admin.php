@@ -20,10 +20,7 @@ if (!defined('IN_GW')) {
 class gw_addon_custom_pages_admin extends gw_addon
 {
     public $str;
-    public $ar           = [];
     public $ar_component = [];
-    /* Current component name */
-    public $component;
 
     /* Autoexec */
     public function __construct()
@@ -31,7 +28,7 @@ class gw_addon_custom_pages_admin extends gw_addon
         $this->init();
 
         /* Get the list of pages */
-        $this->ar = gw_create_tree_custom_pages();
+        $this->ar = gw_create_flat_custom_pages();
     }
 
     /* */
@@ -433,81 +430,8 @@ class gw_addon_custom_pages_admin extends gw_addon
         return $oForm->Output($str_form);
     }
 
-
     /**
-     * Reset sorting for all child pages of the specified parent page.
-     *
-     * @param int $parent_id
-     *
-     * @return bool
-     */
-    private function _reset_page_sort($parent_id)
-    {
-        $parent_id = (int)$parent_id;
-        if ($parent_id < 0) {
-            return false;
-        }
-
-        $table_pages = gw_get_tbl_name('pages');
-        $ar_sql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-custompages_id-by-p', $parent_id));
-
-        if (!is_array($ar_sql) || empty($ar_sql)) {
-            return false;
-        }
-
-        $ar_queries = [];
-        $int_sort = 10;
-
-        foreach ($ar_sql as $ar_v) {
-            if ($ar_v['id_page'] <= 0) {
-                continue;
-            }
-
-            $ar_queries[] = sprintf(
-                'UPDATE `%s`
-                 SET `int_sort` = %d
-                 WHERE `id_page` = %d',
-                $table_pages,
-                $int_sort,
-                $ar_v['id_page']
-            );
-
-            $int_sort += 10;
-        }
-
-        postQuery(
-            $ar_queries,
-            $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->gw_this['vars'][GW_TARGET]),
-            $this->sys['isDebugQ'],
-            $this->sys['isPause']
-        );
-
-        return true;
-    }
-
-
-    /**
-     * Reset sibling sorting for the specified page.
-     *
-     * @param int $page_id
-     *
-     * @return bool
-     */
-    private function _reset_page_sort_by_page($page_id)
-    {
-        $page_id = (int)$page_id;
-        if ($page_id <= 0) {
-            return false;
-        }
-
-        $parent_id = isset($this->ar[$page_id]['p']) ? (int)$this->ar[$page_id]['p'] : 0;
-
-        return $this->_reset_page_sort($parent_id);
-    }
-
-
-    /**
-     * Move page up or down inside the same parent.
+     * Move a custom page one position up or down in flat list.
      *
      * @param int $page_id
      * @param string $mode
@@ -516,73 +440,53 @@ class gw_addon_custom_pages_admin extends gw_addon
      */
     private function _move_page($page_id, $mode)
     {
-        $page_id = (int)$page_id;
-        $mode = (string)$mode;
+        $page_id = (int) $page_id;
+        $mode = (string) $mode;
 
-        if ($page_id <= 0 || ($mode != 'up' && $mode != 'dn')) {
+        if ($page_id < 1 || ($mode != 'up' && $mode != 'dn')) {
             return false;
         }
 
-        $sort_delta_sql = ($mode == 'up') ? '- 15' : '+ 15';
+        $ar_rows = $this->_get_flat_page_rows();
 
-        $sql = sprintf(
-            'UPDATE `%s`
-             SET `int_sort` = (`int_sort` %s)
-             WHERE `id_page` = %d',
-            gw_get_tbl_name('pages'),
-            $sort_delta_sql,
-            $page_id
-        );
-        $this->oDb->sqlExec($sql);
-
-        return $this->_reset_page_sort_by_page($page_id);
-    }
-
-
-    /**
-     * Set active flag for the page tree starting from the specified page.
-     *
-     * @param int $page_id
-     * @param string $mode
-     *
-     * @return bool
-     */
-    private function _set_page_tree_active($page_id, $mode)
-    {
-        $page_id = (int)$page_id;
-        $mode = (string)$mode;
-
-        if ($page_id <= 0 || ($mode != 'off' && $mode != 'on')) {
+        if (count($ar_rows) < 2) {
             return false;
         }
 
-        $ar_keys = gw_ctlg_get_tree($this->ar, $page_id);
-        if (!is_array($ar_keys) || empty($ar_keys)) {
-            return false;
-        }
+        $page_index = -1;
 
-        $safe_ids = [];
-        foreach ($ar_keys as $tree_page_id) {
-            $tree_page_id = (int)$tree_page_id;
-            if ($tree_page_id > 0) {
-                $safe_ids[] = $tree_page_id;
+        foreach ($ar_rows as $row_index => $row) {
+            if ((int) $row['id_page'] === $page_id) {
+                $page_index = $row_index;
             }
         }
 
-        if (empty($safe_ids)) {
+        if ($page_index < 0) {
             return false;
         }
 
-        $is_active = ($mode == 'on') ? 1 : 0;
-        $ar_queries = [];
+        $new_page_index = ($mode == 'up') ? $page_index - 1 : $page_index + 1;
 
-        $ar_queries[] = 'UPDATE `' . gw_get_tbl_name('pages') . '`
-            SET `is_active` = ' . $is_active . '
-            WHERE `id_page` IN (' . implode(',', $safe_ids) . ')';
+        if (!isset($ar_rows[$new_page_index])) {
+            return false;
+        }
 
-        postQuery(
+        $tmp = $ar_rows[$page_index];
+        $ar_rows[$page_index] = $ar_rows[$new_page_index];
+        $ar_rows[$new_page_index] = $tmp;
+
+        $ar_queries = $this->_build_reset_pages_sort_queries($ar_rows);
+
+        if (empty($ar_queries)) {
+            return false;
+        }
+
+        $this->str .= postQuery(
             $ar_queries,
-            $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->gw_this['vars'][GW_TARGET]),
+            $this->oUrlBuilder->build_admin_url(
+                GW_A_BROWSE,
+                $this->gw_this['vars'][GW_TARGET]
+            ),
             $this->sys['isDebugQ'],
             $this->sys['isPause']
         );
@@ -590,6 +494,150 @@ class gw_addon_custom_pages_admin extends gw_addon
         return true;
     }
 
+    /**
+     * Build flat custom pages rows from loaded admin data.
+     *
+     * @return array
+     */
+    private function _get_flat_page_rows()
+    {
+        $ar_rows = [];
+
+        foreach ($this->ar as $row_key => $row) {
+            $raw_page_id = isset($row['id'])
+                ? $row['id']
+                : (isset($row['id_page']) ? $row['id_page'] : $row_key);
+
+            $id_page = $this->_normalize_page_id($raw_page_id);
+
+            if ($id_page > 0) {
+                $row['id_page'] = $id_page;
+                $row['_gw_sort'] = isset($row['int_sort']) ? (int) $row['int_sort'] : 0;
+
+                $ar_rows[] = $row;
+            }
+        }
+
+        usort($ar_rows, [$this, '_sort_flat_page_rows']);
+
+        return $ar_rows;
+    }
+
+    /**
+     * Compare flat custom pages by sort value and id.
+     *
+     * @param array $row_a
+     * @param array $row_b
+     *
+     * @return int
+     */
+    private function _sort_flat_page_rows(array $row_a, array $row_b)
+    {
+        if ((int) $row_a['_gw_sort'] === (int) $row_b['_gw_sort']) {
+            if ((int) $row_a['id_page'] === (int) $row_b['id_page']) {
+                return 0;
+            }
+
+            return ((int) $row_a['id_page'] < (int) $row_b['id_page']) ? -1 : 1;
+        }
+
+        return ((int) $row_a['_gw_sort'] < (int) $row_b['_gw_sort']) ? -1 : 1;
+    }
+
+    /**
+     * Build SQL queries for rebuilding flat custom pages sort order.
+     *
+     * @param array $ar_rows
+     *
+     * @return array
+     */
+    private function _build_reset_pages_sort_queries(array $ar_rows)
+    {
+        $sql_case = [];
+        $sql_ids = [];
+        $sort_value = 10;
+
+        foreach ($ar_rows as $row) {
+            $page_id = (int) $row['id_page'];
+
+            if ($page_id > 0) {
+                $sql_case[] = 'WHEN ' . $page_id . ' THEN ' . $sort_value;
+                $sql_ids[] = $page_id;
+
+                $sort_value += 10;
+            }
+        }
+
+        if (empty($sql_ids)) {
+            return [];
+        }
+
+        return [
+            'UPDATE `' . gw_get_tbl_name('pages') . '` '
+            . 'SET `int_sort` = CASE `id_page` '
+            . implode(' ', $sql_case)
+            . ' END '
+            . 'WHERE `id_page` IN (' . implode(', ', $sql_ids) . ')',
+        ];
+    }
+
+    /**
+     * Normalize page id from regular or legacy ordered value.
+     *
+     * Example: 0001000006 => 6.
+     *
+     * @param mixed $value
+     *
+     * @return int
+     */
+    private function _normalize_page_id($value)
+    {
+        $value = (string) $value;
+
+        if ($value !== '' && ctype_digit($value) && strlen($value) >= 8) {
+            return (int) substr($value, 5);
+        }
+
+        return (int) $value;
+    }
+
+    /**
+     * Set active flag for one flat custom page.
+     *
+     * @param int $page_id
+     * @param string $mode
+     *
+     * @return bool
+     */
+    private function _set_page_active($page_id, $mode)
+    {
+        $page_id = (int) $page_id;
+        $mode = (string) $mode;
+
+        if ($page_id < 1 || ($mode != 'off' && $mode != 'on')) {
+            return false;
+        }
+
+        $is_active = ($mode == 'on') ? 1 : 0;
+
+        $ar_queries = [
+            'UPDATE `' . gw_get_tbl_name('pages') . '` '
+            . 'SET `is_active` = ' . $is_active . ' '
+            . 'WHERE `id_page` = ' . $page_id,
+        ];
+
+        $this->str .= postQuery(
+            $ar_queries,
+            $this->oUrlBuilder->build_admin_url(
+                GW_A_BROWSE,
+                $this->gw_this['vars'][GW_TARGET]
+            ),
+            $this->sys['isDebugQ'],
+            $this->sys['isPause']
+        );
+
+        return true;
+    }
 
     /* */
     public function alpha()

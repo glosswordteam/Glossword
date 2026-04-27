@@ -11,32 +11,39 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+
 if (!defined('IN_GW')) {
     die('<!-- Not in App -->');
 }
 
 /* Included from $oAddonAdm->alpha(); */
 
-$ar_query = [];
+$ar_queries = [];
 
 if (!$this->gw_this['vars']['isConfirm']) {
-    /* Deletion must be confirmed */
+    /* Deletion must be confirmed. */
     return;
 }
 
 $page_id = (int)$this->gw_this['vars'][GW_TARGET_ID];
 
-/* Enable debug mode */
-# $this->sys['isDebugQ'] = 1;
+if ($page_id < 1) {
+    return;
+}
 
-/* Check page permissions */
+/* Check page permissions. */
 $ar_sql = $this->oDb->sqlExec(
     $this->oSqlQ->getQ('get-custompages-adm', $page_id)
 );
 
-$ar_parsed = isset($ar_sql[0]) ? $ar_sql[0] : ['id_user' => -1];
+if (empty($ar_sql)) {
+    return;
+}
+
+$ar_parsed = $ar_sql[0];
 
 $is_allow_edit = 0;
+
 if ($this->oSess->is('is-cpages')) {
     $is_allow_edit = 1;
 } elseif (
@@ -52,25 +59,26 @@ if (!$is_allow_edit) {
     return;
 }
 
-/* Read the page tree */
-$ar_keys = gw_ctlg_get_tree($this->ar, $page_id);
+/* @TODO: Reset parents migration */
+$ar_query[] = 'UPDATE `' . gw_get_tbl_name('pages') . '` '
+    . 'SET `id_parent` = 0 '
+    . 'WHERE `id_parent` = ' . $page_id;
 
-if (empty($ar_keys)) {
-    return;
-}
+/* Remove one custom page. */
+$ar_queries[] = 'DELETE FROM `' . gw_get_tbl_name('pages') . '` '
+    . 'WHERE `id_page` = ' . $page_id;
 
-$sql_ids = implode(', ', $ar_keys);
+/* Remove custom page phrases. */
+$ar_queries[] = 'DELETE FROM `' . gw_get_tbl_name('pages_phrase') . '` '
+    . 'WHERE `id_page` = ' . $page_id;
 
-/* Remove pages */
-$ar_query[] = 'DELETE FROM `' . gw_get_tbl_name('pages') . '` WHERE `id_page` IN (' . $sql_ids . ')';
-
-/* Remove page phrases */
-$ar_query[] = 'DELETE FROM `' . gw_get_tbl_name('pages_phrase') . '` WHERE `id_page` IN (' . $sql_ids . ')';
-
-/* Redirect */
+/* Redirect. */
 $this->str .= postQuery(
-    $ar_query,
-    $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->component),
+    $ar_queries,
+    $this->oUrlBuilder->build_admin_url(
+        GW_A_BROWSE,
+        $this->gw_this['vars'][GW_TARGET]
+    ),
     $this->sys['isDebugQ'],
     $this->sys['isPause']
 );

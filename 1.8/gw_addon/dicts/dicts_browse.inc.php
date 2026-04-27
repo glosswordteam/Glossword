@@ -15,6 +15,7 @@ if (!defined('IN_GW')) {
     die('<!-- Not in App -->');
 }
 /* Included from $oAddonAdm->alpha(); */
+$arVar = [];
 
 /* */
 $this->str .= $this->_get_nav();

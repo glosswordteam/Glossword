@@ -635,11 +635,12 @@ function gw_create_tree_topics($id = 0)
 	}
 	/* Create the list of topics */
 	$arSqlc = gw_rearrange_to_locale($arSqlc, 'id_topic');
-	return gw_rearrange_to_tree($arSqlc, $id, 'id_topic');
+    return $arSqlc;
+	#return gw_rearrange_to_tree($arSqlc, $id, 'id_topic');
 }
 
 /* */
-function gw_create_tree_custom_pages($id = 0)
+function gw_create_flat_custom_pages($id = 0)
 {
     global $oSqlQ, $oDb;
     /* Disable caching for admin mode */
@@ -650,7 +651,10 @@ function gw_create_tree_custom_pages($id = 0)
     }
     /* Create the list of topics */
     $arSqlc = gw_rearrange_to_locale($arSqlc, 'id_page');
-    return gw_rearrange_to_tree($arSqlc, $id, 'id_page');
+
+    return $arSqlc;
+
+    #return gw_rearrange_to_tree($arSqlc, $id, 'id_page');
 }
 
 
@@ -665,52 +669,52 @@ function gw_create_tree_custom_pages($id = 0)
  *
  * @return array
  */
-function gw_rearrange_to_tree($ar_sql, $unused_id = 0, $id_name = 'id_page')
+function gw_rearrange_to_tree(array $ar_sql, $root_id = 0, $id_name = 'id_page')
 {
-    $ar_tree       = [[]];
-    $ar_rows_by_id = [];
+    $tree = [
+        $root_id => [],
+    ];
+    $rows_by_id = [];
 
-    foreach ($ar_sql as $ar_v) {
-        $parsed    = sscanf((string)$ar_v[$id_name], '%05d%03d');
-        $node_id   = isset($parsed[1]) ? (int)$parsed[1] : (int)$ar_v[$id_name];
-        $parent_id = isset($ar_v['p']) ? (int)$ar_v['p'] : 0;
+    foreach ($ar_sql as $row) {
+        $parsed = sscanf($row[$id_name], '%05d%03d');
 
-        $ar_v['id']     = $node_id;
-        $ar_v[$id_name] = $node_id;
+        $int_sort = (int) $parsed[0];
+        $row_id = (int) $parsed[1];
 
-        $ar_rows_by_id[$node_id] = $ar_v;
+        $row['id'] = $row_id;
+        $row[$id_name] = $row_id;
+        $row['int_sort'] = $int_sort;
 
-        if (!isset($ar_tree[$parent_id]) || !is_array($ar_tree[$parent_id])) {
-            $ar_tree[$parent_id] = [];
+        $parent_id = (int) $row['p'];
+
+        $rows_by_id[$row_id] = $row;
+
+        if (!isset($tree[$parent_id])) {
+            $tree[$parent_id] = [];
         }
 
-        if (!isset($ar_tree[$parent_id]['ch']) || !is_array($ar_tree[$parent_id]['ch'])) {
-            $ar_tree[$parent_id]['ch'] = [];
-        }
+        $tree[$parent_id]['ch'][$row_id] = $row_id;
+        $tree[$parent_id]['max'] = $row_id;
 
-        $ar_tree[$parent_id]['ch'][$node_id] = $node_id;
-
-        if (!isset($ar_tree[$parent_id]['min']) || $node_id < $ar_tree[$parent_id]['min']) {
-            $ar_tree[$parent_id]['min'] = $node_id;
-        }
-
-        if (!isset($ar_tree[$parent_id]['max']) || $node_id > $ar_tree[$parent_id]['max']) {
-            $ar_tree[$parent_id]['max'] = $node_id;
-        }
-    }
-
-    /* Merge row data into tree nodes */
-    foreach ($ar_rows_by_id as $node_id => $ar_v) {
-        if (isset($ar_tree[$node_id]) && is_array($ar_tree[$node_id])) {
-            foreach ($ar_v as $key => $value) {
-                $ar_tree[$node_id][$key] = $value;
-            }
-        } else {
-            $ar_tree[$node_id] = $ar_v;
+        if (!isset($tree[$parent_id]['min'])) {
+            $tree[$parent_id]['min'] = $row_id;
         }
     }
 
-    return $ar_tree;
+    /* Merge row data into tree nodes. */
+    foreach ($rows_by_id as $row_id => $row) {
+        if (!isset($tree[$row_id])) {
+            $tree[$row_id] = $row;
+            continue;
+        }
+
+        foreach ($row as $field_name => $field_value) {
+            $tree[$row_id][$field_name] = $field_value;
+        }
+    }
+
+    return $tree;
 }
 
 
@@ -780,7 +784,8 @@ function ctlgGetTopicsRow($ar = array(), $startId = 0, $cntRow = 1)
 	global $arImgTread, $arTxtTread, $cntRow, $tid, $arParents, $a, $t, $sys, $ar_theme, $gw_this;
 	global $oSess, $oHtml, $oL, $oFunc, $topic_mode;
 
-    return '';
+    #prn_r($ar, 'ctlgGetTopicsRow');
+    #return '';
 
 	/* Using $sys variable instead of global variable */
 	if (isset($sys['topic_mode']))
@@ -980,7 +985,7 @@ function ctlgGetTopicsRow($ar = array(), $startId = 0, $cntRow = 1)
  */
 function gw_ctlg_get_tree(array $tree, $node_id, array $result = [], array &$visited = [])
 {
-    $node_id = (int) $node_id;
+    $node_id = (int)$node_id;
 
     if (isset($visited[$node_id])) {
         return $result;
@@ -994,7 +999,7 @@ function gw_ctlg_get_tree(array $tree, $node_id, array $result = [], array &$vis
     }
 
     foreach ($tree[$node_id]['ch'] as $child_id => $child_value) {
-        $child_id = (int) $child_id;
+        $child_id = (int)$child_id;
         $result = gw_ctlg_get_tree($tree, $child_id, $result, $visited);
     }
 
@@ -1002,221 +1007,195 @@ function gw_ctlg_get_tree(array $tree, $node_id, array $result = [], array &$vis
 }
 
 /* */
-function gw_get_thread_pages($ar = array(), $startId = 0, $cntRow = 1)
+function gw_get_thread_pages2($ar = [], $startId = 0, $cntRow = 1)
 {
-	global $arImgTread, $arTxtTread, $cntRow, $arParents, $sys, $ar_theme, $gw_this;
-	global $oSess, $oHtml, $oL, $oFunc;
-	global $topic_mode;
-	
-	/* Using $sys variable instead of global variable */
-	if (isset($sys['topic_mode']))
-	{
-		$topic_mode = $sys['topic_mode'];
-	}
+    global $arImgTread, $arTxtTread, $cntRow, $arParents, $sys, $ar_theme, $gw_this;
+    global $oSess, $oHtml, $oL, $oFunc;
+    global $topic_mode;
 
-	$str = $strT = $image = '';
-	$isDn = $isUp = 1;
-	$isReset = 0;
-	$page_index = $sys['page_index'];
-	if (GW_IS_BROWSE_ADMIN)
-	{
-		$page_index = $sys['page_admin'];
-	}
-	/* Parents with selected tid (same for delete) */
-	if ($cntRow == 1)
-	{
-		$arParents = gw_ctlg_get_tree($ar, $gw_this['vars']['tid']);
-	}
-	if (sizeof($ar) > 0)
-	{
-		if ($startId != 0)
-		{
-			$ar[$startId]['title'] = isset($ar[$startId]['title']) ? $ar[$startId]['title'] : 0;
-			$ar[$startId]['id'] = isset($ar[$startId]['id']) ? $ar[$startId]['id'] : 0;
-			$p = isset($ar[$startId]['p']) ? $ar[$startId]['p'] : 0;
-			if ($p != 0)
-			{
-				if (!isset($ar[$p]['img']))
-				{
-					$ar[$p]['img'] = '';
-				}
-				$image = $ar[$p]['img'];
-				if ($ar[$p]['max'] == $ar[$startId]['id'])
-				{
-					$image .= ($topic_mode == 'html') ? $arImgTread['l'] : $arTxtTread['l'];
-				}
-				else
-				{
-					$image .= ($topic_mode == 'html') ? $arImgTread['t'] : $arTxtTread['t'];
-				}
-			} // if $p != 0;
-			if (isset($ar[$startId]['ch']) && is_array($ar[$startId]['ch']))
-			{
-				$IsDn = $IsUp = 1;
-				if (isset($ar[$p]['img']))
-				{
-					$ar[$startId]['img'] = $ar[$p]['img'];
-					if($startId == $ar[$p]['max'])
-					{
-						$ar[$startId]['img'] .= ($topic_mode == 'html') ? $arImgTread['trans'] : $arTxtTread['trans'];
-					}
-					else
-					{
-						$ar[$startId]['img'] .= ($topic_mode == 'html') ? $arImgTread['i'] : $arTxtTread['i'];
-					}
-				}
-				$image .= ($topic_mode == 'html') ? $arImgTread['m'] : $arTxtTread['m'];
-			}
-			else
-			{
-				if ($p != 0)
-				{
-					$image .= ($topic_mode == 'html') ? $arImgTread['c'] : $arTxtTread['c'];
-				}
-				else
-				{
-					$image .= ($topic_mode == 'html') ? $arImgTread['space'] : $arTxtTread['space'];
-				}
-			}
-			if ( isset($ar[$p]['max']) && ($ar[$p]['max'] == $startId)){ $isDn = 0; }
-			if ( isset($ar[$p]['min']) && ($ar[$p]['min'] == $startId)){ $isUp = 0; $isReset = 1; }
-			if (!$isUp && !$isDn) { $isReset = 0; }
-			$cntRow % 2 ? ($bgcolor = $ar_theme['color_1']) : ($bgcolor = $ar_theme['color_2']);
-			if ($topic_mode == 'form')
-			{
-				$selected = '';
-				if (isset($ar[$gw_this['vars']['tid']]['p']))
-				{
-					$selected = ($ar[$gw_this['vars']['tid']]['p'] == $ar[$startId]['id']) ? 'selected="selected" ' : '';
-				}
-				$isBuild = 0;
-				// do not allow to place topic under the same topic and parent under the same parent
-				// Edit mode
-				if (!isset($arParents[$startId]) && ($ar[$startId]['id'] != $gw_this['vars']['tid']))
-				{
-					$isBuild = 1;
-				}
-				// exclusion for Add mode
-				if ($gw_this['vars'][GW_ACTION] == GW_A_ADD || ($gw_this['vars'][GW_TARGET] == GW_T_DICTS))
-				{
-					$isBuild = 1;
-					// rule for auto-selection in Add mode
-					if (isset($ar[$gw_this['vars']['tid']]['p']))
-					{
-						$selected = ($ar[$gw_this['vars']['tid']]['id'] == $ar[$startId]['id']) ? 'selected="selected" ' : '';
-					}
-				}
-				if ($isBuild)
-				{
-					$int_title_len = mb_strlen($ar[$startId]['title']);
-					if ($int_title_len > 45)
-					{
-						$ar[$startId]['title'] = mb_substr($ar[$startId]['title'], 0, 45). '&#8230;';
-					}
-					$str .= '<option ' . $selected . 'style="background:'.$bgcolor.'" value="'.$ar[$startId]['id'].'">';
-					$str .= '&#160;' . $image . '&#160;' . $ar[$startId]['title'];
-					$str .= '</option>';
-				}
-			} // form
-			elseif ($topic_mode == 'html')
-			{
-				$int_title_len = mb_strlen($ar[$startId]['title']);
-				
-				if ($gw_this['vars'][GW_TARGET] == 'topics')
-				{
-					/* Check permission to edit the topic */
-					$is_allow_edit = ($oSess->is('is-topics') ? 1 : ($oSess->is('is-topics-own') && ($ar[$startId]['id_user'] == $oSess->id_user)) ? 1 : 0);
-				}
-				else if ($gw_this['vars'][GW_TARGET] == 'custom-pages')
-				{
-					/* Check permission to edit the page */
-					$is_allow_edit = ($oSess->is('is-cpages') ? 1 : ($oSess->is('is-cpages-own') && ($ar[$startId]['id_user'] == $oSess->id_user)) ? 1 : 0);
-				}
-				
-				if ($int_title_len > 45)
-				{
-					$ar[$startId]['title'] = mb_substr($ar[$startId]['title'], 0, 45). '&#8230;';
-				}
-				$str .= '<tr style="background:'.$bgcolor.'">';
-				$str .= '<td class="xt n" style="text-align:'.$sys['css_align_right'].'">' .  $cntRow . '</td>';
-				$str .= '<td>';
-				$str .= '<table cellspacing="0" cellpadding="0" border="0"><tbody><tr class="xu">';
-				$str .= '<td class="nobr">' . $arImgTread['space'] . $image . '</td>';
-				$str .= '<td>&#160;';
+    /* Using $sys variable instead of global variable */
+    if (isset($sys['topic_mode'])) {
+        $topic_mode = $sys['topic_mode'];
+    }
 
-				$oHtml->setTag('a', 'title', $ar[$startId]['title']);
-				$str .= ($is_allow_edit ? $oHtml->a(
-							$page_index . '?'.GW_ACTION.'='.GW_A_EDIT.'&'.GW_TARGET.'='.$gw_this['vars'][GW_TARGET].'&tid=' . $ar[$startId]['id'],
-							$ar[$startId]['title'], $oL->m('3_edit') )
-						: $ar[$startId]['title']);
-				$oHtml->setTag('a', 'title', '');
-				
-				$str .= '</td>';
-				$str .= '</tr>';
-				$str .= '</tbody></table>';
-				$str .= '</td>';
+    $str = $strT = $image = '';
+    $isDn = $isUp = 1;
+    $isReset = 0;
+    $page_index = $sys['page_index'];
+    if (GW_IS_BROWSE_ADMIN) {
+        $page_index = $sys['page_admin'];
+    }
+    /* Parents with selected tid (same for delete) */
+    if ($cntRow == 1) {
+       $arParents = gw_ctlg_get_tree($ar, $gw_this['vars']['tid']);
+    }
 
-				if (isset($ar[$startId]['int_items']))
-				{
-					$str .= '<td class="n actions-third" style="text-align:right">';
-					if ($ar[$startId]['int_items'] > 0)
-					{
-						$str .= $oHtml->a( $page_index . '?'.GW_ACTION.'='.GW_A_BROWSE.'&'.GW_TARGET.'='.GW_T_DICTS.'&w1='.$ar[$startId]['id'], 
-								$oFunc->number_format($ar[$startId]['int_items'], 0, $oL->languagelist(LOCALE_LANG_RULES))
-								);
-					}
-					else
-					{
-						$str .= '<del>0</del>';
-					}
-					$str .= '</td>';
-				}
-				
-				$str .= '<td class="actions-third" style="text-align:center">';
-				$str .= ($isUp && $is_allow_edit) ? $oHtml->a( $page_index . '?'.GW_ACTION.'='.GW_A_EDIT.'&'.GW_TARGET.'='.$gw_this['vars'][GW_TARGET].'&mode=up&tid=' . $ar[$startId]['id'], $oL->m('3_up')) : '<del>'.$oL->m('3_up').'</del>';
-				$str .= ' ';
-				$str .= ($isDn && $is_allow_edit) ? $oHtml->a( $page_index . '?'.GW_ACTION.'='.GW_A_EDIT.'&'.GW_TARGET.'='.$gw_this['vars'][GW_TARGET].'&mode=dn&tid=' . $ar[$startId]['id'], $oL->m('3_down')) : '<del>'.$oL->m('3_down').'</del>';
-				$str .= ' ';
-				$str .= ($isReset && $is_allow_edit) ? $oHtml->a( $page_index . '?'.GW_ACTION.'='.GW_A_EDIT.'&'.GW_TARGET.'='.$gw_this['vars'][GW_TARGET].'&mode=reset&tid=' . $ar[$startId]['id'], $oL->m('3_reset')) : '<del>'.$oL->m('3_reset').'</del>';
-				$str .= '</td>';
-				$str .= '<td class="actions-third" style="text-align:center">';
-				$str .= ($is_allow_edit ? $oHtml->a( $page_index . '?'.GW_ACTION.'='.GW_A_ADD.'&'.GW_TARGET.'='.$gw_this['vars'][GW_TARGET].'&tid='.$ar[$startId]['id'], $oL->m('3_add') ) : '<del>'.$oL->m('3_add').'</del>' );
-				$str .= ' ';
-				$str .= ($is_allow_edit ? $oHtml->a( $page_index . '?'.GW_ACTION.'='.GW_A_EDIT.'&'.GW_TARGET.'='.$gw_this['vars'][GW_TARGET].'&tid='.$ar[$startId]['id'], $oL->m('3_edit') ) : '<del>'.$oL->m('3_edit').'</del>' );
-				$str .= ' ';
+    if (sizeof($ar) > 0) {
+        if ($startId != 0) {
+            $ar[$startId]['title'] = isset($ar[$startId]['title']) ? $ar[$startId]['title'] : 0;
+            $ar[$startId]['id'] = isset($ar[$startId]['id']) ? $ar[$startId]['id'] : 0;
+            $p = isset($ar[$startId]['p']) ? $ar[$startId]['p'] : 0;
+            if ($p != 0) {
+                if (!isset($ar[$p]['img'])) {
+                    $ar[$p]['img'] = '';
+                }
+                $image = $ar[$p]['img'];
+                if ($ar[$p]['max'] == $ar[$startId]['id']) {
+                    $image .= ($topic_mode == 'html') ? $arImgTread['l'] : $arTxtTread['l'];
+                } else {
+                    $image .= ($topic_mode == 'html') ? $arImgTread['t'] : $arTxtTread['t'];
+                }
+            } // if $p != 0;
+            if (isset($ar[$startId]['ch']) && is_array($ar[$startId]['ch'])) {
+                $IsDn = $IsUp = 1;
+                if (isset($ar[$p]['img'])) {
+                    $ar[$startId]['img'] = $ar[$p]['img'];
+                    if ($startId == $ar[$p]['max']) {
+                        $ar[$startId]['img'] .= ($topic_mode == 'html') ? $arImgTread['trans'] : $arTxtTread['trans'];
+                    } else {
+                        $ar[$startId]['img'] .= ($topic_mode == 'html') ? $arImgTread['i'] : $arTxtTread['i'];
+                    }
+                }
+                $image .= ($topic_mode == 'html') ? $arImgTread['m'] : $arTxtTread['m'];
+            } else {
+                if ($p != 0) {
+                    $image .= ($topic_mode == 'html') ? $arImgTread['c'] : $arTxtTread['c'];
+                } else {
+                    $image .= ($topic_mode == 'html') ? $arImgTread['space'] : $arTxtTread['space'];
+                }
+            }
+            if (isset($ar[$p]['max']) && ($ar[$p]['max'] == $startId)) {
+                $isDn = 0;
+            }
+            if (isset($ar[$p]['min']) && ($ar[$p]['min'] == $startId)) {
+                $isUp = 0;
+                $isReset = 1;
+            }
+            if (!$isUp && !$isDn) {
+                $isReset = 0;
+            }
+            $cntRow % 2 ? ($bgcolor = $ar_theme['color_1']) : ($bgcolor = $ar_theme['color_2']);
+            if ($topic_mode == 'form') {
+                $selected = '';
+                if (isset($ar[$gw_this['vars']['tid']]['p'])) {
+                    $selected = ($ar[$gw_this['vars']['tid']]['p'] == $ar[$startId]['id']) ? 'selected="selected" ' : '';
+                }
+                $isBuild = 0;
+                // do not allow to place topic under the same topic and parent under the same parent
+                // Edit mode
+                if (!isset($arParents[$startId]) && ($ar[$startId]['id'] != $gw_this['vars']['tid'])) {
+                    $isBuild = 1;
+                }
+                // exclusion for Add mode
+                if ($gw_this['vars'][GW_ACTION] == GW_A_ADD || ($gw_this['vars'][GW_TARGET] == GW_T_DICTS)) {
+                    $isBuild = 1;
+                    // rule for auto-selection in Add mode
+                    if (isset($ar[$gw_this['vars']['tid']]['p'])) {
+                        $selected = ($ar[$gw_this['vars']['tid']]['id'] == $ar[$startId]['id']) ? 'selected="selected" ' : '';
+                    }
+                }
+                if ($isBuild) {
+                    $int_title_len = mb_strlen($ar[$startId]['title']);
+                    if ($int_title_len > 45) {
+                        $ar[$startId]['title'] = mb_substr($ar[$startId]['title'], 0, 45) . '&#8230;';
+                    }
+                    $str .= '<option ' . $selected . 'style="background:' . $bgcolor . '" value="' . $ar[$startId]['id'] . '">';
+                    $str .= '&#160;' . $image . '&#160;' . $ar[$startId]['title'];
+                    $str .= '</option>';
+                }
+            } // form
+            elseif ($topic_mode == 'html') {
+                $int_title_len = mb_strlen($ar[$startId]['title']);
 
-				$oHtml->setTag('a', 'onclick', 'return confirm(\''.$oL->m('3_remove').': &quot;'.htmlspecialchars($ar[$startId]['title']).'&quot;. '.$oL->m('9_remove').'\' )');
-				$str .= ($is_allow_edit ? $oHtml->a( $page_index . '?'.GW_ACTION.'='.GW_A_REMOVE.'&'.GW_TARGET.'='.$gw_this['vars'][GW_TARGET].'&isConfirm=1&tid='.$ar[$startId]['id'], $oL->m('3_remove') ) :'<del>'.$oL->m('3_remove').'</del>' );
-				$oHtml->setTag('a', 'onclick', '');
-				
-				$str .= '</td>';
-				/* 1.8.7: Turn on/off */
-				$href_onoff = $page_index . '?'.GW_ACTION.'='.GW_A_EDIT.'&'.GW_TARGET.'='.$gw_this['vars'][GW_TARGET].'&tid=' . $ar[$startId]['id'];
-				$str .= '<td class="actions-third" style="text-align:center">';
-				$str .= ($is_allow_edit ? ($ar[$startId]['is_active'] 
-							? $oHtml->a($href_onoff.'&mode=off', '<span class="green">'.$oL->m('is_1').'</span>')
-							: $oHtml->a($href_onoff.'&mode=on', '<span class="red">'.$oL->m('is_0').'</span>', $oL->m('1057') )
-						) : ($ar[$startId]['is_active'] 
-							? '<del><span class="green">'.$oL->m('is_1').'</span></del>'
-							: '<del><span class="red">'.$oL->m('is_0').'</span></del>'
-						));
-				$str .= '</td>';
-				$str .= '</tr>';
-			}
-		}
-		if (isset($ar[$startId]['ch']) && is_array($ar[$startId]['ch']))
-		{
-			$cnt = sizeof($ar[$startId]['ch']);
-			for ($i = 1; $i <= $cnt; $i++)
-			{
-				$k = key($ar[$startId]['ch']);
-				$cntRow++;
-				#$strT .= gw_get_thread_pages($ar, $k);
-				next($ar[$startId]['ch']);
-			}
-		}
-	} // count > 1
-	return $str . $strT;
+                if ($gw_this['vars'][GW_TARGET] == 'topics') {
+                    /* Check permission to edit the topic */
+                    $is_allow_edit = ($oSess->is('is-topics') ? 1 : ($oSess->is('is-topics-own') && ($ar[$startId]['id_user'] == $oSess->id_user)) ? 1 : 0);
+                } else {
+                    if ($gw_this['vars'][GW_TARGET] == 'custom-pages') {
+                        /* Check permission to edit the page */
+                        $is_allow_edit = ($oSess->is('is-cpages') ? 1 : ($oSess->is('is-cpages-own') && ($ar[$startId]['id_user'] == $oSess->id_user)) ? 1 : 0);
+                    }
+                }
+
+                if ($int_title_len > 45) {
+                    $ar[$startId]['title'] = mb_substr($ar[$startId]['title'], 0, 45) . '&#8230;';
+                }
+                $str .= '<tr style="background:' . $bgcolor . '">';
+                $str .= '<td class="xt n" style="text-align:' . $sys['css_align_right'] . '">' . $cntRow . '</td>';
+                $str .= '<td>';
+                $str .= '<table cellspacing="0" cellpadding="0" border="0"><tbody><tr class="xu">';
+                $str .= '<td class="nobr">' . $arImgTread['space'] . $image . '</td>';
+                $str .= '<td>&#160;';
+
+                $oHtml->setTag('a', 'title', $ar[$startId]['title']);
+                $str .= ($is_allow_edit ? $oHtml->a(
+                    $page_index . '?' . GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . $gw_this['vars'][GW_TARGET] . '&tid=' . $ar[$startId]['id'],
+                    $ar[$startId]['title'], $oL->m('3_edit'))
+                    : $ar[$startId]['title']);
+                $oHtml->setTag('a', 'title', '');
+
+                $str .= '</td>';
+                $str .= '</tr>';
+                $str .= '</tbody></table>';
+                $str .= '</td>';
+
+                if (isset($ar[$startId]['int_items'])) {
+                    $str .= '<td class="n actions-third" style="text-align:right">';
+                    if ($ar[$startId]['int_items'] > 0) {
+                        $str .= $oHtml->a($page_index . '?' . GW_ACTION . '=' . GW_A_BROWSE . '&' . GW_TARGET . '=' . GW_T_DICTS . '&w1=' . $ar[$startId]['id'],
+                            $oFunc->number_format($ar[$startId]['int_items'], 0, $oL->languagelist(LOCALE_LANG_RULES))
+                        );
+                    } else {
+                        $str .= '<del>0</del>';
+                    }
+                    $str .= '</td>';
+                }
+
+                $str .= '<td class="actions-third" style="text-align:center">';
+                $str .= ($isUp && $is_allow_edit) ? $oHtml->a($page_index . '?' . GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . $gw_this['vars'][GW_TARGET] . '&mode=up&tid=' . $ar[$startId]['id'], $oL->m('3_up')) : '<del>' . $oL->m('3_up') . '</del>';
+                $str .= ' ';
+                $str .= ($isDn && $is_allow_edit) ? $oHtml->a($page_index . '?' . GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . $gw_this['vars'][GW_TARGET] . '&mode=dn&tid=' . $ar[$startId]['id'], $oL->m('3_down')) : '<del>' . $oL->m('3_down') . '</del>';
+                $str .= ' ';
+                $str .= ($isReset && $is_allow_edit) ? $oHtml->a($page_index . '?' . GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . $gw_this['vars'][GW_TARGET] . '&mode=reset&tid=' . $ar[$startId]['id'], $oL->m('3_reset')) : '<del>' . $oL->m('3_reset') . '</del>';
+                $str .= '</td>';
+                $str .= '<td class="actions-third" style="text-align:center">';
+                $str .= ($is_allow_edit ? $oHtml->a($page_index . '?' . GW_ACTION . '=' . GW_A_ADD . '&' . GW_TARGET . '=' . $gw_this['vars'][GW_TARGET] . '&tid=' . $ar[$startId]['id'], $oL->m('3_add')) : '<del>' . $oL->m('3_add') . '</del>');
+                $str .= ' ';
+                $str .= ($is_allow_edit ? $oHtml->a($page_index . '?' . GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . $gw_this['vars'][GW_TARGET] . '&tid=' . $ar[$startId]['id'], $oL->m('3_edit')) : '<del>' . $oL->m('3_edit') . '</del>');
+                $str .= ' ';
+
+                $oHtml->setTag('a', 'onclick', 'return confirm(\'' . $oL->m('3_remove') . ': &quot;' . htmlspecialchars($ar[$startId]['title']) . '&quot;. ' . $oL->m('9_remove') . '\' )');
+                $str .= ($is_allow_edit ? $oHtml->a($page_index . '?' . GW_ACTION . '=' . GW_A_REMOVE . '&' . GW_TARGET . '=' . $gw_this['vars'][GW_TARGET] . '&isConfirm=1&tid=' . $ar[$startId]['id'], $oL->m('3_remove')) : '<del>' . $oL->m('3_remove') . '</del>');
+                $oHtml->setTag('a', 'onclick', '');
+
+                $str .= '</td>';
+                /* 1.8.7: Turn on/off */
+                $href_onoff = $page_index . '?' . GW_ACTION . '=' . GW_A_EDIT . '&' . GW_TARGET . '=' . $gw_this['vars'][GW_TARGET] . '&tid=' . $ar[$startId]['id'];
+                $str .= '<td class="actions-third" style="text-align:center">';
+                $str .= ($is_allow_edit
+                    ? ($ar[$startId]['is_active']
+                        ? $oHtml->a($href_onoff . '&mode=off', '<span class="green">' . $oL->m('is_1') . '</span>')
+                        : $oHtml->a($href_onoff . '&mode=on', '<span class="red">' . $oL->m('is_0') . '</span>', $oL->m('1057'))
+                    )
+                    : ($ar[$startId]['is_active']
+                        ? '<del><span class="green">' . $oL->m('is_1') . '</span></del>'
+                        : '<del><span class="red">' . $oL->m('is_0') . '</span></del>'
+                    ));
+                $str .= '</td>';
+                $str .= '</tr>';
+            }
+        }
+        if (isset($ar[$startId]['ch']) && is_array($ar[$startId]['ch'])) {
+            $cnt = sizeof($ar[$startId]['ch']);
+            for ($i = 1; $i <= $cnt; $i++) {
+                $k = key($ar[$startId]['ch']);
+                $cntRow++;
+                #$strT .= gw_get_thread_pages($ar, $k);
+                next($ar[$startId]['ch']);
+            }
+        }
+    } // count > 1
+    return $str . $strT;
 }
 
 
@@ -1250,4 +1229,320 @@ function gw_breadcrumbs_is_in_root($ar, $tid = 0, $id_root)
 		return gw_breadcrumbs_is_in_root($ar, $id_parent, $id_root);
 	}
 	return false;
+}
+
+
+/**
+ * Extract real page/topic id from a legacy ordered id value.
+ *
+ * Legacy value example: 0001000006 = sort 10 + id 6.
+ *
+ * @param mixed $value
+ *
+ * @return int
+ */
+function gw_thread_page_get_real_id($value)
+{
+    $value = (string) $value;
+
+    if ($value !== '' && ctype_digit($value) && strlen($value) >= 8) {
+        return (int) substr($value, 5);
+    }
+
+    return (int) $value;
+}
+
+/**
+ * Extract sort position from a legacy ordered id value.
+ *
+ * @param mixed $value
+ *
+ * @return int
+ */
+function gw_thread_page_get_sort_from_legacy_id($value)
+{
+    $value = (string) $value;
+
+    if ($value !== '' && ctype_digit($value) && strlen($value) >= 8) {
+        return (int) substr($value, 0, 5);
+    }
+
+    return 0;
+}
+
+/**
+ * Return flat page/topic id.
+ *
+ * @param array $item
+ * @param mixed $item_key
+ *
+ * @return int
+ */
+function gw_thread_page_get_id(array $item, $item_key)
+{
+    if (isset($item['id'])) {
+        return (int) $item['id'];
+    }
+
+    if (isset($item['id_page'])) {
+        return gw_thread_page_get_real_id($item['id_page']);
+    }
+
+    if (isset($item['id_topic'])) {
+        return gw_thread_page_get_real_id($item['id_topic']);
+    }
+
+    return gw_thread_page_get_real_id($item_key);
+}
+
+/**
+ * Return flat page/topic sort value.
+ *
+ * @param array $item
+ * @param mixed $item_key
+ *
+ * @return int
+ */
+function gw_thread_page_get_sort(array $item, $item_key)
+{
+    if (isset($item['int_sort'])) {
+        return (int) $item['int_sort'];
+    }
+
+    if (isset($item['id_page'])) {
+        return gw_thread_page_get_sort_from_legacy_id($item['id_page']);
+    }
+
+    if (isset($item['id_topic'])) {
+        return gw_thread_page_get_sort_from_legacy_id($item['id_topic']);
+    }
+
+    return gw_thread_page_get_sort_from_legacy_id($item_key);
+}
+
+/**
+ * Build flat list of topics/pages for admin table or select field.
+ *
+ * The function does not depend on parent-child tree fields.
+ *
+ * @param array $items
+ * @param int $start_id
+ * @param int $cnt_row
+ *
+ * @return string
+ */
+function gw_get_thread_pages($items = [], $start_id = 0, $cnt_row = 1)
+{
+    global $arImgTread, $sys, $ar_theme, $gw_this;
+    global $oSess, $oHtml, $oL, $oFunc;
+    global $topic_mode;
+
+    if (isset($sys['topic_mode'])) {
+        $topic_mode = $sys['topic_mode'];
+    }
+
+    if (count($items) === 0) {
+        return '';
+    }
+
+    $target = $gw_this['vars'][GW_TARGET];
+    $current_action = $gw_this['vars'][GW_ACTION];
+    $current_id = (int) $gw_this['vars'][GW_TARGET_ID];
+
+    $page_index = $sys['page_index'];
+
+    if (defined('GW_IS_BROWSE_ADMIN') && GW_IS_BROWSE_ADMIN) {
+        $page_index = $sys['page_admin'];
+    }
+
+    $build_url = function ($action, array $params = []) use ($page_index, $target) {
+        $query_params = [
+                GW_ACTION => $action,
+                GW_TARGET => $target,
+            ] + $params;
+
+        return $page_index . '?' . http_build_query($query_params, '', '&');
+    };
+
+    $rows = [];
+
+    foreach ($items as $item_key => $item) {
+        $item['_gw_id'] = gw_thread_page_get_id($item, $item_key);
+        $item['_gw_sort'] = gw_thread_page_get_sort($item, $item_key);
+        $rows[] = $item;
+    }
+
+    usort($rows, function ($item_a, $item_b) {
+        if ($item_a['_gw_sort'] == $item_b['_gw_sort']) {
+            if ($item_a['_gw_id'] == $item_b['_gw_id']) {
+                return 0;
+            }
+
+            return ($item_a['_gw_id'] < $item_b['_gw_id']) ? -1 : 1;
+        }
+
+        return ($item_a['_gw_sort'] < $item_b['_gw_sort']) ? -1 : 1;
+    });
+
+    $total_rows = count($rows);
+    $str = '';
+
+    foreach ($rows as $row_index => $item) {
+        if ($start_id != 0 && $item['_gw_id'] != (int) $start_id) {
+            continue;
+        }
+
+        $row_id = (int) $item['_gw_id'];
+        $is_up = ($row_index > 0) ? 1 : 0;
+        $is_dn = ($row_index < ($total_rows - 1)) ? 1 : 0;
+
+        $bgcolor = ($cnt_row % 2) ? $ar_theme['color_1'] : $ar_theme['color_2'];
+
+        $title = (string) $item['title'];
+        $title_short = $title;
+
+        if (mb_strlen($title_short, 'UTF-8') > 45) {
+            $title_short = mb_substr($title_short, 0, 45, 'UTF-8') . '…';
+        }
+
+        $title_html = htmlspecialchars($title_short, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+        if ($topic_mode == 'form') {
+            $is_build = 1;
+            $selected = '';
+
+            // Do not allow selecting the same item as its own parent in edit mode.
+            if ($current_action != GW_A_ADD && $target != GW_T_DICTS && $row_id == $current_id) {
+                $is_build = 0;
+            }
+
+            // In add mode the current item is the selected parent.
+            if ($current_action == GW_A_ADD || $target == GW_T_DICTS) {
+                $selected = ($row_id == $current_id) ? 'selected="selected" ' : '';
+            }
+
+            if ($is_build) {
+                $str .= '<option ' . $selected . 'style="background:' . $bgcolor . '" value="' . $row_id . '">';
+                $str .= '&#160;' . $title_html;
+                $str .= '</option>';
+            }
+        } elseif ($topic_mode == 'html') {
+            $is_allow_edit = 0;
+
+            if ($target == GW_T_TOPICS) {
+                // Check permission to edit the topic.
+                $is_allow_edit = ($oSess->is('is-topics') || ($oSess->is('is-topics-own') && $item['id_user'] == $oSess->id_user)) ? 1 : 0;
+            } elseif ($target == GW_T_CUSTOMPAGE) {
+                // Check permission to edit the page.
+                $is_allow_edit = ($oSess->is('is-cpages') || ($oSess->is('is-cpages-own') && $item['id_user'] == $oSess->id_user)) ? 1 : 0;
+            }
+
+            $str .= '<tr style="background:' . $bgcolor . '">';
+            $str .= '<td class="xt n" style="text-align:' . $sys['css_align_right'] . '">' . $cnt_row . '</td>';
+            $str .= '<td>';
+            $str .= '<table cellspacing="0" cellpadding="0" border="0"><tbody><tr class="xu">';
+            $str .= '<td class="nobr">' . $arImgTread['space'] . '</td>';
+            $str .= '<td>&#160;';
+
+            $edit_url = $build_url(GW_A_EDIT, [
+                GW_TARGET_ID => $row_id,
+            ]);
+
+            $oHtml->setTag('a', 'title', $title_html);
+
+            $str .= $is_allow_edit
+                ? $oHtml->a($edit_url, $title_html, $oL->m('3_edit'))
+                : $title_html;
+
+            $oHtml->setTag('a', 'title', '');
+
+            $str .= '</td>';
+            $str .= '</tr>';
+            $str .= '</tbody></table>';
+            $str .= '</td>';
+
+            if (isset($item['int_items'])) {
+                $str .= '<td class="n actions-third" style="text-align:right">';
+
+                if ($item['int_items'] > 0) {
+                    $str .= $oHtml->a(
+                        $build_url(GW_A_BROWSE, [
+                            GW_TARGET => GW_T_DICTS,
+                            'w1' => $row_id,
+                        ]),
+                        $oFunc->number_format($item['int_items'], 0, $oL->languagelist(LOCALE_LANG_RULES))
+                    );
+                } else {
+                    $str .= '<del>0</del>';
+                }
+
+                $str .= '</td>';
+            }
+
+            $str .= '<td class="actions-third" style="text-align:center">';
+            $str .= ($is_up && $is_allow_edit)
+                ? $oHtml->a($build_url(GW_A_EDIT, ['mode' => 'up', GW_TARGET_ID => $row_id]), $oL->m('3_up'))
+                : '<del>' . $oL->m('3_up') . '</del>';
+
+            $str .= ' ';
+
+            $str .= ($is_dn && $is_allow_edit)
+                ? $oHtml->a($build_url(GW_A_EDIT, ['mode' => 'dn', GW_TARGET_ID => $row_id]), $oL->m('3_down'))
+                : '<del>' . $oL->m('3_down') . '</del>';
+
+            $str .= '</td>';
+
+            // Actions
+            $str .= '<td class="actions-third" style="text-align:center">';
+
+            $str .= $is_allow_edit
+                ? $oHtml->a($edit_url, $oL->m('3_edit'))
+                : '<del>' . $oL->m('3_edit') . '</del>';
+
+            $str .= ' ';
+
+            $oHtml->setTag('a', 'class', 'submitdel');
+            $oHtml->setTag('a', 'onclick', 'return confirm(\'' . $oL->m('3_remove') . ': &quot;' . htmlspecialchars($title) . '&quot;. ' . $oL->m('9_remove') . '\')');
+
+            $str .= $is_allow_edit
+                ? $oHtml->a(
+                    $build_url(GW_A_REMOVE, [
+                        'isConfirm' => 1,
+                        GW_TARGET_ID => $row_id,
+                    ]),
+                    $oL->m('3_remove')
+                )
+                : '<del>' . $oL->m('3_remove') . '</del>';
+
+            $oHtml->setTag('a', 'onclick', '');
+            $oHtml->setTag('a', 'class', '');
+
+            $str .= '</td>';
+
+            $href_onoff = $build_url(GW_A_EDIT, [
+                GW_TARGET_ID => $row_id,
+            ]);
+
+            $str .= '<td class="actions-third" style="text-align:center">';
+
+            $str .= $is_allow_edit
+                ? (
+                $item['is_active']
+                    ? $oHtml->a($href_onoff . '&mode=off', '<span class="green">' . $oL->m('is_1') . '</span>')
+                    : $oHtml->a($href_onoff . '&mode=on', '<span class="red">' . $oL->m('is_0') . '</span>', $oL->m('1057'))
+                )
+                : (
+                $item['is_active']
+                    ? '<del><span class="green">' . $oL->m('is_1') . '</span></del>'
+                    : '<del><span class="red">' . $oL->m('is_0') . '</span></del>'
+                );
+
+            $str .= '</td>';
+            $str .= '</tr>';
+        }
+
+        $cnt_row++;
+    }
+
+    return $str;
 }
