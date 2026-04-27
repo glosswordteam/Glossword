@@ -52,7 +52,7 @@ if (isset($this->gw_this['vars']['arPost']['is_all'])) {
         */
         $sql = 'SELECT * FROM `%s` ' . $sql_where;
         $arSql = $this->oDb->sqlExec(sprintf($sql, $arDictParamSource['tablename']));
-        $id_term = $this->oDb->MaxId($arDictParam['tablename'], 'id');
+        $id_term = $this->oDb->NextId($arDictParam['tablename'], 'id');
         foreach ($arSql as $k1 => $arV) {
             $ar_q = [];
             $id_term_prev = $arV['id'];
@@ -123,7 +123,7 @@ if (isset($this->gw_this['vars']['arPost']['is_all'])) {
         */
         $sql = 'SELECT * FROM `%s` WHERE `id` IN (%s)' . $sql_where;
         $arSql = $this->oDb->sqlExec(sprintf($sql, $arDictParamSource['tablename'], implode(',', $this->gw_this['vars']['arPost']['ar_id'])));
-        $id_term = $this->oDb->MaxId($arDictParam['tablename'], 'id');
+        $id_term = $this->oDb->NextId($arDictParam['tablename'], 'id');
         foreach ($arSql as $k1 => $arV) {
             $ar_q = [];
             $id_term_prev = $arV['id'];

@@ -191,7 +191,7 @@ if ($this->gw_this['vars']['post'] == '') {
 
     $ar_queries[] = 'DELETE FROM `' . $table_pages_phrase . '` WHERE `id_page` = ' . $page_id;
 
-    $id_page_phrase_base = (int) $this->oDb->MaxId($table_pages_phrase, 'id_page_phrase');
+    $id_page_phrase_base = (int) $this->oDb->NextId($table_pages_phrase, 'id_page_phrase');
 
     if (isset($ar_pre['page']) && is_array($ar_pre['page'])) {
         foreach ($ar_pre['page'] as $page_offset => $ar_v) {

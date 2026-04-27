@@ -11,6 +11,7 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
+
 if (!defined('IN_GW')) {
     die('<!-- Not in App -->');
 }
@@ -215,7 +216,7 @@ if ($this->gw_this['vars']['post'] == '') {
             unset($arPost['is_permissions'][$k]);
         }
 
-        $q1['id_user'] = $this->oDb->MaxId($this->oSess->db_table_users, 'id_user');
+        $q1['id_user'] = $this->oDb->NextId($this->oSess->db_table_users, 'id_user');
         $q1['is_active'] = isset($arPost['is_active']) ? $arPost['is_active'] : 1;
 
         $q1['login'] = $arPost['login'];
@@ -238,12 +239,19 @@ if ($this->gw_this['vars']['post'] == '') {
             $ar_q[] = gw_sql_replace($q2, gw_get_tbl_name('map_user_to_dict'));
         }
 
-        /* Redirect */
-        $url = GW_ACTION . '=' . GW_A_BROWSE . '&' . GW_TARGET . '=' . GW_T_USERS;
-        if ($this->gw_this['vars']['w1'] != $this->oSess->id_user) {
-            $url .= '&w1=' . $this->gw_this['vars']['w1'];
+        /* Redirect. */
+        $ar_params = [];
+
+        if ((int) $this->gw_this['vars']['w1'] !== (int) $this->oSess->id_user) {
+            $ar_params['w1'] = (int) $this->gw_this['vars']['w1'];
         }
-        $this->str .= postQuery($ar_q, $url, $this->sys['isDebugQ'], 0);
+
+        $this->str .= postQuery(
+            $ar_q,
+            $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, GW_T_USERS, $ar_params),
+            $this->sys['isDebugQ'],
+            $this->sys['isPause']
+        );
     }
 
     unset($arPost['is_send_notice']);

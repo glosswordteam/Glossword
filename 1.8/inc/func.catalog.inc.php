@@ -1450,6 +1450,7 @@ function gw_get_thread_pages($items = [], $start_id = 0, $cnt_row = 1)
     $rows = [];
 
     foreach ($items as $item_key => $item) {
+        /* Skip service tree nodes such as root node with only `ch`, `min`, `max`. */
         if (!is_array($item) || !isset($item['id'])) {
             continue;
         }

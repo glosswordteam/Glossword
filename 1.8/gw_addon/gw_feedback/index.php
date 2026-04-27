@@ -350,7 +350,7 @@ class gw_addon_feedback extends gw_addon
 
                 $ar_query = [];
                 if ($vars['defn'] && $vars['term']) {
-                    $q1['id'] = $this->oDb->MaxId($this->arDictParam['tablename'], 'id');
+                    $q1['id'] = $this->oDb->NextId($this->arDictParam['tablename'], 'id');
                     $q1['is_active'] = '0';
                     $q1['is_complete'] = '0';
                     $q1['date_created'] = $this->sys['time_now_gmt_unix'];

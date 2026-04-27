@@ -54,7 +54,7 @@ if ($this->gw_this['vars']['post'] == '') {
         unset($arPost['id_action_old']);
         unset($arPost['is_permissions']);
         $q1 =& $arPost;
-        $q1['id_component'] = $this->oDb->MaxId($this->sys['tbl_prefix'] . 'component', 'id_component');
+        $q1['id_component'] = $this->oDb->NextId($this->sys['tbl_prefix'] . 'component', 'id_component');
         $q1['int_sort'] = 999;
         $ar_query[] = gw_sql_insert($q1, $this->sys['tbl_prefix'] . 'component');
         /* Add one action automatically */

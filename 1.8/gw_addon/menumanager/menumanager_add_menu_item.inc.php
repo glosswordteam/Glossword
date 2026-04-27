@@ -56,7 +56,7 @@ if ($this->gw_this['vars']['post'] == '') {
         /* */
         $is_use_id_action = $arPost['is_use_id_action'];
         if (!$is_use_id_action[0]) {
-            $q2['id_action'] = $arPost['id_action'] = $this->oDb->MaxId($this->sys['tbl_prefix'] . 'component_actions', 'id_action');
+            $q2['id_action'] = $arPost['id_action'] = $this->oDb->NextId($this->sys['tbl_prefix'] . 'component_actions', 'id_action');
             $q2['aname_sys'] = $arPost['aname_sys'];
             $q2['aname'] = $arPost['aname'];
             $q2['icon'] = $arPost['icon'];

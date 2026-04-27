@@ -142,7 +142,7 @@ if ($this->gw_this['vars']['post'] == '') {
         $q['id_user'] = $this->oSess->id_user;
         /* Create tables */
         $queryA[] = $this->oSqlQ->getQ('create-dict', $q['tablename']);
-        $q['id'] = $q3['dict_id'] = $this->oDb->MaxId(gw_get_tbl_name('dict'));
+        $q['id'] = $q3['dict_id'] = $this->oDb->NextId(gw_get_tbl_name('dict'));
 
         /* 30 apr 2008: Prepare URI */
         $q['dict_uri'] = $q['id'] . '-' . $this->oCase->rm_entity($q['title']);

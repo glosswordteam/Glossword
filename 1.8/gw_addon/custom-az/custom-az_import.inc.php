@@ -86,7 +86,7 @@ if ($this->gw_this['vars']['post'] == '') {
         $arQ[] = 'DELETE FROM `' . $this->sys['tbl_prefix'] . 'custom_az` WHERE `id_profile` = "' . $id_profile . '"';
     } else {
         /* -- Create a new -- */
-        $id_profile = $this->oDb->MaxId($this->sys['tbl_prefix'] . 'custom_az_profiles', 'id_profile');
+        $id_profile = $this->oDb->NextId($this->sys['tbl_prefix'] . 'custom_az_profiles', 'id_profile');
     }
     /* Debug for import */
 #$this->sys['isDebugQ'] = 1;

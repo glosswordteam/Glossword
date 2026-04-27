@@ -439,7 +439,7 @@ class gw_addon_abbr_admin extends gw_addon
             $arPost['abbr_long'] = '';
             $arPost['abbr_short'] = '';
             $arPost['id_abbr_phrase'] = '';
-            $arPost['id_abbr'] = $this->oDb->MaxId($this->sys['tbl_prefix'] . 'abbr', 'id_abbr');
+            $arPost['id_abbr'] = $this->oDb->NextId($this->sys['tbl_prefix'] . 'abbr', 'id_abbr');
             $arPost['id_lang'] = $this->sys['locale_name'];
             $arPost['id_group'] = $this->oSess->user_get('abbr_id_group');
             /* 23 may 2006: select "Custom" on first run */
@@ -481,7 +481,7 @@ class gw_addon_abbr_admin extends gw_addon
                     $q1['id_abbr'] = preg_replace("/![0-9]/", '', $q1['id_abbr']);
                     $q2['id_abbr'] = $q1['id_abbr'];
                 } else {
-                    $q1['id_abbr'] = $q2['id_abbr'] = $this->oDb->MaxId($this->sys['tbl_prefix'] . 'abbr', 'id_abbr');
+                    $q1['id_abbr'] = $q2['id_abbr'] = $this->oDb->NextId($this->sys['tbl_prefix'] . 'abbr', 'id_abbr');
                 }
                 $q2['is_active'] = $q1['is_active'];
                 $q2['id_group'] = $q1['id_group'];

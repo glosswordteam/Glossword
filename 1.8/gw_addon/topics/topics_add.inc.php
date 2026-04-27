@@ -54,8 +54,8 @@ if ($this->gw_this['vars']['post'] == '') {
         $arPre[$v] = isset($arPre[$v]) ? $arPre[$v] : 0;
     }
     $q1 = $q2 = [];
-    $id_topic_phrase = $this->oDb->MaxId($this->sys['tbl_prefix'] . 'topics_phrase', 'id_topic_phrase');
-    $q1['id_topic'] = $q2['id_topic'] = $this->oDb->MaxId($this->sys['tbl_prefix'] . 'topics', 'id_topic');
+    $id_topic_phrase = $this->oDb->NextId($this->sys['tbl_prefix'] . 'topics_phrase', 'id_topic_phrase');
+    $q1['id_topic'] = $q2['id_topic'] = $this->oDb->NextId($this->sys['tbl_prefix'] . 'topics', 'id_topic');
     $q1['id_parent'] = $arPre['id_parent'];
     $q1['is_active'] = $arPre['is_active'];
     $q1['topic_icon'] = $arPre['topic_icon'];
