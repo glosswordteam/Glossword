@@ -26,7 +26,7 @@ class gw_addon_menumanager_admin extends gw_addon
     public $component;
 
     /* Autoexec */
-    public function __construct($str)
+    public function __construct()
     {
         $this->init();
     }
@@ -377,7 +377,7 @@ gw_menumanager_get_option(\'menu-item-name\', gw_getElementById(\'arPost_id_acti
 }
 
 /* */
-$oAddonAdm = new gw_addon_menumanager_admin;
+$oAddonAdm = new gw_addon_menumanager_admin();
 $oAddonAdm->alpha();
 /* */
 $arPageNumbers['menumanager_' . GW_A_UPDATE] = '';
