@@ -115,7 +115,6 @@ function gw_dict_recount($vars)
         $arQ[] = gw_sql_update($qDict, gw_get_tbl_name('dict'), "id = '" . $arDictParam['id'] . "'");
 
         $arQ[] = 'CHECK TABLE `' . $arDictParam['tablename'] . '`';
-        $arQ[] = 'ALTER TABLE `' . $arDictParam['tablename'] . '` PACK_KEYS=1 CHECKSUM=0 DELAY_KEY_WRITE=1';
         $arQ[] = 'OPTIMIZE TABLE `' . $arDictParam['tablename'] . '`';
         /* */
         foreach ($arQ as $sqlk => $sqlv) {

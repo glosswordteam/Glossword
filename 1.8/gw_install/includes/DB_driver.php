@@ -111,7 +111,7 @@ class CI_DB_driver
     {
         // If an existing DB connection resource is supplied
         // there is no need to connect and select the database
-        if (is_resource($this->conn_id) or is_object($this->conn_id)) {
+        if (is_object($this->conn_id)) {
             return true;
         }
 
@@ -1085,7 +1085,7 @@ class CI_DB_driver
      */
     public function close()
     {
-        if (is_resource($this->conn_id) or is_object($this->conn_id)) {
+        if (is_object($this->conn_id)) {
             $this->_close($this->conn_id);
         }
         $this->conn_id = false;

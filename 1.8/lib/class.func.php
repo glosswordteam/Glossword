@@ -197,10 +197,6 @@ class gw_functions
         if ($str == '') {
             return '[loadfile: ' . $filename . ' is empty]';
         }
-        if (function_exists('get_magic_quotes_runtime') && @get_magic_quotes_runtime(
-            )) /* remove slashes, 23 march 2002 */ {
-            $str = stripslashes($str);
-        }
         return $str;
     }
 
@@ -594,22 +590,6 @@ class gw_functions
     public function is_num($value)
     {
         return filter_var($value, FILTER_VALIDATE_INT) !== false && $value >= 0;
-    }
-
-    /**
-     * Get string length, multibyte.
-     *
-     * @param string $t Any string content
-     * @return  int     String length
-     */
-    public function mb_strlen($t, $encoding = 'UTF-8')
-    {
-        /* --enable-mbstring */
-        if (function_exists('mb_strlen')) {
-            return mb_strlen($t, $encoding);
-        } else {
-            return strlen(utf8_decode($t));
-        }
     }
 
     /**

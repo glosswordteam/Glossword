@@ -373,7 +373,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}stat_search` (
   PRIMARY KEY (`id_stat_search`),
   KEY `date_created` (`date_created`),
   KEY `id_dict` (`id_dict`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 PACK_KEYS=1 DELAY_KEY_WRITE=1;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -518,7 +518,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}wordlist` (
   `word_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`word_text`),
   UNIQUE KEY `word_id` (`word_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 PACK_KEYS=1 DELAY_KEY_WRITE=1;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -535,4 +535,5 @@ CREATE TABLE IF NOT EXISTS `{prefix}wordmap` (
   `date_created` int(10) unsigned NOT NULL DEFAULT '0',
   KEY `word_id` (`word_id`),
   KEY `term_id` (`term_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 PACK_KEYS=1 DELAY_KEY_WRITE=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+                                                      

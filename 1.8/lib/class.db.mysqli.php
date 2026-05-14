@@ -230,7 +230,7 @@ if (!class_exists('gwtkDataBase')) {
          */
         public function free_result()
         {
-            if (is_object($this->result_id) || is_resource($this->result_id)) {
+            if ($this->result_id instanceof \mysqli_result) {
                 mysqli_free_result($this->result_id);
                 $this->result_id = false;
             }

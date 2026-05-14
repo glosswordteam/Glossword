@@ -250,24 +250,15 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 * @param	string
 	 * @return	string
 	 */
-    public function escape_str ( $str )
+    public function escape_str($str)
     {
-        if ( is_array( $str ) )
-        {
-            foreach ( $str as $k => $v )
-            {
-                $str[$k] = $this->escape_str( $v );
+        if (is_array($str)) {
+            foreach ($str as $k => $v) {
+                $str[$k] = $this->escape_str($v);
             }
             return $str;
         }
-        if ( function_exists( 'mysqli_real_escape_string' ) && (is_object( $this->conn_id ) || is_resource( $this->conn_id )) )
-        {
-            return mysqli_real_escape_string( $this->conn_id, $str );
-        }
-        else
-        {
-            return addslashes( $str );
-        }
+        return mysqli_real_escape_string($this->conn_id, $str);
     }
 		
 	// --------------------------------------------------------------------

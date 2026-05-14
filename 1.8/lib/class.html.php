@@ -175,7 +175,6 @@ class gw_html {
 					}
 				}
 				$url_new = $this->server_dir . '/';
-				/* depends on magic_quotes_gpc, 11 aug 2003 */
 				parse_str($param, $arQ);
 
 				foreach ($this->mod_rewrite_rule as $kR => $vR)

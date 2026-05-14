@@ -404,15 +404,15 @@ else
 		&& $gw_this['vars']['is']['save_'.GW_LANG_I])
 	{
 		/* Save interface language, set cookie */
-		setcookie('gw_'.GW_LANG_I.$sys['token'], $gw_this['vars'][GW_LANG_I], $sys['time_now']+$sys['time_sec_y'], $sys['server_dir'] );
-		setcookie('gw_is_save_'.GW_LANG_I.$sys['token'], 1,  $sys['time_now']+$sys['time_sec_y'], $sys['server_dir'] );
+		gw_setcookie('gw_'.GW_LANG_I.$sys['token'], $gw_this['vars'][GW_LANG_I], $sys['time_now']+$sys['time_sec_y'], $sys['server_dir'] );
+		gw_setcookie('gw_is_save_'.GW_LANG_I.$sys['token'], 1,  $sys['time_now']+$sys['time_sec_y'], $sys['server_dir'] );
 		$gw_this['cookie']['gw_'.GW_LANG_I] = $gw_this['vars'][GW_LANG_I];
 		$gw_this['cookie']['gw_is_save_'.GW_LANG_I] = 1;
 	}
 	else
 	{
-		setcookie('gw_'.GW_LANG_I.$sys['token'], $gw_this['vars'][GW_LANG_I], $sys['time_now']-2, $sys['server_dir'] );
-		setcookie('gw_is_save_'.GW_LANG_I.$sys['token'], 1,  $sys['time_now']-2, $sys['server_dir'] );
+		gw_setcookie('gw_'.GW_LANG_I.$sys['token'], $gw_this['vars'][GW_LANG_I], $sys['time_now']-2, $sys['server_dir'] );
+		gw_setcookie('gw_is_save_'.GW_LANG_I.$sys['token'], 1,  $sys['time_now']-2, $sys['server_dir'] );
 		$gw_this['cookie']['gw_'.GW_LANG_I] = '';
 		$gw_this['cookie']['gw_is_save_'.GW_LANG_I] = '';
 	}

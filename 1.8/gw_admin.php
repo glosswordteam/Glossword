@@ -150,13 +150,13 @@ if ($gw_this['vars'][GW_LANG_I] == '') {
     if (isset($gw_this['vars']['is']['save_' . GW_LANG_I])
         && $gw_this['vars']['is']['save_' . GW_LANG_I]) {
         /* Save interface language, set cookie */
-        setcookie('gw_' . GW_LANG_I . $sys['token'], $gw_this['vars'][GW_LANG_I], $sys['time_now'] + $sys['time_sec_y'], $sys['server_dir'], '');
-        setcookie('gw_is_save_' . GW_LANG_I . $sys['token'], 1, $sys['time_now'] + $sys['time_sec_y'], $sys['server_dir'], '');
+        gw_setcookie('gw_' . GW_LANG_I . $sys['token'], $gw_this['vars'][GW_LANG_I], $sys['time_now'] + $sys['time_sec_y'], $sys['server_dir'], '');
+        gw_setcookie('gw_is_save_' . GW_LANG_I . $sys['token'], 1, $sys['time_now'] + $sys['time_sec_y'], $sys['server_dir'], '');
         $gw_this['cookie']['gw_' . GW_LANG_I] = $gw_this['vars'][GW_LANG_I];
         $gw_this['cookie']['gw_is_save_' . GW_LANG_I] = 1;
     } else {
-        setcookie('gw_' . GW_LANG_I . $sys['token'], $gw_this['vars'][GW_LANG_I], $sys['time_now'] - 2, $sys['server_dir']);
-        setcookie('gw_is_save_' . GW_LANG_I . $sys['token'], 1, $sys['time_now'] - 2, $sys['server_dir']);
+        gw_setcookie('gw_' . GW_LANG_I . $sys['token'], $gw_this['vars'][GW_LANG_I], $sys['time_now'] - 2, $sys['server_dir']);
+        gw_setcookie('gw_is_save_' . GW_LANG_I . $sys['token'], 1, $sys['time_now'] - 2, $sys['server_dir']);
         $gw_this['cookie']['gw_' . GW_LANG_I] = '';
         $gw_this['cookie']['gw_is_save_' . GW_LANG_I] = '';
     }
@@ -288,7 +288,7 @@ $ar_menu_info[] = '<span class="white xt"><strong>' . $oL->m('online') . '</stro
     $oHtml->a($sys['page_admin'] . '?' . GW_ACTION . '=edit-own' . '&t=users', $oSess->user_get('user_fname') . ' ' . $oSess->user_get('user_sname'), $oL->m('3_profile')) .
     '</strong>';
 $ar_menu_info[] = '<span class="white xt">' . $oFunc->dateSecToTime($sys['time_now_gmt_unix'] - $oSess->user_get('date_login')) . '</span>';
-$ar_menu_info[] = $oHtml->a($sys['page_admin'] . '?a=logout&amp;uri=' . base64_encode($_SERVER['QUERY_STRING']), $oL->m('3_logout'));
+$ar_menu_info[] = $oHtml->a($sys['page_admin'] . '?a=logout&amp;uri=' . base64_encode(isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : ''), $oL->m('3_logout'));
 
 // --------------------------------------------------------
 // Load Add-ons

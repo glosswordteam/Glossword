@@ -14,22 +14,19 @@
 
 /* ------------------------------------------------------- */
 /**
- * @param string $alphabet
- * @param int $maxchar
+ * Pick a random sample of $maxchar characters from $alphabet, without repetition.
+ *
+ * If $maxchar exceeds strlen($alphabet), the result is truncated to the
+ * alphabet length. Intended for CAPTCHA generation with small $maxchar values.
+ *
+ * @param string $alphabet ASCII source characters; falls back to a built-in set when empty
+ * @param int    $maxchar  Desired result length
  * @return string
  */
 function gw_str_random($alphabet, $maxchar = 8)
 {
-    mt_srand((double)microtime() * 1000000);
-    $str = '';
-    $alphabet = ($alphabet ? $alphabet : '23456789bdghkmnqsuvxyz');
-    $alphabet = str_shuffle($alphabet);
-    $len = strlen($alphabet);
-    for ($i = 0; $i < $maxchar; $i++) {
-        $sed = mt_rand(0, $len - 1);
-        $str .= $alphabet[$sed];
-    }
-    return $str;
+    $alphabet = $alphabet ?: '23456789bdghkmnqsuvxyz';
+    return substr(str_shuffle($alphabet), 0, $maxchar);
 }
 
 /* */
@@ -68,12 +65,12 @@ function gw_make_captcha()
         for ($i = 0; $i < $fontfile_width[$k] && $symbol < $alphabet_length; $i++) {
             $transparent = (imagecolorat($font_resource[$k], $i, 0) >> 24) == 127;
             if (!$reading_symbol && !$transparent) {
-                $font_metrics[$k][$alphabet{$symbol}] = ['start' => $i];
+                $font_metrics[$k][$alphabet[$symbol]] = ['start' => $i];
                 $reading_symbol = true;
                 continue;
             }
             if ($reading_symbol && $transparent) {
-                $font_metrics[$k][$alphabet{$symbol}]['end'] = $i;
+                $font_metrics[$k][$alphabet[$symbol]]['end'] = $i;
                 $reading_symbol = false;
                 $symbol++;
                 continue;
@@ -86,7 +83,7 @@ function gw_make_captcha()
     /* Create text */
     for ($i = 0; $i < $len; $i++) {
         $font_file_id = mt_rand(0, sizeof($ar_fonts) - 1);
-        $m = $font_metrics[$font_file_id][$chars{$i}];
+        $m = $font_metrics[$font_file_id][$chars[$i]];
         $y = mt_rand(-$fluctuation_amplitude, $fluctuation_amplitude) + ($height - $fontfile_height[$font_file_id]) / 2 + 2;
         /* Font size -6 big .. 6 small */
         $shift = $resize = mt_rand(-6, 6);

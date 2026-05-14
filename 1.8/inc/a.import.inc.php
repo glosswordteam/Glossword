@@ -1512,10 +1512,6 @@ switch ($gw_this['vars']['arPost'][GW_ACTION])
 		$this->gw_this['vars']['int_items_left'] = 0;
 
 		/* Start import */
-		/* Unpack keys, set delay for key write (See MySQL Manual 5.2.12)*/
-#		$oDb->sqlExec('ALTER TABLE `'. TBL_WORDLIST .'` PACK_KEYS=0 CHECKSUM=0 DELAY_KEY_WRITE=1');
-#		$oDb->sqlExec('ALTER TABLE `'. TBL_WORDMAP .'` PACK_KEYS=0 CHECKSUM=0 DELAY_KEY_WRITE=1');
-#		$oDb->sqlExec('ALTER TABLE `'. $arDictParam['tablename'] .'` PACK_KEYS=0 CHECKSUM=0 DELAY_KEY_WRITE=1');
 		/* Start timer */
 		$oTimer = new gw_timer('import');
 		/* Fix on/off options */

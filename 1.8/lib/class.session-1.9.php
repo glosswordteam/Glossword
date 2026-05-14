@@ -166,7 +166,7 @@ class gw_session_1_9
 			{
 				/* Session ID not found */
 				/* Remove cookie */
-				setcookie( $this->sid.$this->sys['token'], $this->id_sess, $this->time_now - 2, $this->sys['server_dir'] );
+				gw_setcookie( $this->sid.$this->sys['token'], $this->id_sess, $this->time_now - 2, $this->sys['server_dir'] );
 				/* Start Guest session then */
 				$this->sess_insert($this->id_guest);
 			}
@@ -256,7 +256,7 @@ class gw_session_1_9
 		$this->user_close();
 		$this->ar_sess['date_changed'] = $this->time_now_gmt_unix;
 		/* Continue cookie */
-		@setcookie( $this->sid.$this->sys['token'], $this->id_sess, $this->time_now + ($this->int_timeout * 2), $this->sys['server_dir'] );
+		@gw_setcookie( $this->sid.$this->sys['token'], $this->id_sess, $this->time_now + ($this->int_timeout * 2), $this->sys['server_dir'] );
 		/* User ID could not be changed during session! */
 		if ($this->id_sess)
 		{
@@ -501,8 +501,8 @@ class gw_session_1_9
 	{
 		
 		/* Remove cookies on eny error */
-		setcookie( $this->sid.$this->sys['token'], $this->id_sess, $this->time_now - 2, $this->sys['server_dir'] );
-		setcookie( $this->sid.'r'.$this->sys['token'], 1, $this->time_now - 2, $this->sys['server_dir'] );
+		gw_setcookie( $this->sid.$this->sys['token'], $this->id_sess, $this->time_now - 2, $this->sys['server_dir'] );
+		gw_setcookie( $this->sid.'r'.$this->sys['token'], 1, $this->time_now - 2, $this->sys['server_dir'] );
 		$msg = '';
 		switch ($error_code)
 		{
@@ -513,7 +513,7 @@ class gw_session_1_9
 				$msg .= sprintf( $this->msg_5, '<strong>'.intval(($this->time_now_gmt_unix - $this->time_changed) / 60).'</strong>.' );
 				$msg .= ' ';
 				$msg .= sprintf( $this->msg_6, '<strong>'.intval($this->int_timeout / 60).'</strong>.' );
-				$this->uri = base64_encode($_SERVER['QUERY_STRING']);
+				$this->uri = base64_encode(isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '');
 			break;
 			case 2:
 				$msg = $this->msg_2;
@@ -528,7 +528,7 @@ class gw_session_1_9
 				/* Authorization required. Session expired or does not exist. */
 				$msg = $this->msg_4;
 				$this->id_sess = '';
-				$this->uri = base64_encode($_SERVER['QUERY_STRING']);
+				$this->uri = base64_encode(isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '');
 			break;
 		}
 		/* Display HTML */
@@ -549,5 +549,4 @@ class gw_session_1_9
 	
 }
 $sys['class_session'] = 'gw_session_1_9';
-
 

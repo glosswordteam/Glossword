@@ -83,8 +83,6 @@ function gw_optimize_keywords()
     }
     $oDb->sqlExec('CHECK TABLE `' . TBL_WORDMAP . '`');
     $oDb->sqlExec('CHECK TABLE `' . TBL_WORDLIST . '`');
-    $oDb->sqlExec('ALTER TABLE `' . TBL_WORDLIST . '` PACK_KEYS=1 CHECKSUM=0 DELAY_KEY_WRITE=1');
-    $oDb->sqlExec('ALTER TABLE `' . TBL_WORDMAP . '` PACK_KEYS=1 CHECKSUM=0 DELAY_KEY_WRITE=1');
     $oDb->sqlExec('OPTIMIZE TABLE `' . TBL_WORDLIST . '`');
     $oDb->sqlExec('OPTIMIZE TABLE `' . TBL_WORDMAP . '`');
     $arStatus[] = [sprintf('<strong class="red">%s</strong>', $oL->m('1019')), ''];

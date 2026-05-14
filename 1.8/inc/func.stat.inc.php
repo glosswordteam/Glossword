@@ -19,6 +19,19 @@ if (!defined('IN_GW')) {
  *  Logging data, file functions, replacement functions.
  */
 
+/**
+ * Legacy convenience wrapper around gw_setcookie().
+ *
+ * Sets a cookie named "<n><token>" with a standardized expiry: 7 days when
+ * $is_always is 0/false, 1 year otherwise. Always uses path "/".
+ *
+ * Cookie value is encoded once by PHP's setcookie() and decoded once by PHP
+ * when populated into $_COOKIE — callers must not pre-encode/decode the value.
+ *
+ * @param string $n         Base cookie name (the global $sys['token'] is appended)
+ * @param string $value     Raw cookie value
+ * @param int    $is_always 0 = 7 days; 1 = 1 year (default)
+ */
 function gw_set_cookie($n, $value = '', $is_always = 1)
 {
 	global $sys;
@@ -27,7 +40,7 @@ function gw_set_cookie($n, $value = '', $is_always = 1)
 	{
 		$expires = time() + (60*60*24*365);
 	}
-	@setcookie($n.$sys['token'], urlencode($value), $expires, '/', '' );
+	@gw_setcookie($n . $sys['token'], $value, $expires, '/');
 }
 
 

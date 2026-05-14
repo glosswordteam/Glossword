@@ -440,6 +440,42 @@ function gw_get_protocol()
 }
 
 /**
+ * Send a Set-Cookie header with secure defaults (HttpOnly, SameSite=Lax,
+ * auto-Secure on HTTPS).
+ *
+ * Uses the array signature on PHP 7.3+ (so SameSite is honored); falls back
+ * to the positional signature on PHP 5.6 / 7.0-7.2, where SameSite cannot be
+ * set directly by PHP.
+ *
+ * @param string    $name     Cookie name
+ * @param string    $value    Cookie value (PHP auto URL-encodes)
+ * @param int       $expires  Unix timestamp; 0 = session cookie; past = delete
+ * @param string    $path     URL path scope
+ * @param string    $domain   Domain scope ('' = current host)
+ * @param bool|null $secure   true/false to force; null = auto-detect from HTTPS
+ * @param bool      $httponly HTTP-only flag (JS cannot read the cookie)
+ * @param string    $samesite 'Lax' | 'Strict' | 'None' (PHP 7.3+ only)
+ * @return bool TRUE on success, FALSE on failure
+ */
+function gw_setcookie($name, $value, $expires, $path = '/', $domain = '', $secure = null, $httponly = true, $samesite = 'Lax')
+{
+    if ($secure === null) {
+        $secure = (gw_get_protocol() === 'https://');
+    }
+    if (PHP_VERSION_ID >= 70300) {
+        return setcookie($name, (string)$value, [
+            'expires'  => (int)$expires,
+            'path'     => (string)$path,
+            'domain'   => (string)$domain,
+            'secure'   => (bool)$secure,
+            'httponly' => (bool)$httponly,
+            'samesite' => (string)$samesite,
+        ]);
+    }
+    return setcookie($name, (string)$value, (int)$expires, (string)$path, (string)$domain, (bool)$secure, (bool)$httponly);
+}
+
+/**
  * Return system settings as key-value array.
  *
  * If settings are missing and installer exists, redirect to installation.

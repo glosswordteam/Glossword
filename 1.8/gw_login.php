@@ -117,8 +117,8 @@ if (isset($gw_this['vars']['arPost']['locale_name'])) {
     $gw_this['vars']['lang_enc'] = preg_replace("/^([a-z0-9])+-/", '', $gw_this['vars']['lang_enc']);
     $gw_this['vars']['locale_name'] = $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc'];
     /* 1.8.8: Save interface language selection */
-    setcookie('gw_' . GW_LANG_I . $sys['token'], $gw_this['vars'][GW_LANG_I], $sys['time_now'] + $sys['time_sec_y'], $sys['server_dir']);
-    setcookie('gw_is_save_' . GW_LANG_I . $sys['token'], 1, $sys['time_now'] + $sys['time_sec_y'], $sys['server_dir']);
+    gw_setcookie('gw_' . GW_LANG_I . $sys['token'], $gw_this['vars'][GW_LANG_I], $sys['time_now'] + $sys['time_sec_y'], $sys['server_dir']);
+    gw_setcookie('gw_is_save_' . GW_LANG_I . $sys['token'], 1, $sys['time_now'] + $sys['time_sec_y'], $sys['server_dir']);
 }
 
 
@@ -449,8 +449,8 @@ if ($gw_this['vars']['post'] == '') {
                 /* Update last user activity */
                 $oSess->user_set_val('date_login', $oSess->time_now_gmt_unix);
                 /* Add cookies */
-                setcookie($oSess->sid . $sys['token'], $oSess->id_sess, $sys['time_now'] + ($oSess->int_timeout * 2), $sys['server_dir']);
-                setcookie($oSess->sid . 'r' . $sys['token'], 1, $sys['time_now'] + ($oSess->int_timeout * 2), $sys['server_dir']);
+                gw_setcookie($oSess->sid . $sys['token'], $oSess->id_sess, $sys['time_now'] + ($oSess->int_timeout * 2), $sys['server_dir']);
+                gw_setcookie($oSess->sid . 'r' . $sys['token'], 1, $sys['time_now'] + ($oSess->int_timeout * 2), $sys['server_dir']);
                 /* Close Session class */
                 $oSess->sess_close();
                 /* 1.8.8 restore URL */

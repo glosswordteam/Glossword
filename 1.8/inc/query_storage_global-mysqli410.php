@@ -616,7 +616,7 @@ $tmp['ar_queries'] = [
 						KEY `count` (`is_active`,`date_created`),
 						KEY `recent` (`is_active`,`date_modified`,`date_created`),
 						KEY `term123` (`is_active`,`term_1`,`term_2`,`term_3`,`date_created`)
-					 ) ENGINE=MyISAM DEFAULT CHARSET=utf8
+					 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 					",
 ];
 

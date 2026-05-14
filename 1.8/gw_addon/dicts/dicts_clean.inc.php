@@ -94,7 +94,7 @@ $arQ[] = $this->oSqlQ->getQ('del-wordmap-by-dict', $this->gw_this['vars']['id'])
 $arQ[] = sprintf('DELETE FROM `%s` WHERE id_dict = "%d"', $this->sys['tbl_prefix'] . 'history_terms', $this->gw_this['vars']['id']);
 $arQ[] = sprintf('UPDATE `%s` SET int_terms = 0, int_terms_total = 0, int_bytes = 0 WHERE `id` = "%d"', $this->sys['tbl_prefix'] . 'dict', $this->gw_this['vars']['id']);
 /* */
-$arQ[] = 'ALTER TABLE `' . $arDictParam['tablename'] . '` PACK_KEYS=0 CHECKSUM=0 DELAY_KEY_WRITE=1 AUTO_INCREMENT=1';
+$arQ[] = 'ALTER TABLE `' . $arDictParam['tablename'] . '` AUTO_INCREMENT=1';
 $arQ[] = 'CHECK TABLE `' . $arDictParam['tablename'] . '`';
 $this->str .= gw_tmp_clear($this->gw_this['vars']['id']);
 /* Redirect to... */

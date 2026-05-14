@@ -69,8 +69,8 @@ if (!class_exists('gw_register_globals')) {
                     /* Get value from GET */
                     $tmp[$field_name] = $_GET[$field_name];
                 } elseif (isset($_COOKIE[$field_name . $cookie_token]) && ($_COOKIE[$field_name . $cookie_token] !== '')) {
-                    /* Get value from COOKIE */
-                    $tmp['_cookie'][$field_name] = urldecode($_COOKIE[$field_name . $cookie_token]);
+                    /* Get value from COOKIE — PHP already URL-decodes $_COOKIE values */
+                    $tmp['_cookie'][$field_name] = $_COOKIE[$field_name . $cookie_token];
                 } else {
                     /* Default value */
                     $tmp[$field_name] = '';

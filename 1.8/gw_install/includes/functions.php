@@ -76,10 +76,6 @@ if (!defined('IS_CLASS_GW2_FUNCTIONS')) {
             if ($str == '') {
                 return '[loadfile: ' . $filename . ' is empty]';
             }
-            /* Remove slashes, 23 march 2002 */
-            if (function_exists('get_magic_quotes_runtime') && @get_magic_quotes_runtime()) {
-                $str = stripslashes($str);
-            }
             return $str;
         }
 

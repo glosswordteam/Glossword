@@ -313,8 +313,8 @@ if ($this->gw_this['vars']['post'] == '') {
             $gw_this['vars']['lang_enc'] = preg_replace("/^([a-z0-9])+-/", '', $arPost['user_settings']['locale_name']);
 
             /* Save interface language, set cookie */
-            setcookie('gw_' . GW_LANG_I . $this->sys['token'], $gw_this['vars'][GW_LANG_I], $this->sys['time_now'] + $this->sys['time_sec_y'], $this->sys['server_dir'], '');
-            setcookie('gw_is_save_' . GW_LANG_I . $this->sys['token'], 1, $this->sys['time_now'] + $this->sys['time_sec_y'], $this->sys['server_dir'], '');
+            gw_setcookie('gw_' . GW_LANG_I . $this->sys['token'], $gw_this['vars'][GW_LANG_I], $this->sys['time_now'] + $this->sys['time_sec_y'], $this->sys['server_dir'], '');
+            gw_setcookie('gw_is_save_' . GW_LANG_I . $this->sys['token'], 1, $this->sys['time_now'] + $this->sys['time_sec_y'], $this->sys['server_dir'], '');
         }
 
         $q1['user_settings'] = serialize($q1['user_settings']);
