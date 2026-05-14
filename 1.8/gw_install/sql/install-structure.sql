@@ -536,4 +536,3 @@ CREATE TABLE IF NOT EXISTS `{prefix}wordmap` (
   KEY `word_id` (`word_id`),
   KEY `term_id` (`term_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-                                                      
