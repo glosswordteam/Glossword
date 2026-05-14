@@ -110,7 +110,6 @@ function gw_get_cfg()
         '{register_globals}'           => (int)ini_get("register_globals"),
         '{safe_mode}'                  => (int)ini_get("safe_mode"),
         '{short_open_tag}'             => (int)ini_get("short_open_tag"),
-        '{mbstring.internal_encoding}' => ini_get('mbstring.internal_encoding'),
     ];
     $str = '';
     $str .= '<line>' . CRLF;

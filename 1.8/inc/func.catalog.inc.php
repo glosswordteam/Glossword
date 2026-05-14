@@ -1507,8 +1507,8 @@ function gw_get_thread_pages($items = [], $start_id = 0, $cnt_row = 1)
         $title = (string) $item['title'];
         $title_short = $title;
 
-        if (mb_strlen($title_short, 'UTF-8') > 45) {
-            $title_short = mb_substr($title_short, 0, 45, 'UTF-8') . '…';
+        if (mb_strlen($title_short) > 45) {
+            $title_short = mb_substr($title_short, 0, 45) . '…';
         }
 
         $title_html = htmlspecialchars($title_short, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');

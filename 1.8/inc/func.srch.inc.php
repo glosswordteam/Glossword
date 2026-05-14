@@ -318,11 +318,11 @@ function gw_search ( $q, $ar_dict_ids, $a_search_params )
 
 						/* 18 July 2007: Enable auto-asterisks for Chinese characters */
 						/* 06 May 2008: Enable auto-asterisks for Japanese and Korean characters */
-                        if (mb_strlen($keyword, 'UTF-8') == 1 && function_exists('mb_encode_numericentity')) {
+                        if (mb_strlen($keyword) == 1 && function_exists('mb_encode_numericentity')) {
                             $keyword_numeric = $keyword;
-                            $keyword_numeric = mb_encode_numericentity($keyword_numeric, [0x3040, 0x312F, 0, 0xFFFF], 'UTF-8');
-                            $keyword_numeric = mb_encode_numericentity($keyword_numeric, [0x3400, 0x9FFF, 0, 0xFFFF], 'UTF-8');
-                            $keyword_numeric = mb_encode_numericentity($keyword_numeric, [0xAC00, 0xD7AF, 0, 0xFFFF], 'UTF-8');
+                            $keyword_numeric = mb_encode_numericentity($keyword_numeric, [0x3040, 0x312F, 0, 0xFFFF]);
+                            $keyword_numeric = mb_encode_numericentity($keyword_numeric, [0x3400, 0x9FFF, 0, 0xFFFF]);
+                            $keyword_numeric = mb_encode_numericentity($keyword_numeric, [0xAC00, 0xD7AF, 0, 0xFFFF]);
                             $keyword_numeric = (int) str_replace(['&#', ';'], '', $keyword_numeric);
 
                             if (($keyword_numeric >= 0x3040 && $keyword_numeric <= 0x312F)
@@ -460,11 +460,11 @@ function gw_search ( $q, $ar_dict_ids, $a_search_params )
 					{
 						$v_numeric = $v;
 						/* Hiragana, Katakana, Bopomofo */
-						$v_numeric = mb_encode_numericentity( $v_numeric, array ( 0x3040, 0x312F, 0, 0xFFFF ), 'UTF-8' );
+						$v_numeric = mb_encode_numericentity( $v_numeric, array ( 0x3040, 0x312F, 0, 0xFFFF ));
 						/* CJK */
-						$v_numeric = mb_encode_numericentity( $v_numeric, array ( 0x3400, 0x9FFF, 0, 0xFFFF ), 'UTF-8' );
+						$v_numeric = mb_encode_numericentity( $v_numeric, array ( 0x3400, 0x9FFF, 0, 0xFFFF ));
 						/* Hangul */
-						$v_numeric = mb_encode_numericentity( $v_numeric, array ( 0xAC00, 0xD7AF, 0, 0xFFFF ), 'UTF-8' );
+						$v_numeric = mb_encode_numericentity( $v_numeric, array ( 0xAC00, 0xD7AF, 0, 0xFFFF ));
 						$v_numeric = intval( str_replace( '&#', '', str_replace( ';', '', $v_numeric ) ) );
 						if ( ($v_numeric >= 0x3040 && $v_numeric <= 0x312F)
 								|| ($v_numeric >= 0x3400 && $v_numeric <= 0x9FFF)
@@ -971,4 +971,3 @@ function gw_search_cleanup ()
 	$oDb->sqlExec( $sql );
 	$oDb->sqlExec( 'CHECK TABLE `' . $sys['tbl_prefix'] . 'stat_search`' );
 }
-

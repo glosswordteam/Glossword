@@ -193,21 +193,15 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
     $qT['term_3'] = ($qT['term_3'] == '') ? mb_substr(
         $str_term_filtered,
         2,
-        1,
-        'UTF-8'
-    ) : $qT['term_3'];
+        1) : $qT['term_3'];
     $qT['term_2'] = ($qT['term_2'] == '') ? mb_substr(
         $str_term_filtered,
         1,
-        1,
-        'UTF-8'
-    ) : $qT['term_2'];
+        1) : $qT['term_2'];
     $qT['term_1'] = ($qT['term_1'] == '') ? mb_substr(
         $str_term_filtered,
         0,
-        1,
-        'UTF-8'
-    ) : $qT['term_1'];
+        1) : $qT['term_1'];
     /* */
     $ar_field_names = ['a', 'b', 'c', 'd', 'e', 'f'];
     preg_match_all("/./u", $qT['term_order'], $ar_letters);

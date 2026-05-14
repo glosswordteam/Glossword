@@ -629,7 +629,7 @@ class gw_functions
 
         $convMap = [0x0000, 0x2FFFF, 0, 0xFFFF];
 
-        return mb_decode_numericentity($string, $convMap, 'UTF-8');
+        return mb_decode_numericentity($string, $convMap);
     }
 
     /**
@@ -649,7 +649,7 @@ class gw_functions
 
         $convMap = [0x0000, 0x2FFFF, 0, 0xFFFF];
 
-        return mb_encode_numericentity($string, $convMap, 'UTF-8');
+        return mb_encode_numericentity($string, $convMap);
     }
 
     /**

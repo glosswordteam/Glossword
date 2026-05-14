@@ -1301,9 +1301,9 @@ function gw_html_forms_select(
          * Cut long names for proper display.
          * trim() is used to handle values loaded from legacy MySQL data.
          */
-        if (($max_char_combobox > 0) && (mb_strlen(trim($option_label), 'UTF-8') > $max_char_combobox)) {
+        if (($max_char_combobox > 0) && (mb_strlen(trim($option_label)) > $max_char_combobox)) {
             $ar_attr_option['title'] = htmlspecialchars($option_label_src, ENT_QUOTES, 'UTF-8');
-            $option_label            = mb_substr($option_label, 0, $max_char_combobox, 'UTF-8') . '…';
+            $option_label            = mb_substr($option_label, 0, $max_char_combobox) . '…';
         }
 
         $ar_attr_option['value'] = $option_value;
