@@ -37,7 +37,7 @@ function getFormXml($vars, $runtime = 0, $arBroken = [], $arReq = [])
     $form->formbgcolor = $ar_theme['color_2'];
     $form->formbordercolor = $ar_theme['color_4'];
     $form->formbordercolorL = $ar_theme['color_1'];
-    $form->Set('charset', $sys['internal_encoding']);
+    $form->Set('charset', 'UTF-8');
     $form->arLtr = ['arPost[split]'];
     ## ----------------------------------------------------
     ##

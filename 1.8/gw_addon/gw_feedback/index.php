@@ -53,7 +53,7 @@ class gw_addon_feedback extends gw_addon
         $oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
         $oForm->Set('align_buttons', $this->sys['css_align_right']);
         $oForm->Set('formwidth', 500);
-        $oForm->Set('charset', $this->sys['internal_encoding']);
+        $oForm->Set('charset', 'UTF-8');
         $oForm->Set('arLtr', ['email']);
 
         $ar_req = array_flip($ar_req);

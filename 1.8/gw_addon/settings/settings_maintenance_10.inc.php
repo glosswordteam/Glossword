@@ -35,7 +35,7 @@ function gw_show_form($vars, $runtime = 0, $arBroken = [], $arReq = [])
     $oForm->Set('formbordercolor', $ar_theme['color_4']);
     $oForm->Set('formbordercolorL', $ar_theme['color_1']);
     $oForm->Set('align_buttons', $sys['css_align_right']);
-    $oForm->Set('charset', $sys['internal_encoding']);
+    $oForm->Set('charset', 'UTF-8');
 
     ## ----------------------------------------------------
     ##

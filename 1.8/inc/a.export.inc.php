@@ -104,7 +104,7 @@ function getFormExport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 	$form->Set('formbordercolor', $ar_theme['color_4']);
 	$form->Set('formbordercolorL', $ar_theme['color_1']);
 	$form->Set('align_buttons',   $GLOBALS['sys']['css_align_right']);
-	$form->Set('charset', $sys['internal_encoding']);
+	$form->Set('charset', 'UTF-8');
 	## ----------------------------------------------------
 	##
 	 // check vars

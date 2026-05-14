@@ -322,8 +322,8 @@ function gw_sql2defnpreview($arSql)
 			$arA[$k]['defn_tooltip'] = strip_tags($arA[$k]['defn']);
 			$arA[$k]['defn_tooltip'] = preg_replace('/&#[x0-9a-f]+;/', ' ', $arA[$k]['defn_tooltip']);
 			$arA[$k]['defn_tooltip'] = preg_replace('/&[a-z]+;/', ' ', $arA[$k]['defn_tooltip']);
-			$arA[$k]['defn_tooltip'] = mb_substr(trim($arA[$k]['defn_tooltip']), 0, 128, $sys['internal_encoding']);
-			$arA[$k]['defn_tooltip'] = htmlspecialchars($arA[$k]['defn_tooltip'], ENT_QUOTES, $sys['internal_encoding']);
+			$arA[$k]['defn_tooltip'] = mb_substr(trim($arA[$k]['defn_tooltip']), 0, 128);
+			$arA[$k]['defn_tooltip'] = htmlspecialchars($arA[$k]['defn_tooltip'], ENT_QUOTES, 'UTF-8');
 		}
 		if (!empty($arDuplicates[$k]))
 		{

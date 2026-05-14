@@ -104,7 +104,7 @@ function gw_search ( $q, $ar_dict_ids, $a_search_params )
 	if ( GW_IS_BROWSE_ADMIN )
 	{
 		$page_index = $sys['page_admin'];
-		$a_keywords = text2keywords( text_normalize( $q ), 1, 25, $sys['internal_encoding'] );
+		$a_keywords = text2keywords( text_normalize( $q ), 1, 25, 'UTF-8' );
 		if ( $q == '' )
 		{
 			$tmp['arCache']['found_total'] = 0;
@@ -120,16 +120,16 @@ function gw_search ( $q, $ar_dict_ids, $a_search_params )
 		if ( isset( $arDictParam['min_srch_length'] ) )
 		{
 			/* Search in single dictionary */
-			$a_keywords = text2keywords( text_normalize( $q ), $arDictParam['min_srch_length'], 25, $sys['internal_encoding'] );
+			$a_keywords = text2keywords( text_normalize( $q ), $arDictParam['min_srch_length'], 25, 'UTF-8' );
 		}
 		else
 		{
 			/* Search in multiple dictionaries */
-			$a_keywords = text2keywords( text_normalize( $q ), 1, 25, $sys['internal_encoding'] );
+			$a_keywords = text2keywords( text_normalize( $q ), 1, 25, 'UTF-8' );
 			$arDictParam['min_srch_length'] = 1;
 		}
 		/* Check for empty queries */
-		if ( mb_strlen( str_replace( '*', '', $q ), $sys['internal_encoding'] ) < $arDictParam['min_srch_length'] )
+		if ( mb_strlen( str_replace( '*', '', $q ) ) < $arDictParam['min_srch_length'] )
 		{
 			$strA[0] = $oL->m( 'error' );
 			return $strA;
@@ -456,7 +456,7 @@ function gw_search ( $q, $ar_dict_ids, $a_search_params )
 					}
 					/* 18 July 2007: Enable auto-asterisks for Chinese characters */
 					/* 06 May 2008: Enable auto-asterisks for Japanese and Korean characters */
-					if ( mb_strlen( $v, $sys['internal_encoding'] ) == 1 && function_exists( 'mb_encode_numericentity' ) )
+					if ( mb_strlen( $v ) == 1 && function_exists( 'mb_encode_numericentity' ) )
 					{
 						$v_numeric = $v;
 						/* Hiragana, Katakana, Bopomofo */
@@ -900,11 +900,11 @@ function gw_search_results ( $id_srch, $p, $id_dict = 0 )
 			/* highlighted link from search results */
 			if ( trim( $v1['defn'] ) == '' )
 			{
-				$oTpl->tmp['d']['search_item'][$k1]['v:term'] = text_highlight( $v1['term_text'], $arSql['q'], $sys['internal_encoding'] );
+				$oTpl->tmp['d']['search_item'][$k1]['v:term'] = text_highlight( $v1['term_text'], $arSql['q'], 'UTF-8' );
 			}
 			else
 			{
-				$oTpl->tmp['d']['search_item'][$k1]['v:term'] = $oHtml->a( $v1['href'], text_highlight( $v1['term_text'], $arSql['q'], $sys['internal_encoding'] ) );
+				$oTpl->tmp['d']['search_item'][$k1]['v:term'] = $oHtml->a( $v1['href'], text_highlight( $v1['term_text'], $arSql['q'], 'UTF-8' ) );
 			}
 			/* links to edit and remove term */
 			/* not in use */
@@ -918,7 +918,7 @@ function gw_search_results ( $id_srch, $p, $id_dict = 0 )
 								. '&tid=' . $v1['t_id'], $oL->m( '3_remove' ) );
 			}
 		}
-		$oTpl->tmp['d']['search_item'][$k1]['v:defn'] = text_highlight( $v1['defn'], $arSql['q'], $sys['internal_encoding'] );
+		$oTpl->tmp['d']['search_item'][$k1]['v:defn'] = text_highlight( $v1['defn'], $arSql['q'], 'UTF-8' );
 		$cnt++;
 	}
 	$oTpl->addVal( 'v:cnt_term_start', (($p - 1) * $arDictParam['page_limit_search']) + 1 );

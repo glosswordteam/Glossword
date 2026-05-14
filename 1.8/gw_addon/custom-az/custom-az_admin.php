@@ -106,7 +106,7 @@ class gw_addon_custom_az_admin extends gw_addon
         $o_form->Set('formbordercolorL', $this->ar_theme['color_1']);
         $o_form->Set('align_buttons', $this->sys['css_align_right']);
         $o_form->Set('formwidth', '100%');
-        $o_form->Set('charset', $this->sys['internal_encoding']);
+        $o_form->Set('charset', 'UTF-8');
 
         if (($action == GW_A_EDIT) && ($tid > 1)) {
             $o_form->isButtonDel = 1;
@@ -200,7 +200,7 @@ class gw_addon_custom_az_admin extends gw_addon
         $oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
         $oForm->Set('align_buttons', $this->sys['css_align_right']);
         $oForm->Set('formwidth', '100%');
-        $oForm->Set('charset', $this->sys['internal_encoding']);
+        $oForm->Set('charset', 'UTF-8');
         if ($this->sys['is_upload']) {
             $oForm->Set('enctype', 'multipart/form-data');
         }
@@ -293,7 +293,7 @@ class gw_addon_custom_az_admin extends gw_addon
         $oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
         $oForm->Set('align_buttons', $this->sys['css_align_right']);
         $oForm->Set('formwidth', '100%');
-        $oForm->Set('charset', $this->sys['internal_encoding']);
+        $oForm->Set('charset', 'UTF-8');
 
         $ar_req = array_flip($ar_req);
         /* mark fields as "Required" and display error message */

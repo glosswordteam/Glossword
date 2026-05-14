@@ -111,7 +111,7 @@ function gw_import_xml()
 		/*
 		if (preg_match("/^([\s])*<line/", $gw_this['vars']['arPost']['xml']))
 		{
-			$gw_this['vars']['arPost']['xml'] = '<'.'?xml version="1.0" encoding="'.$sys['internal_encoding'].'"'.'?>' .
+			$gw_this['vars']['arPost']['xml'] = '<'.'?xml version="1.0" encoding="'.'UTF-8'.'"'.'?>' .
 						 '<glossword>' . CRLF . $gw_this['vars']['arPost']['xml'] . '</glossword>';
 		}
 		*/
@@ -414,7 +414,7 @@ function gw_import_xml()
 								break;
 							}
 							/* Compare using keywords */
-							$ar_kw_existent_term = text2keywords( text_normalize($arV['term']), 1, 25, $sys['internal_encoding'] );
+							$ar_kw_existent_term = text2keywords( text_normalize($arV['term']), 1, 25, 'UTF-8' );
 							sort($ar_keywords[1]);
 							sort($ar_kw_existent_term);
 							/* Keywords from imported Term ID and from existent Term ID are the same */
@@ -447,9 +447,9 @@ function gw_import_xml()
 					$str_term_src_uc = $oCase->uc( $str_term_src );
 					$qT['term_order'] = $str_term_src_uc;
 					$qT['term_a'] = $qT['term_b'] = $qT['term_c'] = $qT['term_d'] = $qT['term_e'] = $qT['term_f'] = 0;
-					$qT['term_3'] = ($qT['term_3'] == '') ? mb_substr($str_term_src_uc, 2, 1, $sys['internal_encoding']) : $qT['term_3'];
-					$qT['term_2'] = ($qT['term_2'] == '') ? mb_substr($str_term_src_uc, 1, 1, $sys['internal_encoding']) : $qT['term_2'];
-					$qT['term_1'] = ($qT['term_1'] == '') ? mb_substr($str_term_src_uc, 0, 1, $sys['internal_encoding']) : $qT['term_1'];
+					$qT['term_3'] = ($qT['term_3'] == '') ? mb_substr($str_term_src_uc, 2, 1) : $qT['term_3'];
+					$qT['term_2'] = ($qT['term_2'] == '') ? mb_substr($str_term_src_uc, 1, 1) : $qT['term_2'];
+					$qT['term_1'] = ($qT['term_1'] == '') ? mb_substr($str_term_src_uc, 0, 1) : $qT['term_1'];
 					/* 1.8.7 */
 					$ar_field_names = array('a','b','c','d','e','f');
 					preg_match_all("/./u", $str_term_src_uc, $ar_letters);
@@ -526,7 +526,7 @@ function gw_import_xml()
 			if (isset($ar_keywords_raw[$fV[0]]))
 			{
 				$str_keywords_raw = implode(' ', $ar_keywords_raw[$fV[0]]);
-				$ar_keywords[$fK] = text2keywords( text_normalize($str_keywords_raw), $arDictParam['min_srch_length'], 25, $sys['internal_encoding'] );
+				$ar_keywords[$fK] = text2keywords( text_normalize($str_keywords_raw), $arDictParam['min_srch_length'], 25, 'UTF-8' );
 				/* Remove stopwords from parsed strings only (others are empty) */
 				$ar_keywords[$fK] = gw_array_exclude($ar_keywords[$fK], $arStop);
 				unset($ar_keywords_raw[$fV[0]]);
@@ -921,7 +921,7 @@ function gw_import_csv()
 			$v2 = str_replace(']]>', '', $v2);
 			/* Get maximum search length per field */
 			$int_min_length = (isset($fV[2]) && ($fV[2] != 'auto') && ($fV[2] != '')) ? $fV[2] : $arDictParam['min_srch_length'];
-			$ar_keywords[$uid][$id_field] = text2keywords( text_normalize($v2), $arDictParam['min_srch_length'], 25, $sys['internal_encoding'] );
+			$ar_keywords[$uid][$id_field] = text2keywords( text_normalize($v2), $arDictParam['min_srch_length'], 25, 'UTF-8' );
 			/* Remove stopwords from parsed strings only (others are empty) */
 			$ar_keywords[$uid][$id_field] = gw_array_exclude( $ar_keywords[$uid][$id_field], $arStop);
 			if (empty($ar_keywords[$uid][$id_field]))
@@ -1014,7 +1014,7 @@ function gw_import_csv()
 					$is_term_exists = 1;
 					break;
 				}
-				$ar_kw_existent_term = text2keywords( $oCase->nc($arV['term']), 1, 25, $sys['internal_encoding'] );
+				$ar_kw_existent_term = text2keywords( $oCase->nc($arV['term']), 1, 25, 'UTF-8' );
 				sort($ar_keywords[$uid][1]);
 				sort($ar_kw_existent_term);
 				if (implode('', $ar_keywords[$uid][1]) == implode('', $ar_kw_existent_term))
@@ -1044,9 +1044,9 @@ function gw_import_csv()
 		$str_term_src_uc = $oCase->uc( $str_term_src );
 		$qT['term_order'] = $str_term_src_uc;
 		$qT['term_a'] = $qT['term_b'] = $qT['term_c'] = $qT['term_d'] = $qT['term_e'] = $qT['term_f'] = 0;
-		$qT['term_3'] = ($arData[$uid]['term_3'] == '') ? mb_substr($str_term_src_uc, 2, 1, $sys['internal_encoding']) : $arData[$uid]['term_3'];
-		$qT['term_2'] = ($arData[$uid]['term_2'] == '') ? mb_substr($str_term_src_uc, 1, 1, $sys['internal_encoding']) : $arData[$uid]['term_2'];
-		$qT['term_1'] = ($arData[$uid]['term_1'] == '') ? mb_substr($str_term_src_uc, 0, 1, $sys['internal_encoding']) : $arData[$uid]['term_1'];
+		$qT['term_3'] = ($arData[$uid]['term_3'] == '') ? mb_substr($str_term_src_uc, 2, 1) : $arData[$uid]['term_3'];
+		$qT['term_2'] = ($arData[$uid]['term_2'] == '') ? mb_substr($str_term_src_uc, 1, 1) : $arData[$uid]['term_2'];
+		$qT['term_1'] = ($arData[$uid]['term_1'] == '') ? mb_substr($str_term_src_uc, 0, 1) : $arData[$uid]['term_1'];
 
 		/* 24 apr 2008: Even better URI. Added transliteration. */
 		$qT['term_uri'] = ($arData[$uid]['term_uri'] == '') ? $qT['id'].'-'.$oCase->translit( $oCase->lc($str_term_src)) : $arData[$uid]['term_uri'];
@@ -1203,7 +1203,7 @@ function getFormImport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 	$oForm->Set('formbordercolor', $ar_theme['color_4']);
 	$oForm->Set('formbordercolorL',$ar_theme['color_1']);
 	$oForm->Set('align_buttons',   $sys['css_align_right']);
-	$oForm->Set('charset', $sys['internal_encoding']);
+	$oForm->Set('charset', 'UTF-8');
 	// Upload xml-file
 	if ($sys['is_upload']) { $oForm->Set('enctype', 'multipart/form-data'); }
 	## ----------------------------------------------------

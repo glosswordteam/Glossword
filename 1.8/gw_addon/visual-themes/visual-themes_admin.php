@@ -90,7 +90,7 @@ class gw_addon_visual_themes_admin extends gw_addon
         $oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
         $oForm->Set('align_buttons', $this->sys['css_align_right']);
         $oForm->Set('formwidth', '100%');
-        $oForm->Set('charset', $this->sys['internal_encoding']);
+        $oForm->Set('charset', 'UTF-8');
         $ar_req = array_flip($ar_req);
         /* mark fields as "Required" and display error message */
         foreach ((is_array($vars) ? $vars : []) as $k => $v) {
@@ -170,7 +170,7 @@ class gw_addon_visual_themes_admin extends gw_addon
         $oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
         $oForm->Set('align_buttons', $this->sys['css_align_right']);
         $oForm->Set('formwidth', '100%');
-        $oForm->Set('charset', $this->sys['internal_encoding']);
+        $oForm->Set('charset', 'UTF-8');
         $ar_req = array_flip($ar_req);
         /* mark fields as "Required" and display error message */
         foreach ((is_array($vars) ? $vars : []) as $k => $v) {
@@ -345,7 +345,7 @@ function switch2edit(id)
         $oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
         $oForm->Set('align_buttons', $this->sys['css_align_right']);
         $oForm->Set('formwidth', '100%');
-        $oForm->Set('charset', $this->sys['internal_encoding']);
+        $oForm->Set('charset', 'UTF-8');
         /* */
         $str_form .= gw_get_form_title_nav(
             $this->oL->m('3_export'),
@@ -409,7 +409,7 @@ function switch2edit(id)
         $oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
         $oForm->Set('align_buttons', $this->sys['css_align_right']);
         $oForm->Set('formwidth', '100%');
-        $oForm->Set('charset', $this->sys['internal_encoding']);
+        $oForm->Set('charset', 'UTF-8');
         if ($this->sys['is_upload']) {
             $oForm->Set('enctype', 'multipart/form-data');
         }

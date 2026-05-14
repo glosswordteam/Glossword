@@ -37,7 +37,7 @@ function getFormCsv($vars, $runtime = 0, $arBroken = [], $arReq = [])
     $oForm->formbgcolor = $ar_theme['color_2'];
     $oForm->formbordercolor = $ar_theme['color_4'];
     $oForm->formbordercolorL = $ar_theme['color_1'];
-    $oForm->Set('charset', $sys['internal_encoding']);
+    $oForm->Set('charset', 'UTF-8');
     $oForm->arLtr = ['arPost[split]'];
     // reverse array keys <-- values;
     $arReq = array_flip($arReq);

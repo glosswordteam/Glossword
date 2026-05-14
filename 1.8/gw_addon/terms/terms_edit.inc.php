@@ -243,7 +243,7 @@ if ($this->gw_this['vars']['w1'] == 'viewhistory') {
         /* */
         $arV['date_modified'] += ($this->oSess->user_get_time_seconds());
         $this->str .= '<td class="actions-third">' . $str_edit . '</td>';
-        $this->str .= '<td class="' . $class_color . 'termpreview">' . $arV['term'] . '<div class="xq">' . htmlspecialchars(mb_substr($arV['defn'], 0, 255, $this->sys['internal_encoding'])) . '</div></td>';
+        $this->str .= '<td class="' . $class_color . 'termpreview">' . $arV['term'] . '<div class="xq">' . htmlspecialchars(mb_substr($arV['defn'], 0, 255)) . '</div></td>';
         $this->str .= '<td class="xq" style="white-space:nowrap">';
         $this->str .= date_extract_int($arV['date_modified'], '%H:%i:%s ') . (date_extract_int($arV['date_modified'], '%d') / 1) . date_extract_int($arV['date_modified'], '&#160;%F&#160;%Y');
         $this->oHtml->setTag('a', 'class', 'ext');

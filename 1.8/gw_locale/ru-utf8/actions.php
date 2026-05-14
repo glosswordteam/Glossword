@@ -16,7 +16,7 @@
  *  Translation created by:
  *      - Dmitry N. Shilnikov <team at glossword.biz>
  */
-$lang['1362'] = 'Мои установки';
+$lang['1362'] = 'Мой профиль';
 $lang['1305'] = 'Очистить историю изменений';
 $lang['1295'] = 'Откат';
 $lang['1284'] = 'Просмотреть ключевые слова';

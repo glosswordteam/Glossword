@@ -125,7 +125,7 @@ class gw_addon_terms_admin extends gw_addon
         $oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
         $oForm->Set('align_buttons', $this->sys['css_align_right']);
         $oForm->Set('formwidth', '100%');
-        $oForm->Set('charset', $this->sys['internal_encoding']);
+        $oForm->Set('charset', 'UTF-8');
         /* */
         $str_form .= gw_get_form_title_nav($this->oL->m('3_export'), '<span style="float:right">' . $oForm->get_button('submit') . '</span>');
 
@@ -203,7 +203,7 @@ class gw_addon_terms_admin extends gw_addon
         $oForm->Set('formbordercolor', $this->ar_theme['color_4']);
         $oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
         $oForm->Set('align_buttons', $this->sys['css_align_right']);
-        $oForm->Set('charset', $this->sys['internal_encoding']);
+        $oForm->Set('charset', 'UTF-8');
         $arDictParam['is_htmled'] = $this->oSess->user_get('is_htmled');
         /* Do not allow to edit a term which is scheduled for deletion */
         if ($vars['is_active'] == 3) {

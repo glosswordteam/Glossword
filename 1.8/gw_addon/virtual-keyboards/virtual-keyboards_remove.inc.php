@@ -16,7 +16,6 @@ if (!defined('IN_GW')) {
 }
 
 /* Included from $oAddonAdm->alpha(); */
-
 $ar_query = [];
 
 if (!$this->gw_this['vars']['isConfirm']) {
@@ -28,14 +27,14 @@ $target_id = (int)$this->gw_this['vars']['tid'];
 
 /* Remove from profiles */
 $ar_query[] = gw_sql_delete(
-    $this->sys['tbl_prefix'] . 'virtual_keyboard',
+    gw_get_tbl_name('virtual_keyboard'),
     ['id_profile' => $target_id]
 );
 
 /* Replace with the default profile */
 $ar_query[] = gw_sql_update(
     ['id_vkbd' => 0],
-    $this->sys['tbl_prefix'] . 'dict',
+    gw_get_tbl_name('dict'),
     '`id_vkbd` = ' . $target_id
 );
 

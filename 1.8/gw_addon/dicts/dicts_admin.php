@@ -62,6 +62,8 @@ class gw_addon_dicts_admin extends gw_addon
         $v_class_1 = 'td1';
         $v_class_2 = 'td2';
         $v_td1_width = '25%';
+        $ar_req_msg = [];
+        $ar_broken_msg = [];
 
         $oForm = new gwForms();
         $oForm->Set('action', $this->sys['page_admin']);
@@ -226,10 +228,7 @@ class gw_addon_dicts_admin extends gw_addon
             /* Shortcut to the list of topics */
             if ($this->oSess->is('is-topics')) {
                 $edit_url = $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, GW_T_TOPICS);
-                $str_form .= ' <span class="actions-third">' . $this->oHtml->a(
-                        $edit_url,
-                        $this->oL->m('3_edit')
-                    ) . '</span>';
+                $str_form .= ' <span class="actions-third">' . $this->oHtml->a($edit_url, $this->oL->m('3_edit')) . '</span>';
             }
             $str_form .= '</td>' .
                 '</tr>';
@@ -242,8 +241,6 @@ class gw_addon_dicts_admin extends gw_addon
              * -----------------------------------------------------------------------------
              */
             $str_form .= gw_get_form_title_nav($this->oL->m('1136'), '');
-            $objCells = new htmlRenderCells();
-            $objCells->tClass = '';
             $oForm->setTag('select', 'style', '');
             $str_form .= '<fieldset class="admform"><legend class="xq">&#160;</legend>';
             $str_form .= '<table class="gw2TableFieldset" width="100%">';
@@ -280,15 +277,8 @@ class gw_addon_dicts_admin extends gw_addon
                     $ar_custom_az
                 );
             if ($this->oSess->is('is-sys-settings')) {
-                $edit_url = $this->oUrlBuilder->build_admin_url(
-                    GW_A_BROWSE,
-                    GW_T_CUSTOM_AZ,
-                    [GW_TARGET_ID => $vars['id_custom_az']]
-                );
-                $str_form .= ' <span class="actions-third">' . $this->oHtml->a(
-                        $edit_url,
-                        $this->oL->m('3_edit')
-                    ) . '</span>';
+                $edit_url = $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, GW_T_CUSTOM_AZ, [GW_TARGET_ID => $vars['id_custom_az']]);
+                $str_form .= ' <span class="actions-third">' . $this->oHtml->a($edit_url, $this->oL->m('3_edit')) . '</span>';
             }
             $str_form .= '</td>' .
                 '</tr>';
@@ -304,13 +294,9 @@ class gw_addon_dicts_admin extends gw_addon
                 '<td class="td2 gray">' . $oForm->field('select', 'arPost[id_vkbd]', $vars['id_vkbd'], 0, $ar_vkbd);
 
             if ($this->oSess->is('is-sys-settings')) {
-                $edit_url = $this->oUrlBuilder->build_admin_url(
-                    GW_A_BROWSE,
-                    GW_T_VIRTUAL_KEYBOARD,
-                    [GW_TARGET_ID => $vars['id_vkbd']]
-                );
+                $edit_url = $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, GW_T_VIRTUAL_KEYBOARD, [GW_TARGET_ID => $vars['id_vkbd']]);
+                $str_form .= ' <span class="actions-third">' . $this->oHtml->a($edit_url, $this->oL->m('3_edit')) . '</span>';
             }
-            $str_form .= ' <span class="actions-third">' . $this->oHtml->a($edit_url, $this->oL->m('3_edit')) . '</span>';
 
             $str_form .= '</td>'
                 . '</tr>';
@@ -416,22 +402,18 @@ class gw_addon_dicts_admin extends gw_addon
             foreach ($ar_page_options as $fieldname => $caption) {
                 $ar_page_options_cell[] = '<table cellspacing="0" cellpadding="0" border="0" width="100%">' .
                     '<tbody><tr style="vertical-align:middle" class="xt">' .
-                    '<td class="td1" style="width:25%">' . $oForm->field(
-                        'checkbox',
-                        'arPost[' . $fieldname . ']',
-                        $vars[$fieldname]
-                    ) . '</td>' .
-                    '<td><label for="' . $oForm->text_field2id('arPost[' . $fieldname . ']') . '">' . $this->oL->m(
-                        $caption
-                    ) . '</label></td>' .
+                    '<td class="td1" style="width:25%">' . $oForm->field('checkbox', 'arPost[' . $fieldname . ']', $vars[$fieldname]) . '</td>' .
+                    '<td><label for="' . $oForm->text_field2id('arPost[' . $fieldname . ']') . '">' . $this->oL->m($caption) . '</label></td>' .
                     '</tr></tbody>' .
                     '</table>';
             }
-            $objCells->X = 3;
-            $objCells->Y = 99;
+            $objCells = new htmlRenderCells();
+            $objCells->x = 3;
+            $objCells->x = 99;
             $objCells->ar = $ar_page_options_cell;
-            $objCells->tClass = 'table-cells';
+            $objCells->t_class = 'table-cells';
             $str_form .= $objCells->RenderCells();
+
             $str_form .= '</td>';
             $str_form .= '</tr>';
             $str_form .= '</tbody></table>';
@@ -461,11 +443,12 @@ class gw_addon_dicts_admin extends gw_addon
                     '</tr></tbody>' .
                     '</table>';
             }
-            $objCells->X = 3;
-            $objCells->Y = 99;
+            $objCells->x = 3;
+            $objCells->y = 99;
             $objCells->ar = $arFieldsStr;
-            $objCells->tClass = 'table-cells';
+            $objCells->t_class = 'table-cells';
             $str_form .= $objCells->RenderCells();
+
             $str_form .= '</td></tr></tbody></table>';
             $str_form .= '</fieldset>';
 

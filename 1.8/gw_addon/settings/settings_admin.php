@@ -60,7 +60,7 @@ class gw_addon_settings_admin extends gw_addon
 		$oForm->Set('formbordercolor', $this->ar_theme['color_4']);
 		$oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
 		$oForm->Set('align_buttons', $this->sys['css_align_right']);
-		$oForm->Set('charset', $this->sys['internal_encoding']);
+		$oForm->Set('charset', 'UTF-8');
 		$oForm->Set('method', 'post');
 		$oForm->arLtr = array('arPost[y_email]', 'arPost[locale_name]', 'arPost[visualtheme]','arPost[path_log]'
 		);
@@ -349,7 +349,7 @@ class gw_addon_settings_admin extends gw_addon
 		$oForm->Set('formbordercolor', $this->ar_theme['color_4']);
 		$oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
 		$oForm->Set('align_buttons', $this->sys['css_align_right']);
-		$oForm->Set('charset', $this->sys['internal_encoding']);
+		$oForm->Set('charset', 'UTF-8');
 
 		$trClass = 'xt';
 		$str_form = '';
@@ -444,7 +444,7 @@ class gw_addon_settings_admin extends gw_addon
 		$oForm->Set('formbordercolor', $this->ar_theme['color_4']);
 		$oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
 		$oForm->Set('align_buttons', $this->sys['css_align_right']);
-		$oForm->Set('charset', $this->sys['internal_encoding']);
+		$oForm->Set('charset', 'UTF-8');
 
 		$trClass = 'xt';
 		$str_form = '';

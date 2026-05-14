@@ -19,6 +19,7 @@ if (!defined('IN_GW')) {
 
 $isPause = 0;
 $isDebugQ = 0;
+$table_virtual_keyboard = gw_get_tbl_name('virtual_keyboard');
 
 /* Page ID is not defined */
 if (!$this->gw_this['vars'][GW_TARGET_ID]) {
@@ -133,14 +134,14 @@ if ($this->gw_this['vars']['post'] == '') {
         if ($arPost['is_index_page']) {
             $ar_query[] = gw_sql_update(
                 ['is_index_page' => '0'],
-                $this->sys['tbl_prefix'] . 'virtual_keyboard',
+                $table_virtual_keyboard,
                 'is_index_page = \'1\' AND id_profile != \'' . $this->gw_this['vars'][GW_TARGET_ID] . '\''
             );
         }
 
         $ar_query[] = gw_sql_update(
             $q1,
-            $this->sys['tbl_prefix'] . 'virtual_keyboard',
+            $table_virtual_keyboard,
             'id_profile = "' . $this->gw_this['vars'][GW_TARGET_ID] . '"'
         );
 

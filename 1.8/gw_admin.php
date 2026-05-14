@@ -222,7 +222,7 @@ include_once($sys['path_include'] . '/class.confirm.php');
 /* Uppercase / lowercase */
 $oCase = new gwv_casemap([1, 2, 3, 4, 5, 6, 7, 8], [1, 2, 3, 4, 5]);
 $oCase->set_replace_sp(['--' => ' ', '-' => ' ', '[' => '[', ']' => ']']);
-$oCase->encoding = $sys['internal_encoding'];
+$oCase->encoding = 'UTF-8';
 $oCase->is_use_mbstring = 1;
 
 //

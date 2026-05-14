@@ -196,7 +196,7 @@ function gw_login_form($ar_vars, $ar_broken = [], $ar_req = [])
     $oForm->action = $sys['page_login'];
     $oForm->submitok = $oL->m('3_login');
     $oForm->isButtonCancel = 0;
-    $oForm->Set('charset', $sys['internal_encoding']);
+    $oForm->Set('charset', 'UTF-8');
 
     $strForm = '';
     $v_class_1 = 'td1';

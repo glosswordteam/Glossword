@@ -1,61 +1,75 @@
 <?php
-/**********************************************************
-*  HTML tools
-*  =============================
-*  Copyright (c) 2002 Dmitry Shilnikov <dev at glossword dot info>
-*
-*  $Id: class.rendercells.php 84 2007-06-19 13:01:21Z yrtimd $
-*
-*  This program is free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  This program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with this program; if not, write to the Free Software
-*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*
-*
-* @author   Dmitry Shilnikov <dev at glossword dot info>
-*
-* Usage:
-*   $class = new htmlRenderCells();
-*   $class->ar = $somearray; // $ar[] = 'cell 1';
-*   $class->X = $x;
-*   $class->Y = $y;
-*   print $class->RenderCells();
-*
-*/
+
+/**
+ * Glossword - glossary compiler (http://glossword.biz/)
+ * © 2008-2026 Glossword.biz team <team at glossword dot biz>
+ * © 2002-2008 Dmitry N. Shilnikov
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
+ */
+
+/**
+ * HTML table grid renderer
+ * Renders an array of items into an HTML table grid with configurable columns/rows.
+ *
+ * Usage:
+ *   $grid = new HtmlRenderCells();
+ *   $grid->ar = $some_array;
+ *   $grid->x = $columns;
+ *   $grid->y = $rows_per_page;
+ *   echo $grid->render_cells();
+ */
 
 class htmlRenderCells
 {
-    public $cellAlign = "";
-    public $cellClass = "";
-    public $tBorder = 0;
-    public $X = 1;
-    public $Y = 99;
-    public $ar = array();
-    public $totalItems = '';
-    public $page = 1;
-    public $tClass = '';
+    /** @var string Horizontal alignment for table rows */
+    public $cell_align = '';
 
-    public function RowsCols($numCols, $numRows, $col, $row, $pages=0)
+    /** @var string CSS class for table rows */
+    public $cell_class = '';
+
+    /** @var int Table border width */
+    public $t_border = 0;
+
+    /** @var int Number of columns */
+    public $x = 1;
+
+    /** @var int Max number of rows per page */
+    public $y = 99;
+
+    /** @var array Items to render */
+    public $ar = [];
+
+    /** @var int Current page number (1-based) */
+    public $page = 1;
+
+    /** @var string CSS class for the table element */
+    public $t_class = '';
+
+    /**
+     * Calculates the flat array index for a cell at given grid position.
+     *
+     * @param int $num_cols  Number of columns in the grid
+     * @param int $num_rows  Number of rows in the grid
+     * @param int $col       Current column (1-based)
+     * @param int $row       Current row (1-based)
+     * @param int $pages     Current page offset (1-based)
+     * @return int           Zero-based index into the items array
+     */
+    private function _rows_cols($num_cols, $num_rows, $col, $row, $pages = 0)
     {
-        $numStart = $num = "0";
-        for ($i=1; $i <= $numRows; $i++)
-        {
-            if ($i == $row)
-            {
-                $numStart = ($i * $numCols) + $col - $numCols;
+        $num_start = 0;
+        for ($i = 1; $i <= $num_rows; $i++) {
+            if ($i == $row) {
+                $num_start = ($i * $num_cols) + $col - $num_cols;
             }
         }
-        $numStart = $numStart + ($numCols*$numRows) * $pages - ($numCols*$numRows);
-        return $numStart;
+        $num_start = $num_start + ($num_cols * $num_rows) * $pages - ($num_cols * $num_rows);
+        return $num_start;
     }
 
 public function RenderCells()
@@ -111,7 +125,7 @@ public function RenderCells()
         // render <td>
         for($ThumbRows = 1; $ThumbRows <= $this->X; $ThumbRows++)
         {
-            $NumberOfCell = ( $this->RowsCols($this->Y, $this->X, $ThumbCols, $ThumbRows, 1) - 1 );
+            $NumberOfCell = ( $this->_rows_cols($this->Y, $this->X, $ThumbCols, $ThumbRows, 1) - 1 );
             $str .= '<td>';
             $str .= isset($this->ar[$NumberOfCell]) ? $this->ar[$NumberOfCell] : '&#160;';
             $str.= '</td>';

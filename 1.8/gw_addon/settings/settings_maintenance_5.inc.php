@@ -34,7 +34,7 @@ function gw_dict_list_cnt($vars)
     $oForm->Set('formbordercolor', $ar_theme['color_4']);
     $oForm->Set('formbordercolorL', $ar_theme['color_1']);
     $oForm->Set('align_buttons', $sys['css_align_right']);
-    $oForm->Set('charset', $sys['internal_encoding']);
+    $oForm->Set('charset', 'UTF-8');
 
     $strForm = '';
     $strForm .= gw_get_form_title_nav($oL->m(1005), '<span style="float:right">' . $oForm->get_button('submit') . '</span>');

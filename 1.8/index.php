@@ -444,7 +444,7 @@ $oL->applyCustomPhrases('custom', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['
 /* Uppercase / lowercase */
 $oCase = new gwv_casemap(array(1,2,3,4,5,6,7,8), array(1));
 $oCase->set_replace_sp(array('--'=>' ', '-' => ' ','[['=>'[',']]'=>']'));
-$oCase->encoding = $sys['internal_encoding'];
+$oCase->encoding = 'UTF-8';
 // ---------------------------------------------------------
 // Search engine, last modified 1 aug 2003
 // ---------------------------------------------------------
@@ -614,7 +614,7 @@ if ($sys['is_use_xhtml'] && !$sys['is_debug_output'])
 $oTpl->addVal( 'v:content_type', $sys['content_type'] );
 /* Last header */
 $oHdr->add('Content-Type: '.$sys['content_type'].'; charset='.$oL->languagelist(LOCALE_LANG_ENCODING));
-#$oHdr->add('Content-Type: '.$sys['content_type'].'; charset='.$sys['internal_encoding']);
+#$oHdr->add('Content-Type: '.$sys['content_type'].'; charset='.'UTF-8');
 /* ------------------------------------------------------- */
 /* Debug information */
 if (GW_DEBUG)

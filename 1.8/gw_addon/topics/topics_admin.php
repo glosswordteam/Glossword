@@ -56,7 +56,7 @@ class gw_addon_topic_admin extends gw_addon
         $oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
         $oForm->Set('align_buttons', $this->sys['css_align_right']);
         $oForm->Set('formwidth', '100%');
-        $oForm->Set('charset', $this->sys['internal_encoding']);
+        $oForm->Set('charset', 'UTF-8');
         if ($this->gw_this['vars'][GW_ACTION] == GW_A_EDIT) {
             $oForm->isButtonDel = 1;
             $oForm->Set('submitdelname', 'remove');
@@ -186,7 +186,7 @@ class gw_addon_topic_admin extends gw_addon
         $oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
         $oForm->Set('align_buttons', $this->sys['css_align_right']);
         $oForm->Set('formwidth', '100%');
-        $oForm->Set('charset', $this->sys['internal_encoding']);
+        $oForm->Set('charset', 'UTF-8');
         /* */
         $str_form .= gw_get_form_title_nav($this->oL->m('3_export'), '<span style="float:right">' . $oForm->get_button('submit') . '</span>');
         $str_form .= '<table class="gw2TableFieldset" width="100%">';
@@ -308,7 +308,7 @@ class gw_addon_topic_admin extends gw_addon
         $oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
         $oForm->Set('align_buttons', $this->sys['css_align_right']);
         $oForm->Set('formwidth', '100%');
-        $oForm->Set('charset', $this->sys['internal_encoding']);
+        $oForm->Set('charset', 'UTF-8');
         if ($this->sys['is_upload']) {
             $oForm->Set('enctype', 'multipart/form-data');
         }

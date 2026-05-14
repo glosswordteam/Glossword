@@ -40,7 +40,7 @@ function getFormSql($vars, $runtime = 0, $arBroken = [], $arReq = [])
     $form->Set('formbordercolorL', $ar_theme['color_1']);
     $form->Set('align_buttons', $sys['css_align_right']);
     $form->Set('arLtr', ['arPost[split]']);
-    $form->Set('charset', $sys['internal_encoding']);
+    $form->Set('charset', 'UTF-8');
     ## ----------------------------------------------------
     ##
     // reverse array keys <-- values;

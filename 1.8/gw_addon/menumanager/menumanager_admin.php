@@ -60,7 +60,7 @@ class gw_addon_menumanager_admin extends gw_addon
         $oForm->Set('formbordercolorL', $this->ar_theme['color_1']);
         $oForm->Set('align_buttons', $this->sys['css_align_right']);
         $oForm->Set('formwidth', '100%');
-        $oForm->Set('charset', $this->sys['internal_encoding']);
+        $oForm->Set('charset', 'UTF-8');
         if ($this->gw_this['vars'][GW_ACTION] == 'edit') {
             $oForm->Set('isButtonDel', 1);
         }

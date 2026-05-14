@@ -194,19 +194,19 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
         $str_term_filtered,
         2,
         1,
-        $sys['internal_encoding']
+        'UTF-8'
     ) : $qT['term_3'];
     $qT['term_2'] = ($qT['term_2'] == '') ? mb_substr(
         $str_term_filtered,
         1,
         1,
-        $sys['internal_encoding']
+        'UTF-8'
     ) : $qT['term_2'];
     $qT['term_1'] = ($qT['term_1'] == '') ? mb_substr(
         $str_term_filtered,
         0,
         1,
-        $sys['internal_encoding']
+        'UTF-8'
     ) : $qT['term_1'];
     /* */
     $ar_field_names = ['a', 'b', 'c', 'd', 'e', 'f'];
@@ -290,7 +290,7 @@ function gwAddTerm($arPre, $id_dict, $arStop, $in_term, $is_specialchars, $is_ov
                     gw_text_sql(text_normalize($tmpStr)),
                     $int_min_length,
                     25,
-                    $sys['internal_encoding']
+                    'UTF-8'
                 );
                 /* Remove stopwords from parsed strings only (others are empty) */
                 $arKeywords[$fK] = gw_array_exclude($arKeywords[$fK], $arStop);

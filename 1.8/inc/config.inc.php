@@ -117,9 +117,6 @@ $sys['int_jpeg_compression'] = 51;
 $sys['is_ext_fields'] = 1;
 $sys['id_custom_page_on'] = 5;
 
-/* PHP variables */
-$sys['internal_encoding'] = 'UTF-8';
-
 /* I request you to retain the copyright notice! Ask for copyright removal. */
 $sys['str_branding'] = 'Powered&#160;by <a href="http://glossword.biz/" onclick="window.open(this);return false" title="Freeware dictionary/glossary PHP-script">Glossword</a>&#160;';
 
