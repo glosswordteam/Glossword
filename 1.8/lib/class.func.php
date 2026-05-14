@@ -31,6 +31,12 @@ if (!defined('IN_GW')) {
 class gw_functions
 {
 
+    const UID_CHAR_SET_ALL = 0;
+    const UID_CHAR_SET_NUMBERS = 1;
+    const UID_CHAR_SET_LOWERCASE = 2;
+    const UID_CHAR_SET_UPPERCASE = 3;
+    const UID_CHAR_SET_NUMBERS_LOWERCASE = 4;
+    const UID_CHAR_SET_LOWERCASE_UPPERCASE = 5;
 
     public function js_addslashes($t)
     {
@@ -61,59 +67,51 @@ class gw_functions
     }
 
     /**
-     * Generates a random string using a reduced character set.
+     * Generateы a random readable UID from predefined character groups.
      *
      * Ambiguous characters are excluded to improve readability.
      * Two groups of confusing symbols are removed.
      *
-     * @param int $maxChar Maximum generated string length
-     * @param int $charSet Character set selector:
-     *                     0 = all,
-     *                     1 = numbers,
-     *                     2 = lowercase,
-     *                     3 = uppercase,
-     *                     4 = numbers + lowercase,
-     *                     5 = lowercase + uppercase
-     * @param string $first Prefix for returned string
+     * @param int $max_char Maximum generated string length
+     * @param int $char_set Character set selector:
+     *                      self::UID_CHAR_SET_ALL = all,
+     *                      self::UID_CHAR_SET_NUMBERS = numbers,
+     *                      self::UID_CHAR_SET_LOWERCASE = lowercase,
+     *                      self::UID_CHAR_SET_UPPERCASE = uppercase,
+     *                      self::UID_CHAR_SET_NUMBERS_LOWERCASE = numbers + lowercase,
+     *                      self::UID_CHAR_SET_LOWERCASE_UPPERCASE = lowercase + uppercase
      * @return string Generated string
      */
-    public function text_make_uid($maxChar = 8, $charSet = 0, $first = '')
+    public function text_make_uid($max_char = 8, $char_set = 0)
     {
         // Exclude ambiguous characters.
         // Group 1: 0, 1, l, I
         // Group 2: a, c, e, o, p, x, A, C, E, H, O, K, M, P, X
+
         $result = '';
-        $charsNumbers = '23456789';
-        $charsLower = 'bdfghijkmnqrstuvwyz';
-        $charsUpper = 'QWRYUSDFGJLZVN';
+        $chars_numbers = '23456789';
+        $chars_lower = 'bdfghijkmnqrstuvwyz';
+        $chars_upper = 'QWRYUSDFGJLZVN';
 
-        if ($charSet == 1) {
-            $chars = $charsNumbers;
-        } elseif ($charSet == 2) {
-            $chars = $charsLower;
-        } elseif ($charSet == 3) {
-            $chars = $charsUpper;
-        } elseif ($charSet == 4) {
-            $chars = $charsNumbers . $charsLower;
-        } elseif ($charSet == 5) {
-            $chars = $charsLower . $charsUpper;
+        if ($char_set == self::UID_CHAR_SET_NUMBERS) {
+            $chars = $chars_numbers;
+        } elseif ($char_set == self::UID_CHAR_SET_LOWERCASE) {
+            $chars = $chars_lower;
+        } elseif ($char_set == self::UID_CHAR_SET_UPPERCASE) {
+            $chars = $chars_upper;
+        } elseif ($char_set == self::UID_CHAR_SET_NUMBERS_LOWERCASE) {
+            $chars = $chars_numbers . $chars_lower;
+        } elseif ($char_set == self::UID_CHAR_SET_LOWERCASE_UPPERCASE) {
+            $chars = $chars_lower . $chars_upper;
         } else {
-            $chars = $charsNumbers . $charsLower . $charsUpper;
+            $chars = $chars_numbers . $chars_lower . $chars_upper;
         }
 
-        $charsLength = strlen($chars);
-
-        for ($i = 0; $i < $maxChar; $i++) {
-            $randomIndex = mt_rand(0, $charsLength - 1);
-            $result .= $chars[$randomIndex];
+        while (strlen($result) < $max_char) {
+            $result .= str_shuffle($chars);
         }
 
-        $first = (string)$first;
-        if ($first !== '') {
-            $result = $first . substr($result, 0, strlen($result) - strlen($first));
-        }
-
-        return $result;
+        return substr($result, 0, $max_char);
     }
 
     /**
@@ -400,10 +398,11 @@ class gw_functions
             $s = str_replace(
                 'href="mailto:',
                 'title="mailto:' . $e[1][0] . '" ' .
-                'href="mailto:' . $this->text_make_uid(mt_rand(2, 8), 2) . '@' . $this->text_make_uid(
-                    mt_rand(2, 8),
-                    2
-                ) . '.com" onmouseover="this.href=\''
+                'href="mailto:'
+                . $this->text_make_uid(mt_rand(2, 8), self::UID_CHAR_SET_LOWERCASE)
+                . '@'
+                . $this->text_make_uid(mt_rand(2, 8), self::UID_CHAR_SET_LOWERCASE)
+                . '.com" onmouseover="this.href=\''
                 . $this->mb_wordwrap('mailto:' . strtolower($e[1][0]), mt_rand(2, 4), "'+'", 1)
                 . "'",
                 $s
