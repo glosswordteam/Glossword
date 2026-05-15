@@ -79,7 +79,7 @@ class htmlRenderCells
     {
         $href = "";
         $str = "";
-        $navPagesA = array();
+        $navPagesA = [];
         $linkNext = $linkPrev = $linkCur = "";
         $cellAlign = ($this->cell_align != "") ? ' align="' . $this->cell_align . '"' : '';
         $cellClass = ($this->cell_class != "") ? ' class="' . $this->cell_class . '"' : '';

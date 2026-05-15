@@ -429,7 +429,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	{
 		if (is_array($item))
 		{
-			$escaped_array = array();
+			$escaped_array = [];
 
 			foreach($item as $k=>$v)
 			{
@@ -514,7 +514,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 		if (is_array($values[0]))
 		{
 			$keys = array_keys($values[0]);
-			$ar_sql = array();
+			$ar_sql = [];
 			foreach ($values as $key => $arV)
 			{
 				foreach ($arV as $k => $v)
@@ -547,7 +547,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 * @param	array	the limit clause
 	 * @return	string
 	 */
-    public function _update($table, $values, $where, $orderby = array(), $limit = FALSE)
+    public function _update($table, $values, $where, $orderby = [], $limit = FALSE)
 	{
 		foreach ($values as $key => $val)
 		{
@@ -603,7 +603,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 * @param	string	the limit clause
 	 * @return	string
 	 */
-    public function _delete($table, $where = array(), $like = array(), $limit = FALSE)
+    public function _delete($table, $where = [], $like = [], $limit = FALSE)
 	{
 		$conditions = '';
 

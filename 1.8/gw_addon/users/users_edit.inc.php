@@ -276,7 +276,7 @@ if ($this->gw_this['vars']['post'] == '') {
         }
 
         /* 1.8.10: clear previously assigned settings */
-#		$ar_user['user_settings'] = array();
+#		$ar_user['user_settings'] = [];
         /* Import previously assigned settings */
         $arPost = gw_array_merge_clobber($arSql, $arPost);
 

@@ -46,20 +46,20 @@ if (!defined('IN_GW')) {
 
 class gw_cells_tpl
 {
-    public $int_total = -1;
-    public $int_page = 1;
-    public $X = 1;
-    public $Y = 99;
-    public $arK = array();
-    public $tBorder = 0;
-    public $tSpacing = 1;
-    public $is_odd = 0;
-    public $tPadding = 0;
+    public $int_total  = -1;
+    public $int_page   = 1;
+    public $X          = 1;
+    public $Y          = 99;
+    public $arK        = [];
+    public $tBorder    = 0;
+    public $tSpacing   = 1;
+    public $is_odd     = 0;
+    public $tPadding   = 0;
     public $tAttrClass = '';
-    public $tpl = 'tpl_cells';
-    public $id_theme = 1;
-    public $class_tpl = 'sh_template';
-    public $arVar = array();
+    public $tpl        = 'tpl_cells';
+    public $id_theme   = 1;
+    public $class_tpl  = 'sh_template';
+    public $arVar      = [];
 
     /* */
     public function RowsCols($numCols, $numRows, $col, $row, $pages = 0)
@@ -78,7 +78,7 @@ class gw_cells_tpl
     /* */
     public function get_tmp()
     {
-        $tmp = array();
+        $tmp = [];
         /* */
         $tmp['x']               = $this->X;
         $tmp['y']               = $this->Y;
@@ -127,7 +127,7 @@ class gw_cells_tpl
         }
         $this->arK = array_values( $this->arK );
         /* -------------------------------------------- */
-        $arKeys = empty($this->arK[0]) ? array() : array_keys($this->arK[0]);
+        $arKeys = empty($this->arK[0]) ? [] : array_keys($this->arK[0]);
         $tmp    = $this->get_tmp();
         /* render <tr> */
         $bgcolorclass = 'even';

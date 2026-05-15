@@ -90,7 +90,7 @@ function gw_get_export_filename($filename, $parts_count, $format)
 /**
  *
  */
-function getFormExport($vars, $runtime = 0, $arBroken = array(), $arReq = array())
+function getFormExport($vars, $runtime = 0, $arBroken = [], $arReq = [])
 {
 	global $sys, ${GW_ACTION}, $id, $oL, $arPost, $oFunc, ${GW_SID}, $ar_theme, $gw_this;
 	$strForm = '';
@@ -111,7 +111,7 @@ function getFormExport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 	// reverse array keys <-- values;
 	$arReq = array_flip($arReq);
 	// mark fields as "REQUIRED" and make error messages
-	foreach ((is_array($vars) ? $vars : array()) as $key => $val)
+	foreach ((is_array($vars) ? $vars : []) as $key => $val)
 	{
 		$arReqMsg[$key] = $arBrokenMsg[$key] = '';
 		if (isset($arReq[$key])) { $arReqMsg[$key] = ' <span style="color:#E30"><b>*</b></span>'; }
@@ -195,7 +195,7 @@ function getFormExport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 $oL->applyCustomPhrases('export', $gw_this['vars'][GW_LANG_I] . '-' . $gw_this['vars']['lang_enc']);
 // --------------------------------------------------------
 // Prepare variables
-if ($arPost == '') { $arPost = array(); }
+if ($arPost == '') { $arPost = []; }
 if (!isset($arPost[GW_ACTION])) { $arPost[GW_ACTION] = GW_A_ADD; }
 //
 $is_idadd   = isset($arPost['is_idadd']) ? $arPost['is_idadd'] : 0;

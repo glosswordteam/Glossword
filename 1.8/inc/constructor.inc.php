@@ -878,7 +878,7 @@ switch ( $gw_this['vars']['layout'] )
   $oRender->load_abbr_trns();
   $oTpl->addVal( 'block:randomterm', gw_html_block_small('Randomly choosed term',
   '<span class="xr">'.$gw_this['vars']['arTermRandom']['term'].'</span>'.$oRender->array_to_html($arPre) ) );
-  $gw_this['vars']['arTermRandom'] = $gw_this['vars']['arDictParam'] = array();
+  $gw_this['vars']['arTermRandom'] = $gw_this['vars']['arDictParam'] = [];
   }
  */
 /* Menu with custom pages */

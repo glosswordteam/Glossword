@@ -40,37 +40,37 @@ class gw_html {
 // --------------------------------------------------------
 // Default variables
 
-	/* do parse through `htmlspecialchars' function before to output */
-	public $is_htmlspecialchars = 0;
-	/* :cool: setup custom open tag! */
-	public $tagOpen    = '<';
-	/* :cool: setup custom close tag!*/
-	public $tagClose   = '>';
-	/* default attributes for tags */
-	public $tags = array('a' => array('href' => ''));
-	/* current virtual directory name */
-	public $server_dir = '';
+        /* do parse through `htmlspecialchars' function before to output */
+        public $is_htmlspecialchars = 0;
+        /* :cool: setup custom open tag! */
+        public $tagOpen = '<';
+        /* :cool: setup custom close tag!*/
+        public $tagClose = '>';
+        /* default attributes for tags */
+        public $tags = ['a' => ['href' => '']];
+        /* current virtual directory name */
+        public $server_dir = '';
 
 // --------------------------------------------------------
 // mod_rewrite configuration, for Apache webservers only
 
-	public $ar_except = array('admin');
-	/* Append Session ID */
-	public $id_sess_name = 's';
-	public $id_sess = 0;
-	public $is_append_sid = 0;
-	public $ar_url_append = array();
-	/* Do rebuild URL parameters for <a href="">  */
-	public $is_mod_rewrite = 0;
-	/* The rules to rebuild URL parameters.
-	   rule `array('/a/id/')' will always convert `?a=go&id=1 into `/go/1/'
-	   rule `array('a=view' => '/a/id/')' will convert `?a=view&id=1' into `/view/1/'
-	   only when `a' is `view'. */
-	public $mod_rewrite_rule = array('/a/id/');
-	/* String to add at the end of URL, /a/id/123.xhtml */
-	public $mod_rewrite_suffix = '.xhtml';
-	/* String to add at the end of URL, /a/index.xhtml */
-	public $mod_rewrite_index = 'index.xhtml';
+        public $ar_except = ['admin'];
+        /* Append Session ID */
+        public $id_sess_name  = 's';
+        public $id_sess       = 0;
+        public $is_append_sid = 0;
+        public $ar_url_append = [];
+        /* Do rebuild URL parameters for <a href="">  */
+        public $is_mod_rewrite = 0;
+        /* The rules to rebuild URL parameters.
+           rule `array('/a/id/')' will always convert `?a=go&id=1 into `/go/1/'
+           rule `array('a=view' => '/a/id/')' will convert `?a=view&id=1' into `/view/1/'
+           only when `a' is `view'. */
+        public $mod_rewrite_rule = ['/a/id/'];
+        /* String to add at the end of URL, /a/id/123.xhtml */
+        public $mod_rewrite_suffix = '.xhtml';
+        /* String to add at the end of URL, /a/index.xhtml */
+        public $mod_rewrite_index = 'index.xhtml';
 
 // --------------------------------------------------------
 // Support functions
@@ -98,7 +98,7 @@ class gw_html {
 		}
 		elseif (isset($this->tags[$tag]))
 		{
-			$this->tags[$tag] = array();
+			$this->tags[$tag] = [];
 		}
 	}
 	/* */
@@ -165,7 +165,7 @@ class gw_html {
 			$url = $file .'?'. implode('&', $ar);
 			if (($this->is_mod_rewrite) && !preg_match("/^http/", $url))
 			{
-				$arQ = array();
+				$arQ = [];
 				/* Exception mode */
 				foreach ($this->ar_except as $k => $v)
 				{
@@ -286,7 +286,7 @@ class gw_html {
 	{
 		$url = '';
 		$arRule = explode('/', $str);
-		$arUrl = array();
+		$arUrl = [];
 		foreach ($arRule as $k => $v)
 		{
 			if (isset($arQ[$v]) )
@@ -296,7 +296,7 @@ class gw_html {
 			}
 		}
 		$url .= implode('/', $arUrl);
-		$arRule2 = array();
+		$arRule2 = [];
 		$str_implode = ',';
 		if (strpos( end($arRule), ','))
 		{
@@ -314,7 +314,7 @@ class gw_html {
 			$url .= '/';
 		}
 		$arRule2 = explode($str_implode, end($arRule));
-		$arUrl = array();
+		$arUrl = [];
 		if (sizeof($arRule2) > 1 )
 		{
 			foreach ($arRule2 as $k => $v)
@@ -358,7 +358,7 @@ class gw_html {
 				$url .= '&'.$arParamParts[1];
 			}
 		}
-		$arRule2 = array();
+		$arRule2 = [];
 		$str_split = ' '; /* default rule delimeter */
 		if (strpos( end($arRule), ','))
 		{
@@ -395,7 +395,7 @@ class gw_html {
  * Tags functions
  * ----------------------------------------------------- */
 	/* */
-	public function tag_open($t, $arAttr = array())
+	public function tag_open($t, $arAttr = [])
 	{
 		$t = preg_replace("/[^a-zA-Z0-9_:]/", '', $t);
 		$extras = $this->paramValue($arAttr);

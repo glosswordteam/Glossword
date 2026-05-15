@@ -110,7 +110,7 @@ class gw_render extends gw_htmlforms
 		$this->sys =& $sys;
 		$this->ar_theme =& $ar_theme;
 	}
-	public function tag2field_xml($fieldname, $ar = array())
+	public function tag2field_xml($fieldname, $ar = [])
 	{
 		$fieldname = strtolower($fieldname);
 		$funcname = 'make_xml_' . $fieldname;
@@ -123,7 +123,7 @@ class gw_render extends gw_htmlforms
 			return $this->$funcname($fieldname, $ar);
 		}
 	}
-	public function tag2field_html($fieldname, $ar = array())
+	public function tag2field_html($fieldname, $ar = [])
 	{
 		$fieldname = strtolower($fieldname);
 		$funcname = 'make_html_' . $fieldname;
@@ -134,57 +134,53 @@ class gw_render extends gw_htmlforms
 	}
 
 	//
-	public function make_xml_term($fieldname, $ar = array())
+	public function make_xml_term($fieldname, $ar = [])
 	{
 #		$s = $this->objDom->get_content($this->arEl[$fieldname][0]);
 #		return $s;
 	}
-	public function make_html_term($fieldname, $ar = array())
+	public function make_html_term($fieldname, $ar = [])
 	{
 		return '';
 	}
 	//
-	public function make_xml_trsp($fieldname, $ar = array(), $tag = 'trsp')
+	public function make_xml_trsp($fieldname, $ar = [], $tag = 'trsp')
 	{
 		return $this->make_xml_set_array2textarea($fieldname, $ar, 'trsp');
 	}
 	//
-	public function make_html_trsp($fieldname, $ar = array(), $tag = 'trsp')
-	{
-		$tmp['strxml'] = $tmp['str'] = '';
-		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
-		$split_trsp = $this->ar_theme['split_trsp'];
-		$prepend_trsp = $this->ar_theme['prepend_trsp'];
-		$append_trsp = $this->ar_theme['append_trsp'];
-		// do auto fill
-		if (empty($tmp['arEl']))
-		{
-			$tmp['arEl'][0] = array('value' => '', 'attributes' => array('link' => ''));
-		}
-		$tmp['ar_compiled'] = array();
-		$i = 0;
-		//
-		foreach ($tmp['arEl'] as $elK => $elV)
-		{
-			if ($elV['value'] != '')
-			{
-				$i++;
-				$delimeter = ($i == 1) ? '' : $split_trsp;
-				$tmp['strxml'] .= $delimeter . $elV['value'];
-			}
-		}
-		if ($tmp['strxml'] != '')
-		{
-			$tmp['strxml'] = '<div title="'.$this->oL->m($tag).'" class="gw'.$fieldname.'">' . $prepend_trsp . $tmp['strxml'] . $append_trsp.'</div>';
-		}
-		return $tmp['strxml'];
-		
-	}
-	/* 26 feb 2008: attached files */
-	public function make_html_audio($fieldname, $ar = array(), $tag = 'audio')
+    public function make_html_trsp($fieldname, $ar = [], $tag = 'trsp')
+    {
+        $tmp['strxml'] = $tmp['str'] = '';
+        $tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : [];
+        $split_trsp = $this->ar_theme['split_trsp'];
+        $prepend_trsp = $this->ar_theme['prepend_trsp'];
+        $append_trsp = $this->ar_theme['append_trsp'];
+        // do auto fill
+        if (empty($tmp['arEl'])) {
+            $tmp['arEl'][0] = ['value' => '', 'attributes' => ['link' => '']];
+        }
+        $tmp['ar_compiled'] = [];
+        $i = 0;
+        //
+        foreach ($tmp['arEl'] as $elK => $elV) {
+            if ($elV['value'] != '') {
+                $i++;
+                $delimeter = ($i == 1) ? '' : $split_trsp;
+                $tmp['strxml'] .= $delimeter . $elV['value'];
+            }
+        }
+        if ($tmp['strxml'] != '') {
+            $tmp['strxml'] = '<div title="' . $this->oL->m($tag) . '" class="gw' . $fieldname . '">' . $prepend_trsp . $tmp['strxml'] . $append_trsp . '</div>';
+        }
+        return $tmp['strxml'];
+    }
+
+    /* 26 feb 2008: attached files */
+	public function make_html_audio($fieldname, $ar = [], $tag = 'audio')
 	{
 		$tmp['strhtml'] = $tmp['str'] = '';
-		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
+		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : [];
 		// do auto fill
 		if (empty($tmp['arEl']))
 		{
@@ -207,10 +203,10 @@ class gw_render extends gw_htmlforms
 		}
 		return $tmp['strhtml'];
 	}
-	public function make_xml_audio($fieldname, $ar = array(), $tag = 'audio')
+	public function make_xml_audio($fieldname, $ar = [], $tag = 'audio')
 	{
 		$tmp['strxml'] = $tmp['str'] = '';
-		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
+		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : [];
 		// do auto fill
 		if (empty($tmp['arEl']))
 		{
@@ -236,7 +232,7 @@ class gw_render extends gw_htmlforms
 		return $tmp['strxml'];
 	}
 	/* */
-	public function make_xml_defn($fieldname, $ar = array())
+	public function make_xml_defn($fieldname, $ar = [])
 	{
 		$tmp['strxml'] = '';
 
@@ -287,7 +283,7 @@ class gw_render extends gw_htmlforms
 		}
 		return $tmp['strxml'];
 	}
-	public function make_html_defn($fieldname, $ar = array())
+	public function make_html_defn($fieldname, $ar = [])
 	{
 		$tmp['strhtml'] = $tmp['br'] = '';
 		//
@@ -365,7 +361,7 @@ class gw_render extends gw_htmlforms
 			global $gw_this;
 			$id_term = ($this->arDictParam['is_show_full']) ? $this->Gtmp['tid'] : $gw_this['vars']['id_term'];
 			$arSql = $this->oDb->sqlExec($this->oSqlQ->getQ('get-users-by-term_id', $id_term));
-			$ar_authors = array();
+			$ar_authors = [];
 			foreach ($arSql as $k => $arV)
 			{
 				$ar_authors[] = $this->oHtml->a($this->sys['page_index'].'?'.GW_ACTION.'='.GW_A_PROFILE.'&t=view&id='.$arV['id_user'], $arV['user_name']);
@@ -378,10 +374,10 @@ class gw_render extends gw_htmlforms
 		return $tmp['strhtml'];
 	}
 	/* */
-	public function make_xml_abbr($fieldname, $ar = array(), $tag = 'abbr')
+	public function make_xml_abbr($fieldname, $ar = [], $tag = 'abbr')
 	{
 		$tmp['strxml'] = '';
-		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
+		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : [];
 		//
 		// do auto fill
 		if (empty($tmp['arEl']))
@@ -408,10 +404,10 @@ class gw_render extends gw_htmlforms
 		}
 		return $tmp['strxml'];
 	}
-	public function make_xml_trns($fieldname, $ar = array(), $tag = 'trns')
+	public function make_xml_trns($fieldname, $ar = [], $tag = 'trns')
 	{
 		$tmp['strxml'] = '';
-		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
+		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : [];
 		//
 		// do auto fill
 		//
@@ -440,25 +436,25 @@ class gw_render extends gw_htmlforms
 		return $tmp['strxml'];
 	}
 	/* HTML-code for abbreviations */
-	public function make_html_abbr ($fieldname, $ar = array(), $tag = 'abbr')
+	public function make_html_abbr ($fieldname, $ar = [], $tag = 'abbr')
 	{
 		global $oDb, $oSqlQ;
 		global $gw_this, $arDictParam;
 		$tmp['strhtml'] = '';
-		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
+		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : [];
 
 		$prepend_name = $this->ar_theme['prepend_'.$tag];
 		$split_name = $this->ar_theme['split_'.$tag];
 		$append_name = $this->ar_theme['append_'.$tag];
 		$postlang_name = $this->ar_theme['postlang_'.$tag];
 
-		$tmp['attributes'] = array();
+		$tmp['attributes'] = [];
 		/* Collect lang codes */
 		foreach ($tmp['arEl'] as $chK => $chV)
 		{
 			$tmp['attributes'][$chK] = $this->objDom->get_attribute('lang', '', $chV);
 		}
-		$arSql = array();
+		$arSql = [];
 		$sql_in = implode("', '", $tmp['attributes']);
 		if ($sql_in != '')
 		{
@@ -483,14 +479,14 @@ class gw_render extends gw_htmlforms
 			}
 			$ar_abbr_groups[$id_abbr] = $arV['id_group'];
 		}
-		$arSql = array();
+		$arSql = [];
 		// do auto fill
 		if (empty($tmp['arEl']))
 		{
 			$tmp['arEl'][0] = array('value' => '', 'attributes' => array('lang' => '--'));
 		}
 		/* */
-		$tmp['ar_compiled'] = array();
+		$tmp['ar_compiled'] = [];
 		$i = 0;
         foreach ($tmp['arEl'] as $chK => $chV) {
 			$i++;
@@ -534,51 +530,51 @@ class gw_render extends gw_htmlforms
 		return $tmp['strhtml'];
 	}
 	/* */
-	public function make_html_trns($fieldname, $ar = array(), $tag = 'trns')
+	public function make_html_trns($fieldname, $ar = [], $tag = 'trns')
 	{
 		return $this->make_html_abbr($fieldname, $ar, $tag);
 	}
 	//
-	public function make_xml_usg($fieldname, $ar = array())
+	public function make_xml_usg($fieldname, $ar = [])
 	{
 		return $this->make_xml_set_array2textarea($fieldname, $ar, 'usg');
 	}
-	public function make_html_usg($fieldname, $ar = array())
+	public function make_html_usg($fieldname, $ar = [])
 	{
 		return $this->make_html_set_array2textarea($fieldname, $ar, 'usg');
 	}
 	//
-	public function make_xml_src($fieldname, $ar = array())
+	public function make_xml_src($fieldname, $ar = [])
 	{
 		return $this->make_xml_set_textarea($fieldname, $ar, 'src');
 	}
-	public function make_html_src($fieldname, $ar = array())
+	public function make_html_src($fieldname, $ar = [])
 	{
 		return $this->make_html_set_textarea($fieldname, $ar, 'src');
 	}
 	//
-	public function make_xml_address($fieldname, $ar = array())
+	public function make_xml_address($fieldname, $ar = [])
 	{
 		return $this->make_xml_set_textarea($fieldname, $ar, 'address');
 	}
-	public function make_html_address($fieldname, $ar = array())
+	public function make_html_address($fieldname, $ar = [])
 	{
 		return $this->make_html_set_textarea($fieldname, $ar, 'address');
 	}
 	//
-	public function make_xml_phone($fieldname, $ar = array())
+	public function make_xml_phone($fieldname, $ar = [])
 	{
 		return $this->make_xml_set_textarea($fieldname, $ar, 'phone');
 	}
-	public function make_html_phone($fieldname, $ar = array())
+	public function make_html_phone($fieldname, $ar = [])
 	{
 		return $this->make_html_set_textarea($fieldname, $ar, 'phone');
 	}
 	//
-	public function make_xml_see($fieldname, $ar = array(), $tag = 'see')
+	public function make_xml_see($fieldname, $ar = [], $tag = 'see')
 	{
 		$tmp['strxml'] = $tmp['str'] = '';
-		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
+		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : [];
 		// do auto fill
 		if (empty($tmp['arEl']))
 		{
@@ -623,21 +619,21 @@ class gw_render extends gw_htmlforms
 		return $tmp['strxml'];
 	}
 	/* */
-	public function make_xml_syn($fieldname, $ar = array())
+	public function make_xml_syn($fieldname, $ar = [])
 	{
 		return $this->make_xml_see($fieldname, $ar, 'syn');
 	}
 	/* */
-	public function make_xml_antonym($fieldname, $ar = array())
+	public function make_xml_antonym($fieldname, $ar = [])
 	{
 		return $this->make_xml_see($fieldname, $ar, 'antonym');
 	}
 	/* */
-	public function make_html_see($fieldname, $ar = array(), $tag = 'see')
+	public function make_html_see($fieldname, $ar = [], $tag = 'see')
 	{
 		global $oHtml;
 		$tmp['strxml'] = $tmp['str'] = '';
-		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
+		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : [];
 
 		$prepend_name = $this->ar_theme['prepend_see_syn'];
 		$split_name = $this->ar_theme['split_see_syn'];
@@ -648,7 +644,7 @@ class gw_render extends gw_htmlforms
 		{
 			$tmp['arEl'][0] = array('value' => '', 'attributes' => array('link' => ''));
 		}
-		$tmp['ar_compiled'] = array();
+		$tmp['ar_compiled'] = [];
 		$i = 0;
 		//
 		foreach ($tmp['arEl'] as $elK => $elV)
@@ -672,19 +668,19 @@ class gw_render extends gw_htmlforms
 		}
 		return $tmp['strxml'];
 	}
-	public function make_html_syn($fieldname, $ar = array(), $tag = 'syn')
+	public function make_html_syn($fieldname, $ar = [], $tag = 'syn')
 	{
 		return $this->make_html_see($fieldname, $ar, $tag);
 	}
-	public function make_html_antonym($fieldname, $ar = array(), $tag = 'antonym')
+	public function make_html_antonym($fieldname, $ar = [], $tag = 'antonym')
 	{
 		return $this->make_html_see($fieldname, $ar, $tag);
 	}
 	//
-	public function make_xml_set_textarea($fieldname, $ar = array(), $tag)
+	public function make_xml_set_textarea($fieldname, $ar = [], $tag)
 	{
 		$tmp['strxml'] = $tmp['str'] = '';
-		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
+		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : [];
 		//
 		$this->unsetTag('textarea'); // reset settings for <textarea>
 		//
@@ -704,12 +700,12 @@ class gw_render extends gw_htmlforms
 		return $tmp['strxml'];
 	}
 	//
-	public function make_html_set_textarea($fieldname, $ar = array(), $tag)
+	public function make_html_set_textarea($fieldname, $ar = [], $tag)
 	{
 		$tmp['str'] = '';
-		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
+		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : [];
 		//
-		$tmp['ar_compiled'] = array();
+		$tmp['ar_compiled'] = [];
 		$i = 0;
 		$split_name = 'split_'.$tag;
 		//
@@ -734,7 +730,7 @@ class gw_render extends gw_htmlforms
 		return $tmp['str'];
 	}
 	//
-	public function make_xml_set_array2textarea($fieldname, $ar = array(), $tag)
+	public function make_xml_set_array2textarea($fieldname, $ar = [], $tag)
 	{
 		/* */
 		$tmp['strform'] = $tmp['str'] = '';
@@ -766,12 +762,12 @@ class gw_render extends gw_htmlforms
 		return $tmp['str'];
 	}
 
-	public function make_html_set_array2textarea($fieldname, $ar = array(), $tag)
+	public function make_html_set_array2textarea($fieldname, $ar = [], $tag)
 	{
 		/* */
 		$tmp['str'] = '';
 		/* */
-		$tmp['ar_compiled'] = array();
+		$tmp['ar_compiled'] = [];
 		$i = 0;
 		$split_name = 'split_'.$tag;
 		$append_name = 'append_'.$tag;

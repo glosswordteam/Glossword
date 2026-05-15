@@ -76,7 +76,7 @@ class gwForms {
 		}
 		elseif (isset($this->tags[$tag]))
 		{
-			$this->tags[$tag] = array();
+			$this->tags[$tag] = [];
 		}
 	}
 	/**
@@ -172,7 +172,7 @@ class gwForms {
 			$extras = $this->htmlParamValue($this->tags[$formtype]);
 			$str = sprintf('<input%s />', $extras);
 #		$str .= '<input';
-#			$str .= $this->htmlParamValue(array_merge($ar, is_array($array) ? $array : array()));
+#			$str .= $this->htmlParamValue(array_merge($ar, is_array($array) ? $array : []));
 #			$str .= ' />';
 		break;
 		case "pass":
@@ -258,7 +258,7 @@ class gwForms {
 			}
 			$extras = $this->htmlParamValue($this->tags[$formtype]);
 			$str = sprintf('<select%s>', $extras);
-			foreach ((is_array($array) ? $array : array()) as $k => $v)
+			foreach ((is_array($array) ? $array : []) as $k => $v)
 			{
 				$s = '';
 				$title = '';
@@ -299,7 +299,7 @@ class gwForms {
 	public function Output($formedhtml = "")
 	{
 		$str = "";
-		$ar = array();
+		$ar = [];
 		$ar['id']       = $this->formname;
 		$ar['action']   = $this->action;
 		$ar['enctype']  = $this->enctype;

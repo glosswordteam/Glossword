@@ -44,36 +44,36 @@ if (!defined('IS_CLASS_TPL'))
 class gwv_template
 {
 	/* all variables are internal */
-	public $path_source = 'tpl';
-	public $path_cache = 'cache/tpl';
-	public $pairsC = array();
-	public $pairsV = array();
-	public $pairsN = array(); /* virtual namespaces */
-	public $namespace_default = 'GW';
-	public $tag_start = '';
-	public $tag_end = '';
-	public $tag_noncached = 'non';
-	public $is_tpl_show_names = 0;
-	public $o_encoding = 'utf-8';
-	public $ua_type = 'is_ua_client';
-	/* default caching rules */
-	public $is_cache_write = 0;
-	public $is_cache_parse = 0;
-	public $is_in_cache = 1;
-	public $is_cache_keypresent = 0;
-	/* default blocks */
-	public $arBlockV = array();
-	public $arBlockC = array();
-	public $arBlockI = array();
-	public $arChilds = array();
-	public $arNamespaces = array();
-	public $curLevel = 0;
-	public $arBlockPos = array();
-	public $varsRun = array();
-	/* */
-	public $ua_number = false;
+    public $path_source       = 'tpl';
+    public $path_cache        = 'cache/tpl';
+    public $pairsC            = [];
+    public $pairsV            = [];
+    public $pairsN            = []; /* virtual namespaces */
+    public $namespace_default = 'GW';
+    public $tag_start         = '';
+    public $tag_end           = '';
+    public $tag_noncached     = 'non';
+    public $is_tpl_show_names = 0;
+    public $o_encoding        = 'utf-8';
+    public $ua_type           = 'is_ua_client';
+    /* default caching rules */
+    public $is_cache_write      = 0;
+    public $is_cache_parse      = 0;
+    public $is_in_cache         = 1;
+    public $is_cache_keypresent = 0;
+    /* default blocks */
+    public $arBlockV     = [];
+    public $arBlockC     = [];
+    public $arBlockI     = [];
+    public $arChilds     = [];
+    public $arNamespaces = [];
+    public $curLevel     = 0;
+    public $arBlockPos   = [];
+    public $varsRun      = [];
+    /* */
+    public $ua_number = false;
 
-	/** @var gwv_template_cmd Command processor (set by constructor) */
+    /** @var gwv_template_cmd Command processor (set by constructor) */
 	public $oCmd;
 
     /** @var string Name of the last parsed variable */
@@ -93,7 +93,7 @@ class gwv_template
 	/* */
 	public function get_info_files()
 	{
-		$ar = array();
+		$ar = [];
 		foreach ($this->pairsC as $k => $v)
 		{
 			$ar[crc32($v['filename'])] = $v['filename'];
@@ -160,9 +160,9 @@ class gwv_template
 	}
 // --------------------------------------------------------
 	/* $ar - the list of files */
-	public function define($ar = array())
+	public function define($ar = [])
 	{
-		foreach ((is_array($ar) ? $ar : array()) as $tplName => $filename)
+		foreach ((is_array($ar) ? $ar : []) as $tplName => $filename)
 		{
 			$tplName = sprintf("%u", crc32($filename));
 			if (isset($this->pairsC[$tplName]))
@@ -174,14 +174,14 @@ class gwv_template
 				'filename' => $filename,
 				'filedesc' => $this->_file_load('./' . $this->path_source . '/' . $filename)
 			);
-			$arBlockI = array();
+			$arBlockI = [];
 			eval($this->_compile($tplName));
-			if (!isset($arBlockI)) { $arBlockI = array(); }
+			if (!isset($arBlockI)) { $arBlockI = []; }
 			$this->arBlockI =& array_merge($this->arBlockI, $arBlockI);
 		}
 	}
 	/* */
-	public function assign($ar = array())
+	public function assign($ar = [])
 	{
 		$str = '';
 		foreach ($ar as $n => $v)
@@ -211,13 +211,13 @@ class gwv_template
 	{
 		/* call commands class file */
 		$this->oCmd->_reset();
-		$tmp = array();
+		$tmp = [];
 		$tmp['filename_c'] = '';
 		$tmp['str_i'] = '';
 		/* if current template exists in array (filename) */
 		if (isset($this->pairsC[$tplName]) && isset($this->pairsC[$tplName]['filedesc']))
 		{
-			$arRpl = array();
+			$arRpl = [];
 			/* Source template content which will be replaced */
 			$tmp['tpl_content'] = $this->pairsC[$tplName]['filedesc'];
 			/* Full path to cache files */
@@ -228,7 +228,7 @@ class gwv_template
 			if (preg_match_all($preg, $tmp['tpl_content'], $tmp['tpl_matches']))
 			{
 				/* array with template commands */
-				$arCmd = array();
+				$arCmd = [];
 				/* fix for `< ? x m l  ? >' */
 				$arCmd[] = '<?xml';
 				$arRpl[] = '<?php echo "<","?xml"; ?>'; // parameter works faster that concatenation
@@ -310,7 +310,7 @@ class gwv_template
 	{
 		// start
 		ob_start();
-		$tpl = array();
+		$tpl = [];
 		$this->var_last_parsed = '';
 		$tpl['value'] = '';
 		foreach ($this->pairsC as $k => $arV)
@@ -486,10 +486,10 @@ class gwv_template
 		return $str;
 	}
 	/* @access public */
-	public function gw_text_replace_vars($t = '', $ar = array(), $is_keep = 0)
+	public function gw_text_replace_vars($t = '', $ar = [], $is_keep = 0)
 	{
-		$arCmd = array();
-		$arRpl = array();
+		$arCmd = [];
+		$arRpl = [];
 		/* Search for template tags */
 		$preg = "/({)([ A-Za-z0-9:\/\-_]+)(})/i";
 		if (preg_match_all($preg, $t, $tmp['tpl_matches']))
@@ -521,10 +521,10 @@ class gwv_template
 class gwv_template_cmd extends gwv_template
 {
 	/** @var array Plural-form collection of compiled blocks (vs. parent's $arBlockC) */
-	public $arBlocksC = array();
+	public $arBlocksC = [];
 
 	/** @var array Plural-form collection of include blocks (vs. parent's $arBlockI) */
-	public $arBlocksI = array();
+	public $arBlocksI = [];
 
 	/* */
 	public function __construct()
@@ -534,18 +534,19 @@ class gwv_template_cmd extends gwv_template
 	/* */
 	public function _reset()
 	{
-		$this->namespace_default = 'GW';
-		$this->arBlockV = array();
-		$this->arBlockC = array();
-		$this->arBlockI = array();
-		$this->arChilds = array();
-		$this->arNamespaces = array();
-		$this->arBlockPos = array();
-		$this->varsRun = array();
-		$this->curLevel = 0;
-	}
-	/* */
-	public function get_contents_c($is_delete = 1)
+        $this->namespace_default = 'GW';
+        $this->arBlockV = [];
+        $this->arBlockC = [];
+        $this->arBlockI = [];
+        $this->arChilds = [];
+        $this->arNamespaces = [];
+        $this->arBlockPos = [];
+        $this->varsRun = [];
+        $this->curLevel = 0;
+    }
+
+    /* */
+    public function get_contents_c($is_delete = 1)
 	{
 		$str = '';
 		foreach ($this->arBlockI as $block => $info)
@@ -567,7 +568,7 @@ class gwv_template_cmd extends gwv_template
 		}
 		if ($is_delete)
 		{
-			$this->arBlocksC = $this->arBlocksI = array();
+			$this->arBlocksC = $this->arBlocksI = [];
 		}
 		return $str;
 	}
@@ -596,7 +597,7 @@ class gwv_template_cmd extends gwv_template
 		}
 		else
 		{
-			$this->arBlockI[$dynName]['childs'] = array();
+			$this->arBlockI[$dynName]['childs'] = [];
 		}
 		$this->arBlockC[] = $dynName;
 		return '<'.'?php while ($this->_dRun("'.$dynName.'")) : ?>'.CRLF;

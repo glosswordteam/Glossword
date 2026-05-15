@@ -28,45 +28,45 @@
  */
 class CI_DB_active_record extends CI_DB_driver {
 
-	public $ar_select		= array();
-	public $ar_distinct	= FALSE;
-	public $ar_from		= array();
-	public $ar_join		= array();
-	public $ar_where		= array();
-	public $ar_like		= array();
-	public $ar_groupby		= array();
-	public $ar_having		= array();
-	public $ar_limit		= FALSE;
-	public $ar_offset		= FALSE;
-	public $ar_order		= FALSE;
-	public $ar_orderby		= array();
-	public $ar_set			= array();	
-	public $ar_wherein		= array();
-	public $ar_aliased_tables		= array();
-	public $ar_store_array	= array();
+    public $ar_select         = [];
+    public $ar_distinct       = false;
+    public $ar_from           = [];
+    public $ar_join           = [];
+    public $ar_where          = [];
+    public $ar_like           = [];
+    public $ar_groupby        = [];
+    public $ar_having         = [];
+    public $ar_limit          = false;
+    public $ar_offset         = false;
+    public $ar_order          = false;
+    public $ar_orderby        = [];
+    public $ar_set            = [];
+    public $ar_wherein        = [];
+    public $ar_aliased_tables = [];
+    public $ar_store_array    = [];
 
-	// Active Record Caching variables
-	public $ar_caching 		= FALSE;
-	public $ar_cache_select	= array();
-	public $ar_cache_from		= array();
-	public $ar_cache_join		= array();
-	public $ar_cache_where		= array();
-	public $ar_cache_like		= array();
-	public $ar_cache_groupby	= array();
-	public $ar_cache_having	= array();
-	public $ar_cache_limit		= FALSE;
-	public $ar_cache_offset	= FALSE;
-	public $ar_cache_order		= FALSE;
-	public $ar_cache_orderby	= array();
-	public $ar_cache_set		= array();	
+    // Active Record Caching variables
+    public $ar_caching       = false;
+    public $ar_cache_select  = [];
+    public $ar_cache_from    = [];
+    public $ar_cache_join    = [];
+    public $ar_cache_where   = [];
+    public $ar_cache_like    = [];
+    public $ar_cache_groupby = [];
+    public $ar_cache_having  = [];
+    public $ar_cache_limit   = false;
+    public $ar_cache_offset  = false;
+    public $ar_cache_order   = false;
+    public $ar_cache_orderby = [];
+    public $ar_cache_set     = [];
 
 
-	/**
-	 * DB Prefix
-	 *
-	 * Prepends a database prefix if one exists in configuration
-	 *
-	 * @access	public
+    /**
+     * DB Prefix
+     *
+     * Prepends a database prefix if one exists in configuration
+     *
+     * @access    public
 	 * @param	string	the table
 	 * @return	string
 	 */
@@ -586,7 +586,7 @@ class CI_DB_active_record extends CI_DB_driver {
 		}
 
 		// reset the array for multiple calls
-		$this->ar_wherein = array();
+		$this->ar_wherein = [];
 		return $this;
 	}
 		
@@ -1565,7 +1565,7 @@ class CI_DB_active_record extends CI_DB_driver {
 			return $object;
 		}
 		
-		$array = array();
+		$array = [];
 		foreach (get_object_vars($object) as $key => $val)
 		{
 			// There are some built in keys we need to ignore for this conversion
@@ -1621,23 +1621,23 @@ class CI_DB_active_record extends CI_DB_driver {
 	 * @return	void
 	 */	
 	public function flush_cache()
-	{	
-		$ar_reset_items = array(
-			'ar_cache_select' => array(), 
-			'ar_cache_from' => array(), 
-			'ar_cache_join' => array(),
-			'ar_cache_where' => array(), 
-			'ar_cache_like' => array(), 
-			'ar_cache_groupby' => array(), 
-			'ar_cache_having' =>array(), 
-			'ar_cache_orderby' => array(), 
-			'ar_cache_set' => array()
-		);
+	{
+        $ar_reset_items = [
+            'ar_cache_select'  => [],
+            'ar_cache_from'    => [],
+            'ar_cache_join'    => [],
+            'ar_cache_where'   => [],
+            'ar_cache_like'    => [],
+            'ar_cache_groupby' => [],
+            'ar_cache_having'  => [],
+            'ar_cache_orderby' => [],
+            'ar_cache_set'     => [],
+        ];
 
-		$this->_reset_run($ar_reset_items);	
-	}
+        $this->_reset_run($ar_reset_items);
+    }
 
-	// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
 	/**
 	 * Merge Cache
@@ -1688,29 +1688,29 @@ class CI_DB_active_record extends CI_DB_driver {
 	 * @access	private
 	 * @return	void
 	 */
-	public function _reset_select()
-	{
-		$ar_reset_items = array(
-			'ar_select' => array(), 
-			'ar_from' => array(), 
-			'ar_join' => array(), 
-			'ar_where' => array(), 
-			'ar_like' => array(), 
-			'ar_groupby' => array(), 
-			'ar_having' => array(), 
-			'ar_orderby' => array(), 
-			'ar_wherein' => array(), 
-			'ar_aliased_tables' => array(),
-			'ar_distinct' => FALSE, 
-			'ar_limit' => FALSE, 
-			'ar_offset' => FALSE, 
-			'ar_order' => FALSE,
-		);
-		
-		$this->_reset_run($ar_reset_items);
-	}
-	
-	// --------------------------------------------------------------------
+    public function _reset_select()
+    {
+        $ar_reset_items = [
+            'ar_select'         => [],
+            'ar_from'           => [],
+            'ar_join'           => [],
+            'ar_where'          => [],
+            'ar_like'           => [],
+            'ar_groupby'        => [],
+            'ar_having'         => [],
+            'ar_orderby'        => [],
+            'ar_wherein'        => [],
+            'ar_aliased_tables' => [],
+            'ar_distinct'       => false,
+            'ar_limit'          => false,
+            'ar_offset'         => false,
+            'ar_order'          => false,
+        ];
+
+        $this->_reset_run($ar_reset_items);
+    }
+
+    // --------------------------------------------------------------------
 
 	/**
 	 * Resets the active record "write" values.
@@ -1720,19 +1720,19 @@ class CI_DB_active_record extends CI_DB_driver {
 	 * @access	private
 	 * @return	void
 	 */
-	public function _reset_write()
-	{	
-		$ar_reset_items = array(
-			'ar_set' => array(), 
-			'ar_from' => array(), 
-			'ar_where' => array(), 
-			'ar_like' => array(),
-			'ar_orderby' => array(), 
-			'ar_limit' => FALSE, 
-			'ar_order' => FALSE
-		);
+    public function _reset_write()
+    {
+        $ar_reset_items = [
+            'ar_set'     => [],
+            'ar_from'    => [],
+            'ar_where'   => [],
+            'ar_like'    => [],
+            'ar_orderby' => [],
+            'ar_limit'   => false,
+            'ar_order'   => false,
+        ];
 
-		$this->_reset_run($ar_reset_items);
-	}
-	
+        $this->_reset_run($ar_reset_items);
+    }
+
 }

@@ -66,7 +66,7 @@ if (!class_exists('gwtkCache')) {
          *
          * @var array
          */
-        public $query_array = array();
+        public $query_array = [];
 
         /** @var int */
         public $cnt_queries_debug = 0;

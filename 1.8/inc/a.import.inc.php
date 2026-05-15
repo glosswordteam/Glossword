@@ -78,7 +78,7 @@ function gw_import_xml()
 				LIMIT 1
 		';
 		$arSql = $oDb->sqlExec($sql);
-		$arSql = isset($arSql[0]) ? $arSql[0] : array();
+		$arSql = isset($arSql[0]) ? $arSql[0] : [];
 
 		$gw_this['vars']['arPost'] = array_merge($gw_this['vars']['arPost'], unserialize($arSql['settings']));
 		$gw_this['vars']['int_items_total'] = $arSql['int_items_total'];
@@ -177,7 +177,7 @@ function gw_import_xml()
 			{
 				if (!$v1){ continue; }
 				$str_param = '';
-				$ar_attr = $ar_newattr = array();
+				$ar_attr = $ar_newattr = [];
 				if (!preg_match_all($rule_attr_regex, $v1, $ar_pairs, PREG_SET_ORDER))
 				{
 					continue;
@@ -222,7 +222,7 @@ function gw_import_xml()
 			$gw_this['vars']['arPost']['xml'] = str_replace('<antonym>', ']]><antonym><![CDATA[', str_replace('</antonym>', ']]></antonym>', $gw_this['vars']['arPost']['xml']));
 			$gw_this['vars']['arPost']['xml'] = str_replace('<![CDATA[<![CDATA[', '<![CDATA[', $gw_this['vars']['arPost']['xml']);
 			$gw_this['vars']['arPost']['xml'] = str_replace(']]>]]>', ']]>', $gw_this['vars']['arPost']['xml']);
-			$arTagNames = array();
+			$arTagNames = [];
 			foreach ($arFields as $fK => $fV)
 			{
 				$arTagNames[] = $fV[0];
@@ -239,7 +239,7 @@ function gw_import_xml()
 		}
 	}
 #	$cnt = 0;
-	$queryA = array();
+	$queryA = [];
 	
 	$gw_this['vars']['arPost']['xml'] = str_replace('</glossword>', '', $gw_this['vars']['arPost']['xml']);
 
@@ -256,7 +256,7 @@ function gw_import_xml()
 	}
 
 	/* Get stopwords */
-	$arStop = array();
+	$arStop = [];
 	if ($arDictParam['is_filter_stopwords'])
 	{
 		$arStop = gw_get_stopwords($arDictParam);
@@ -271,7 +271,7 @@ function gw_import_xml()
 	/* Memory usage */
 	$sys['memory_spend'] = memory_get_usage();
 	
-	$arStatus = array();
+	$arStatus = [];
 
 	/* Do import using DOM model */
 	$oDom = new gw_domxml;
@@ -323,9 +323,9 @@ function gw_import_xml()
 			return;
 		}
 		$arXmlLine = $arXmlLine[0];
-		$qT = $arTermMap = $arQ = array();
+		$qT = $arTermMap = $arQ = [];
 		$id_term = $id_term_old = $is_clean_map = $is_term_exists = 0;
-		$ar_keywords_raw = $ar_keywords = array();
+		$ar_keywords_raw = $ar_keywords = [];
 		if (!isset($arXmlLine['children'])) { continue; }
 		foreach ($arXmlLine['children'] as $k2 => $v2)
 		{
@@ -522,7 +522,7 @@ function gw_import_xml()
 		/* Collect keywords per fields */
 		foreach ($arFields as $fK => $fV)
 		{
-			#$ar_keywords[$fK] = array();
+			#$ar_keywords[$fK] = [];
 			if (isset($ar_keywords_raw[$fV[0]]))
 			{
 				$str_keywords_raw = implode(' ', $ar_keywords_raw[$fV[0]]);
@@ -640,7 +640,7 @@ function gw_import_csv()
 	$gw_this['vars']['arPost']['str_separator_defn'] = ' ;; ';
 	$gw_this['vars']['arPost']['str_enclosed'] = '';
 
-	$arXML = $arDuplicates = array();
+	$arXML = $arDuplicates = [];
 	
 	if (!isset($file_location['name']))
 	{
@@ -666,7 +666,7 @@ function gw_import_csv()
 				LIMIT 1
 		';
 		$arSql = $oDb->sqlExec($sql);
-		$arSql = isset($arSql[0]) ? $arSql[0] : array();
+		$arSql = isset($arSql[0]) ? $arSql[0] : [];
 
 		$gw_this['vars']['arPost'] = array_merge($gw_this['vars']['arPost'], unserialize($arSql['settings']));
 		$gw_this['vars']['int_items_total'] = $arSql['int_items_total'];
@@ -712,14 +712,14 @@ function gw_import_csv()
 		/* no data */
 		if ($ar_lines_csv[0] == '')
 		{
-			$ar_lines_csv = array();
+			$ar_lines_csv = [];
 			$gw_this['vars']['arPost']['csv'] = $oL->m('1255');
 		}
 		/* too many lines */
 		if ($int_lines > $sys['max_lines_csv'])
 		{
 			$is_continue = 0;
-			$ar_lines_csv = array();
+			$ar_lines_csv = [];
 			$gw_this['vars']['arPost']['csv'] = sprintf($oL->m('1254'), $sys['max_lines_csv'], $int_lines);
 			$gw_this['vars']['arPost']['xml'] = '';
 			$arBroken['csv'] = 1;
@@ -738,8 +738,8 @@ function gw_import_csv()
 			1. convert inputed data into array with XML-code
 			2. import XML-code
 		*/
-		$arXML = array();
-		$arDuplicates = array();
+		$arXML = [];
+		$arDuplicates = [];
 		foreach ($ar_lines_csv as $k1 => $v1)
 		{
 			/* id, term, ... */
@@ -904,7 +904,7 @@ function gw_import_csv()
 		3. Create keywords.
 	*/
 	/* Exclude stopwords */
-	$arData = $arQ = $arStatus = array();
+	$arData = $arQ = $arStatus = [];
 	$arStop = gw_get_stopwords($arDictParam);
 #	prn_r( $arXML );
 	foreach ($arXML as $uid => $v1)
@@ -970,7 +970,7 @@ function gw_import_csv()
             $arData[$uid]['defn']
         );
 
-		$qT = $arTermMap = $arQ = array();
+		$qT = $arTermMap = $arQ = [];
 		$id_term = $id_term_old = $is_clean_map = $is_term_exists = 0;
 		$qT['id'] = $arData[$uid]['id'];
 		if ($qT['id'] == '')
@@ -1183,7 +1183,7 @@ function gw_import_csv()
 	$sys['memory_spend'] = memory_get_usage();
 }
 /* */
-function getFormImport($vars, $runtime = 0, $arBroken = array(), $arReq = array())
+function getFormImport($vars, $runtime = 0, $arBroken = [], $arReq = [])
 {
 	global $id, $oL, $oSess, $oFunc, $sys, $oCase;
 	global $ar_theme, $gw_this;
@@ -1212,7 +1212,7 @@ function getFormImport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 	// reverse array keys <-- values;
 	$arReq = array_flip($arReq);
 	// mark fields as "REQUIRED" and make error messages
-	foreach ((is_array($vars) ? $vars : array()) as $key => $val)
+	foreach ((is_array($vars) ? $vars : []) as $key => $val)
 	{
 		$arReqMsg[$key] = $arBrokenMsg[$key] = "";
 		if (isset($arReq[$key])) { $arReqMsg[$key] = '&#160;<span class="red"><strong>*</strong></span>'; }
@@ -1223,7 +1223,7 @@ function getFormImport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 	//
 	##
 	## ----------------------------------------------------
-	$arBoxId = array();
+	$arBoxId = [];
 	$strForm .= gw_get_form_title_nav($oL->m('1061'), '<span style="float:right">'.
 				$oForm->get_button('submit').'</span>');
 	$strForm .= '<table class="gw2TableFieldset" width="100%"><tbody>';
@@ -1395,7 +1395,7 @@ function getFormImport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 	$ar_time_exec = array(5 => 5, 10 => 10, 20 => 20, 30 => 30, 40 => 40, 50 => 50, 60 => 60);
 	if ($max_execution_time < 60)
 	{
-		$ar_time_exec = array();
+		$ar_time_exec = [];
 		for ($i = 5; $i <= $max_execution_time; $i = $i + 5)
 		{
 			$ar_time_exec[$i] = $i;
@@ -1439,7 +1439,7 @@ function getFormImport($vars, $runtime = 0, $arBroken = array(), $arReq = array(
 } // end of getFormImport()
 // --------------------------------------------------------
 // Prepare variables
-if ($gw_this['vars']['arPost'] == '') { $gw_this['vars']['arPost'] = array(); }
+if ($gw_this['vars']['arPost'] == '') { $gw_this['vars']['arPost'] = []; }
 if (!isset($gw_this['vars']['arPost'][GW_ACTION])) { $gw_this['vars']['arPost'][GW_ACTION] = GW_A_ADD; }
 
 switch ($gw_this['vars']['arPost'][GW_ACTION])
@@ -1465,7 +1465,7 @@ switch ($gw_this['vars']['arPost'][GW_ACTION])
 
 		if ($vars['format'] == '') { $vars['format'] = 'csv'; }
 
-		$this->str .= getFormImport($vars, 0, 0, array());
+		$this->str .= getFormImport($vars, 0, 0, []);
 		$arHelpMap['XML'] = gw_htmlspecialchars_ltgt('<line><term t1="T" t2="TE" is_active="1" id="1"><![CDATA[term]]></term><defn><trsp><![CDATA[trsp]]></trsp> <abbr><![CDATA[abbr]]></abbr> <trns><![CDATA[trns]]></trns><![CDATA[defn]]> <usg><![CDATA[usg]]></usg> <syn><![CDATA[syn]]></syn> <antonym><![CDATA[antonym]]></antonym> <see><![CDATA[see]]></see> <src><![CDATA[src]]></src> <address><![CDATA[address]]></address> <phone><![CDATA[phone]]></phone></defn></line>');
 		if (function_exists('xslt_create'))
 		{
@@ -1501,7 +1501,7 @@ switch ($gw_this['vars']['arPost'][GW_ACTION])
 			return;
 		}
 
-		$arStatus = array();
+		$arStatus = [];
 		$xml_file = '';
 		$cnt = 0;
 		$this->sys['import_filename'] = '';

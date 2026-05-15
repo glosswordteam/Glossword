@@ -19,7 +19,7 @@ class gw_reqcheck
     public $is_checked = 1;
     public $is_checked_total = 1;
 	/* */
-	public function SetVars($ar = array())
+	public function SetVars($ar = [])
 	{
 		foreach ($ar as $k => $v)
 		{
@@ -34,7 +34,7 @@ class gw_reqcheck
 	/* */
     public function GetInfo()
 	{
-		$ar_info = array();
+		$ar_info = [];
 		foreach ( $this->map as $tag => $arV )
 		{
 			foreach ($arV as $k1 => $arParams )

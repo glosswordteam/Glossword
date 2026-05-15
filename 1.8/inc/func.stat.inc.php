@@ -53,7 +53,7 @@ function gw_set_cookie($n, $value = '', $is_always = 1)
  * @return  array   The list of directories
  */
 function file_readDirD($strDir, $ex = "(.*)"){
-	$ar = array();
+	$ar = [];
 	if (is_dir($strDir))
 	{
 		$h_dir = opendir($strDir);
@@ -81,7 +81,7 @@ function file_readDirD($strDir, $ex = "(.*)"){
  */
 function file_readDirF($strDir, $ex = "(.*)")
 {
-	$ar = array();
+	$ar = [];
 	if (is_dir($strDir))
 	{
 		$h_dir = opendir($strDir);
@@ -150,7 +150,7 @@ class tkit_mail
 		$from = '=?utf-8?B?'.base64_encode($from_name). '?= <'.$from_email.'>';
 		$to = '=?utf-8?B?'.base64_encode($to_name). '?= <'.$to_email.'>';
 		$subject = '=?utf-8?B?'.base64_encode($subject). '?=';
-		$ar_h = array();
+		$ar_h = [];
 		$ar_h[] = 'From: '.$from;
 		$ar_h[] = 'Return-Path: ' .$from. ' ';
 		$ar_h[] = 'X-Mailer: ' .$this->h_mailer;

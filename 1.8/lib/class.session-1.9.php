@@ -17,64 +17,64 @@ if (!defined('IN_GW')) {
 }
 class gw_session_1_9
 {
-	public $oDb;
-	public $oL;
-	public $sys;
-	
-	/* Field name */
-	public $db_user_settings = 'user_settings';
-		
-	/* Guest User ID */
-	public $id_guest = 1;
-	public $ar_permissions = array();
-	/* User settings */
-	public $is_changed = 0;
-	public $is_closed = 0;
+    public $oDb;
+    public $oL;
+    public $sys;
 
-	/* Used for creatign Session ID */
-	public $is_use_remote_ip = 0;
-	public $is_use_remote_ua = 0;
-	public $str_secret;
+    /* Field name */
+    public $db_user_settings = 'user_settings';
 
-	public $ar_sess = array();
-	public $ar_user = array();
-	public $id_user;
-	public $id_sess;
-	public $sid;
-	public $url_login;
-	public $url_append_mode;
-	public $uri;
-	/* Garbage collect probability in percent */
-	public $gc_probability = 4;
-	/* Session will be expired in `n` seconds (3600 = 1 hour) */
-	public $int_timeout = 3600;
-	public $time_changed;
-	public $time_now_gmt_unix;
-	/* Times used in META tag */
-	public $time_refresh = 2;
-	/* Messages */
-	public $msg_1 = 'Session expired in case of inactivity.';
-	public $msg_2 = 'Authorization required. Session does not exist.';
-	public $msg_3 = 'You have logged out.';
-	public $msg_4 = 'Authorization required. Session expired or does not exist.';
-	public $msg_5 = 'Passed: %s minutes';
-	public $msg_6 = 'Time to idle: %s minutes';
-	public $db_table_users = '';
-	public $db_table_sessions = '';
+    /* Guest User ID */
+    public $id_guest       = 1;
+    public $ar_permissions = [];
+    /* User settings */
+    public $is_changed = 0;
+    public $is_closed  = 0;
 
-	/** @var int Whether the session is marked as remember-me */
-	public $is_remember = 0;
+    /* Used for creatign Session ID */
+    public $is_use_remote_ip = 0;
+    public $is_use_remote_ua = 0;
+    public $str_secret;
+
+    public $ar_sess = [];
+    public $ar_user = [];
+    public $id_user;
+    public $id_sess;
+    public $sid;
+    public $url_login;
+    public $url_append_mode;
+    public $uri;
+    /* Garbage collect probability in percent */
+    public $gc_probability = 4;
+    /* Session will be expired in `n` seconds (3600 = 1 hour) */
+    public $int_timeout = 3600;
+    public $time_changed;
+    public $time_now_gmt_unix;
+    /* Times used in META tag */
+    public $time_refresh = 2;
+    /* Messages */
+    public $msg_1             = 'Session expired in case of inactivity.';
+    public $msg_2             = 'Authorization required. Session does not exist.';
+    public $msg_3             = 'You have logged out.';
+    public $msg_4             = 'Authorization required. Session expired or does not exist.';
+    public $msg_5             = 'Passed: %s minutes';
+    public $msg_6             = 'Time to idle: %s minutes';
+    public $db_table_users    = '';
+    public $db_table_sessions = '';
+
+    /** @var int Whether the session is marked as remember-me */
+    public $is_remember = 0;
 
     /** @var string Remote client IP, populated from REMOTE_IP */
-	public $remote_ip = '';
+    public $remote_ip = '';
 
     /** @var string Remote client User-Agent, populated from REMOTE_UA */
-	public $remote_ua = '';
+    public $remote_ua = '';
 
     /** @var int Current request time, populated from $sys['time_now'] */
-	public $time_now = 0;
+    public $time_now = 0;
 
-	public function load_settings()
+    public function load_settings()
 	{
 		$vars = array(
 			'msg_1' => $this->oL->m('1342'),
@@ -173,7 +173,7 @@ class gw_session_1_9
 			$sql .= 'WHERE u.id_user = s.id_user AND s.id_sess = "'.$this->id_sess.'" ';
 			$sql .= 'LIMIT 1';
 			$arSql = $this->oDb->sqlExec($sql);
-			$arSql = isset($arSql[0]) ? $arSql[0] : array();
+			$arSql = isset($arSql[0]) ? $arSql[0] : [];
 			if (empty($arSql))
 			{
 				/* Session ID not found */
@@ -303,7 +303,7 @@ class gw_session_1_9
 		$sql .= 'WHERE u.id_user = "'.gw_text_sql($id_user).'" ';
 		$sql .= 'LIMIT 1';
 		$arSql = $this->oDb->sqlExec( $sql );
-		$arSql = isset($arSql[0]) ? $arSql[0] : array();
+		$arSql = isset($arSql[0]) ? $arSql[0] : [];
 		/* No valid user found */
 		if (empty($arSql) && $mode == 'merge')
 		{
@@ -403,7 +403,7 @@ class gw_session_1_9
 		if ($varname == '')
 		{
 			/* no variable defined, clean all custom variables */
-			$this->ar_user['user_settings'] = array();
+			$this->ar_user['user_settings'] = [];
 		}
 		else
 		{
@@ -433,7 +433,7 @@ class gw_session_1_9
 		unset($this->ar_user['is_remember'], $this->ar_user['ua']);
 		$sql = gw_sql_update($this->ar_user, $this->db_table_users, '`id_user` = "'.$this->id_user.'"');
 		$this->oDb->sqlExec($sql);
-		$this->ar_user = array();
+		$this->ar_user = [];
 	}
 	
 	/**
@@ -505,7 +505,7 @@ class gw_session_1_9
 		{
 			return $this->oDb->sqlExec($sql);
 		}
-		return array();
+		return [];
 	}
 
 	/* Error handing */

@@ -18,7 +18,7 @@ $str_version_to = '1.8.12';
 $this->oTpl->addVal( 'v:favicon', 'favicon_update.ico' );
 
 $this->set_steps(3);
-$ar_status = array();
+$ar_status = [];
 
 /* */
 switch($this->gv['step'])
@@ -76,7 +76,7 @@ switch($this->gv['step'])
 
 		/* Import visual themes */
 		$ar_status['themes'] = '<div>'.$this->oTkit->_(20010).': '.$this->oTkit->_(20011).'</div>';
-		$ar_items = array();
+		$ar_items = [];
 		foreach (glob('xml/visual-themes_*.xml') as $filename)
 		{
 			$this->import_visual_themes_file($filename);

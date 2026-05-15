@@ -48,7 +48,7 @@ function gw_get_dict_terms($dict_tablename, $id_dict)
 		/* */
 		$sql = $oSqlQ->getQ('get-az-terms', $dict_tablename, $letter, $sys['time_now_db'], $arDictParam['az_sql'], $sys['max_terms_in_index']);
 		$arSql = $oDb->sqlExec($sql);
-		$ar_terms = array();
+		$ar_terms = [];
 		foreach ($arSql as $arK => $arV)
 		{
 			switch ($sys['pages_link_mode'])
@@ -139,7 +139,7 @@ function getDictWordList($w1, $w2, $w3, $id_dict, $p, $is_descr = true, $is_full
 	}
 
 	$arSql = $oDb->sqlExec($sql);
-	$arA = array();
+	$arA = [];
 	$cnt = 0;
 	$delmtr = ' ';
 	if ($is_full)
@@ -223,7 +223,7 @@ function getDictWordList($w1, $w2, $w3, $id_dict, $p, $is_descr = true, $is_full
 #	$intRowStep = $sys['dplayout'] ? ceil($intAr / $sys['dplayout']) : 0;
 	$intRowStep = 2;
 	$intColStep = 1;
-	$tmp['href_term'] = array();
+	$tmp['href_term'] = [];
 	if (empty($arA[0]))
 	{
 		return;
@@ -293,7 +293,7 @@ function getDictWordList($w1, $w2, $w3, $id_dict, $p, $is_descr = true, $is_full
 		$oCells->tPadding = 0;
 		$oCells->tAttrClass = 'tbl-browse';
 		$oTpl->addVal( 'block:columns', $oCells->output());
-		$oTpl->tmp['d']['list_item'] = array();
+		$oTpl->tmp['d']['list_item'] = [];
 	}
 	else if (GW_IS_BROWSE_WEB)
 	{
@@ -312,7 +312,7 @@ function getDictArray()
 {
 	global $oSqlQ, $oDb, $oSess;
 	global $sys;
-	$arSql = array();
+	$arSql = [];
 	if (GW_IS_BROWSE_ADMIN)
 	{
 		// not guest, get all dictionaries.
@@ -326,7 +326,7 @@ function getDictArray()
 		$arSql = $oDb->sqlExec( $oSqlQ->getQ('get-dicts-web', $sys['time_now_db']) );
 	}
 	/* Resort using Dictionary ID */
-	$arSqlNew = array();
+	$arSqlNew = [];
 	foreach ($arSql as $k => $v)
 	{
 		unset($arSql[$k]);
@@ -344,7 +344,7 @@ function getDictSrch($language = '', $x = 1, $y = 99, $qStrOrder = '', $is_form_
 	global $gw_this, $oL, $sys;
 	$str = '';
 	$arSql = $gw_this['ar_dict_list'];
-	$arDictMap = array();
+	$arDictMap = [];
 	if (sizeof($arSql) > 0)
 	{
 		if (GW_IS_BROWSE_WEB)
@@ -464,7 +464,7 @@ function getCatalogTitle($ar, $arDictMap, $p = 0, $depth = 1, $dict_nmax, $runti
 		$tpcs_nmax = $dict_nmax;
 		//
 		$str .= CRLF . '<dl class="catalog">';
-		foreach ((is_array($ar[$p]['ch']) ? $ar[$p]['ch'] : array()) as $k => $v) // (Root or Topic) -> Topic
+		foreach ((is_array($ar[$p]['ch']) ? $ar[$p]['ch'] : []) as $k => $v) // (Root or Topic) -> Topic
 		{
 			/* Reserved for dictionary parameters */
 #			prn_r( $k );
@@ -499,7 +499,7 @@ function getCatalogTitle($ar, $arDictMap, $p = 0, $depth = 1, $dict_nmax, $runti
 				{
 					$cntDict = 0;
 					$str .= CRLF . '<dl>';
-					foreach ((is_array($arDictMap[$k]) ? $arDictMap[$k] : array()) as $k2 => $v2)
+					foreach ((is_array($arDictMap[$k]) ? $arDictMap[$k] : []) as $k2 => $v2)
 					{
 						$strMark = '';
 						$idcolor = '#999';
@@ -862,7 +862,7 @@ function gw_parse_composite_entity_id($value)
  * @globals int     $t
  * @globals object  $auth
  */
-function ctlgGetTopicsRow($ar = array(), $startId = 0, $cntRow = 1)
+function ctlgGetTopicsRow($ar = [], $startId = 0, $cntRow = 1)
 {
 	global $arImgTread, $arTxtTread, $cntRow, $tid, $arParents, $a, $t, $sys, $ar_theme, $gw_this;
 	global $oSess, $oHtml, $oL, $oFunc, $topic_mode;
@@ -1283,7 +1283,7 @@ function gw_get_thread_pages2($ar = [], $startId = 0, $cntRow = 1)
 
 
 /* */
-function gw_breadcrumbs_pages_ar($ar, $tid = 0, $ar_bc = array())
+function gw_breadcrumbs_pages_ar($ar, $tid = 0, $ar_bc = [])
 {
 	$id_parent = $ar[$tid]['p'];
 	/* There is some Parent ID... */

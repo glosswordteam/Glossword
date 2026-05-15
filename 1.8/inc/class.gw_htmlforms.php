@@ -47,7 +47,7 @@ class gw_htmlforms extends gwForms
 		// load trns
 		// load abbr
 	}
-	public function tag2field($fieldname, $ar = array())
+	public function tag2field($fieldname, $ar = [])
 	{
 		$fieldname = strtolower($fieldname);
 		$funcname = 'make_' . $fieldname;
@@ -159,7 +159,7 @@ class gw_htmlforms extends gwForms
 		return $tmp['str'];
 	}
 	//
-	public function make_term($fieldname, $ar = array())
+	public function make_term($fieldname, $ar = [])
 	{
 		global $oFunc;
 		if (!isset($this->arEl[$fieldname]))
@@ -254,7 +254,7 @@ class gw_htmlforms extends gwForms
 		return $tmp['strform'];
 	}
 	/* */
-	public function make_audio($fieldname, $ar = array())
+	public function make_audio($fieldname, $ar = [])
 	{
 		$tmp['strform'] = '';
 		$tmp['strform'] .= '<tr class="'.$this->Gtmp['cssTrClass'].'">';
@@ -295,7 +295,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		return $tmp['strform'];
 	}
 	/* */
-	public function make_trsp($fieldname, $ar = array())
+	public function make_trsp($fieldname, $ar = [])
 	{
 		return $this->make_set_array2textarea($fieldname, $ar);
 	}
@@ -318,7 +318,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		return $str;
 	}
 	//
-	public function make_defn($fieldname, $ar = array())
+	public function make_defn($fieldname, $ar = [])
 	{
 		global $oFunc, $oHtml, $gw_this, $oSess;
 		$tmp['strform'] = $tmp['strBtnRemove'] = $tmp['strHtmlTB'] = $tmp['strBtnAdd'] = '';
@@ -328,9 +328,9 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		// default value
 		if (!isset($this->arEl[$fieldname]) || !is_array($this->arEl[$fieldname][0]))
 		{
-			$this->arEl[$fieldname] = array(0 => array('value' => ''));
-		}
-		if (!isset($this->arEl[$fieldname]))
+            $this->arEl[$fieldname] = [0 => ['value' => '']];
+        }
+        if (!isset($this->arEl[$fieldname]))
 		{
 			$this->arEl[$fieldname][0]['value'] = '';
 		}
@@ -543,12 +543,12 @@ $tmp['strform'] .= '/*]]>*/</script>';
         $this->Set('arAbbr', $tmp['arTmp']);
     }
 	/* */
-	public function make_trns($fieldname, $ar = array())
+	public function make_trns($fieldname, $ar = [])
 	{
 		return $this->make_abbr($fieldname, $ar, 'trns');
 	}
 	/* */
-	public function make_abbr($fieldname, $ar = array(), $tag = 'abbr')
+	public function make_abbr($fieldname, $ar = [], $tag = 'abbr')
 	{
 		$tmp['strform'] = '';
 
@@ -562,7 +562,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		}
 		$tmp['cur_array'] = $this->$tmp['cur_element'];
 
-		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
+		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : [];
 		//
 		$this->unsetTag('input'); // reset settings for <input>
 		$this->setTag('input', 'size', '25');
@@ -636,26 +636,26 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		return $tmp['strform'];
 	}
 	//
-	public function make_usg($fieldname, $ar = array())
+	public function make_usg($fieldname, $ar = [])
 	{
 		return $this->make_set_array2textarea($fieldname, $ar);
 	}
 	//
-	public function make_src($fieldname, $ar = array())
+	public function make_src($fieldname, $ar = [])
 	{
 		return $this->make_set_textarea($fieldname, $ar);
 	}
 	//
-	public function make_syn($fieldname, $ar = array())
+	public function make_syn($fieldname, $ar = [])
 	{
 		return $this->make_see($fieldname, $ar);
 	}
 	//
-	public function make_see($fieldname, $ar = array())
+	public function make_see($fieldname, $ar = [])
 	{
 		global $oFunc;
 		$tmp['strform'] = $tmp['str'] = '';
-		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
+		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : [];
 		//
 		// do auto fill
 		if (empty($tmp['arEl']))
@@ -699,26 +699,26 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		return $tmp['strform'];
 	}
 	/* */
-	public function make_antonym($fieldname, $ar = array())
+	public function make_antonym($fieldname, $ar = [])
 	{
 		return $this->make_see($fieldname, $ar);
 	}
 	//
-	public function make_address($fieldname, $ar = array())
+	public function make_address($fieldname, $ar = [])
 	{
 		return $this->make_set_textarea($fieldname, $ar);
 	}
 	//
-	public function make_phone($fieldname, $ar = array())
+	public function make_phone($fieldname, $ar = [])
 	{
 		return $this->make_set_textarea($fieldname, $ar);
 	}
 	//
-	public function make_set_textarea($fieldname, $ar = array())
+	public function make_set_textarea($fieldname, $ar = [])
 	{
 		global $oFunc;
 		$tmp['strform'] = $tmp['str'] = '';
-		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : array();
+		$tmp['arEl'] = isset($this->arEl[$fieldname][$ar['elK']]) ? $this->arEl[$fieldname][$ar['elK']] : [];
 		//
 		// do auto fill
 		if (empty($tmp['arEl']))
@@ -750,7 +750,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		return $tmp['strform'];
 	}
 	//
-	public function make_set_array2textarea($fieldname, $ar = array())
+	public function make_set_array2textarea($fieldname, $ar = [])
 	{
 		global $oFunc; /* getFormHeight */
 		$this->unsetTag('textarea');
@@ -759,7 +759,7 @@ $tmp['strform'] .= '/*]]>*/</script>';
 		//
 		if (!isset($this->arEl[$fieldname]))
 		{
-			$this->arEl[$fieldname] = array();
+			$this->arEl[$fieldname] = [];
 		}
 		if (!isset($ar['elK']))
 		{

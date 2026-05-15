@@ -75,7 +75,7 @@ class CI_DB_mysqli_utility extends CI_DB_utility {
 	 * @param	array	Preferences
 	 * @return	mixed
 	 */
-    public function _backup($params = array())
+    public function _backup($params = [])
 	{
 		if (count($params) == 0)
 		{
@@ -141,7 +141,7 @@ class CI_DB_mysqli_utility extends CI_DB_utility {
 			// surround the data with quotes or not
 			
 			$field_str = '';
-			$is_int = array();
+			$is_int = [];
 			for ($i = 0, $num_fields = mysqli_num_fields($query->result_id); $i < $num_fields; $i++)
 			{
 				$field = mysqli_fetch_field_direct($query->result_id, $i);

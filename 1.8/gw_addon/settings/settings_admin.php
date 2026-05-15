@@ -19,11 +19,11 @@ if (!defined('IN_GW')) {
 class gw_addon_settings_admin extends gw_addon
 {
 	public $str;
-	public $ar_component = array();
+	public $ar_component = [];
 	/* Current component name */
 	public $component;
 	/** @var array */
-	public $ar_msg_topics = array();
+	public $ar_msg_topics = [];
 	/* Autoexec */
 	public function __construct()
 	{
@@ -44,7 +44,7 @@ class gw_addon_settings_admin extends gw_addon
 	 * @return   string  complete HTML-code
 	 * @see textcodetoform(), getFormHeight()
 	 */
-	public function get_form($vars, $runtime = 0, $arBroken = array(), $arReq = array())
+	public function get_form($vars, $runtime = 0, $arBroken = [], $arReq = [])
 	{
 		$topic_mode = 'form';
 		$str_form = '';
@@ -71,7 +71,7 @@ class gw_addon_settings_admin extends gw_addon
 		// reverse array keys <-- values;
 		$arReq = array_flip($arReq);
 		// mark fields as "REQUIRED" and make error messages
-		foreach ((is_array($vars) ? $vars : array()) as $key => $val)
+		foreach ((is_array($vars) ? $vars : []) as $key => $val)
 		{
 			$arReqMsg[$key] = $arBrokenMsg[$key] = '';
 			if (isset($arReq[$key])) { $arReqMsg[$key] = '&#160;<span class="red"><strong>*</strong></span>'; }
@@ -518,7 +518,7 @@ class gw_addon_settings_admin extends gw_addon
 				$this->gw_this['vars'][GW_ACTION],
 				$this->gw_this['vars'][GW_TARGET])
 			);
-			$this->ar_component = isset($arSql[0]) ? $arSql[0] : array();
+			$this->ar_component = isset($arSql[0]) ? $arSql[0] : [];
 			/* Component settings found */
 			if (!empty($this->ar_component))
 			{

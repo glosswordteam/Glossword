@@ -48,25 +48,25 @@ if ( ! class_exists('gwv_casemap')) {
         public $encoding = 'UTF-8';
 
         /* Autostart */
-        public function __construct($arp = array(1), $arp_sp = array(1))
+        public function __construct($arp = [1], $arp_sp = [1])
         {
-            $this->arp    = $arp;
+            $this->arp = $arp;
             $this->arp_sp = $arp_sp;
         }
 
         /* Reload settings */
-        public function reload($arp = array(1), $arp_sp = array(1))
+        public function reload($arp = [1], $arp_sp = [1])
         {
-            $this->arp          = $arp;
-            $this->arp_sp       = $arp_sp;
-            $this->is_loaded    = 0;
+            $this->arp = $arp;
+            $this->arp_sp = $arp_sp;
+            $this->is_loaded = 0;
             $this->is_loaded_sp = 0;
         }
 
         /**
          * @access private
          */
-        public function _load_profile($ar = array(1))
+        public function _load_profile($ar = [1])
         {
             /* Exit when `mbstring' is enabled or the casemap has been loaded before */
             if ((function_exists('mb_strtoupper')
@@ -76,7 +76,7 @@ if ( ! class_exists('gwv_casemap')) {
             ) {
                 return;
             }
-            $this->ar['lc'] = $this->ar['uc'] = $this->ar['nn'] = $this->ar['tr'] = array();
+            $this->ar['lc'] = $this->ar['uc'] = $this->ar['nn'] = $this->ar['tr'] = [];
             switch ($this->encoding) {
                 case 'windows-1251':
                     $func_enc = '_get_windows1251_casemap';
@@ -95,12 +95,12 @@ if ( ! class_exists('gwv_casemap')) {
         }
 
         /* */
-        public function _load_profile_sp($ar = array(1))
+        public function _load_profile_sp($ar = [1])
         {
             if ($this->is_loaded_sp) {
                 return;
             }
-            $this->ar_sp = array();
+            $this->ar_sp = [];
             foreach ($ar as $k => $v) {
                 $this->ar_sp = array_merge($this->ar_sp, unserialize($this->_get_specials($v)));
             }
@@ -263,7 +263,7 @@ if ( ! class_exists('gwv_casemap')) {
          */
         public function _get_utf8_casemap_db($map = 'lc', $id_profile = 1)
         {
-            return array();
+            return [];
         }
 
         /* Remove everything */
@@ -379,7 +379,7 @@ if ( ! class_exists('gwv_casemap')) {
                 return $sp[$id_profile];
             }
 
-            return array();
+            return [];
         }
 
         /**
@@ -389,7 +389,7 @@ if ( ! class_exists('gwv_casemap')) {
          */
         public function _get_specials_db($id_profile = 1)
         {
-            return array();
+            return [];
         }
     }
 

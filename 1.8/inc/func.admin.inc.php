@@ -311,9 +311,9 @@ function gw_admin_menu($a, $t)
 
     $arMenu = gw_admin_get_menu_items();
 
-	$gw_this['ar_actions_list'] = array();
+	$gw_this['ar_actions_list'] = [];
 	/* Javascript collapsible objects */
-	$ar_js_ids = array();
+	$ar_js_ids = [];
 	/* Add search form */
 	if ($oSess->is('is-terms') || $oSess->is('is-terms-own'))
 	{
@@ -334,7 +334,7 @@ function gw_admin_menu($a, $t)
 		$ar_js_ids[$int_menu_el] = str_replace('_', '-', $id_component);
 
         // Context action list
-		$gw_this['ar_actions_list'][$id_component] = array();
+		$gw_this['ar_actions_list'][$id_component] = [];
 
 		$str .= PHP_EOL.'<tr>';
 		$str .= '<td onclick="return toggle_collapse(\''.$ar_js_ids[$int_menu_el].'\')" class="admcomponents" style="text-align:' . $sys['css_align_left'] . '">';
@@ -497,27 +497,25 @@ function postQuery($arQuery, $url = '', $isDebug = 0, $isPause = 1, $lock = '')
  */
 function gw_ParsePre($arParsed, $arPre)
 {
-	global $arDictParam, $gw_this;
+    global $arDictParam, $gw_this;
 
-	$arControl =& $gw_this['vars']['arControl'];
-	if (!is_array($arParsed) || !is_array($arPre))
-	{
-		return $arParsed;
-	}
-	// go for $arPre
-	//
-	// update some arrays and tags...
-	//
-	//
-	if (isset($arPre['trsp'][0][0]['value']))
-	{
-		$tmp['arTrsp'] = explode(CRLF, trim($arPre['trsp'][0]['value']));
+    $arControl =& $gw_this['vars']['arControl'];
+    if (!is_array($arParsed) || !is_array($arPre)) {
+        return $arParsed;
+    }
+    // go for $arPre
+    //
+    // update some arrays and tags...
+    //
+    //
+    if (isset($arPre['trsp'][0][0]['value'])) {
+        $tmp['arTrsp'] = explode(CRLF, trim($arPre['trsp'][0]['value']));
         if (is_array($tmp['arTrsp'])) {
             foreach ($tmp['arTrsp'] as $k => $v) {
                 $arPre['trsp'][0][$k]['value'] = $v;
             }
         }
-	}
+    }
     // for each target [ abbr | trns | defn | syn | .. ]
     foreach ($arPre as $target_name => $arTarget) {
         // replace structures
@@ -525,124 +523,116 @@ function gw_ParsePre($arParsed, $arPre)
     }
     // for each target [ abbr | trns | defn | syn | .. ]
     foreach ($arPre as $target_name => $arTarget) {
-		// is there any direct instructions for this tag?
-		if (isset($arControl[$target_name])) // defn | abbr | trns
-		{
-			// Get ID from current tag followed by direct instructions
-			foreach ($arControl[$target_name] as $action => $arId)
-			{
-				$tmp['action'] = $action;
-				foreach ($arId as $elK => $arCh)
-				{
-					foreach ($arCh as $chK => $ChV)
-					{
-						$tmp['chK'] = $chK;
-						$tmp['elK'] = $elK;
-					}
-				}
-			}
-			// Now script knows what are `chK' and `ehK' for current tag
+        // is there any direct instructions for this tag?
+        if (isset($arControl[$target_name])) // defn | abbr | trns
+        {
+            // Get ID from current tag followed by direct instructions
+            foreach ($arControl[$target_name] as $action => $arId) {
+                $tmp['action'] = $action;
+                foreach ($arId as $elK => $arCh) {
+                    foreach ($arCh as $chK => $ChV) {
+                        $tmp['chK'] = $chK;
+                        $tmp['elK'] = $elK;
+                    }
+                }
+            }
+            // Now script knows what are `chK' and `ehK' for current tag
 
-			// How many keys (definitions) in the current tag
-			$tmp['intCurChilds'] = (sizeof($arParsed[$target_name][$tmp['elK']]) - 1); // -1 because array
+            // How many keys (definitions) in the current tag
+            $tmp['intCurChilds'] = (sizeof($arParsed[$target_name][$tmp['elK']]) - 1); // -1 because array
 
-			if ($tmp['action'] == GW_A_ADD)
-			{
-				// add empty values
-				if (!empty($arDictParam))
-				{
-					if (!isset($arParsed['syn']) && $arDictParam['is_syn'] ) { $arParsed['syn'] = array(); }
-					if (!isset($arParsed['antonym']) && $arDictParam['is_antonym'] ) { $arParsed['antonym'] = array(); }
-					if (!isset($arParsed['see']) && $arDictParam['is_see']){ $arParsed['see'] = array(); }
-					if (!isset($arParsed['usg']) && $arDictParam['is_usg']){ $arParsed['usg'] = array(); }
-					if (!isset($arParsed['src']) && $arDictParam['is_src']){ $arParsed['src'] = array(); }
-					if (!isset($arParsed['phone']) && $arDictParam['is_phone']){ $arParsed['phone'] = array(); }
-					if (!isset($arParsed['address']) && $arDictParam['is_address']){ $arParsed['address'] = array(); }
-				}
-				//
-				if ( ($target_name == 'abbr') || ($target_name == 'trns') )
-				{
-					// do not add empty attributes
-					if ( ($arParsed[$target_name][$tmp['elK']][$tmp['intCurChilds']]['value'] != '') ||
-						 ($arParsed[$target_name][$tmp['elK']][$tmp['intCurChilds']]['attributes']['lang'] != '--')
-					   )
-					{
-						$arParsed[$target_name][$tmp['elK']][($tmp['intCurChilds']+1)]['value'] = '';
-						$arParsed[$target_name][$tmp['elK']][($tmp['intCurChilds']+1)]['attributes']['lang'] = '--';
-					}
-				}
-				elseif ($target_name == 'defn')
-				{
-					//
-					gw_array_insert($arParsed[$target_name], $tmp['elK'],
-							array('value' => '')
-					);
-					//
-					gw_array_insert($arParsed['abbr'], $tmp['elK'],
-							array(0 => array('value' => '', 'attributes' => array('lang' => '--')))
-					);
-					gw_array_insert($arParsed['trns'], $tmp['elK'],
-							array(0 => array('value' => '', 'attributes' => array('lang' => '--')))
-					);
-					//
-					gw_array_insert($arParsed['usg'], $tmp['elK'], array('value' => '') );
-					gw_array_insert($arParsed['address'], $tmp['elK'], array(0 => array('value' => '')) );
-					gw_array_insert($arParsed['phone'], $tmp['elK'], array(0 => array('value' => '')) );
-					gw_array_insert($arParsed['src'], $tmp['elK'], array(0 => array('value' => '')) );
-					gw_array_insert($arParsed['see'], $tmp['elK'], array(0 => array('value' => '')) );
-					gw_array_insert($arParsed['syn'], $tmp['elK'], array(0 => array('value' => '')) );
-					gw_array_insert($arParsed['antonym'], $tmp['elK'], array(0 => array('value' => '')) );
-
-					#prn_r($arParsed['usg'], strval($tmp['elK']));
-				}
-				elseif ($target_name == 'page')
-				{
-					gw_array_insert($arParsed[$target_name], $tmp['elK'],
-							array('page_title' => '', 'page_descr' => '', 'page_keywords' => '', 'page_content' => '', 'id_lang' => '', 'id_page_phrase' => '')
-					);
-				}
-				elseif ($target_name == 'topic')
-				{
-					gw_array_insert($arParsed[$target_name], $tmp['elK'],
-							array('topic_title' => '', 'topic_descr' => '', 'id_lang' => '', 'id_topic_phrase' => '')
-					);
-				}
-			}
-			elseif ($tmp['action'] == GW_A_REMOVE)
-			{
-				// `Remove' pressed
-				//
-				if ( ($target_name == 'abbr') || ($target_name == 'trns') )
-				{
-					// do not remove empty attributes
-					if ( ($arParsed[$target_name][$tmp['elK']][$tmp['chK']]['value'] != '') ||
-						 ($arParsed[$target_name][$tmp['elK']][$tmp['chK']]['attributes']['lang'] != '--')
-					   )
-					{
-						unset($arParsed[$target_name][$tmp['elK']][$tmp['chK']]);
-					}
-					unset($arParsed[$target_name][$tmp['elK']][$tmp['chK']]);
-				}
-				else
-				{
-					// Remove current key from definition and all related to key tags
-					foreach ($arParsed as $targetK => $targetV)
-					{
-						/* unset only existed keys */
-						if (isset($targetV[$tmp['elK']]) && is_array($arParsed[$targetK][$tmp['elK']]))
-						{
-							unset( $arParsed[$targetK][$tmp['elK']] );
-						}
-					}
-				} // end of target
-			} // end of action
+            if ($tmp['action'] == GW_A_ADD) {
+                // add empty values
+                if (!empty($arDictParam)) {
+                    if (!isset($arParsed['syn']) && $arDictParam['is_syn']) {
+                        $arParsed['syn'] = [];
+                    }
+                    if (!isset($arParsed['antonym']) && $arDictParam['is_antonym']) {
+                        $arParsed['antonym'] = [];
+                    }
+                    if (!isset($arParsed['see']) && $arDictParam['is_see']) {
+                        $arParsed['see'] = [];
+                    }
+                    if (!isset($arParsed['usg']) && $arDictParam['is_usg']) {
+                        $arParsed['usg'] = [];
+                    }
+                    if (!isset($arParsed['src']) && $arDictParam['is_src']) {
+                        $arParsed['src'] = [];
+                    }
+                    if (!isset($arParsed['phone']) && $arDictParam['is_phone']) {
+                        $arParsed['phone'] = [];
+                    }
+                    if (!isset($arParsed['address']) && $arDictParam['is_address']) {
+                        $arParsed['address'] = [];
+                    }
+                }
+                //
+                if (($target_name == 'abbr') || ($target_name == 'trns')) {
+                    // do not add empty attributes
+                    if (($arParsed[$target_name][$tmp['elK']][$tmp['intCurChilds']]['value'] != '') ||
+                        ($arParsed[$target_name][$tmp['elK']][$tmp['intCurChilds']]['attributes']['lang'] != '--')
+                    ) {
+                        $arParsed[$target_name][$tmp['elK']][($tmp['intCurChilds'] + 1)]['value'] = '';
+                        $arParsed[$target_name][$tmp['elK']][($tmp['intCurChilds'] + 1)]['attributes']['lang'] = '--';
+                    }
+                } elseif ($target_name == 'defn') {
+                    //
+                    gw_array_insert($arParsed[$target_name], $tmp['elK'],
+                        ['value' => '']
+                    );
+                    //
+                    gw_array_insert($arParsed['abbr'], $tmp['elK'],
+                        [0 => ['value' => '', 'attributes' => ['lang' => '--']]]
+                    );
+                    gw_array_insert($arParsed['trns'], $tmp['elK'],
+                        [0 => ['value' => '', 'attributes' => ['lang' => '--']]]
+                    );
+                    //
+                    gw_array_insert($arParsed['usg'], $tmp['elK'], ['value' => '']);
+                    gw_array_insert($arParsed['address'], $tmp['elK'], [0 => ['value' => '']]);
+                    gw_array_insert($arParsed['phone'], $tmp['elK'], [0 => ['value' => '']]);
+                    gw_array_insert($arParsed['src'], $tmp['elK'], [0 => ['value' => '']]);
+                    gw_array_insert($arParsed['see'], $tmp['elK'], [0 => ['value' => '']]);
+                    gw_array_insert($arParsed['syn'], $tmp['elK'], [0 => ['value' => '']]);
+                    gw_array_insert($arParsed['antonym'], $tmp['elK'], [0 => ['value' => '']]);
+                    #prn_r($arParsed['usg'], strval($tmp['elK']));
+                } elseif ($target_name == 'page') {
+                    gw_array_insert($arParsed[$target_name], $tmp['elK'],
+                        ['page_title' => '', 'page_descr' => '', 'page_keywords' => '', 'page_content' => '', 'id_lang' => '', 'id_page_phrase' => '']
+                    );
+                } elseif ($target_name == 'topic') {
+                    gw_array_insert($arParsed[$target_name], $tmp['elK'],
+                        ['topic_title' => '', 'topic_descr' => '', 'id_lang' => '', 'id_topic_phrase' => '']
+                    );
+                }
+            } elseif ($tmp['action'] == GW_A_REMOVE) {
+                // `Remove' pressed
+                //
+                if (($target_name == 'abbr') || ($target_name == 'trns')) {
+                    // do not remove empty attributes
+                    if (($arParsed[$target_name][$tmp['elK']][$tmp['chK']]['value'] != '') ||
+                        ($arParsed[$target_name][$tmp['elK']][$tmp['chK']]['attributes']['lang'] != '--')
+                    ) {
+                        unset($arParsed[$target_name][$tmp['elK']][$tmp['chK']]);
+                    }
+                    unset($arParsed[$target_name][$tmp['elK']][$tmp['chK']]);
+                } else {
+                    // Remove current key from definition and all related to key tags
+                    foreach ($arParsed as $targetK => $targetV) {
+                        /* unset only existed keys */
+                        if (isset($targetV[$tmp['elK']]) && is_array($arParsed[$targetK][$tmp['elK']])) {
+                            unset($arParsed[$targetK][$tmp['elK']]);
+                        }
+                    }
+                } // end of target
+            } // end of action
 #            prn_r($arPre);
 #            prn_r($arParsed);
-		} // target_name
-		//
-		#prn_r($arParsed['abbr'], $target_name);
-	} // end of root elements, target
-	return $arParsed;
+        } // target_name
+        //
+        #prn_r($arParsed['abbr'], $target_name);
+    } // end of root elements, target
+    return $arParsed;
 }
 
 /**

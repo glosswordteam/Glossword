@@ -27,9 +27,9 @@ if (!defined('CRLF')) { define('CRLF', "\n"); }
 if (!defined('IS_CLASS_GW2_GLOBALS')) { define('IS_CLASS_GW2_GLOBALS', 1);
 class tkit_register_globals {
 	private $max_nesting_level = 5;
-    public function register($ar = array())
+    public function register($ar = [])
 	{
-		$tmp['_files'] = $tmp['_cookie'] = array();
+		$tmp['_files'] = $tmp['_cookie'] = [];
 		foreach ($ar as $k => $v)
 		{
 			if (isset($_POST[$v]) && ($_POST[$v] != ''))

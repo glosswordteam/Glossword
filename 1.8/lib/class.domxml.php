@@ -32,7 +32,7 @@ if ( ! class_exists('gw_domxml')) {
          *
          */
         public $strData = '<xml><line type="123">abc<level>qwerty</level></line><line type="456">def</line></xml>';
-        public $arData = array();
+        public $arData = [];
         public $vals = '';
         public $index = '';
         public $is_skip_white = 1;
@@ -49,7 +49,7 @@ if ( ! class_exists('gw_domxml')) {
             /* preg_match! */
             preg_match_all("/<" . $tagname . "( (.*?))*>(.*?)<\/" . $tagname . ">/si", $this->strData, $arFound);
 
-            return isset($arFound[$key]) ? $arFound[$key] : array();
+            return isset($arFound[$key]) ? $arFound[$key] : [];
         }
 
         /**
@@ -59,7 +59,7 @@ if ( ! class_exists('gw_domxml')) {
         {
             /* current $arElement only */
             if ($tagname == '') {
-                $arReturn = array();
+                $arReturn = [];
                 if ( ! is_array($arElement)) {
                     $arReturn[] = $arElement;
                 }
@@ -88,7 +88,7 @@ if ( ! class_exists('gw_domxml')) {
                         }
                     }
 
-                    return array();
+                    return [];
                 }
             }
         }
@@ -96,7 +96,7 @@ if ( ! class_exists('gw_domxml')) {
         /**
          *
          */
-        public function get_attribute($attrname, $tagname, $a = array())
+        public function get_attribute($attrname, $tagname, $a = [])
         {
             $attrname = strtolower($attrname);
             $tagname  = strtolower($tagname);
@@ -129,10 +129,10 @@ if ( ! class_exists('gw_domxml')) {
         }
 
         /* */
-        public function get_elements_by_tagname($tagname, $a = array())
+        public function get_elements_by_tagname($tagname, $a = [])
         {
             $tagname  = strtolower($tagname);
-            $arReturn = array();
+            $arReturn = [];
             if (empty($a)) {
                 $a = $this->arData;
             }
@@ -155,7 +155,7 @@ if ( ! class_exists('gw_domxml')) {
          */
         public function get_children($vals, &$i)
         {
-            $children = array();
+            $children = [];
             $cntVals  = sizeof($vals);
             /* TODO: limit nesting levels */
             if ($vals[$i]['level'] > 4) {
@@ -223,7 +223,7 @@ if ( ! class_exists('gw_domxml')) {
             if (isset($ar_last['value'])) {
                 $this->msg_error .= ', value: ' . htmlspecialchars(substr($ar_last['value'], 0, 128));
             }
-            $tree = array();
+            $tree = [];
             $i    = 0;
             if ( ! empty($vals)) {
                 $tree[] = array(

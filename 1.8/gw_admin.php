@@ -396,7 +396,7 @@ $arTplVars['srch'] = [
 $gw_this['arDictListSrch'] = [];
 //
 // Search query, default values
-#if (!is_array($srch)) { $srch = array(); }
+#if (!is_array($srch)) { $srch = []; }
 #if (!isset($srch['by'])) { $srch['by'] = 'd'; } // search by dictionary
 #if (!isset($gw_this['vars']['srch']['in'])) { $gw_this['vars']['srch']['in'] = 1; }  // search in terms only for admin mode
 #if (!isset($srch['adv'])) { $srch['adv'] = 'all'; } // seach all words

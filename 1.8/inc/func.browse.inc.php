@@ -132,7 +132,7 @@ function gw_sql2defnpreview($arSql)
 	global $sys, $arFields, $arDictParam, $gw_this;
 
 	$oDom = new gw_domxml;
-	$arPreview = array();
+	$arPreview = [];
 	$incr_term = 0;
 	$int_fields_total = sizeof($arFields);
 	$str_split_defn =& $ar_theme['split_defn'];
@@ -146,7 +146,7 @@ function gw_sql2defnpreview($arSql)
 
     foreach ($arSql as $k => $arV) {
 		$incr_term = $k;
-		$arPre = array();
+		$arPre = [];
 		/* Init. */
         foreach ($arFields as $fK => $fV) {
 			$arPreview[$incr_term][0][$fK] = '';
@@ -297,8 +297,8 @@ function gw_sql2defnpreview($arSql)
 #prn_r( $arPreview );
 #prn_r( $arDuplicates );
 
-	$arA = array(array());
-	$int_timer = 0;
+    $arA = [[]];
+    $int_timer = 0;
     foreach ($arPreview as $k => $arV) {
 		$str_incomplete = $arV[1]['is_complete'] ? '' : '?&#160;';
 
@@ -1030,7 +1030,7 @@ function get_get_term_random()
 	$arDictParam = $gw_this['ar_dict_list'][mt_rand(0, sizeof($gw_this['ar_dict_list'])-1)];
 	$sql = $oSqlQ->getQ('get-term-rand', $arDictParam['tablename']);
 	$arSql = $oDb->sqlExec($sql);
-	$arSql = isset($arSql[0]) ? $arSql[0] : array();
+	$arSql = isset($arSql[0]) ? $arSql[0] : [];
 	$arSql = array_merge($arDictParam, $arSql);
 	return $arSql;
 }
