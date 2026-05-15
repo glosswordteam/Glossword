@@ -25,6 +25,8 @@ class gw_addon_vkbd_admin extends gw_addon
     public $ar_groups   = [];
     public $ar_profile  = [];
     public $ar_profiles = [];
+    /** @var array */
+    public $ar_component = [];
 
     /* Autoexec */
     public function __construct()

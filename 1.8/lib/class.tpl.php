@@ -73,6 +73,12 @@ class gwv_template
 	/* */
 	public $ua_number = false;
 
+	/** @var gwv_template_cmd Command processor (set by constructor) */
+	public $oCmd;
+
+    /** @var string Name of the last parsed variable */
+	public $var_last_parsed = '';
+
 // --------------------------------------------------------
 // Autostart
 // --------------------------------------------------------
@@ -514,6 +520,12 @@ class gwv_template
 
 class gwv_template_cmd extends gwv_template
 {
+	/** @var array Plural-form collection of compiled blocks (vs. parent's $arBlockC) */
+	public $arBlocksC = array();
+
+	/** @var array Plural-form collection of include blocks (vs. parent's $arBlockI) */
+	public $arBlocksI = array();
+
 	/* */
 	public function __construct()
 	{

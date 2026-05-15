@@ -26,6 +26,10 @@ class gw_addon_feedback extends gw_addon
     public $int_max_length = 4096;
     public $str;
     public $html_title;
+    /** @var string */
+    public $subject_add_a_term;
+    /** @var string */
+    public $subject_report;
 
     /* Autoexec */
     public function __construct()

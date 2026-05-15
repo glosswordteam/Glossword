@@ -22,18 +22,20 @@ if (!defined('IN_GW')) {
  */
 class gw_htmlforms extends gwForms
 {
-	public $Gsys     = array();
-	public $Gtmp     = array('strform' => '', 'str' => '');
-	public $oL       = array();
-	public $objDom   = '';
-	public $objDict  = '';
-	public $oFieldExt  = array();
-	public $arFields = array();
-	public $arEl     = array();
-	public $is_abbr_short = 0; // [ 0 - abbreviation | 1 - abbr.   ]
+	/** @var array */
+    public $arDictParam   = [];
+    public $Gsys          = [];
+    public $Gtmp          = ['strform' => '', 'str' => ''];
+    public $oL            = [];
+    public $objDom        = '';
+    public $objDict       = '';
+    public $oFieldExt     = [];
+    public $arFields      = [];
+    public $arEl          = [];
+    public $is_abbr_short = 0; // [ 0 - abbreviation | 1 - abbr.   ]
 
-	// available functions
-	public $arFuncList = array(
+    // available functions
+    public $arFuncList = array(
 					   'make_term' => 1, 'make_trsp' => 1, 'make_defn' => 1,
 					   'make_abbr' => 1, 'make_trns' => 1, 'make_audio' => 1,
 					   'make_syn'  => 1, 'make_antonym'  => 1, 'make_see'  => 1,

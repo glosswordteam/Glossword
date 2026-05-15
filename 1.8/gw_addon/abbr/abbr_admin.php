@@ -21,6 +21,8 @@ class gw_addon_abbr_admin extends gw_addon
 {
     public $addon_name = 'abbr';
     public $ar_groups;
+    /** @var array */
+    public $ar_component = [];
 
     /* Autoexec */
     public function __construct()

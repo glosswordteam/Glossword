@@ -22,6 +22,13 @@ if (!defined('IN_GW')) {
 
 class gw_addon_topic_admin extends gw_addon
 {
+    /** @var string */
+    public $addon_name;
+    /** @var array */
+    public $ar_component = [];
+    /** @var string */
+    public $filename;
+
     /* Autoexec */
     public function __construct()
     {

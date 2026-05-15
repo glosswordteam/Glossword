@@ -25,7 +25,31 @@ if (!defined('IN_GW')) {
 
 class gw_render extends gw_htmlforms
 {
-	public $is_html_preview = 0;
+    /** @var array */
+    public $sys = [];
+
+    /** @var array */
+    public $ar_theme = [];
+
+    /** @var gw_database */
+    public $oDb;
+
+    /** @var gw_functions */
+    public $oFunc;
+
+    /** @var gw_html */
+    public $oHtml;
+
+    /** @var gw_session */
+    public $oSess;
+
+    /** @var gw_sql_query */
+    public $oSqlQ;
+
+    /** @var gw_template */
+    public $oTpl;
+
+    public $is_html_preview = 0;
 	public $tag_abbr   = 'acronym'; // 'abbr' for XHTML 2.0
 	public $tag_trns   = 'acronym'; // 'abbr' for XHTML 2.0
 	// <trsp> tag

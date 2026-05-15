@@ -76,6 +76,30 @@ function gw_get_note_afterpost($text, $status = 0)
 
 class gw_restore_quotes
 {
+    /** @var int */
+    public $is_strip_tags = 0;
+
+    /** @var string */
+    public $rule_proto;
+
+    /** @var string */
+    public $rule_ahref;
+
+    /** @var string */
+    public $rule_atext;
+
+    /** @var string */
+    public $rule_abracket;
+
+    /** @var string */
+    public $rule_attr;
+
+    /** @var string */
+    public $rule_spaces;
+
+    /** @var string */
+    public $rule_attr_regex;
+
     /* */
     public function init()
     {

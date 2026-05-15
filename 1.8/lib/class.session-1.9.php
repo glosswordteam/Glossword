@@ -62,6 +62,18 @@ class gw_session_1_9
 	public $db_table_users = '';
 	public $db_table_sessions = '';
 
+	/** @var int Whether the session is marked as remember-me */
+	public $is_remember = 0;
+
+    /** @var string Remote client IP, populated from REMOTE_IP */
+	public $remote_ip = '';
+
+    /** @var string Remote client User-Agent, populated from REMOTE_UA */
+	public $remote_ua = '';
+
+    /** @var int Current request time, populated from $sys['time_now'] */
+	public $time_now = 0;
+
 	public function load_settings()
 	{
 		$vars = array(

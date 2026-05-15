@@ -59,7 +59,7 @@ if (!class_exists('gwtkCache')) {
          *
          * @var string
          */
-        private $_cache_key_hash = '_';
+        public $cache_key_hash = '_';
 
         /**
          * Debug log.
@@ -91,7 +91,7 @@ if (!class_exists('gwtkCache')) {
          */
         public function setKey($str, $prefix)
         {
-            $this->_cache_key_hash = md5((string) $str);
+            $this->cache_key_hash = md5((string) $str);
             $this->cache_prefix = (string) $prefix;
         }
 

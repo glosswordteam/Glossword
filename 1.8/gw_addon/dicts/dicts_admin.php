@@ -21,6 +21,10 @@ class gw_addon_dicts_admin extends gw_addon
 {
     /* Current component name */
     public $component;
+    /** @var array */
+    public $ar_component = [];
+    /** @var array */
+    public $ar_profiles = [];
 
     /* Autoexec */
     public function __construct()

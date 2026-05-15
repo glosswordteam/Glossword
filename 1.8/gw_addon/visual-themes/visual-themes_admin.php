@@ -22,6 +22,10 @@ class gw_addon_visual_themes_admin extends gw_addon
 
     public $component = 'visual-themes';
     public $int_found;
+    /** @var array */
+    public $ar_component = [];
+    /** @var string */
+    public $cur_template;
 
     /* Autoexec */
     public function __construct()

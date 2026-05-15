@@ -22,6 +22,8 @@ class gw_addon_log_search_admin extends gw_addon
     public $addon_name = 'log-search';
     public $int_found;
     public $int_pages;
+    /** @var array */
+    public $ar_component = [];
 
     /* Autoexec */
     public function __construct()

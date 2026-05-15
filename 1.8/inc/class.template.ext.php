@@ -18,6 +18,18 @@ if (!defined('IN_GW')) {
 $sys['class_tpl'] = 'pch_template';
 class pch_template extends gwv_template
 {
+	/** @var int Theme settings row id used for template lookup */
+	public $id_style;
+
+    /** @var string Name of the template-storage DB table */
+	public $db_table;
+
+    /** @var gwv_template_cmd */
+	public $oCmd;
+
+	/** @var string Name of the last parsed variable; used for cache invalidation */
+	public $var_last_parsed = '';
+
 	/* File-based */
 	/*
 	public function init()

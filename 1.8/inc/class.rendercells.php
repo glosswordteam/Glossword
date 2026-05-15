@@ -50,6 +50,9 @@ class htmlRenderCells
     /** @var string CSS class for the table element */
     public $t_class = '';
 
+    /** @var int Total number of items currently in $ar; refreshed by RenderCells() */
+    public $total_items = 0;
+
     /**
      * Calculates the flat array index for a cell at given grid position.
      *
@@ -72,68 +75,68 @@ class htmlRenderCells
         return $num_start;
     }
 
-public function RenderCells()
-{
-    $href = "";
-    $str = "";
-    $navPagesA = array();
-    $linkNext = $linkPrev = $linkCur = "";
-    $cellAlign = ($this->cellAlign != "") ? ' align="' . $this->cellAlign . '"' : '';
-    $cellClass = ($this->cellClass != "") ? ' class="' . $this->cellClass . '"' : '';
-    $this->totalItems = count($this->ar);
-
-    $NumberOfAllThumbs = ($this->X * $this->Y);
-    $NumberOfPages = ceil($this->totalItems / $NumberOfAllThumbs);
-    $ColsTotalOne = intval($NumberOfAllThumbs / $this->X);
-    $ColsTotalTwo = ($NumberOfAllThumbs / $this->X);
-    if ($ColsTotalTwo > $ColsTotalOne){ $ColsTotalOne += 1; }
-    $Y = $ColsTotalOne;
-    $NumberOfEmpty = 0;
-    if (($this->totalItems - ($NumberOfAllThumbs * $this->page) ) < 0)
+    public function RenderCells()
     {
-        $NumberOfEmpty = ( ( ($this->X * $this->Y) * $NumberOfPages) - $this->totalItems );
-    }
-    if ($NumberOfEmpty > 0)
-    {
-        $Yauto = intval(($NumberOfAllThumbs - $NumberOfEmpty) / $this->X);
-        $Yauto2 = (($NumberOfAllThumbs - $NumberOfEmpty) / $this->X);
-        if ($Yauto2 > $Yauto){ $Yauto += 1; }
-        $this->Y = $ColsTotalOne = $Yauto;
-    }
+        $href = "";
+        $str = "";
+        $navPagesA = array();
+        $linkNext = $linkPrev = $linkCur = "";
+        $cellAlign = ($this->cell_align != "") ? ' align="' . $this->cell_align . '"' : '';
+        $cellClass = ($this->cell_class != "") ? ' class="' . $this->cell_class . '"' : '';
+        $this->total_items = count($this->ar);
 
-    $cellwidth = intval(100 / $this->X) . "%";
-
-	$tbl_class = ($this->tClass) ? ' class="'.$this->tClass.'"' : '';
-    $str .= '<table'.$tbl_class.' border="'.$this->tBorder.'" cellspacing="1" cellpadding="0" width="100%">';
-    for ($ThumbCols = 1; $ThumbCols <= $ColsTotalOne; $ThumbCols++)
-    {
-        // add <col width=""> after the first <tr>
-        if ($ThumbCols == 1)
+        $NumberOfAllThumbs = ($this->x * $this->y);
+        $NumberOfPages = ceil($this->total_items / $NumberOfAllThumbs);
+        $ColsTotalOne = intval($NumberOfAllThumbs / $this->x);
+        $ColsTotalTwo = ($NumberOfAllThumbs / $this->x);
+        if ($ColsTotalTwo > $ColsTotalOne){ $ColsTotalOne += 1; }
+        $Y = $ColsTotalOne;
+        $NumberOfEmpty = 0;
+        if (($this->total_items - ($NumberOfAllThumbs * $this->page) ) < 0)
         {
-            $intCellwidth = 0;
-            for($ThumbRows = 1; $ThumbRows <= $this->X; $ThumbRows++)
+            $NumberOfEmpty = ( ( ($this->x * $this->y) * $NumberOfPages) - $this->total_items );
+        }
+        if ($NumberOfEmpty > 0)
+        {
+            $Yauto = intval(($NumberOfAllThumbs - $NumberOfEmpty) / $this->x);
+            $Yauto2 = (($NumberOfAllThumbs - $NumberOfEmpty) / $this->x);
+            if ($Yauto2 > $Yauto){ $Yauto += 1; }
+            $this->y = $ColsTotalOne = $Yauto;
+        }
+
+        $cellwidth = intval(100 / $this->x) . "%";
+
+        $tbl_class = ($this->t_class) ? ' class="'.$this->t_class.'"' : '';
+        $str .= '<table'.$tbl_class.' border="'.$this->t_border.'" cellspacing="1" cellpadding="0" width="100%">';
+        for ($ThumbCols = 1; $ThumbCols <= $ColsTotalOne; $ThumbCols++)
+        {
+            // add <col width=""> after the first <tr>
+            if ($ThumbCols == 1)
             {
-                $intCellwidth += intval(100 / $this->X);
-                if ($ThumbRows == $this->X)
+                $intCellwidth = 0;
+                for($ThumbRows = 1; $ThumbRows <= $this->x; $ThumbRows++)
                 {
-                    $cellwidth = $cellwidth + (100 - $intCellwidth) . '%';
+                    $intCellwidth += intval(100 / $this->x);
+                    if ($ThumbRows == $this->x)
+                    {
+                        $cellwidth = $cellwidth + (100 - $intCellwidth) . '%';
+                    }
+                    $str.= '<col width="'.$cellwidth.'"/>';
                 }
-                $str.= '<col width="'.$cellwidth.'"/>';
             }
+            $str.= '<tr ' . $cellClass . $cellAlign . '>';
+            // render <td>
+            for($ThumbRows = 1; $ThumbRows <= $this->x; $ThumbRows++)
+            {
+                $NumberOfCell = ( $this->_rows_cols($this->y, $this->x, $ThumbCols, $ThumbRows, 1) - 1 );
+                $str .= '<td>';
+                $str .= isset($this->ar[$NumberOfCell]) ? $this->ar[$NumberOfCell] : '&#160;';
+                $str.= '</td>';
+            }
+            $str.=  '</tr>';
         }
-        $str.= '<tr ' . $cellClass . $cellAlign . '>';
-        // render <td>
-        for($ThumbRows = 1; $ThumbRows <= $this->X; $ThumbRows++)
-        {
-            $NumberOfCell = ( $this->_rows_cols($this->Y, $this->X, $ThumbCols, $ThumbRows, 1) - 1 );
-            $str .= '<td>';
-            $str .= isset($this->ar[$NumberOfCell]) ? $this->ar[$NumberOfCell] : '&#160;';
-            $str.= '</td>';
-        }
-        $str.=  '</tr>';
+        $str .= '</table>';
+        return $str;
     }
-    $str .= '</table>';
-    return $str;
-}
 
 } // end of class

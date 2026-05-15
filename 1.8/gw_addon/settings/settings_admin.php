@@ -22,6 +22,8 @@ class gw_addon_settings_admin extends gw_addon
 	public $ar_component = array();
 	/* Current component name */
 	public $component;
+	/** @var array */
+	public $ar_msg_topics = array();
 	/* Autoexec */
 	public function __construct()
 	{

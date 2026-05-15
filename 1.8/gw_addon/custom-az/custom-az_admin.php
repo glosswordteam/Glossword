@@ -25,6 +25,10 @@ class gw_addon_custom_az_admin extends gw_addon
     public $ar_profiles        = [];
     public $ar_profiles_browse = [];
     public $left_td_width      = '25%';
+    /** @var array */
+    public $ar_component = [];
+    /** @var string */
+    public $filename;
 
     /**
      * Initialize admin addon data for custom AZ profiles.

@@ -21,37 +21,44 @@ if (!defined('IN_GW')) {
  * @version $Id: class.forms.php 531 2008-07-09 19:20:16Z glossword_team $
  */
 class gwForms {
-	public $title              = '';
-	public $action             = 'post.php';
-	public $align_buttons      = 'right';
-	public $arReq              = array();
-	public $enctype            = 'application/x-www-form-urlencoded';
-	public $method             = 'post';
-	public $formbgcolor        = 'DDD';
-	public $formbordercolor    = '444';
-	public $formbordercolorL   = '#FFF';
-	public $formname           = 'vbform';
-	public $formvalue          = 'none';
-	public $formwidth          = '100%';
-	public $isButtonDel        = 0;
-	public $isButtonHelp       = 0;
-	public $isButtonCancel     = 1;
-	public $isButtonSubmit     = 1;
-	public $onclickCancel      = 'history.back(-1);document.getElementById(\'vbcontrol\').style.visibility=\'hidden\'';
-	public $onclickSubmit      = 'document.getElementById(\'vbcontrol\').style.visibility=\'hidden\'';
-	public $str                = '';
-	public $strNotes           = '&#160;';
-	public $submitcancel       = ' Cancel ';
-	public $submitdel          = ' Remove ';
-	public $submitdelname      = 'remove';
-	public $submitok           = ' OK ';
-	public $arLtr              = array();
-	public $charset            = 'utf-8';
-	public $is_htmlspecialchars= 0;
-	public $cnt_submit         = 0;
-	public $cnt_cancel         = 0;
-	public $cnt_delete         = 0;
-	/**
+    /** @var string */
+    public $submithelp = '';
+    /** @var string */
+    public $submithelpname = '';
+    /** @var array */
+    public $tags                = [];
+    public $title               = '';
+    public $action              = 'post.php';
+    public $align_buttons       = 'right';
+    public $arReq               = [];
+    public $enctype             = 'application/x-www-form-urlencoded';
+    public $method              = 'post';
+    public $formbgcolor         = 'DDD';
+    public $formbordercolor     = '444';
+    public $formbordercolorL    = '#FFF';
+    public $formname            = 'vbform';
+    public $formvalue           = 'none';
+    public $formwidth           = '100%';
+    public $isButtonDel         = 0;
+    public $isButtonHelp        = 0;
+    public $isButtonCancel      = 1;
+    public $isButtonSubmit      = 1;
+    public $onclickCancel       = 'history.back(-1);document.getElementById(\'vbcontrol\').style.visibility=\'hidden\'';
+    public $onclickSubmit       = 'document.getElementById(\'vbcontrol\').style.visibility=\'hidden\'';
+    public $str                 = '';
+    public $strNotes            = '&#160;';
+    public $submitcancel        = ' Cancel ';
+    public $submitdel           = ' Remove ';
+    public $submitdelname       = 'remove';
+    public $submitok            = ' OK ';
+    public $arLtr               = [];
+    public $charset             = 'utf-8';
+    public $is_htmlspecialchars = 0;
+    public $cnt_submit          = 0;
+    public $cnt_cancel          = 0;
+    public $cnt_delete          = 0;
+
+    /**
 	 *
 	 */
 	public function setTag($tag, $var, $value)

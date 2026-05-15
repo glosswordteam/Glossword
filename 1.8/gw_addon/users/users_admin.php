@@ -24,6 +24,8 @@ class gw_addon_users_admin extends gw_addon
     public $ar_component = [];
     /* Current component name */
     public $component;
+    /** @var array */
+    public $ar_state = [];
 
     /* Autoexec */
     public function __construct()

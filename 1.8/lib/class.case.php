@@ -28,17 +28,22 @@ if ( ! class_exists('gwv_casemap')) {
     class gwv_casemap
     {
         /* Case mapping */
-        public $ar = array();
-        /* Special characters mapping */
-        public $arsp = array();
+        public $ar = [];
+
+        /** @var array Special-characters profile, snake_case alias to $arsp used by load_sp methods */
+        public $ar_sp = [];
+
         /* Array with profiles, Latin (1) */
-        public $arp = array(1);
-        public $arp_sp = array(1);
+        public $arp    = [1];
+        public $arp_sp = [1];
+
         /* Enable usage of PHP-extension `mbstring' */
         public $is_use_mbstring = 0;
+
         /* No any of case mappings is in memory */
-        public $is_loaded = 0;
+        public $is_loaded    = 0;
         public $is_loaded_sp = 0;
+
         /* Character encoding */
         public $encoding = 'UTF-8';
 
