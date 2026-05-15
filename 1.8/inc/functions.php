@@ -592,3 +592,14 @@ function gw_array_merge_clobber($array_1, $array_2)
     return $result;
 }
 
+/**
+ * Escape value for safe HTML output.
+ *
+ * @param mixed $value
+ * @return string
+ */
+function gw_html_escape($value)
+{
+    return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
