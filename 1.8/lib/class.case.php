@@ -30,7 +30,7 @@ if ( ! class_exists('gwv_casemap')) {
         /* Case mapping */
         public $ar = [];
 
-        /** @var array Special-characters profile, snake_case alias to $arsp used by load_sp methods */
+        /** @var array Special-characters profile */
         public $ar_sp = [];
 
         /* Array with profiles, Latin (1) */
