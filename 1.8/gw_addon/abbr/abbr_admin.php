@@ -349,7 +349,7 @@ class gw_addon_abbr_admin extends gw_addon
         /* Switching On/off */
         $arQ = [];
         if ($this->gw_this['vars']['mode'] == 'off') {
-            $arQ[] = 'UPDATE `' . $this->sys['tbl_prefix'] . 'abbr`
+            $arQ[] = 'UPDATE `' . gw_get_tbl_name('abbr') . '`
 								SET `is_active` = "0"
 								WHERE `id_abbr` = "' . $this->gw_this['vars'][GW_TARGET_ID] . '"';
             $strR .= postQuery(
@@ -363,7 +363,7 @@ class gw_addon_abbr_admin extends gw_addon
             );
             return;
         } elseif ($this->gw_this['vars']['mode'] == 'on') {
-            $arQ[] = 'UPDATE `' . $this->sys['tbl_prefix'] . 'abbr`
+            $arQ[] = 'UPDATE `' . gw_get_tbl_name('abbr') . '`
 								SET `is_active` = "1"
 								WHERE `id_abbr` = "' . $this->gw_this['vars'][GW_TARGET_ID] . '"';
             $strR .= postQuery(
@@ -405,12 +405,12 @@ class gw_addon_abbr_admin extends gw_addon
                 $q2['is_active'] = $q1['is_active'];
                 $q2['id_group'] = $q1['id_group'];
                 $q2['id_dict'] = $q1['id_dict'];
-                $ar_query[] = gw_sql_update($q2, $this->sys['tbl_prefix'] . 'abbr', 'id_abbr = "' . $q1['id_abbr'] . '"');
+                $ar_query[] = gw_sql_update($q2, gw_get_tbl_name('abbr'), 'id_abbr = "' . $q1['id_abbr'] . '"');
                 unset($q1['is_active']);
                 unset($q1['id_abbr']);
                 unset($q1['id_group']);
                 unset($q1['id_dict']);
-                $ar_query[] = gw_sql_update($q1, $this->sys['tbl_prefix'] . 'abbr_phrase', 'id_abbr_phrase = "' . $this->gw_this['vars'][GW_TARGET_ID] . '"');
+                $ar_query[] = gw_sql_update($q1, gw_get_tbl_name('abbr_phrase'), 'id_abbr_phrase = "' . $this->gw_this['vars'][GW_TARGET_ID] . '"');
                 $this->str .= postQuery(
                     $ar_query,
                     $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->addon_name,
@@ -441,7 +441,7 @@ class gw_addon_abbr_admin extends gw_addon
             $arPost['abbr_long'] = '';
             $arPost['abbr_short'] = '';
             $arPost['id_abbr_phrase'] = '';
-            $arPost['id_abbr'] = $this->oDb->NextId($this->sys['tbl_prefix'] . 'abbr', 'id_abbr');
+            $arPost['id_abbr'] = $this->oDb->NextId(gw_get_tbl_name('abbr'), 'id_abbr');
             $arPost['id_lang'] = $this->sys['locale_name'];
             $arPost['id_group'] = $this->oSess->user_get('abbr_id_group');
             /* 23 may 2006: select "Custom" on first run */
@@ -483,23 +483,23 @@ class gw_addon_abbr_admin extends gw_addon
                     $q1['id_abbr'] = preg_replace('/[^0-9]/', '', $q1['id_abbr']);
                     $q2['id_abbr'] = $q1['id_abbr'];
                 } else {
-                    $q1['id_abbr'] = $q2['id_abbr'] = $this->oDb->NextId($this->sys['tbl_prefix'] . 'abbr', 'id_abbr');
+                    $q1['id_abbr'] = $q2['id_abbr'] = $this->oDb->NextId(gw_get_tbl_name('abbr'), 'id_abbr');
                 }
                 $q2['is_active'] = $q1['is_active'];
                 $q2['id_group'] = $q1['id_group'];
                 $q2['id_dict'] = $q1['id_dict'];
-                $ar_query[] = gw_sql_replace($q2, $this->sys['tbl_prefix'] . 'abbr');
+                $ar_query[] = gw_sql_replace($q2, gw_get_tbl_name('abbr'));
                 unset($q1['is_active']);
                 unset($q1['id_group']);
                 unset($q1['id_dict']);
-                $ar_query[] = gw_sql_replace($q1, $this->sys['tbl_prefix'] . 'abbr_phrase');
+                $ar_query[] = gw_sql_replace($q1, gw_get_tbl_name('abbr_phrase'));
                 $ar_languages = $this->gw_this['vars']['ar_languages'];
                 /* Add empty values for other languages */
                 unset($ar_languages[$q1['id_lang']]);
                 foreach ($ar_languages as $kl => $vl) {
                     $q1['id_lang'] = $kl;
                     $q1['abbr_short'] = $q1['abbr_long'] = '';
-                    $ar_query[] = gw_sql_replace($q1, $this->sys['tbl_prefix'] . 'abbr_phrase');
+                    $ar_query[] = gw_sql_replace($q1, gw_get_tbl_name('abbr_phrase'));
                 }
                 $this->oSess->user_set('abbr_id_group', $q2['id_group']);
                 $this->str .= postQuery(
@@ -560,8 +560,8 @@ class gw_addon_abbr_admin extends gw_addon
             $oConfirm->setField('hidden', 'arPost[id_abbr]', $arSql['id_abbr']);
             $strR .= $oConfirm->Form();
         } else {
-            $ar_query[] = 'DELETE FROM `' . $this->sys['tbl_prefix'] . 'abbr` WHERE id_abbr = "' . $arSql['id_abbr'] . '"';
-            $ar_query[] = 'DELETE FROM `' . $this->sys['tbl_prefix'] . 'abbr_phrase` WHERE id_abbr = "' . $arSql['id_abbr'] . '"';
+            $ar_query[] = 'DELETE FROM `' . gw_get_tbl_name('abbr') . '` WHERE id_abbr = "' . $arSql['id_abbr'] . '"';
+            $ar_query[] = 'DELETE FROM `' . gw_get_tbl_name('abbr_phrase') . '` WHERE id_abbr = "' . $arSql['id_abbr'] . '"';
             $strR .= postQuery(
                 $ar_query,
                 $this->oUrlBuilder->build_admin_url(GW_A_BROWSE, $this->addon_name, [
