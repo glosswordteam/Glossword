@@ -480,7 +480,7 @@ class gw_addon_abbr_admin extends gw_addon
                 /* Use assigned Abbreviation ID or create new */
                 if ($q1['id_abbr']) {
                     /* Fixes for Abbreviation ID */
-                    $q1['id_abbr'] = preg_replace("/![0-9]/", '', $q1['id_abbr']);
+                    $q1['id_abbr'] = preg_replace('/[^0-9]/', '', $q1['id_abbr']);
                     $q2['id_abbr'] = $q1['id_abbr'];
                 } else {
                     $q1['id_abbr'] = $q2['id_abbr'] = $this->oDb->NextId($this->sys['tbl_prefix'] . 'abbr', 'id_abbr');
