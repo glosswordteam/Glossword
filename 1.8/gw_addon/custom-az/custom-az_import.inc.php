@@ -82,7 +82,7 @@ if ($this->gw_this['vars']['post'] == '') {
     /* Profile ID */
     if ($arPost['id_profile']) {
         /* -- Use an existent ID -- */
-        $id_profile = $arPost['id_profile'];
+        $id_profile = (int)$arPost['id_profile'];
         $arQ[] = 'DELETE FROM `' . $this->sys['tbl_prefix'] . 'custom_az` WHERE `id_profile` = "' . $id_profile . '"';
     } else {
         /* -- Create a new -- */

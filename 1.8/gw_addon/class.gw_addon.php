@@ -84,6 +84,9 @@ if (!defined('IS_CLASS_ADDON')) {
         /** @var Current component name */
         public $component;
 
+        /** @var array Current component data row (used by most addon admin classes) */
+        public $ar_component = [];
+
         /**
          * Initialize full addon dependencies.
          *

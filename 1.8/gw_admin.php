@@ -430,7 +430,7 @@ if (isset($gw_this['vars']['srch']['by']) && $gw_this['vars']['srch']['by'] == '
     // Set switcher for HTML
     $arTplVars['srch']['v:chk_srch_by_dict'] = ' checked="checked"';
     foreach ($gw_this['ar_dict_list'] as $kDict => $vDict) {
-        if ($d == 0) {
+        if (!(int)$d) {
             $gw_this['arDictListSrch'][] = $vDict['id'];
         } else {
             // TODO: search for multiple dictionaries
