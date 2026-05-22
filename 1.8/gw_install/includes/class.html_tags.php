@@ -109,7 +109,7 @@ if (!defined('IS_CLASS_GW2_HTMLTAGS')) {
                 parse_str($ar_path[1], $ar_url);
                 if ($this->is_sef && isset($this->sef_rule)) {
                     foreach ($this->sef_rule as $expr => $rule) {
-                        if (isset($ar_url[$this->v_get]) && (!$expr || strpos($ar_path[1], $expr))) {
+                        if (isset($ar_url[$this->v_get]) && (!$expr || strpos($ar_path[1], $expr) !== false)) {
                             $url = $this->url_do_sef($rule, $ar_url[$this->v_get]);
                         }
                     }

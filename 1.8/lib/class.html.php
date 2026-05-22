@@ -298,17 +298,17 @@ class gw_html {
 		$url .= implode('/', $arUrl);
 		$arRule2 = [];
 		$str_implode = ',';
-		if (strpos( end($arRule), ','))
+		if (strpos(end($arRule), ',') !== false)
 		{
 			$str_implode = ',';
 			$url .= '/';
 		}
-		elseif (strpos( end($arRule), '.'))
+		elseif (strpos(end($arRule), '.') !== false)
 		{
 			$str_implode = '.';
 			$url .= '/';
 		}
-		elseif (strpos( end($arRule), '-'))
+		elseif (strpos(end($arRule), '-') !== false)
 		{
 			$str_implode = '-';
 			$url .= '/';
@@ -344,14 +344,14 @@ class gw_html {
 		{
 			if (($v != '') 
 				&& isset($arP[$k]) && ($arP[$k] != '') 
-				&& !strpos($v, ',') && !strpos($v, '-') 
+				&& strpos($v, ',') === false && strpos($v, '-') === false
 				&& ($arP[$k] != $this->mod_rewrite_suffix)
 				)
 			{
 				$url .= '&' . $v . '=' . urlencode($arP[$k]);
 			}
 			/* parse additional parameters ".xhtml?param=value" */
-			if (isset($arP[$k]) && strpos($arP[$k], $this->mod_rewrite_suffix.'?'))
+			if (isset($arP[$k]) && strpos($arP[$k], $this->mod_rewrite_suffix.'?') !== false)
 			{
 				$arParamParts = explode($this->mod_rewrite_suffix.'?', $arP[$k]);
 				$arP[$k] = $arParamParts[0];
@@ -360,15 +360,15 @@ class gw_html {
 		}
 		$arRule2 = [];
 		$str_split = ' '; /* default rule delimeter */
-		if (strpos( end($arRule), ','))
+		if (strpos(end($arRule), ',') !== false)
 		{
 			$str_split = ',';
 		}
-		elseif (strpos( end($arRule), '.'))
+		elseif (strpos(end($arRule), '.') !== false)
 		{
 			$str_split = '.';
 		}
-		elseif (strpos( end($arRule), '-'))
+		elseif (strpos(end($arRule), '-') !== false)
 		{
 			$str_split = '-';
 		}

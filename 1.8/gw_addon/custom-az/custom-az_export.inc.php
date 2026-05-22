@@ -85,7 +85,7 @@ if ($this->gw_this['vars']['post'] == '') {
 
     if ($arPost['is_as_file']) {
         /* Send headers */
-        if (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+        if (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
             header('Content-Type: application/force-download');
         } else {
             header('Content-Type: application/octet-stream');

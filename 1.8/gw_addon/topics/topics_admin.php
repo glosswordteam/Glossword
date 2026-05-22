@@ -276,7 +276,7 @@ class gw_addon_topic_admin extends gw_addon
             $filename = 'gw_topics_map_' . date("Y-m[M]-d", $this->sys['time_now_gmt_unix']) . '.xml';
             if ($arPost['is_as_file']) {
                 /* Send headers */
-                if (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+                if (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
                     header('Content-Type: application/force-download');
                 } else {
                     header('Content-Type: application/octet-stream');
