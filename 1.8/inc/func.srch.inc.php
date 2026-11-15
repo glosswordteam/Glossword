@@ -922,7 +922,7 @@ function gw_search_results ( $id_srch, $p, $id_dict = 0 )
 		$cnt++;
 	}
 	$oTpl->addVal( 'v:cnt_term_start', (($p - 1) * $arDictParam['page_limit_search']) + 1 );
-	$oTpl->addVal( 'v:cnt_term_end', (($p - 1) * $arDictParam['page_limit_search']) + 1 + $cnt );
+	$oTpl->addVal( 'v:cnt_term_end', (($p - 1) * $arDictParam['page_limit_search']) + $cnt );
 
 	$oTpl->addVal( 'l:1371', $oL->m( 1371 ) );
 	$oTpl->addVal( 'l:1372', $oL->m( 1372 ) );

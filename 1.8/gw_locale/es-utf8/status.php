@@ -25,6 +25,7 @@ $lang['2_page_sys_maintenance'] = 'Mantenimiento del sistema';
 $lang['2_page_user_browse'] = 'Lista de usuarios';
 $lang['2_page_17'] = 'Actualizando un término';
 $lang['2_page__srch'] = 'Buscando en';
+$lang['admin_search_results'] = 'Resultados de búsqueda';
 /**
  * The end of translation file.
  */

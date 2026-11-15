@@ -218,6 +218,7 @@ $lang['allow_letters'] = 'Mostrar la barra alfabética (A-Z)';
 $lang['sysname'] = 'Nombre de la tabla en la base de datos';
 $lang['options'] = 'Opciones';
 $lang['ed_xref'] = 'Poner un enlace a un término';
+$lang['not_published'] = 'No publicado';
 /**
  * The end of translation file.
  */

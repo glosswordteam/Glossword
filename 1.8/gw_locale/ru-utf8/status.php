@@ -25,6 +25,7 @@ $lang['2_page_sys_maintenance'] = 'Обслуживание системы';
 $lang['2_page_user_browse'] = 'Список пользователей';
 $lang['2_page_17'] = 'Обновление термина';
 $lang['2_page__srch'] = 'Поиск...';
+$lang['admin_search_results'] = 'Результаты поиска';
 /**
  * The end of translation file.
  */

@@ -588,13 +588,22 @@ if ($gw_this['vars'][GW_ACTION] == GW_A_SEARCH) {
     if ($gw_this['arSrchResults']['found'] > 0) {
         $oTpl->tmp['d']['if:found'] = '';
     }
-    $oTpl->addVal('l:search_time', $oL->m('srch_6'));
-    $oTpl->addVal('v:search_time', $gw_this['arSrchResults']['time']);
     $oTpl->addVal('l:search_matches', $oL->m('srch_matches'));
     $oTpl->addVal('l:search_phrase', $oL->m('srch_phrase'));
     $oTpl->addVal('l:search_total', $oL->m('srch_5'));
     $oTpl->addVal('l:found', $oL->m('srch_3'));
     $oTpl->addVal('l:search_found_dict', $oL->m('srch_2'));
+    $oTpl->addVal('l:term_select_page', $oL->m('term_select_page'));
+    $oTpl->addVal('l:term_selected', $oL->m('term_selected'));
+    $oTpl->addVal('l:term_select_dictionary', $oL->m('term_select_dictionary'));
+    $oTpl->addVal('l:term_publish', $oL->m('term_publish'));
+    $oTpl->addVal('l:term_unpublish', $oL->m('term_unpublish'));
+    $oTpl->addVal('l:term_clear_selection', $oL->m('term_clear_selection'));
+    $oTpl->addVal('l:term_all_terms_in', $oL->m('term_all_terms_in'));
+    $oTpl->addVal('l:term_page_of', $oL->m('term_page_of'));
+    $ar_search_dict_param = gw_get_dict_param($gw_this['vars']['d']);
+    $oTpl->addVal('v:dict_terms_total', isset($ar_search_dict_param['int_terms_total']) ? $ar_search_dict_param['int_terms_total'] : 0);
+    $oTpl->addVal('v:dict_title', isset($ar_search_dict_param['title']) ? htmlspecialchars($ar_search_dict_param['title'], ENT_QUOTES, 'UTF-8') : '');
     $oTpl->addVal('v:q', htmlspecialchars($gw_this['arSrchResults']['q']));
     $oTpl->addVal('v:found', $gw_this['arSrchResults']['found']);
     $oTpl->addVal('v:found_total', $gw_this['arSrchResults']['found_total']);
@@ -607,6 +616,11 @@ if ($gw_this['vars'][GW_ACTION] == GW_A_SEARCH) {
     if (($gw_this['vars']['p'] < 1) || ($gw_this['vars']['p'] > $intSumPages)) {
         $gw_this['vars']['p'] = 1;
     }
+    $int_page_limit_search = isset($arDictParam['page_limit_search']) ? max(1, (int)$arDictParam['page_limit_search']) : max(1, (int)$gw_this['arSrchResults']['found']);
+    $int_page_range_start = $gw_this['arSrchResults']['found'] ? (($gw_this['vars']['p'] - 1) * $int_page_limit_search) + 1 : 0;
+    $int_page_range_end = min($gw_this['vars']['p'] * $int_page_limit_search, $gw_this['arSrchResults']['found']);
+    $str_page_range = $int_page_range_start . '–' . $int_page_range_end . ' ' . $oL->m('term_page_of') . ' ' . $gw_this['arSrchResults']['found'];
+    $oTpl->addVal('v:page_range', $str_page_range);
     if ($intSumPages > 1) {
         $oTpl->addVal('l:pages', $oL->m('L_pages'));
     }
@@ -734,9 +748,31 @@ if ($gw_this['vars'][GW_TARGET] != '') {
 
 /* Set current action name (page numbers) */
 $oTpl->addVal('v:current_action', $oL->m($sys['id_current_status']));
+if ($gw_this['vars'][GW_ACTION] == GW_A_SEARCH) {
+    $oTpl->addVal('v:current_action', $oL->m('admin_search_results'));
+}
 
-/* Create dictionaries list */
+/* Create dictionary selectors */
 $oTpl->AddVal('block:SearchSelect', getDictSrch('', 1, 99, '', 1, $gw_this['vars']['d']));
+$int_dictionary_count = is_array($gw_this['ar_dict_list']) ? count($gw_this['ar_dict_list']) : 0;
+if ($int_dictionary_count > 1) {
+    $str_search_select = getDictSrch('', 1, 99, '', 1, $gw_this['vars']['d']);
+    $str_search_select = str_replace(' selected="selected"', '', $str_search_select);
+    $str_search_select = preg_replace('/<select\b/', '<select id="term-move-dictionary" data-source-dict="' . (int)$gw_this['vars']['d'] . '" disabled="disabled" onchange="return term_move_dictionary(this)"', $str_search_select, 1);
+    $int_select_end = strpos($str_search_select, '>');
+    if ($int_select_end !== false) {
+        $str_move_placeholder = '<option value="" selected="selected">' . htmlspecialchars($oL->m('term_move_to_dictionary'), ENT_QUOTES, 'UTF-8') . '</option>';
+        $str_search_select = substr_replace($str_search_select, $str_move_placeholder, $int_select_end + 1, 0);
+    }
+} else {
+    $str_search_select = '<select id="term-move-dictionary" class="input" style="width:100%" data-source-dict="' .
+        (int)$gw_this['vars']['d'] . '" disabled="disabled" onchange="return term_move_dictionary(this)">';
+    $str_search_select .= '<option value="" selected="selected">' .
+        htmlspecialchars($oL->m('term_move_to_dictionary'), ENT_QUOTES, 'UTF-8') . '</option>';
+    $str_search_select .= '<option value="" disabled="disabled">' .
+        htmlspecialchars($oL->m('term_move_unavailable'), ENT_QUOTES, 'UTF-8') . '</option></select>';
+}
+$oTpl->AddVal('block:TermMoveSelect', $str_search_select);
 
 /* Turn on the block of HTML-code when editing or adding terms is allowed */
 if ($oSess->is('is-terms') || $oSess->is('is-terms-own')) {

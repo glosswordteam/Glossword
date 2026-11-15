@@ -158,48 +158,102 @@ function is_allow_checkbox(e, id)
 
 
 /* Search results */
-var ar_checked_terms = new Array();
-
 function term_selected(id)
 {
-	ar_checked_terms[id] = gw_getElementById('id-term-' + id).checked ? true : false;
-	cnt = 0;
-	for (i = 0, s = ar_checked_terms.length; i < s; i++)
-	{
-		if (ar_checked_terms[i] == true)
-		{
-			cnt++;
-		}
-	}
-	gw_getElementById('checked').innerHTML = cnt;
+	term_update_selection();
 	return false;
 }
 /* check/uncheck all */
 function term_check(is_check)
 {
-	items = document.forms["term-browse"]["arPost[ar_id][]"];
-	if (items.length == undefined)
-	{
-		len = 1;
+	var items = document.forms['term-browse']['arPost[ar_id][]'];
+	var item_count = items.length == undefined ? 1 : items.length;
+	for (var i = 0; i < items.length; i++) {
+		items[i].checked = is_check;
+	}
+	if (items.length == undefined) {
 		items.checked = is_check;
 	}
-	else
-	{
-		len = items.length;
-		for (i = 0, s = len; i < s; i++) {
-			items[i].checked = is_check;
-			ar_checked_terms[items[i].value] = is_check;
-		}
-	}
-	gw_getElementById('checked').innerHTML = is_check ? len : 0;
+	term_update_selection(is_check ? item_count : 0);
 	return false;
 }
 
-function term_alert_checking(alltermchecked, msg) {
-	alltermchecked = gw_getElementById(alltermchecked);
-	if (alltermchecked.checked == true)
-	{
-		alltermchecked.checked = window.confirm(msg);
+function term_update_selection(selected_count) {
+	var items = document.forms['term-browse']['arPost[ar_id][]'];
+	var page_toggle = gw_getElementById('term-select-page');
+	var dictionary_toggle = gw_getElementById('term-is-all');
+	var item_count = items.length == undefined ? 1 : items.length;
+	var selected = 0;
+	for (var i = 0; i < item_count; i++) {
+		var item = items.length == undefined ? items : items[i];
+		if (item.checked) {
+			selected++;
+		}
+		item.disabled = dictionary_toggle.checked;
 	}
+	if (typeof selected_count == 'number') {
+		selected = selected_count;
+	}
+	var has_selection = dictionary_toggle.checked || selected > 0;
+	var selected_total = dictionary_toggle.checked ? parseInt(gw_getElementById('term-dictionary-count').innerHTML, 10) || 0 : selected;
+	gw_getElementById('term-selection-row').style.display = has_selection ? 'flex' : 'none';
+	gw_getElementById('term-selected-count').innerHTML = selected_total;
+	gw_getElementById('term-all-dictionary').style.display = dictionary_toggle.checked ? 'inline' : 'none';
+	document.forms['term-browse']['arPost[selected_term_on]'].disabled = !has_selection;
+	document.forms['term-browse']['arPost[selected_term_off]'].disabled = !has_selection;
+	document.forms['term-browse']['arPost[selected_term_remove]'].disabled = !has_selection;
+	var move_dictionary = gw_getElementById('term-move-dictionary');
+	if (move_dictionary) {
+		move_dictionary.disabled = !has_selection;
+	}
+	page_toggle.disabled = dictionary_toggle.checked;
+	page_toggle.checked = !dictionary_toggle.checked && item_count > 0 && selected == item_count;
+	page_toggle.indeterminate = !dictionary_toggle.checked && selected > 0 && selected < item_count;
+	return false;
+}
+
+function term_clear_selection() {
+	gw_getElementById('term-is-all').checked = false;
+	term_check(false);
+	return false;
+}
+
+function term_select_dictionary(dictionary_toggle) {
+	if (dictionary_toggle.checked && !window.confirm(gw_getElementById('term-is-all-confirm').value)) {
+		dictionary_toggle.checked = false;
+	}
+	if (dictionary_toggle.checked) {
+		term_check(false);
+	}
+	term_update_selection();
+	return false;
+}
+
+function term_move_dictionary(dictionary_select) {
+	if (dictionary_select.value == '') {
+		return false;
+	}
+	if (dictionary_select.value == dictionary_select.getAttribute('data-source-dict')) {
+		dictionary_select.value = '';
+		return false;
+	}
+	var items = document.getElementsByName('arPost[ar_id][]');
+	var dictionary_toggle = gw_getElementById('term-is-all');
+	var selected = 0;
+	for (var i = 0; i < items.length; i++) {
+		if (items[i].checked) {
+			selected++;
+		}
+	}
+	if (!dictionary_toggle.checked && selected == 0) {
+		dictionary_select.value = '';
+		return false;
+	}
+	var move_action = document.createElement('input');
+	move_action.type = 'hidden';
+	move_action.name = 'arPost[selected_term_move]';
+	move_action.value = '1';
+	document.forms['term-browse'].appendChild(move_action);
+	document.forms['term-browse'].submit();
 	return false;
 }
