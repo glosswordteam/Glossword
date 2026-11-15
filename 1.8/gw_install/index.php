@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(E_ALL);
 /**
  * Glossword - glossary compiler (http://glossword.biz/)
  * © 2008-2026 Glossword.biz team <team at glossword dot biz>
@@ -11,17 +11,19 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
-if (!defined('IS_IN_GW2')) {
-    define('IS_IN_GW2', 1);
+if (!defined('IN_GW')) {
+    define('IN_GW', 1);
 }
 if (!defined('GW2_THIS_SCRIPT')) {
     define('GW2_THIS_SCRIPT', 'index.php');
 }
 
-include_once('../inc/functions.php');
-include_once('/includes/class.gw_mini_site.php');
-include_once('/includes/class.gw_var_store.php');
-include_once('/includes/class.gw_mini_timer.php');
+date_default_timezone_set('UTC');
+
+include_once(__DIR__ . '/../inc/functions.php');
+include_once(__DIR__ . '/includes/class.gw_mini_site.php');
+include_once(__DIR__ . '/includes/class.gw_var_store.php');
+include_once(__DIR__ . '/includes/class.gw_mini_timer.php');
 
 define('GW2_TPL_WEB_INDEX', 1);
 

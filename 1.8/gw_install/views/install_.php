@@ -11,7 +11,7 @@
  * (at your option) any later version.
  * (see `http://creativecommons.org/licenses/GPL/2.0/' for details)
  */
-if (!defined('IS_IN_GW2')) {
+if (!defined('IN_GW')) {
     die();
 }
 
@@ -76,10 +76,10 @@ switch ($this->gv['step']) {
 
         if (empty($this->gv['arp'])) {
             $this->gv['arp']['db_host'] = 'localhost';
-            $this->gv['arp']['db_user'] = 'root';
-            $this->gv['arp']['db_pass'] = '';
+            $this->gv['arp']['db_user'] = 'glossword';
+            $this->gv['arp']['db_pass'] = 'glossword';
             $this->gv['arp']['db_prefix'] = 'gw_';
-            $this->gv['arp']['db_name_new'] = $this->gv['arp']['db_name_existent'] = 'glossword';
+            $this->gv['arp']['db_name_new'] = $this->gv['arp']['db_name_existent'] = 'glossword18';
             $is_str_checked_new = '';
             $is_str_checked_existent = ' checked="checked"';
             $is_str_checked_preinstall = ' checked="checked"';

@@ -22,6 +22,11 @@ if (!defined('IN_GW')) {
 define('THIS_SCRIPT', 'index.php');
 define('GW_IS_BROWSE_WEB', 1);
 define('GW_IS_BROWSE_ADMIN', 0);
+/* Redirect to the installer before loading the database configuration. */
+if (!is_file('gw_temp/install_lock.txt') && is_file('gw_install/index.php')) {
+    header('Location: gw_install/index.php');
+    exit;
+}
 /* ------------------------------------------------------- */
 /* Load configuration */
 $sys['is_prepend'] = 1;

@@ -12,7 +12,7 @@
 /**
  * $Id: update_1.8.10-1.8.11.php 552 2008-08-17 17:40:40Z glossword_team $
  */
-if (!defined('IS_IN_GW2')){die();}
+if (!defined('IN_GW')){die();}
 
 $str_version_from = '1.8.10';
 $str_version_to = '1.8.11';
