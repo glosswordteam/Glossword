@@ -15,7 +15,6 @@ services:
         condition: service_healthy
     networks:
       - default
-      - web
 
   mysql:
     image: mysql:5.7
@@ -34,8 +33,6 @@ services:
       timeout: 5s
       interval: 10s
       retries: 5
-    ports:
-      - "3306:3306"
     networks:
       - default
 
@@ -58,12 +55,6 @@ services:
       - ./docker/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
     networks:
       - default
-      - web
-
-networks:
-  web:
-    external: true
-    name: web
 
 volumes:
   mysql_data:
